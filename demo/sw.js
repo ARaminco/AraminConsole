@@ -12,12 +12,12 @@
    Push: `push` and the demo's SIMULATE_PUSH message share one handler; `notificationclick` focuses / opens the app.
    Every URL is relative to this file, so the demo works under a sub-path (GitHub Pages /AraminConsole/demo/). */
 const VERSION = 'ac-demo-v0.2.0';
-const BUILD = '6b32479b0d'; // stamped by scripts/build.mjs
+const BUILD = 'f732670142'; // stamped by scripts/build.mjs
 const CACHE = `${VERSION}-${BUILD}`;
 const OFFLINE = './errors/offline.html';
 const SHELL = [
   './', './index.html', './app.js', './support.js', './data.js', './demo.css', './pages-a.css', './manifest.webmanifest', './offline.html', OFFLINE,
-  './standalone.css', './standalone.js', './icons/icon.svg', './icons/icon-192.png', './brand/air/logo-header.svg', './brand/air/logo-header-dark.svg',
+  './standalone.css', './standalone.js', './icons/icon.svg', './icons/icon-192.png', './brand/air/logo-mark.svg', './brand/air/logo-mark-dark.svg',
   './i18n/fa.json', './i18n/en.json', './i18n/ar.json', './pages/dashboard.html',
   '../dist/demo/aramin-console.min.css', '../dist/demo/aramin-console.min.js', '../dist/aramin-console-boot.js', '../dist/icons.svg',
   '../dist/fonts/vazirmatn-variable.woff2',
