@@ -359,9 +359,9 @@ const icon = (name, cls = '') => `<svg class="ac-icon${cls ? ' ' + cls : ''}" ar
 /* ---------------------------------------------------------------- theme */
 const darkMQ = matchMedia('(prefers-color-scheme: dark)');
 const THEME_KEYS = { theme: 'ac:theme', accent: 'ac:accent', density: 'ac:density', radius: 'ac:radius' };
-const THEME_DEFAULTS = { theme: 'light', accent: 'orange', density: 'comfortable', radius: 'default' };
+const THEME_DEFAULTS = { theme: 'light', accent: 'air', density: 'comfortable', radius: 'default' };
 const theme = {
-  accents: ['orange', 'violet', 'blue', 'emerald', 'rose', 'amber', 'slate'],
+  accents: ['air', 'orange', 'violet', 'blue', 'emerald', 'rose', 'amber', 'slate'],
   /** { theme: 'auto'|'light'|'dark', resolved: 'light'|'dark', accent, density, radius } */
   get() {
     const out = {};
@@ -3406,7 +3406,7 @@ const { palette } = __ac_m4;
 
 
 
-const SWATCH = { orange: '#f0532d', violet: '#6d4aff', blue: '#2563eb', emerald: '#059669', rose: '#e11d48', amber: '#d97706', slate: '#475569' };
+const SWATCH = { air: '#0b7f8a', orange: '#f0532d', violet: '#6d4aff', blue: '#2563eb', emerald: '#059669', rose: '#e11d48', amber: '#d97706', slate: '#475569' };
 const LANGS = () => (i18n.languages || []).map((l) => [l.code, l.name, l.dir === 'rtl' ? 'RTL' : 'LTR']);
 let api = null;
 const t = (k, f) => escapeHtml(i18n.t(k, f));
@@ -3494,7 +3494,7 @@ const customizer = {
       n.focus(); n.click();
     });
     on(el, 'ac:segmented:change', (e) => { const g = e.target.closest('[data-cz]'); if (g) apply(g.dataset.cz, e.detail.value); });
-    on(el, 'click', '[data-cz-reset]', () => { theme.set({ theme: 'light', accent: 'orange', density: 'comfortable', radius: 'default' }); i18n.setDigits('latn'); motionPref.set('system'); if (i18n.lang !== 'fa') i18n.set('fa'); });
+    on(el, 'click', '[data-cz-reset]', () => { theme.set({ theme: 'light', accent: 'air', density: 'comfortable', radius: 'default' }); i18n.setDigits('latn'); motionPref.set('system'); if (i18n.lang !== 'fa') i18n.set('fa'); });
     el.addEventListener('ac:drawer:closed', () => { api = null; }, { once: true });
     return api.open(trigger);
   },

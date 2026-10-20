@@ -113,8 +113,8 @@
   display: grid;
   place-items: center;
   border-radius: var(--ac-r-pill);
-  background: var(--ac-accent);
-  color: var(--ac-accent-contrast);
+  background: var(--ac-highlight);
+  color: var(--ac-highlight-contrast);
   font-size: 0.5625rem;
   font-weight: var(--ac-fw-bold);
   line-height: 1;
@@ -292,7 +292,7 @@
   inline-size: 0.45rem;
   block-size: 0.45rem;
   border-radius: 50%;
-  background: var(--ac-accent);
+  background: var(--ac-highlight);
   box-shadow: 0 0 0 2px var(--ac-chrome-bg);
 }
 
@@ -844,3 +844,8 @@
   .ac-main > .ac-powered { display: none; }
   .ac-powered--float { position: fixed; inset-block-end: var(--ac-s-3); inset-inline-end: var(--ac-s-4); margin: 0; background: var(--ac-glass-bg); z-index: 1; }
 }
+
+/* brand logo inside the brand pill (replaces the monogram disc when a brand ships a wordmark) */
+.ac-brand__logo { block-size: 1.25rem; inline-size: auto; flex: none; display: block; }
+.ac-brand:has(.ac-brand__logo) { padding-inline-start: var(--ac-s-4); }
+.ac-brand:has(.ac-brand__logo) .ac-brand__name { font-size: var(--ac-fs-sm); color: var(--ac-text-soft); padding-inline-start: var(--ac-s-2); border-inline-start: 1px solid var(--ac-border-strong); }

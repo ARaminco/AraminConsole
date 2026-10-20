@@ -7,7 +7,7 @@ Every colour, radius, shadow, spacing, and motion value is a CSS custom property
 | Attribute | Values | Default | Saved in `localStorage` |
 |---|---|---|---|
 | `data-theme` | `light` · `dark` (unset = follow the OS) | `light` | `ac:theme` (`light` / `dark` / `auto`) |
-| `data-accent` | `orange` · `violet` · `blue` · `emerald` · `rose` · `amber` · `slate` | `orange` | `ac:accent` |
+| `data-accent` | `air` · `orange` · `violet` · `blue` · `emerald` · `rose` · `amber` · `slate` | `air` | `ac:accent` |
 | `data-density` | `comfortable` · `compact` | `comfortable` | `ac:density` |
 | `data-radius` | `sharp` · `default` · `round` | `default` | `ac:radius` |
 | `lang` / `dir` | `fa`/`ar` → `rtl`, others → `ltr` | `fa` / `rtl` | `ac:lang` |
@@ -20,6 +20,16 @@ AC.theme.toggle();                       // light ⇄ dark
 AC.theme.get();                          // { theme, resolved, accent, density, radius }
 document.addEventListener('ac:theme:change', (e) => console.log(e.detail));
 ```
+
+## Air — the default theme
+
+`air` is the AIR brand preset: Night/Ink navy (`#0F1B28` / `#1B2836`) for primary buttons and the active nav pill, AIR Teal as the accent (`#0B7F8A` in light so white text passes, `#13B5C2` on the navy dark canvas), and **one** amber highlight (`--ac-highlight`: `#F5A524` light / `#FFB020` dark) used only for the notification count and dock dot. Charts: navy, teal, amber. Dark mode uses the navy family for canvas and surfaces.
+
+Contrast (WCAG 2.x): white on light accent 4.75:1; ink button 14.96:1; body text on canvas 15.85:1; muted text 5.23:1 on white; dark: navy on teal 6.97:1, body text on surface 13.74:1, muted 5.05:1.
+
+Switch back to the old look with `data-accent="orange"` (still shipped) or `AC.theme.set({ accent: 'orange' })`; to make it your default, change `accent` in `THEME_DEFAULTS` (`src/js/core.js`), the fallback in `src/js/boot.js` and the `data-accent` on `<html>`. The brand files (logo, favicon, app icons) live in `demo/brand/air/`; the AIR logo is a trademark of AIR and is not under the MIT licence, so replace it with yours when you ship your own brand.
+
+To define your own brand preset, add two blocks to `tokens.css` (or your own CSS loaded after it) — a light one scoped with `:not([data-theme="dark"])` and a dark one — overriding `--ac-accent`, `--ac-accent-2`, `--ac-accent-contrast`, `--ac-ink*`, the neutral surface/text tokens and optionally `--ac-highlight`; then add the name to `theme.accents` and a swatch colour in `customizer.js`.
 
 ## Brand your panel
 

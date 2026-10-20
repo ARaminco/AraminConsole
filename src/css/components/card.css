@@ -277,3 +277,7 @@
 }
 .ac-kpi--accent :is(.ac-kpi__label, .ac-kpi__foot) { color: rgba(255, 255, 255, 0.85); }
 .ac-kpi--accent .ac-stat__icon { background: rgba(255, 255, 255, 0.22); color: #fff; box-shadow: none; }
+/* dark Air: bright teal carries navy text, not white */
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .ac-kpi--accent :is(.ac-kpi__label, .ac-kpi__foot, .ac-trend) { color: rgba(15, 27, 40, 0.82); }
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .ac-kpi--accent .ac-stat__icon { background: rgba(15, 27, 40, 0.16); color: #0f1b28; }
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .ac-kpi--accent .ac-trend { background: rgba(15, 27, 40, 0.14); }
