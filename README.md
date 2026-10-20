@@ -162,6 +162,7 @@ Issues and pull requests are welcome: [CONTRIBUTING.md](CONTRIBUTING.md), [Code 
 ## Credits
 - Icons: [Lucide](https://lucide.dev), ISC License (`dist/LICENSE-lucide.txt`).
 - Font: [Vazirmatn](https://github.com/rastikerdar/vazirmatn) by Saber Rastikerdar, SIL Open Font License 1.1 (`src/fonts/OFL.txt`).
+- Default theme: **Air** (AIR brand colours). The AIR name and logo are trademarks of AIR and are **not** covered by the MIT license; replace them when you ship your own brand.
 - Visual direction inspired by the "Dashboard V14 — Modern & Minimal UI" concept by code.xr.
 - Bank logos (`dist/banks.svg`): Iranian banks from [@iran-utils/iranian-banks-icons-core](https://github.com/houtan-rocky/iranian-banks-react-icons) (MIT); card networks and international banks from [simple-icons](https://simpleicons.org) (CC0); a few are generated monograms. **All bank and card-network logos are trademarks of their respective owners and are included for identification only.** Sources: `src/banks/SOURCES.md`, notice: `dist/LICENSE-bank-logos.txt`.
 
