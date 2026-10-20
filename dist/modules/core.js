@@ -1165,6 +1165,7 @@ function anchor() {
 const cssWait = new Map();
 const sheetReady = (link) => new Promise((resolve) => {
   if (link.tagName === 'STYLE' || link.sheet) return resolve();
+  setTimeout(resolve, 3000); // never block a page forever on a stylesheet that already failed or stalls
   link.addEventListener('load', resolve, { once: true });
   link.addEventListener('error', () => { console.warn(`[AC] module css failed: ${link.dataset.acModule}`); resolve(); }, { once: true });
 });
