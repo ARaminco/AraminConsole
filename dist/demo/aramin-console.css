@@ -725,12 +725,24 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
   background: linear-gradient(to bottom, var(--ac-bg) 62%, color-mix(in oklab, var(--ac-bg) 0%, transparent));
   transition: background var(--ac-dur-3) var(--ac-ease);
 }
-/* once the page scrolls, content slides under a frosted canvas strip */
-.ac-appbar[data-scrolled="true"] {
-  background: color-mix(in oklab, var(--ac-bg) 82%, transparent);
+/* once the page scrolls, content dissolves under the bar: a frosted layer that fades out downward,
+   never a hard edge (the layer reaches past the bar and is masked to transparent) */
+.ac-appbar::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -2.75rem 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to bottom, var(--ac-bg) 0%, color-mix(in oklab, var(--ac-bg) 88%, transparent) 55%, transparent 100%);
   -webkit-backdrop-filter: var(--ac-glass-blur);
   backdrop-filter: var(--ac-glass-blur);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%);
+  transition: opacity var(--ac-dur-3) var(--ac-ease);
 }
+.ac-appbar[data-scrolled="true"] { background: transparent; }
+.ac-appbar[data-scrolled="true"]::before { opacity: 1; }
 .ac-appbar__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
