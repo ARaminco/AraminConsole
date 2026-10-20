@@ -32,7 +32,7 @@
 - **ساخته‌شده برای ایران.** ریال/تومان، تقویم شمسی و هجری، کارت و لوگوی بانک‌ها، شبا، اعتبارسنجی کد ملی و موبایل، صورت‌حساب رسمی.
 - **اعلانی (declarative).** با ویژگی `data-ac="…"` اجزا راه می‌افتند، حتی در HTML که بعداً اضافه شود؛ هر جزء API روی `window.AC` هم دارد.
 - **ماژولار.** 26 ماژول؛ همه، بعضی، یا بارگذاری تنبل با `AC.use('maps')`.
-- **دوستدار هوش مصنوعی.** فایل‌های [`AGENTS.md`](AGENTS.md)، [`llms.txt`](llms.txt) و [Agent Skill](skills/aramin-console/SKILL.md) به هر دستیار کدنویسی کمک می‌کنند درست با آن بسازد.
+- **دوستدار هوش مصنوعی.** فایل‌های [`AGENTS.md`](AGENTS.md)، [`llms.txt`](llms.txt) و [Agent Skill](skills/aramin-console/SKILL.md) به هر دستیار کدنویسی کمک می‌کنند درست با آن بسازد. سیستم طراحی: [docs/design-system](docs/design-system/README.md)، مهارت [aramin-design-system](skills/aramin-design-system/SKILL.md) و [راهنمای مهارت‌ها](docs/skills-guide.fa.md).
 
 ## ویژگی‌ها و ماژول‌ها
 حجم‌ها فشرده و gzip هستند (از `dist/modules/modules.json`).

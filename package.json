@@ -51,11 +51,12 @@
     "starters"
   ],
   "scripts": {
-    "build": "node scripts/build.mjs && node scripts/llms.mjs",
+    "build": "node scripts/build.mjs && node scripts/tokens-doc.mjs && node scripts/llms.mjs",
     "dev": "node scripts/build.mjs && node scripts/serve.mjs",
     "serve": "node scripts/serve.mjs",
     "test": "node scripts/build.mjs && node tests/run.mjs",
-    "llms": "node scripts/llms.mjs"
+    "llms": "node scripts/llms.mjs",
+    "tokens": "node scripts/tokens-doc.mjs"
   },
   "devDependencies": {
     "lucide-static": "^1.59.0",

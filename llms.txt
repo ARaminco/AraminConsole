@@ -28,6 +28,8 @@ Use one CSS file and one ES module (copy `dist/`). Components start from `data-a
 - [Prose & Markdown](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/prose.md): Module: src/modules/prose/ (prose.js, markdown.js, prose.css). It ships in the full bundle and as dist/modules/prose.{js,css} for AC.use('prose'). It depends on
 - [PWA — install, offline, updates](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/pwa.md): Module pwa (src/modules/pwa/), service worker template demo/sw.js, manifest demo/manifest.webmanifest. Live: demo/#/notify-lab. Tests: node tests/pwa.mjs (runs 
 - [RTL / LTR](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/rtl.md): AraminConsole is RTL-first (fa, ar) and must be pixel-correct in LTR (en). i18n.set(lang) sets <html lang dir>; every layout mirrors through CSS logical propert
+- [راهنمای استفاده از مهارت‌ها (Skills)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/skills-guide.fa.md): AraminConsole دو مهارت آماده برای دستیارهای هوش مصنوعی دارد:
+- [Skills guide](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/skills-guide.md): AraminConsole ships two Agent Skills (Persian guide: skills-guide.fa.md):
 - [Starters](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/starters.md): Copy-ready projects live in starters/. Each has its own README. The repository is also a GitHub template: click Use this template, then keep the starter you nee
 - [Support chat widget](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/support-chat.md): Optional module: src/modules/support-chat/{support-chat.js,support-chat.css,module.json} (dependency: core). Demo wiring: demo/support.js (one <script type="mod
 - [Theming](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/theming.md): Every colour, radius, shadow, spacing, and motion value is a CSS custom property named --ac- (defined in src/css/tokens.css). Components read only tokens, so a 
@@ -37,6 +39,9 @@ Use one CSS file and one ES module (copy `dist/`). Components start from `data-a
 - [Starter: plain HTML](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/starters/html/README.md): Starter project: html
 - [Starter: Laravel Blade](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/starters/laravel-blade/README.md): Starter project: laravel-blade
 - [Starter: Next.js (App Router)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/starters/nextjs/README.md): Starter project: nextjs
+- [AraminConsole design system](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-design-system/SKILL.md): Agent Skill: design-system rules, token cheat-sheet and review checklist
+- [سیستم طراحی AraminConsole](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/design-system/README.md): Design system (Persian): principles, tokens, patterns, components; tokens in dist/tokens.json
+- [Skills guide](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/skills-guide.md): How to install and use the AraminConsole skills (Claude, Codex, Cursor, Copilot)
 - [Class and markup reference (condensed from docs/CONVENTIONS.md)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/reference/components.md): Skill reference
 - [Recipes (copy, then adapt)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/reference/recipes.md): Skill reference
 - [Theming tokens and modules](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/reference/theming-and-modules.md): Skill reference

@@ -23,6 +23,9 @@ const extras = [
   { path: 'AGENTS.md', note: 'Operating guide for AI coding assistants: architecture, conventions, commands' },
   { path: 'skills/aramin-console/SKILL.md', note: 'Agent Skill: component cheat-sheet and recipes for building admin panels' },
   ...['html', 'laravel-blade', 'nextjs'].map((s) => ({ path: `starters/${s}/README.md`, note: `Starter project: ${s}` })),
+  { path: 'skills/aramin-design-system/SKILL.md', note: 'Agent Skill: design-system rules, token cheat-sheet and review checklist' },
+  { path: 'docs/design-system/README.md', note: 'Design system (Persian): principles, tokens, patterns, components; tokens in dist/tokens.json' },
+  { path: 'docs/skills-guide.md', note: 'How to install and use the AraminConsole skills (Claude, Codex, Cursor, Copilot)' },
   { path: 'CONTRIBUTING.md', note: 'How to contribute' },
   { path: 'CHANGELOG.md', note: 'Release history' },
 ].filter((e) => existsSync(join(ROOT, e.path)));
@@ -55,7 +58,7 @@ const index = [
 ].join('\n');
 writeFileSync(join(ROOT, 'llms.txt'), index);
 
-const all = ['README.md', 'AGENTS.md', 'skills/aramin-console/SKILL.md', ...docEntries.map((d) => d.path),
+const all = ['README.md', 'AGENTS.md', 'skills/aramin-console/SKILL.md', 'skills/aramin-design-system/SKILL.md', 'docs/design-system/README.md', 'docs/skills-guide.md', ...docEntries.map((d) => d.path),
   ...extras.filter((e) => e.path.startsWith('skills/aramin-console/reference') || e.path.startsWith('starters/')).map((e) => e.path)]
   .filter((p) => existsSync(join(ROOT, p)));
 const full = all.map((p) => `\n\n<!-- ===== ${p} ===== -->\n\n${read(p).trim()}`).join('');
