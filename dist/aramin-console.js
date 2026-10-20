@@ -1162,19 +1162,30 @@ function anchor() {
   return [...document.querySelectorAll('link[rel="stylesheet"]')].filter((l) => /aramin-console[^/]*\.css|\/modules\/[^/]+\.css/.test(l.href)).pop() || null;
 }
 
+// One promise per stylesheet: every caller waits until the sheet has really applied (fixes a race where a page
+// rendered before its module CSS arrived because a second caller saw the name as "already requested").
+const cssWait = new Map();
+const sheetReady = (link) => new Promise((resolve) => {
+  if (link.tagName === 'STYLE' || link.sheet) return resolve();
+  link.addEventListener('load', resolve, { once: true });
+  link.addEventListener('error', () => { console.warn(`[AC] module css failed: ${link.dataset.acModule}`); resolve(); }, { once: true });
+});
 function loadCSS(name) {
-  if (R.__css.has(name) || graph()[name]?.css === false) return Promise.resolve();
+  if (graph()[name]?.css === false) return Promise.resolve();
+  if (cssWait.has(name)) return cssWait.get(name);
   const found = document.querySelector(`link[data-ac-module="${name}"], style[data-ac-module="${name}"]`);
-  R.__css.add(name);
-  if (found) return Promise.resolve();
-  return new Promise((resolve) => {
-    const link = Object.assign(document.createElement('link'), { rel: 'stylesheet', href: url(`${name}${R.__min ? '.min' : ''}.css`) });
+  if (!found && R.__css.has(name)) return Promise.resolve(); // shipped inside an already-loaded bundle
+  let link = found;
+  if (!link) {
+    link = Object.assign(document.createElement('link'), { rel: 'stylesheet', href: url(`${name}${R.__min ? '.min' : ''}.css`) });
     link.dataset.acModule = name;
-    link.onload = resolve;
-    link.onerror = () => { console.warn(`[AC] module css failed: ${name}`); resolve(); };
     const a = anchor();
     if (a) a.after(link); else document.head.append(link);
-  });
+  }
+  R.__css.add(name);
+  const p = sheetReady(link);
+  cssWait.set(name, p);
+  return p;
 }
 
 function loadOne(name) {
