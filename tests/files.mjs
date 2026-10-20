@@ -148,7 +148,7 @@ console.log('desktop');
   await p.click('[data-job-act="resume"]');
   await p.waitForSelector('.ac-fm-job[data-state="done"]', { timeout: 15000 });
   ok(await p.locator('.ac-fm-tile .ac-fm__name:has-text("big-report")').count() === 1, 'finished upload appears in the folder');
-  await fm(() => window.__files.upload([new File([new Uint8Array(1000)], 'big-report.pdf', { type: 'application/pdf' })]));
+  await fm(() => { window.__files.upload([new File([new Uint8Array(1000)], 'big-report.pdf', { type: 'application/pdf' })]); });
   await p.waitForSelector('.ac-fm-conflict', { timeout: 4000 });
   ok(true, 'a name clash opens the conflict dialog');
   await p.click('[data-choice="keep"]');
