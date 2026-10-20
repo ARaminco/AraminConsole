@@ -146,6 +146,7 @@ await AC.use('maps');                  // بارگذاری تنبل یک ماژ�
 Issue و Pull Request خوشامد است: [CONTRIBUTING.md](CONTRIBUTING.md)، [آیین‌نامه رفتار](CODE_OF_CONDUCT.md)، [سیاست امنیتی](SECURITY.md). با `npm run dev` سرور محلی را بالا بیاورید و http://localhost:5178/demo/ را باز کنید. دستیارهای هوش مصنوعی ابتدا [AGENTS.md](AGENTS.md) را بخوانند.
 
 ## منابع و سپاس
+- تم پیش‌فرض: **Air** (رنگ‌های برند AIR). نام و لوگوی AIR علامت تجاری AIR است و **زیر مجوز MIT نیست**؛ برای برند خودتان جایگزینش کنید.
 - آیکون‌ها: [Lucide](https://lucide.dev)، مجوز ISC.
 - فونت: [وزیرمتن](https://github.com/rastikerdar/vazirmatn) از صابر راستی‌کردار، مجوز SIL OFL 1.1.
 - لوگوی بانک‌ها: بانک‌های ایرانی از [iranian-banks-icons](https://github.com/houtan-rocky/iranian-banks-react-icons) (MIT)، شبکه‌های کارت و بانک‌های خارجی از [simple-icons](https://simpleicons.org) (CC0). **همهٔ لوگوها علامت تجاری صاحبانشان‌اند و فقط برای شناسایی آمده‌اند.** جزئیات: `src/banks/SOURCES.md`.
