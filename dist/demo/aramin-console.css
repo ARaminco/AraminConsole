@@ -1204,7 +1204,7 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
   .ac-content { padding-block-end: calc(var(--ac-tabbar-h) + var(--ac-safe-bottom) + var(--ac-s-10)); }
 }
 
-.ac-page-enter { animation: ac-fade-up var(--ac-dur-4) var(--ac-ease-out) both; }
+.ac-page-enter { animation: ac-fade-up var(--ac-dur-4) var(--ac-ease-out) backwards; } /* backwards: no transform left behind (it would trap position:fixed children) */
 
 /* initial / slow-route placeholder inside .ac-content */
 .ac-page-loading { display: grid; gap: var(--ac-s-6); padding-block: var(--ac-s-5); }
