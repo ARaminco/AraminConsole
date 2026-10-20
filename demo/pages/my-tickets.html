@@ -1,0 +1,102 @@
+<section class="ac-page" data-page="my-tickets" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="mt.eyebrow">مرکز پشتیبانی</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.myTickets">درخواست‌های من</h1>
+      <p class="ac-page-head__sub" data-i18n="mt.sub">وضعیت درخواست‌هایتان را دنبال کنید یا درخواست تازه‌ای ثبت کنید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--primary" type="button" data-mt-new><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="mt.new">درخواست جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-span-12 ac-card--static ac-tk-help">
+      <div class="ac-card__body">
+        <div class="ac-tk-help__text"><span class="ac-tk-help__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-life-buoy"/></svg></span><div><h2 class="ac-card__title" data-i18n="mt.helpTitle">قبل از ثبت درخواست، راهنما را ببینید</h2><p class="ac-card__sub" data-i18n="mt.helpSub">بیشتر پاسخ‌ها همین‌جا هستند؛ کمتر از یک دقیقه.</p></div></div>
+        <label class="ac-searchpill ac-tk-help__search"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg><input type="search" placeholder="جستجو در راهنما…" aria-label="Search help" data-i18n-attr="placeholder:mt.searchHelp; aria-label:mt.searchHelp" data-mt-help></label>
+        <div class="ac-tk-help__chips" data-mt-articles></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-span-12 ac-card--static">
+      <div class="ac-card__head">
+        <div class="ac-segmented" data-ac="segmented" role="radiogroup" aria-label="View" data-i18n-attr="aria-label:mt.view" data-mt-tabs>
+          <button class="ac-segmented__item" type="button" role="radio" data-value="list" aria-checked="true"><svg class="ac-icon ac-icon--sm" aria-hidden="true"><use href="#i-tickets"/></svg><span data-i18n="mt.list">درخواست‌های من</span></button>
+          <button class="ac-segmented__item" type="button" role="radio" data-value="new"><svg class="ac-icon ac-icon--sm" aria-hidden="true"><use href="#i-square-pen"/></svg><span data-i18n="mt.new">درخواست جدید</span></button>
+        </div>
+      </div>
+
+      <div class="ac-card__body" data-mt-panel="list">
+        <div class="ac-split ac-tk-portal" data-ac="split">
+          <div class="ac-split__pane ac-tk-portal__list"><ul class="ac-tk-mylist" role="list" data-mt-list></ul></div>
+          <div class="ac-split__pane ac-tk-portal__detail"><div class="ac-tk-portal__conv" data-mt-detail></div></div>
+        </div>
+      </div>
+
+      <div class="ac-card__body" data-mt-panel="new" hidden>
+        <form class="ac-wizard ac-tk-wizard" data-ac="form wizard" autocomplete="off" data-mt-form>
+          <ol class="ac-stepper">
+            <li class="ac-step" data-state="current"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="mt.s1">موضوع</strong><small data-i18n="mt.s1Sub">دستهٔ درخواست</small></span></li>
+            <li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="mt.s2">جزئیات</strong><small data-i18n="mt.s2Sub">شرح مشکل</small></span></li>
+            <li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="mt.s3">پیوست</strong><small data-i18n="mt.s3Sub">تصویر یا فایل</small></span></li>
+            <li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="mt.s4">بازبینی</strong><small data-i18n="mt.s4Sub">ثبت نهایی</small></span></li>
+          </ol>
+
+          <section class="ac-wizard__step" aria-labelledby="mt-s1">
+            <h3 class="ac-form-section__title" id="mt-s1" data-i18n="mt.s1Title">درخواست شما دربارهٔ چیست؟</h3>
+            <fieldset class="ac-choice-group" data-ac-rules="required">
+              <legend class="ac-visually-hidden" data-i18n="mt.s1">موضوع</legend>
+              <div class="ac-tk-create__cats ac-tk-create__cats--lg" data-mt-cats></div>
+            </fieldset>
+          </section>
+
+          <section class="ac-wizard__step" aria-labelledby="mt-s2" hidden>
+            <h3 class="ac-form-section__title" id="mt-s2" data-i18n="mt.s2Title">کمی بیشتر توضیح دهید</h3>
+            <div class="ac-form-grid">
+              <div class="ac-field ac-span-full">
+                <label class="ac-label" for="mt-subject"><span data-i18n="mt.subject">عنوان</span><span class="ac-label__req">*</span></label>
+                <div class="ac-input-group" data-ac="input" data-counter><input class="ac-input" id="mt-subject" name="subject" maxlength="80" data-ac-rules="required|min:5" placeholder="مثلا: سفارشم هنوز ارسال نشده" data-i18n-attr="placeholder:mt.subjectPh"></div>
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="mt-order"><span data-i18n="mt.order">سفارش مرتبط</span><span class="ac-label__opt" data-i18n="forms.optional">اختیاری</span></label>
+                <select class="ac-select" id="mt-order" name="order" data-mt-orders></select>
+              </div>
+              <fieldset class="ac-field ac-choice-group">
+                <legend class="ac-label" data-i18n="mt.urgency">فوریت</legend>
+                <div class="ac-segmented ac-segmented--block" data-ac="segmented" role="radiogroup" aria-label="Urgency" data-i18n-attr="aria-label:mt.urgency" data-mt-urgency>
+                  <button class="ac-segmented__item" type="button" role="radio" data-value="low" data-i18n="mt.uLow">عادی</button>
+                  <button class="ac-segmented__item" type="button" role="radio" data-value="normal" aria-checked="true" data-i18n="mt.uNormal">مهم</button>
+                  <button class="ac-segmented__item" type="button" role="radio" data-value="urgent" data-i18n="mt.uUrgent">فوری</button>
+                </div>
+                <input type="hidden" name="priority" value="normal" data-mt-priority>
+              </fieldset>
+              <div class="ac-field ac-span-full">
+                <label class="ac-label" for="mt-message"><span data-i18n="mt.message">شرح درخواست</span><span class="ac-label__req">*</span></label>
+                <div class="ac-input-group" data-ac="input" data-counter><textarea class="ac-input" id="mt-message" name="message" rows="4" maxlength="1000" data-ac-rules="required|min:15"></textarea></div>
+                <p class="ac-help" data-i18n="mt.messageHelp">هرچه دقیق‌تر بنویسید، سریع‌تر پاسخ می‌گیرید.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="ac-wizard__step" aria-labelledby="mt-s3" hidden>
+            <h3 class="ac-form-section__title" id="mt-s3" data-i18n="mt.s3Title">تصویر خطا یا رسید را پیوست کنید</h3>
+            <div class="ac-dropzone" data-ac="dropzone" data-max-files="4" data-max-size="5MB"><input type="file" name="files" multiple accept="image/*,.pdf"></div>
+          </section>
+
+          <section class="ac-wizard__step" aria-labelledby="mt-s4" hidden>
+            <h3 class="ac-form-section__title" id="mt-s4" data-i18n="mt.s4Title">بازبینی و ثبت</h3>
+            <dl class="ac-form-summary" data-mt-review></dl>
+          </section>
+
+          <div class="ac-wizard__nav">
+            <span class="ac-wizard__count ac-num" data-wizard-count></span>
+            <button class="ac-btn" type="button" data-wizard-prev><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-left"/></svg><span data-i18n="forms.back">قبلی</span></button>
+            <button class="ac-btn ac-btn--primary" type="button" data-wizard-next><span data-i18n="forms.next">بعدی</span><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+            <button class="ac-btn ac-btn--primary" type="submit"><svg class="ac-icon" aria-hidden="true"><use href="#i-send"/></svg><span data-i18n="mt.submit">ثبت درخواست</span></button>
+          </div>
+        </form>
+      </div>
+    </article>
+  </div>
+</section>

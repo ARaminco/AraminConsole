@@ -1,0 +1,1 @@
+{ "description": "Long-form reading: .ac-prose typography (fa/ar/en, mixed direction), zero-dependency XSS-safe Markdown renderer (AC.markdown), article chrome (reading progress, sticky TOC with scroll-spy, reading time, lightbox), blog cards, docs layout and Markdown editor styles.", "dependencies": ["data-display"] }

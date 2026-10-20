@@ -1,0 +1,44 @@
+/* demo/pages/notify-lab — lab-only layout (the notification and install UI itself lives in src/modules/{notify,pwa}). */
+.nlab__row { display: grid; gap: var(--ac-s-2); }
+.nlab__wrap { flex-wrap: wrap; max-inline-size: 100%; }
+.nlab__wrap.ac-segmented { display: flex; block-size: auto; }
+.nlab__toggles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 var(--ac-s-4); }
+@media (max-width: 639.98px) { .nlab__toggles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.nlab__toggles .ac-toggle-row { padding-block: var(--ac-s-2); }
+.nlab__code {
+  margin: 0; padding: var(--ac-s-4); border-radius: var(--ac-r-lg); background: var(--ac-surface-2); border: 1px solid var(--ac-border);
+  font-family: var(--ac-font-mono); font-size: var(--ac-fs-xs); line-height: 1.55; color: var(--ac-text-soft, var(--ac-text));
+  max-block-size: 15rem; overflow: auto; white-space: pre; text-align: left;
+}
+.nlab__tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ac-s-2); }
+@media (max-width: 400px) { .nlab__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.nlab__tile {
+  display: grid; justify-items: start; gap: 2px; padding: var(--ac-s-3); text-align: start; font: inherit; color: var(--ac-text);
+  background: var(--ac-surface-1, var(--ac-elevated)); border: 1px solid var(--ac-border); border-radius: var(--ac-r-lg); cursor: pointer;
+  transition: transform var(--ac-dur-1) var(--ac-ease), border-color var(--ac-dur-2) var(--ac-ease), box-shadow var(--ac-dur-2) var(--ac-ease);
+}
+.nlab__tile:hover { border-color: var(--ac-border-strong); box-shadow: var(--ac-shadow-sm); }
+.nlab__tile:active { transform: scale(0.97); }
+.nlab__tile:focus-visible { outline: none; box-shadow: var(--ac-focus); }
+.nlab__tile .ac-ntf__icon { margin-block-end: var(--ac-s-2); }
+.nlab__tile strong { font-size: var(--ac-fs-sm); }
+.nlab__tile small { color: var(--ac-muted); font-size: var(--ac-fs-xs); }
+.nlab__inline { display: grid; gap: var(--ac-s-2); margin-block-start: var(--ac-s-3); }
+.nlab__inline:empty { display: none; }
+.nlab__state { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ac-s-2); margin: 0; }
+@media (max-width: 639.98px) { .nlab__state { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.nlab__state > div { padding: var(--ac-s-2) var(--ac-s-3); border-radius: var(--ac-r-md); background: var(--ac-surface-2); }
+.nlab__state dt { color: var(--ac-muted); font-size: var(--ac-fs-xs); }
+.nlab__state dd { margin: 0; font-weight: var(--ac-fw-semibold, 600); font-variant-numeric: tabular-nums; }
+.nlab__badge { display: flex; align-items: center; justify-content: space-between; gap: var(--ac-s-3); flex-wrap: wrap; }
+.nlab__count { min-inline-size: 2rem; text-align: center; font-weight: 700; font-size: var(--ac-fs-lg); }
+[data-page="notify-lab"] .ac-bento > * { min-inline-size: 0; }
+.nlab__code { max-inline-size: 100%; }
+.nlab__chips { display: flex; flex-wrap: wrap; gap: var(--ac-s-2); }
+.nlab__chips .ac-chip { cursor: pointer; }
+.nlab__dot { inline-size: 0.6rem; block-size: 0.6rem; border-radius: 50%; background: var(--ac-border-strong); }
+.nlab__dot[data-tone="accent"] { background: var(--ac-accent); }
+.nlab__dot[data-tone="success"] { background: var(--ac-success); }
+.nlab__dot[data-tone="warning"] { background: var(--ac-warning); }
+.nlab__dot[data-tone="danger"] { background: var(--ac-danger); }
+.nlab__dot[data-tone="info"] { background: var(--ac-info); }

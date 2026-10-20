@@ -1,0 +1,55 @@
+<section class="ac-page" data-page="orders" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="ord.eyebrow">فروش</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.orders">سفارش‌ها</h1>
+      <p class="ac-page-head__sub" data-i18n="ord.sub">سفارش‌های فروشگاه آنلاین و حضوری را پیگیری کنید و فاکتور بگیرید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-hide-phone" type="button" data-ord-export><svg class="ac-icon" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="common.export">خروجی</span></button>
+      <a class="ac-btn ac-btn--primary" href="#/invoice"><svg class="ac-icon" aria-hidden="true"><use href="#i-receipt"/></svg><span data-i18n="ord.newInvoice">فاکتور جدید</span></a>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-card--accent ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="ord.revenue">فروش ۳۰ روز</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-dollar-sign"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-prefix="$" data-compact data-ord-kpi="revenue">0</span></div>
+      <div class="ac-stat__foot"><span class="ac-trend" data-trend="up">11.4%</span></div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="ord.count">سفارش‌ها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-cart"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-ord-kpi="count">0</span></div>
+      <div class="ac-stat__foot"><span class="ac-trend" data-trend="up">6%</span></div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="ord.aov">میانگین سبد</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-bag"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-prefix="$" data-ord-kpi="aov">0</span></div>
+      <div class="ac-stat__foot"><span class="ac-trend" data-trend="down">2.1%</span></div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="ord.toShip">آمادهٔ ارسال</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-truck"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-ord-kpi="pending">0</span></div>
+      <div class="ac-stat__foot" data-i18n="ord.toShipFoot">پرداخت‌شده یا در انتظار</div>
+    </article>
+
+    <article class="ac-card ac-card--static ac-span-12">
+      <div class="ac-card__head pa-head-wrap">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ord.list">همهٔ سفارش‌ها</h2>
+          <p class="ac-card__sub" data-i18n="ord.listSub">روی هر ردیف بزنید تا جزئیات باز شود.</p>
+        </div>
+        <div class="ord-filters" role="group" aria-label="Status" data-i18n-attr="aria-label:col.status" data-ord-filters>
+          <button class="ac-chip" type="button" data-status="all" aria-pressed="true"><span data-i18n="ops.all">همه</span><span class="ac-count" data-n="all">0</span></button>
+          <button class="ac-chip" type="button" data-status="paid" aria-pressed="false"><span data-i18n="status.paid">پرداخت‌شده</span><span class="ac-count" data-n="paid">0</span></button>
+          <button class="ac-chip" type="button" data-status="pending" aria-pressed="false"><span data-i18n="status.pending">در انتظار</span><span class="ac-count" data-n="pending">0</span></button>
+          <button class="ac-chip" type="button" data-status="shipped" aria-pressed="false"><span data-i18n="status.shipped">ارسال‌شده</span><span class="ac-count" data-n="shipped">0</span></button>
+          <button class="ac-chip" type="button" data-status="refunded" aria-pressed="false"><span data-i18n="status.refunded">مرجوعی</span><span class="ac-count" data-n="refunded">0</span></button>
+        </div>
+      </div>
+      <div class="ac-card__body ac-card__body--flush">
+        <div data-ord-table></div>
+      </div>
+    </article>
+  </div>
+</section>

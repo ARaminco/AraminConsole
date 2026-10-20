@@ -1,0 +1,1 @@
+{ "description": "Messenger panel: conversation list (filters, pinned, unread, muted), direct / group / channel threads, reactions, reply/quote, edit, delete, forward, voice notes, image lightbox, link previews, read receipts, typing, infinite scroll up, info sidebar with media / files / links, new chat modal; phones: push/pop stack.", "dependencies": ["apps", "overlays"] }

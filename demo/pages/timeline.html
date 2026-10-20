@@ -1,0 +1,47 @@
+<section class="ac-page" data-page="timeline" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.pages">صفحه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.timeline">خط زمانی</h1>
+      <p class="ac-page-head__sub" data-i18n="tl.sub">هر اتفاقی که در فضای کاری افتاده، به ترتیب زمان.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--outline" type="button" data-tl-export><svg class="ac-icon" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="common.export">خروجی</span></button>
+    </div>
+  </header>
+
+  <div class="ac-apptoolbar ac-animate-in">
+    <div class="ac-segmented ac-segmented--sm" data-ac="segmented" aria-label="Filter" data-i18n-attr="aria-label:kanban.filter" data-tl-filter>
+      <button class="ac-segmented__item" type="button" aria-checked="true" data-value="all" data-i18n="kanban.all">همه</button>
+      <button class="ac-segmented__item" type="button" aria-checked="false" data-value="deploy" data-i18n="tl.deploys">انتشارها</button>
+      <button class="ac-segmented__item" type="button" aria-checked="false" data-value="people" data-i18n="tl.people">افراد</button>
+      <button class="ac-segmented__item" type="button" aria-checked="false" data-value="alert" data-i18n="tl.alerts">هشدارها</button>
+    </div>
+  </div>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-card--static ac-span-12 ac-span-xl-8">
+      <div class="ac-card__body">
+        <div class="ac-activity" data-tl-list></div>
+        <div class="ac-activity__more"><button class="ac-btn ac-btn--outline" type="button" data-tl-more><svg class="ac-icon" aria-hidden="true"><use href="#i-refresh-cw"/></svg><span data-i18n="tl.loadMore">رویدادهای قدیمی‌تر</span></button></div>
+      </div>
+    </article>
+    <aside class="ac-span-12 ac-span-xl-4 ac-stack ac-gap-4">
+      <article class="ac-card ac-card--static">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="tl.week">این هفته</h2></div>
+        <div class="ac-card__body">
+          <div class="ac-kpis">
+            <div class="ac-kpi ac-kpi--accent"><div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="tl.deploys">انتشارها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-rocket"/></svg></span></div><div class="ac-kpi__value"><span data-ac="counter" data-to="14">0</span></div><div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">12%</span></div></div>
+            <div class="ac-kpi"><div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="tl.merged">ادغام‌ها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-git-merge"/></svg></span></div><div class="ac-kpi__value"><span data-ac="counter" data-to="38">0</span></div><div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">6%</span></div></div>
+            <div class="ac-kpi"><div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="tl.incidents">رخدادها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-triangle-alert"/></svg></span></div><div class="ac-kpi__value"><span data-ac="counter" data-to="2">0</span></div><div class="ac-kpi__foot"><span class="ac-trend" data-trend="down">50%</span></div></div>
+            <div class="ac-kpi"><div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="tl.comments">نظرها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-message-square"/></svg></span></div><div class="ac-kpi__value"><span data-ac="counter" data-to="127">0</span></div><div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">9%</span></div></div>
+          </div>
+        </div>
+      </article>
+      <article class="ac-card ac-card--static">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="tl.top">فعال‌ترین‌ها</h2></div>
+        <div class="ac-card__body"><ul class="ac-list ac-list--divided" role="list" data-tl-people></ul></div>
+      </article>
+    </aside>
+  </div>
+</section>

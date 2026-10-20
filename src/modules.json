@@ -1,0 +1,636 @@
+{
+  "$comment": "AraminConsole module manifest. Paths are relative to src/. 'core' is always included. Folders in src/modules/<name>/ are discovered automatically (module.json inside the folder may add description / dependencies); run `node scripts/build.mjs --sync-manifest` to write them and the measured sizes back here. See docs/modules.md.",
+  "modules": [
+    {
+      "name": "core",
+      "required": true,
+      "description": "Tokens, base, app-shell layout, motion system, atoms (button, card, misc), base form controls and tables (static markup is always styled) and the runtime: AC namespace, auto-init registry, i18n, theme, format, gestures, focus trap, AC.use() lazy loader.",
+      "css": [
+        "css/tokens.css",
+        "css/base.css",
+        "css/layout.css",
+        "css/components/button.css",
+        "css/components/card.css",
+        "css/components/misc.css",
+        "css/components/table.css",
+        "css/components/form.css",
+        "css/motion.css"
+      ],
+      "js": [
+        "js/core.js",
+        "js/motion.js",
+        "js/loader.js"
+      ],
+      "dependencies": [],
+      "size": {
+        "js": {
+          "min": 51134,
+          "gzip": 16885
+        },
+        "css": {
+          "min": 131832,
+          "gzip": 24185
+        }
+      }
+    },
+    {
+      "name": "shell",
+      "description": "App chrome behaviour: rail / dock / flyout, bottom tab bar, large title, tabs & segmented, command palette, press ripple, pull-to-refresh, progress ring.",
+      "css": [
+        "css/components/nav.css",
+        "css/components/palette.css"
+      ],
+      "js": [
+        "js/components/rail.js",
+        "js/components/tabbar.js",
+        "js/components/largetitle.js",
+        "js/components/tabs.js",
+        "js/components/palette.js",
+        "js/components/press.js",
+        "js/components/pull-refresh.js",
+        "js/components/ring.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 27438,
+          "gzip": 8489
+        },
+        "css": {
+          "min": 12913,
+          "gzip": 2933
+        }
+      }
+    },
+    {
+      "name": "overlays",
+      "description": "Layer stack + positioning, modal, bottom sheet, drawer, menus / action sheets, popover, tooltip, confirm & prompt, toast, alert, notification center.",
+      "css": [
+        "css/components/overlay.css",
+        "css/components/feedback.css"
+      ],
+      "js": [
+        "js/components/position.js",
+        "js/components/sheet.js",
+        "js/components/modal.js",
+        "js/components/drawer.js",
+        "js/components/menu.js",
+        "js/components/popover.js",
+        "js/components/tooltip.js",
+        "js/components/toast.js",
+        "js/components/confirm.js",
+        "js/components/alert.js",
+        "js/components/notifications.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 52354,
+          "gzip": 16074
+        },
+        "css": {
+          "min": 25623,
+          "gzip": 5312
+        }
+      }
+    },
+    {
+      "name": "customizer",
+      "description": "Theme customizer drawer (theme, accent, density, radius, language, digits). Styles ship with overlays.",
+      "css": [],
+      "js": [
+        "js/components/customizer.js"
+      ],
+      "dependencies": [
+        "overlays",
+        "shell"
+      ],
+      "size": {
+        "js": {
+          "min": 8412,
+          "gzip": 3133
+        },
+        "css": null
+      }
+    },
+    {
+      "name": "langpicker",
+      "description": "Data-driven language picker: popover on desktop, bottom sheet on phones, crossfades into the new direction.",
+      "css": [
+        "css/components/langpicker.css"
+      ],
+      "js": [
+        "js/components/langpicker.js"
+      ],
+      "dependencies": [
+        "overlays"
+      ],
+      "size": {
+        "js": {
+          "min": 7548,
+          "gzip": 2988
+        },
+        "css": {
+          "min": 5654,
+          "gzip": 1670
+        }
+      }
+    },
+    {
+      "name": "forms",
+      "description": "Inputs, floating labels, password, OTP, number, range, rating, tags, swatches, combobox / multi-select, file dropzone, inline validation, wizard. Styles ship with core.",
+      "css": [],
+      "js": [
+        "js/components/form-core.js",
+        "js/components/form-input.js",
+        "js/components/form-select.js",
+        "js/components/form-file.js",
+        "js/components/form-validate.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 55113,
+          "gzip": 18316
+        },
+        "css": null
+      }
+    },
+    {
+      "name": "datepicker",
+      "description": "Jalali + Gregorian date / range / time pickers and AC.date helpers.",
+      "css": [
+        "css/components/datepicker.css"
+      ],
+      "js": [
+        "js/components/datepicker.js",
+        "js/components/date.js"
+      ],
+      "dependencies": [
+        "forms"
+      ],
+      "size": {
+        "js": {
+          "min": 24683,
+          "gzip": 8840
+        },
+        "css": {
+          "min": 7768,
+          "gzip": 2149
+        }
+      }
+    },
+    {
+      "name": "data-display",
+      "description": "Swipeable lists, accordion, tree view, code block / JSON viewer, log viewer, description lists, timeline.",
+      "css": [
+        "css/components/data.css"
+      ],
+      "js": [
+        "js/components/list.js",
+        "js/components/accordion.js",
+        "js/components/tree.js",
+        "js/components/code.js",
+        "js/components/logview.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 20578,
+          "gzip": 7301
+        },
+        "css": {
+          "min": 13408,
+          "gzip": 3094
+        }
+      }
+    },
+    {
+      "name": "table",
+      "description": "Data table: sort, search, filters, pagination, selection + bulk bar, column visibility, expansion, CSV, card list on phones. Styles ship with core.",
+      "css": [],
+      "js": [
+        "js/components/table.js"
+      ],
+      "dependencies": [
+        "data-display"
+      ],
+      "size": {
+        "js": {
+          "min": 25129,
+          "gzip": 8558
+        },
+        "css": null
+      }
+    },
+    {
+      "name": "chart",
+      "description": "Inline-SVG charts: line, area, bar, donut, gauge, sparkline, heatmap.",
+      "css": [
+        "css/components/chart.css"
+      ],
+      "js": [
+        "js/components/chart.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 27024,
+          "gzip": 10134
+        },
+        "css": {
+          "min": 9553,
+          "gzip": 2407
+        }
+      }
+    },
+    {
+      "name": "apps",
+      "description": "App-screen styles (mail, chat, calendar, files, kanban) + kanban drag & drop and split panes.",
+      "css": [
+        "css/components/apps.css"
+      ],
+      "js": [
+        "js/components/kanban.js",
+        "js/components/split.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 10940,
+          "gzip": 4071
+        },
+        "css": {
+          "min": 36484,
+          "gzip": 6604
+        }
+      }
+    },
+    {
+      "name": "money",
+      "description": "Money input & formatting, Iranian banks (logos, IBAN / Sheba, card numbers), bank card form.",
+      "css": [
+        "css/components/finance.css"
+      ],
+      "js": [
+        "js/components/money.js",
+        "js/components/bank.js",
+        "js/components/bank-card.js"
+      ],
+      "dependencies": [
+        "forms"
+      ],
+      "size": {
+        "js": {
+          "min": 44854,
+          "gzip": 16129
+        },
+        "css": {
+          "min": 10455,
+          "gzip": 3245
+        }
+      }
+    },
+    {
+      "name": "chat",
+      "description": "Messenger panel: conversation list (filters, pinned, unread, muted), direct / group / channel threads, reactions, reply/quote, edit, delete, forward, voice notes, image lightbox, link previews, read receipts, typing, infinite scroll up, info sidebar with media / files / links, new chat modal; phones: push/pop stack.",
+      "css": [
+        "modules/chat/chat.css"
+      ],
+      "js": [
+        "modules/chat/chat.js"
+      ],
+      "dependencies": [
+        "apps",
+        "overlays"
+      ],
+      "size": {
+        "js": {
+          "min": 55658,
+          "gzip": 16799
+        },
+        "css": {
+          "min": 37746,
+          "gzip": 6664
+        }
+      }
+    },
+    {
+      "name": "files",
+      "description": "Finder / Explorer-class file, document and records manager on a pluggable storage adapter: icons / list / columns / gallery views, real content thumbnails (images, video frames, text/CSV/Markdown pages, audio waveforms, server renditions; pdf.js optional plugin), preview pane, Quick Look, Get Info inspector with document records (type, number, parties, expiry reminders, approval, OCR), versions, sharing, tags, drag & drop, marquee, clipboard, uploads with pause/resume and conflict resolution, trash; phones: Files-app layout.",
+      "css": [
+        "modules/files/files.css"
+      ],
+      "js": [
+        "modules/files/files.js"
+      ],
+      "dependencies": [
+        "overlays"
+      ],
+      "size": {
+        "js": {
+          "min": 169978,
+          "gzip": 51871
+        },
+        "css": {
+          "min": 60472,
+          "gzip": 11346
+        }
+      }
+    },
+    {
+      "name": "invoice-ir",
+      "description": "",
+      "css": [
+        "modules/invoice-ir/invoice-ir.css"
+      ],
+      "js": [
+        "modules/invoice-ir/invoice-ir.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 34436,
+          "gzip": 11327
+        },
+        "css": {
+          "min": 17912,
+          "gzip": 4324
+        }
+      }
+    },
+    {
+      "name": "mail",
+      "description": "Email client: folders + coloured labels, threads, bulk actions, search filters, snooze, swipe actions, floating / minimisable compose with rich text, chips + autocomplete, attachments, signature, schedule send, draft autosave, undo send, settings.",
+      "css": [
+        "modules/mail/mail.css"
+      ],
+      "js": [
+        "modules/mail/mail.js"
+      ],
+      "dependencies": [
+        "apps",
+        "overlays",
+        "forms",
+        "data-display"
+      ],
+      "size": {
+        "js": {
+          "min": 63070,
+          "gzip": 18805
+        },
+        "css": {
+          "min": 32592,
+          "gzip": 5758
+        }
+      }
+    },
+    {
+      "name": "maps",
+      "description": "",
+      "css": [
+        "modules/maps/maps.css"
+      ],
+      "js": [
+        "modules/maps/maps.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 83466,
+          "gzip": 27327
+        },
+        "css": {
+          "min": 24825,
+          "gzip": 5281
+        }
+      }
+    },
+    {
+      "name": "marketing",
+      "description": "",
+      "css": [
+        "modules/marketing/marketing.css"
+      ],
+      "js": [
+        "modules/marketing/marketing.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 40949,
+          "gzip": 13521
+        },
+        "css": {
+          "min": 15850,
+          "gzip": 3601
+        }
+      }
+    },
+    {
+      "name": "notify",
+      "description": "AC.notify(): toast, rich card, banner, inline, undo snackbar, progress, dynamic island, system & Web Push — routed by per-user preferences (settings card), with sound, haptics, grouping and priority.",
+      "css": [
+        "modules/notify/notify.css"
+      ],
+      "js": [
+        "modules/notify/notify.js"
+      ],
+      "dependencies": [
+        "overlays"
+      ],
+      "size": {
+        "js": {
+          "min": 39727,
+          "gzip": 13152
+        },
+        "css": {
+          "min": 18048,
+          "gzip": 3975
+        }
+      }
+    },
+    {
+      "name": "prose",
+      "description": "Long-form reading: .ac-prose typography (fa/ar/en, mixed direction), zero-dependency XSS-safe Markdown renderer (AC.markdown), article chrome (reading progress, sticky TOC with scroll-spy, reading time, lightbox), blog cards, docs layout and Markdown editor styles.",
+      "css": [
+        "modules/prose/prose.css"
+      ],
+      "js": [
+        "modules/prose/prose.js"
+      ],
+      "dependencies": [
+        "data-display"
+      ],
+      "size": {
+        "js": {
+          "min": 31818,
+          "gzip": 11572
+        },
+        "css": {
+          "min": 33310,
+          "gzip": 6934
+        }
+      }
+    },
+    {
+      "name": "pwa",
+      "description": "Service-worker lifecycle with update toast, install invitation (sheet / banner / card / inline / iOS steps), app badge, Web Share, standalone tweaks, splash, network status, background-sync outbox.",
+      "css": [
+        "modules/pwa/pwa.css"
+      ],
+      "js": [
+        "modules/pwa/pwa.js"
+      ],
+      "dependencies": [
+        "overlays"
+      ],
+      "size": {
+        "js": {
+          "min": 28100,
+          "gzip": 10411
+        },
+        "css": {
+          "min": 12523,
+          "gzip": 3119
+        }
+      }
+    },
+    {
+      "name": "support-chat",
+      "description": "Floating support chat widget: launcher with unread badge, Intercom-style panel (home, conversation with typing / quick replies / attachments / emoji / read receipts, help articles, offline form); phones: full-screen sheet.",
+      "css": [
+        "modules/support-chat/support-chat.css"
+      ],
+      "js": [
+        "modules/support-chat/support-chat.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 23904,
+          "gzip": 8500
+        },
+        "css": {
+          "min": 20354,
+          "gzip": 4247
+        }
+      }
+    },
+    {
+      "name": "terminal",
+      "description": "",
+      "css": [
+        "modules/terminal/terminal.css"
+      ],
+      "js": [
+        "modules/terminal/terminal.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 4660,
+          "gzip": 2085
+        },
+        "css": {
+          "min": 3005,
+          "gzip": 1138
+        }
+      }
+    },
+    {
+      "name": "tickets",
+      "description": "Help desk: ticket inbox (queue views, filters, priority / status / live SLA chips, bulk assign), ticket detail (thread, internal notes, attachments, canned replies, macros, merge, SLA timer, properties, tags, CSAT, activity), create-ticket modal, customer status timeline; phones: list → detail push.",
+      "css": [
+        "modules/tickets/tickets.css"
+      ],
+      "js": [
+        "modules/tickets/tickets.js"
+      ],
+      "dependencies": [
+        "table",
+        "overlays",
+        "forms",
+        "apps"
+      ],
+      "size": {
+        "js": {
+          "min": 49435,
+          "gzip": 15787
+        },
+        "css": {
+          "min": 25409,
+          "gzip": 4881
+        }
+      }
+    },
+    {
+      "name": "uptime",
+      "description": "",
+      "css": [
+        "modules/uptime/uptime.css"
+      ],
+      "js": [
+        "modules/uptime/uptime.js"
+      ],
+      "dependencies": [
+        "core"
+      ],
+      "size": {
+        "js": {
+          "min": 2326,
+          "gzip": 1176
+        },
+        "css": {
+          "min": 1396,
+          "gzip": 704
+        }
+      }
+    },
+    {
+      "name": "user-panel",
+      "description": "Customer 'my account' home blocks: wallet card with privacy toggle, profile completeness ring, quick-action app grid, order step tracker, notification / ticket rows, security checklist, time-aware greeting.",
+      "css": [
+        "modules/user-panel/user-panel.css"
+      ],
+      "js": [
+        "modules/user-panel/user-panel.js"
+      ],
+      "dependencies": [
+        "shell"
+      ],
+      "size": {
+        "js": {
+          "min": 4429,
+          "gzip": 2111
+        },
+        "css": {
+          "min": 12138,
+          "gzip": 2907
+        }
+      }
+    }
+  ]
+}

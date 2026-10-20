@@ -1,0 +1,1 @@
+{ "description": "Floating support chat widget: launcher with unread badge, Intercom-style panel (home, conversation with typing / quick replies / attachments / emoji / read receipts, help articles, offline form); phones: full-screen sheet.", "dependencies": ["core"] }

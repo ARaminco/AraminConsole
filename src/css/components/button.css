@@ -1,0 +1,191 @@
+/* ==========================================================================
+   Buttons — pills. primary = ink (black; white in dark), default = gray pill
+   .ac-btn + --primary | --secondary (default) | --outline | --accent | --gradient | --ghost | --soft | --danger | --danger-soft | --link
+   sizes: --sm | --lg   shape: --icon (circle) | --square | --block
+   loading: aria-busy="true" (spinner, label kept for width)
+   group: <div class="ac-btn-group" role="group">…</div>
+   ========================================================================== */
+
+.ac-btn {
+  --_bg: var(--ac-pill-bg);
+  --_fg: var(--ac-text);
+  --_bd: transparent;
+  --_bg-hover: var(--ac-pill-bg-hover);
+  --_shadow: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ac-s-2);
+  min-block-size: var(--ac-control-h);
+  padding-inline: var(--ac-control-px);
+  border: 1px solid var(--_bd);
+  border-radius: var(--ac-r-pill);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-size: var(--ac-fs-md);
+  font-weight: var(--ac-fw-medium);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: var(--_shadow);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    background-color var(--ac-dur-1) var(--ac-ease),
+    border-color var(--ac-dur-1) var(--ac-ease),
+    color var(--ac-dur-1) var(--ac-ease),
+    box-shadow var(--ac-dur-2) var(--ac-ease),
+    transform var(--ac-dur-2) var(--ac-ease);
+}
+.ac-btn:hover { background: var(--_bg-hover); }
+.ac-btn:active:not(:disabled, [aria-disabled="true"]) { transform: var(--ac-press); }
+.ac-btn:focus-visible { outline: none; box-shadow: var(--_shadow), var(--ac-focus); }
+.ac-btn:disabled, .ac-btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; box-shadow: none; }
+.ac-btn .ac-icon { inline-size: 1.1em; block-size: 1.1em; margin-inline: -0.1em; }
+@media (pointer: coarse) { .ac-btn { min-block-size: max(var(--ac-control-h), 2.75rem); } }
+
+/* primary = black ink pill (white in dark mode) */
+.ac-btn--primary {
+  --_bg: var(--ac-ink);
+  --_fg: var(--ac-ink-contrast);
+  --_bd: transparent;
+  --_bg-hover: var(--ac-ink-hover);
+  --_shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+.ac-btn--primary:hover { box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.55); transform: translateY(-1px); }
+/* accent CTA (orange gradient) — use sparingly */
+.ac-btn--gradient, .ac-btn--accent {
+  --_bg: var(--ac-accent);
+  --_fg: var(--ac-accent-contrast);
+  --_bd: transparent;
+  --_bg-hover: var(--ac-accent-hover);
+  --_shadow: var(--ac-shadow-glow), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.ac-btn--gradient { background-image: var(--ac-gradient); }
+.ac-btn--gradient:hover { filter: brightness(1.05) saturate(1.05); }
+/* secondary = light gray pill (the default look) ; --outline = white pill with hairline */
+.ac-btn--secondary { /* default look */ }
+.ac-btn--outline { --_bg: var(--ac-surface-1); --_bd: var(--ac-border-strong); --_bg-hover: var(--ac-surface-2); }
+.ac-btn--ghost {
+  --_bg: transparent;
+  --_bd: transparent;
+  --_bg-hover: var(--ac-hover);
+  --_shadow: none;
+  --_fg: var(--ac-text-soft);
+}
+.ac-btn--ghost:hover { color: var(--ac-text); }
+.ac-btn--soft {
+  --_bg: var(--ac-accent-soft);
+  --_fg: var(--ac-accent-ink);
+  --_bd: transparent;
+  --_bg-hover: var(--ac-accent-soft-2);
+  --_shadow: none;
+}
+.ac-btn--danger {
+  --_bg: var(--ac-danger);
+  --_fg: #fff;
+  --_bd: transparent;
+  --_bg-hover: color-mix(in oklab, var(--ac-danger) 88%, #000);
+  --_shadow: 0 1px 2px color-mix(in oklab, var(--ac-danger) 40%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.ac-btn--danger-soft {
+  --_bg: var(--ac-danger-soft);
+  --_fg: var(--ac-danger-ink);
+  --_bd: transparent;
+  --_bg-hover: color-mix(in oklab, var(--ac-danger) 18%, transparent);
+  --_shadow: none;
+}
+.ac-btn--link {
+  --_bg: transparent;
+  --_bg-hover: transparent;
+  --_bd: transparent;
+  --_shadow: none;
+  --_fg: var(--ac-accent-ink);
+  min-block-size: auto;
+  padding-inline: 0;
+  overflow: visible;
+}
+.ac-btn--link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.ac-btn--sm { min-block-size: var(--ac-control-h-sm); padding-inline: calc(var(--ac-control-px) * 0.75); font-size: var(--ac-fs-sm); gap: var(--ac-s-1); }
+.ac-btn--lg { min-block-size: var(--ac-control-h-lg); padding-inline: calc(var(--ac-control-px) * 1.4); font-size: var(--ac-fs-lg); }
+.ac-btn--icon { padding-inline: 0; inline-size: var(--ac-control-h); flex: none; overflow: visible; border-radius: 50%; }
+.ac-btn--icon.ac-btn--sm { inline-size: var(--ac-control-h-sm); }
+.ac-btn--icon.ac-btn--lg { inline-size: var(--ac-control-h-lg); }
+.ac-btn--icon .ac-icon { inline-size: 1.2rem; block-size: 1.2rem; margin: 0; }
+@media (pointer: coarse) { .ac-btn--icon { inline-size: max(var(--ac-control-h), 2.75rem); } }
+.ac-btn--pill { border-radius: var(--ac-r-pill); }
+.ac-btn--square { border-radius: var(--ac-r-md); }
+.ac-btn--block { display: flex; inline-size: 100%; }
+
+/* loading */
+.ac-btn[aria-busy="true"] { color: transparent !important; pointer-events: none; }
+.ac-btn[aria-busy="true"] > * { visibility: hidden; }
+.ac-btn[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
+  border-radius: 50%;
+  border: 2px solid var(--_fg);
+  border-inline-end-color: transparent;
+  animation: ac-spin 0.7s linear infinite;
+}
+
+/* group */
+.ac-btn-group { display: inline-flex; isolation: isolate; }
+.ac-btn-group > .ac-btn { border-radius: 0; }
+.ac-btn-group > .ac-btn:not(:first-child) { margin-inline-start: -1px; }
+.ac-btn-group > .ac-btn:first-child { border-start-start-radius: var(--ac-r-pill); border-end-start-radius: var(--ac-r-pill); }
+.ac-btn-group > .ac-btn:last-child { border-start-end-radius: var(--ac-r-pill); border-end-end-radius: var(--ac-r-pill); }
+.ac-btn-group > .ac-btn:hover, .ac-btn-group > .ac-btn:focus-visible { z-index: 1; }
+.ac-btn-group > .ac-btn:not(:first-child) { border-inline-start: 1px solid var(--ac-border); }
+.ac-btn-group > .ac-btn--primary + .ac-btn--primary { border-inline-start: 1px solid color-mix(in oklab, var(--ac-ink-contrast) 22%, transparent); }
+
+/* ripple (added by press.js on [data-ac="ripple"] or .ac-btn when AC.press.ripple=true) */
+.ac-ripple {
+  position: absolute;
+  z-index: -1;
+  inline-size: var(--ac-ripple-size, 100px);
+  block-size: var(--ac-ripple-size, 100px);
+  left: var(--ac-ripple-x, 0); /* rtl-ok: JS-measured pointer position */
+  top: var(--ac-ripple-y, 0);
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.16;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ac-ripple 520ms var(--ac-ease-out) forwards;
+  pointer-events: none;
+}
+@keyframes ac-ripple { to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+
+/* generic press feedback for any element: class="ac-pressable" */
+.ac-pressable { transition: transform var(--ac-dur-1) var(--ac-ease); cursor: pointer; }
+.ac-pressable:active { transform: var(--ac-press); }
+.ac-ripple-host { position: relative; overflow: hidden; }
+.ac-card--interactive, .ac-tabbar__item { overflow: hidden; }
+
+/* search field pill (card headers, toolbars): <label class="ac-searchpill"><svg class="ac-icon"/><input type="search" placeholder="…"></label> */
+.ac-searchpill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ac-s-2);
+  min-block-size: var(--ac-control-h-sm);
+  inline-size: clamp(9rem, 22vw, 15rem);
+  padding-inline: var(--ac-s-3);
+  border-radius: var(--ac-r-pill);
+  border: 1px solid var(--ac-border);
+  background: var(--ac-surface-1);
+  color: var(--ac-muted);
+  transition: border-color var(--ac-dur-1), box-shadow var(--ac-dur-2);
+}
+.ac-searchpill:focus-within { border-color: var(--ac-border-strong); box-shadow: var(--ac-focus); }
+.ac-searchpill .ac-icon { inline-size: 1rem; block-size: 1rem; }
+.ac-searchpill input { flex: 1; min-width: 0; border: 0; background: none; outline: 0; font-size: var(--ac-fs-sm); color: var(--ac-text); }
+.ac-searchpill input::-webkit-search-cancel-button { display: none; }

@@ -1,0 +1,103 @@
+/*! AraminConsole v0.1.0 — module datepicker CSS — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+
+/* ==== css/components/datepicker.css ==== */
+/* ==========================================================================
+   Pop panels for form controls (combobox list, date picker, time picker).
+   Top-layer popover positioned by JS (--_x/--_y); bottom sheet on phones ([data-sheet]).
+   ========================================================================== */
+.ac-pop {
+  position: fixed; inset: auto; margin: 0; padding: 0;
+  left: var(--_x, 0); top: var(--_y, 0); /* rtl-ok: JS-measured physical position */
+  inline-size: max(var(--_w, 0px), 14rem); max-inline-size: calc(100vw - 16px); max-block-size: var(--_maxh, 22rem);
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--ac-border); border-radius: var(--ac-r-xl);
+  background: var(--ac-elevated); color: var(--ac-text); box-shadow: var(--ac-shadow-lg);
+  z-index: var(--ac-z-dropdown);
+  opacity: 0; transform: translateY(-4px) scale(0.98); transform-origin: top center;
+  transition: opacity var(--ac-dur-2) var(--ac-ease), transform var(--ac-dur-2) var(--ac-ease);
+}
+.ac-pop[data-up] { transform-origin: bottom center; transform: translateY(4px) scale(0.98); }
+.ac-pop[data-state="open"] { opacity: 1; transform: none; }
+@starting-style { .ac-pop[data-state="open"] { opacity: 0; transform: translateY(-4px) scale(0.98); } }
+.ac-pop:not(:popover-open) { display: none; }
+.ac-pop[hidden] { display: none; }
+.ac-pop::backdrop { background: transparent; }
+.ac-pop__scroll { overflow-y: auto; overscroll-behavior: contain; min-block-size: 0; flex: 1 1 auto; }
+.ac-pop__grab { display: none; }
+.ac-pop[data-sheet] {
+  inset-inline: 0; top: auto; bottom: 0; inline-size: auto; max-inline-size: none; max-block-size: 88dvh;
+  border-radius: var(--ac-r-2xl) var(--ac-r-2xl) 0 0; border-inline: 0; border-block-end: 0;
+  padding-block-end: var(--ac-safe-bottom); z-index: var(--ac-z-sheet);
+  transform: translateY(100%); translate: 0 var(--ac-drag, 0px);
+  transition: opacity var(--ac-dur-2), transform var(--ac-dur-4) var(--ac-ease-out);
+}
+.ac-pop[data-sheet][data-state="open"] { transform: none; }
+@starting-style { .ac-pop[data-sheet][data-state="open"] { transform: translateY(100%); } }
+.ac-pop[data-sheet]::backdrop { background: var(--ac-scrim); }
+.ac-pop[data-sheet] .ac-pop__grab { display: block; flex: none; inline-size: 2.25rem; block-size: 5px; margin: var(--ac-s-2) auto 0; border-radius: 5px; background: var(--ac-border-strong); cursor: grab; touch-action: none; }
+
+/* ---- date picker ----------------------------------------------------- */
+.ac-dp { inline-size: 19.5rem; padding: var(--ac-s-3); gap: var(--ac-s-2); }
+.ac-dp[data-double] { inline-size: 38rem; }
+.ac-dp__head { display: flex; align-items: center; gap: var(--ac-s-1); }
+.ac-dp__nav, .ac-dp__title { display: grid; place-items: center; block-size: 2.25rem; border-radius: var(--ac-r-pill); color: var(--ac-text-soft); transition: background var(--ac-dur-1), color var(--ac-dur-1), transform var(--ac-dur-1); }
+.ac-dp__nav { inline-size: 2.25rem; flex: none; background: var(--ac-surface-3); }
+.ac-dp__nav .ac-icon { inline-size: 1.1rem; block-size: 1.1rem; }
+.ac-dp__title { flex: 1; font-weight: var(--ac-fw-bold); color: var(--ac-text); font-size: var(--ac-fs-md); white-space: pre; }
+:is(.ac-dp__nav, .ac-dp__title):hover { background: var(--ac-hover); color: var(--ac-text); }
+:is(.ac-dp__nav, .ac-dp__title, .ac-dp__day, .ac-dp__pick, .ac-dp__cal button, .ac-tp__opt):focus-visible { outline: none; box-shadow: var(--ac-focus); }
+:is(.ac-dp__nav, .ac-dp__day, .ac-dp__pick, .ac-tp__opt):active { transform: scale(0.92); }
+.ac-dp__body { display: grid; gap: var(--ac-s-4); }
+.ac-dp[data-double] .ac-dp__body[data-view="days"] { grid-template-columns: 1fr 1fr; }
+.ac-dp__body[data-view="months"], .ac-dp__body[data-view="years"] { grid-template-columns: repeat(3, 1fr); gap: var(--ac-s-2); padding-block: var(--ac-s-2); }
+.ac-dp__body > * { animation: ac-dp-in var(--ac-dur-3) var(--ac-ease); }
+@keyframes ac-dp-in { from { opacity: 0.4; } }
+.ac-dp__grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; }
+.ac-dp__row { display: contents; }
+.ac-dp__wd { display: grid; place-items: center; block-size: 2rem; font-size: var(--ac-fs-xs); font-weight: var(--ac-fw-semibold); color: var(--ac-muted); }
+.ac-dp__cell { display: grid; }
+.ac-dp__day {
+  position: relative; display: grid; place-items: center; block-size: 2.375rem; border-radius: var(--ac-r-pill);
+  font-size: var(--ac-fs-sm); font-weight: var(--ac-fw-medium); color: var(--ac-text);
+  transition: background var(--ac-dur-1), color var(--ac-dur-1), transform var(--ac-dur-1) var(--ac-ease);
+}
+.ac-dp__day:hover:not(:disabled, [aria-selected="true"], [data-start], [data-end], [data-in]) { background: var(--ac-hover); }
+.ac-dp__day[data-out] { color: var(--ac-faint); }
+.ac-dp__day:disabled { color: var(--ac-faint); opacity: 0.45; text-decoration: line-through; cursor: not-allowed; }
+.ac-dp__day[aria-current="date"]::after { content: ""; position: absolute; inset-block-end: 5px; inline-size: 4px; block-size: 4px; border-radius: 50%; background: var(--ac-accent); }
+.ac-dp__day[data-in] { background: var(--ac-surface-3); border-radius: 0; }
+.ac-dp__day[data-start] { border-start-start-radius: var(--ac-r-pill); border-end-start-radius: var(--ac-r-pill); }
+.ac-dp__day[data-end] { border-start-end-radius: var(--ac-r-pill); border-end-end-radius: var(--ac-r-pill); }
+.ac-dp__day[aria-selected="true"], .ac-dp__day[data-start], .ac-dp__day[data-end] { background: var(--ac-text); color: var(--ac-surface-1); font-weight: var(--ac-fw-semibold); }
+.ac-dp__day[aria-selected="true"]::after, .ac-dp__day[data-start]::after { background: currentColor; }
+.ac-dp__pad { display: block; }
+.ac-dp__pick { block-size: 2.75rem; border-radius: var(--ac-r-pill); font-size: var(--ac-fs-sm); font-weight: var(--ac-fw-medium); transition: background var(--ac-dur-1), transform var(--ac-dur-1); }
+.ac-dp__pick:hover { background: var(--ac-hover); }
+.ac-dp__pick[aria-pressed="true"] { background: var(--ac-text); color: var(--ac-surface-1); }
+.ac-dp__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--ac-s-2); padding-block-start: var(--ac-s-2); border-block-start: 1px solid var(--ac-border); }
+.ac-dp__cal { display: inline-flex; padding: 2px; border-radius: var(--ac-r-pill); background: var(--ac-surface-3); }
+.ac-dp__cal button { padding: 4px var(--ac-s-3); border-radius: var(--ac-r-pill); font-size: var(--ac-fs-xs); font-weight: var(--ac-fw-semibold); color: var(--ac-muted); transition: background var(--ac-dur-2), color var(--ac-dur-2), box-shadow var(--ac-dur-2); }
+.ac-dp__cal button[aria-pressed="true"] { background: var(--ac-surface-1); color: var(--ac-text); box-shadow: var(--ac-shadow-sm); }
+.ac-dp[data-sheet] { padding: var(--ac-s-2) var(--ac-s-4) calc(var(--ac-s-4) + var(--ac-safe-bottom)); }
+.ac-dp[data-sheet] .ac-dp__day { block-size: 2.75rem; font-size: var(--ac-fs-md); }
+.ac-date .ac-input, .ac-time .ac-input { cursor: pointer; }
+
+/* ---- time picker ----------------------------------------------------- */
+.ac-tp { inline-size: 12rem; padding: var(--ac-s-2); gap: var(--ac-s-2); }
+.ac-tp__cols { position: relative; display: flex; align-items: stretch; gap: var(--ac-s-1); block-size: 13rem; }
+.ac-tp__cols::before { content: ""; position: absolute; inset-inline: 0; inset-block-start: calc(50% - 1.125rem); block-size: 2.25rem; border-radius: var(--ac-r-pill); background: var(--ac-surface-3); pointer-events: none; }
+.ac-tp__col { flex: 1; display: grid; align-content: start; gap: 2px; padding-block: 5.375rem; scroll-snap-type: y mandatory; scrollbar-width: none; }
+.ac-tp__col::-webkit-scrollbar { display: none; }
+.ac-tp__sep { align-self: center; font-weight: var(--ac-fw-bold); color: var(--ac-muted); }
+.ac-tp__opt { position: relative; block-size: 2.25rem; border-radius: var(--ac-r-pill); scroll-snap-align: center; font-size: var(--ac-fs-md); color: var(--ac-text-soft); transition: color var(--ac-dur-1), font-weight var(--ac-dur-1); }
+.ac-tp__opt:hover { color: var(--ac-text); background: var(--ac-hover); }
+.ac-tp__opt[aria-selected="true"] { color: var(--ac-text); font-weight: var(--ac-fw-bold); }
+.ac-tp[data-sheet] { padding: var(--ac-s-2) var(--ac-s-4) calc(var(--ac-s-4) + var(--ac-safe-bottom)); }
+/* finance kit: secondary calendar under each day, Friday + official holidays */
+.ac-dp__grid[data-secondary] .ac-dp__day { block-size: 2.75rem; place-content: center; gap: 1px; line-height: 1.05; }
+.ac-dp__sub { font-size: 0.625rem; font-weight: var(--ac-fw-regular); color: var(--ac-muted); }
+.ac-dp__day:is([data-holiday], [data-weekend]):not([aria-selected="true"], [data-start], [data-end]) { color: var(--ac-danger-ink); }
+.ac-dp__day[data-holiday]:not([aria-selected="true"]) { background: color-mix(in oklab, var(--ac-danger-soft) 70%, transparent); }
+.ac-dp__day[aria-selected="true"] .ac-dp__sub { color: inherit; opacity: 0.7; }
+.ac-dp__cal button { padding-inline: var(--ac-s-2); }
+

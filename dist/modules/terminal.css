@@ -1,0 +1,33 @@
+/*! AraminConsole v0.1.0 — module terminal CSS — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+
+/* ==== modules/terminal/terminal.css ==== */
+/* Terminal module: always a dark, LTR surface (like a payment-card visual), accent prompt. Tokens for accent/radius/motion. */
+.ac-term { --_bg: #111113; --_fg: #e7e7ea; --_mute: #8b8b93; --_ok: #4ade80; --_warn: #fbbf24; --_err: #f87171; display: flex; flex-direction: column; min-block-size: 18rem; border-radius: var(--ac-r-lg); background: var(--_bg); color: var(--_fg); direction: ltr; text-align: start; overflow: hidden; font-family: var(--ac-font-mono); font-size: 0.8rem; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }
+.ac-term[aria-busy="true"] .ac-term__run { opacity: 0.5; }
+.ac-term__bar { display: flex; align-items: center; gap: 6px; padding: 0.6rem 0.85rem; border-block-end: 1px solid rgba(255, 255, 255, 0.07); }
+.ac-term__bar i { inline-size: 0.6rem; block-size: 0.6rem; border-radius: 50%; background: #ff5f57; }
+.ac-term__bar i:nth-child(2) { background: #febc2e; }
+.ac-term__bar i:nth-child(3) { background: #28c840; }
+.ac-term__bar span { margin-inline-start: auto; color: var(--_mute); font-size: 0.7rem; }
+.ac-term__out { flex: 1 1 0; min-block-size: 10rem; max-block-size: 20rem; overflow: auto; padding: 0.75rem 0.85rem; line-height: 1.6; overscroll-behavior: contain; white-space: nowrap; }
+.ac-term__out:focus-visible { outline: 2px solid var(--ac-accent); outline-offset: -2px; }
+.ac-term__line + .ac-term__line { margin-block-start: 2px; }
+.ac-term__line--echo { margin-block-start: var(--ac-s-2) !important; }
+.ac-term__line--muted, .ac-term .t-muted { color: var(--_mute); }
+.ac-term__line--ok, .ac-term .t-ok { color: var(--_ok); }
+.ac-term__line--warn, .ac-term .t-warn { color: var(--_warn); }
+.ac-term__line--err, .ac-term .t-err { color: var(--_err); }
+.ac-term__prompt, .ac-term .t-cmd { color: var(--ac-accent); font-weight: 600; }
+.ac-term__form { display: flex; align-items: center; gap: 0.5rem; padding-block: 0.55rem; padding-inline: 0.85rem 0.55rem; border-block-start: 1px solid rgba(255, 255, 255, 0.07); }
+.ac-term__input { flex: 1; min-width: 0; border: 0; background: transparent; color: inherit; font: inherit; font-size: max(16px, 0.8rem); caret-color: var(--ac-accent); outline: none; }
+.ac-term__input::placeholder { color: #55555c; }
+.ac-term__run { display: grid; place-items: center; flex: none; inline-size: 2.25rem; block-size: 2.25rem; border-radius: 50%; background: var(--ac-accent); color: var(--ac-accent-contrast); transition: transform var(--ac-dur-2) var(--ac-ease-out), filter var(--ac-dur-2); }
+.ac-term__run:hover { filter: brightness(1.08); }
+.ac-term__run:active { transform: var(--ac-press); }
+.ac-term__run:focus-visible { outline: 2px solid var(--ac-accent); outline-offset: 2px; }
+.ac-term__chips { display: flex; gap: 6px; padding: 0 0.85rem 0.75rem; overflow-x: auto; scrollbar-width: none; }
+.ac-term__chip { flex: none; min-block-size: 2rem; padding-inline: 0.75rem; border-radius: var(--ac-r-pill); background: rgba(255, 255, 255, 0.08); color: var(--_fg); font: inherit; font-size: 0.72rem; transition: background var(--ac-dur-2), transform var(--ac-dur-2) var(--ac-ease-out); }
+.ac-term__chip:hover { background: rgba(255, 255, 255, 0.15); }
+.ac-term__chip:active { transform: var(--ac-press); }
+.ac-term__chip:focus-visible { outline: 2px solid var(--ac-accent); outline-offset: 2px; }
+

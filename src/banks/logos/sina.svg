@@ -1,0 +1,4 @@
+<!-- source: @iran-utils/iranian-banks-icons-core@1.0.4 (MIT, (c) 2026 Houtan Rocky), export SinaColorIcon; vendored verbatim -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#243873" d="m34.3083 5.97032 1.3264.79591L15.1518 18.7144v10.3332l7.3456 4.2705-11.5471 6.9361L3.5 35.8215V11.9406L24.0389 0l10.2694 5.97032Z"/>
+  <path fill="#243873" d="m13.6918 42.0297-1.3265-.7959 20.4831-11.9482V18.9524l-7.3457-4.2705 11.5472-6.93615L44.5 12.1785v23.881L23.9611 48l-10.2693-5.9703Z"/>
+  <path fill="#DBAF2E" fill-rule="evenodd" d="M23.9999 31C27.8555 31 31 27.8555 31 24s-3.1445-7-7.0001-7C20.1445 17 17 20.1445 17 24s3.1445 7 6.9999 7Z" clip-rule="evenodd"/></svg>

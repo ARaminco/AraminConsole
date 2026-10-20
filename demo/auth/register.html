@@ -1,0 +1,123 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ثبت‌نام · AraminConsole</title>
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+  <link rel="stylesheet" href="../standalone.css">
+  <script type="module" src="../../dist/aramin-console.js"></script>
+  <script type="module" src="../standalone.js"></script>
+</head>
+<body data-page="register">
+  <main class="ac-auth auth">
+    <section class="ac-auth__main">
+      <div class="sa-top">
+        <a class="ac-chrome ac-brand" href="../" aria-label="Aramin">
+          <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+          <span class="ac-brand__name">Aramin</span>
+        </a>
+        <div class="ac-chrome sa-tools">
+          <div data-ac="langpicker"></div>
+          <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        </div>
+      </div>
+
+      <div class="ac-auth__card auth-card">
+        <header class="auth-head">
+          <span class="auth-head__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-user-plus"/></svg></span>
+          <h1 class="auth-title" data-i18n="auth.registerTitle">ساخت حساب کاربری</h1>
+          <p class="auth-sub" data-i18n="auth.registerSub">چند ثانیه بیشتر طول نمی‌کشد. بعد از ثبت‌نام، کد تأیید پیامک می‌شود.</p>
+        </header>
+        <ol class="auth-steps" aria-label="مراحل ثبت‌نام" data-i18n-attr="aria-label:auth.steps">
+          <li class="auth-steps__step" data-step="1" data-state="current"><span class="auth-steps__dot"><bdi class="ac-num" dir="ltr">1</bdi></span><span data-i18n="auth.stepAccount">اطلاعات حساب</span></li>
+          <li class="auth-steps__step" data-step="2"><span class="auth-steps__dot"><bdi class="ac-num" dir="ltr">2</bdi></span><span data-i18n="auth.stepVerify">تأیید موبایل</span></li>
+          <li class="auth-steps__step" data-step="3"><span class="auth-steps__dot"><bdi class="ac-num" dir="ltr">3</bdi></span><span data-i18n="auth.stepDone">آماده</span></li>
+          <li class="auth-steps__bar" aria-hidden="true"><span class="auth-steps__track"><span class="auth-steps__fill"></span></span><bdi class="ac-num" dir="ltr" data-steps-pct>0%</bdi></li>
+        </ol>
+        <form class="auth-form ac-form" id="register-form" data-ac="form" novalidate>
+          <div class="ac-field">
+            <label class="ac-label" for="r-name" data-i18n="auth.fullName">نام و نام خانوادگی</label>
+            <input class="ac-input" id="r-name" name="name" autocomplete="name" data-ac-rules="required|min:3">
+          </div>
+          <div class="ac-form-grid">
+            <div class="ac-field">
+              <label class="ac-label" for="r-email" data-i18n="auth.email">ایمیل</label>
+              <input class="ac-input ac-ltr" id="r-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" data-ac-rules="required|email">
+            </div>
+              <div class="ac-field">
+              <label class="ac-label" for="r-mobile" data-i18n="auth.mobile">موبایل</label>
+              <input class="ac-input ac-ltr" id="r-mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912 345 6789" data-ac-rules="required|iran-mobile">
+            </div>
+            </div>
+          <div class="ac-field">
+            <label class="ac-label" for="r-pass" data-i18n="auth.password">رمز عبور</label>
+            <div class="ac-input-group" data-ac="password" data-strength data-checklist>
+              <input class="ac-input ac-ltr" id="r-pass" name="password" type="password" autocomplete="new-password" data-ac-rules="required|min:8">
+            </div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="r-pass2" data-i18n="auth.password2">تکرار رمز عبور</label>
+            <input class="ac-input ac-ltr" id="r-pass2" name="password2" type="password" autocomplete="new-password" data-ac-rules="required|match:#r-pass">
+          </div>
+          <label class="ac-choice ac-text-sm"><input class="ac-check" type="checkbox" name="terms" value="1" data-ac-rules="required"><span><span data-i18n="auth.terms">قوانین و حریم خصوصی را خوانده‌ام و می‌پذیرم.</span></span></label>
+          <div class="auth-actions">
+            <button class="ac-btn ac-btn--primary ac-btn--block auth-submit" type="submit"><span data-i18n="auth.createAccountBtn">ساخت حساب</span><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+          </div>
+        </form>
+        <p class="auth-foot"><span data-i18n="auth.haveAccount">حساب دارید؟</span> <a class="auth-link" href="login.html" data-i18n="auth.signInLink">وارد شوید</a></p>
+      </div>
+    </section>
+
+    <aside class="ac-auth__aside" aria-label="AraminConsole">
+      <span class="show-tag"><b dir="ltr">v0.1</b><span data-i18n="auth.showTag">متن‌باز · بدون وابستگی · MIT</span></span>
+      <div class="show-stage" aria-hidden="true">
+        <div class="mini">
+          <div class="mini__card">
+            <span class="mini__label">Total balance <span>USD</span></span>
+            <span class="mini__value">$498,601.92</span>
+            <span class="mini__pill">↗ 5%</span>
+          </div>
+          <div class="mini__card mini__card--ink">
+            <span class="mini__label">Goals</span>
+            <svg class="mini__ring" viewBox="0 0 44 44"><circle class="t" cx="22" cy="22" r="18"/><circle class="v" cx="22" cy="22" r="18" transform="rotate(-90 22 22)"/></svg>
+            <span class="mini__pill">74% done</span>
+          </div>
+          <div class="mini__card mini__card--wide">
+            <span class="mini__label">Revenue <span>Jan – Jul</span></span>
+            <div class="mini__bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="mini__card">
+            <span class="mini__label">Card controls</span>
+            <span class="mini__row">Online payments <span class="mini__switch"></span></span>
+            <span class="mini__row">Contactless <span class="mini__switch"></span></span>
+            <span class="mini__row">Use abroad <span class="mini__switch mini__switch--off"></span></span>
+          </div>
+          <div class="mini__card mini__card--ink">
+            <span class="mini__label">Team</span>
+            <span class="mini__value">12</span>
+            <span class="mini__people"><span>AR</span><span>SM</span><span>+9</span></span>
+          </div>
+          <span class="mini__chip mini__chip--a"><i><svg class="ac-icon"><use href="#i-check"/></svg></i>Payment received</span>
+          <span class="mini__chip mini__chip--b"><i><svg class="ac-icon"><use href="#i-zap"/></svg></i>+18% this week</span>
+        </div>
+      </div>
+      <div class="show-copy">
+        <h2 data-i18n="auth.showTitle">پنل مدیریتی که روی گوشی مثل یک اپ رفتار می‌کند.</h2>
+        <p data-i18n="auth.showText">راست‌به‌چپ از پایه، حالت تیره، تقویم شمسی و ده‌ها کامپوننت آماده — فقط با یک فایل CSS و یک ماژول JS.</p>
+        <div class="show-points">
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>RTL</span>
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>Dark mode</span>
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>PWA</span>
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>Jalali</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

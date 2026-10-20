@@ -1,0 +1,164 @@
+<section class="ac-page" data-page="settings" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="set.eyebrow">فضای کاری آرامین</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.settings">تنظیمات</h1>
+      <p class="ac-page-head__sub" data-i18n="set.sub">ترجیحات حساب، ظاهر، اعلان‌ها، امنیت و صورتحساب.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--primary" type="button" data-set-save><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="set.save">ذخیرهٔ تغییرات</span></button>
+    </div>
+  </header>
+
+  <div class="set-layout">
+    <nav class="ac-card ac-card--static set-nav" aria-label="Settings sections" data-i18n-attr="aria-label:nav.settings">
+      <a class="set-nav__link" href="#set-general" aria-current="true"><svg class="ac-icon" aria-hidden="true"><use href="#i-sliders-horizontal"/></svg><span data-i18n="set.general">عمومی</span></a>
+      <a class="set-nav__link" href="#set-appearance"><svg class="ac-icon" aria-hidden="true"><use href="#i-paintbrush"/></svg><span data-i18n="set.appearance">ظاهر</span></a>
+      <a class="set-nav__link" href="#set-notifications"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell"/></svg><span data-i18n="nav.notifications">اعلان‌ها</span></a>
+      <a class="set-nav__link" href="#set-security"><svg class="ac-icon" aria-hidden="true"><use href="#i-shield-check"/></svg><span data-i18n="prof.security">امنیت</span></a>
+      <a class="set-nav__link" href="#set-api"><svg class="ac-icon" aria-hidden="true"><use href="#i-key-round"/></svg><span data-i18n="set.api">کلیدهای API</span></a>
+      <a class="set-nav__link" href="#set-billing"><svg class="ac-icon" aria-hidden="true"><use href="#i-credit-card"/></svg><span data-i18n="set.billing">صورتحساب</span></a>
+    </nav>
+
+    <div class="set-main ac-stagger">
+      <!-- general -->
+      <section class="set-group" id="set-general" aria-labelledby="set-h-general">
+        <h2 class="set-group__title" id="set-h-general" data-i18n="set.general">عمومی</h2>
+        <div class="ac-card ac-card--static set-card">
+          <div class="set-row set-row--field">
+            <label class="set-row__text" for="set-ws"><span class="set-row__title" data-i18n="set.workspace">نام فضای کاری</span><span class="set-row__desc" data-i18n="set.workspaceSub">در منو و ایمیل‌ها دیده می‌شود</span></label>
+            <input class="ac-input set-row__control" id="set-ws" dir="auto" value="CoHub · Aramin">
+          </div>
+          <div class="set-row set-row--field">
+            <label class="set-row__text" for="set-lang"><span class="set-row__title" data-i18n="app.language">زبان</span><span class="set-row__desc" data-i18n="set.langSub">جهت صفحه هم عوض می‌شود</span></label>
+            <select class="ac-select set-row__control" id="set-lang" data-set-lang><option value="fa">فارسی</option><option value="en">English</option><option value="ar">العربية</option></select>
+          </div>
+          <div class="set-row set-row--field">
+            <label class="set-row__text" for="set-tz"><span class="set-row__title" data-i18n="prof.tz">منطقهٔ زمانی</span></label>
+            <select class="ac-select set-row__control" id="set-tz" dir="ltr"><option>Asia/Tehran (UTC+03:30)</option><option>Asia/Dubai (UTC+04:00)</option><option>Europe/Berlin (UTC+01:00)</option><option>UTC</option></select>
+          </div>
+          <div class="set-row">
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.calendar">تقویم</span><span class="set-row__desc" data-i18n="set.calendarSub">نمایش تاریخ‌ها در جدول‌ها و گزارش‌ها</span></span>
+            <div class="ac-segmented ac-segmented--sm" data-ac="segmented" aria-label="Calendar" data-i18n-attr="aria-label:set.calendar">
+              <button class="ac-segmented__item" type="button" data-value="persian" aria-checked="true" data-i18n="set.jalali">شمسی</button>
+              <button class="ac-segmented__item" type="button" data-value="gregory" data-i18n="set.gregorian">میلادی</button>
+            </div>
+          </div>
+          <div class="set-row">
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.digits">ارقام</span><span class="set-row__desc" data-i18n="set.digitsSub">پیش‌فرض لاتین است</span></span>
+            <div class="ac-segmented ac-segmented--sm" data-ac="segmented" data-set-digits aria-label="Digits" data-i18n-attr="aria-label:set.digits">
+              <button class="ac-segmented__item" type="button" data-value="latn" aria-checked="true">123</button>
+              <button class="ac-segmented__item" type="button" data-value="native">۱۲۳</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- appearance -->
+      <section class="set-group" id="set-appearance" aria-labelledby="set-h-appearance">
+        <h2 class="set-group__title" id="set-h-appearance" data-i18n="set.appearance">ظاهر</h2>
+        <div class="ac-card ac-card--static set-card">
+          <div class="set-row">
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.theme">پوسته</span></span>
+            <div class="ac-segmented ac-segmented--sm" data-ac="segmented" data-set-theme aria-label="Theme" data-i18n-attr="aria-label:set.theme">
+              <button class="ac-segmented__item" type="button" data-value="light"><svg class="ac-icon" aria-hidden="true"><use href="#i-sun"/></svg><span data-i18n="app.light">روشن</span></button>
+              <button class="ac-segmented__item" type="button" data-value="dark"><svg class="ac-icon" aria-hidden="true"><use href="#i-moon"/></svg><span data-i18n="app.dark">تیره</span></button>
+              <button class="ac-segmented__item" type="button" data-value="auto"><svg class="ac-icon" aria-hidden="true"><use href="#i-monitor"/></svg><span data-i18n="set.auto">خودکار</span></button>
+            </div>
+          </div>
+          <div class="set-row">
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.accent">رنگ اصلی</span></span>
+            <div class="set-accents" role="radiogroup" aria-label="Accent" data-i18n-attr="aria-label:set.accent" data-set-accents></div>
+          </div>
+          <div class="set-row">
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.density">تراکم</span><span class="set-row__desc" data-i18n="set.densitySub">فاصلهٔ ردیف‌ها و کنترل‌ها</span></span>
+            <div class="ac-segmented ac-segmented--sm" data-ac="segmented" data-set-density aria-label="Density" data-i18n-attr="aria-label:set.density">
+              <button class="ac-segmented__item" type="button" data-value="comfortable" data-i18n="set.comfortable">راحت</button>
+              <button class="ac-segmented__item" type="button" data-value="compact" data-i18n="set.compact">فشرده</button>
+            </div>
+          </div>
+          <button class="set-row set-row--link" type="button" data-ac-customizer-open>
+            <span class="set-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-palette"/></svg></span>
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.customizer">سفارشی‌ساز کامل</span><span class="set-row__desc" data-i18n="set.customizerSub">گردی گوشه‌ها، پیش‌نمایش پوسته‌ها و بیشتر</span></span>
+            <svg class="ac-icon set-row__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- notifications -->
+      <section class="set-group" id="set-notifications" aria-labelledby="set-h-notif">
+        <h2 class="set-group__title" id="set-h-notif" data-i18n="nav.notifications">اعلان‌ها</h2>
+        <div class="ac-card ac-card--static set-card">
+          <div class="ac-toggle-list">
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-server-crash"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="set.nDown">قطعی سرویس</span><span class="ac-toggle-row__desc" data-i18n="set.nDownSub">فوری، با واتس‌اپ و پیامک</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-message-circle"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="set.nWapi">وضعیت درگاه‌های واتس‌اپ</span><span class="ac-toggle-row__desc" data-i18n="set.nWapiSub">قطع نشست یا صف طولانی</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-cart"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="set.nOrders">سفارش‌های تازه</span><span class="ac-toggle-row__desc" data-i18n="set.nOrdersSub">خلاصهٔ روزانه به‌جای تک‌تک</span></span><input class="ac-switch" type="checkbox" role="switch"></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-mail"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="set.nWeekly">گزارش هفتگی</span><span class="ac-toggle-row__desc" data-i18n="set.nWeeklySub">هر شنبه ساعت ۹ صبح</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+          </div>
+        </div>
+      </section>
+
+      <!-- security -->
+      <section class="set-group" id="set-security" aria-labelledby="set-h-sec">
+        <h2 class="set-group__title" id="set-h-sec" data-i18n="prof.security">امنیت</h2>
+        <div class="ac-card ac-card--static set-card">
+          <div class="ac-toggle-list">
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shield-check"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="set.force2fa">ورود دومرحله‌ای برای همه</span><span class="ac-toggle-row__desc" data-i18n="set.force2faSub">اعضای بدون آن در ورود بعدی ملزم می‌شوند</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+          </div>
+          <div class="set-row set-row--field">
+            <label class="set-row__text" for="set-timeout"><span class="set-row__title" data-i18n="set.timeout">خروج خودکار</span><span class="set-row__desc" data-i18n="set.timeoutSub">پس از بی‌کاری</span></label>
+            <select class="ac-select set-row__control" id="set-timeout"><option data-i18n="set.t15">15 دقیقه</option><option selected data-i18n="set.t60">1 ساعت</option><option data-i18n="set.t480">8 ساعت</option><option data-i18n="set.t1440">24 ساعت</option></select>
+          </div>
+          <div class="set-row set-row--stack">
+            <label class="set-row__text" for="set-ips"><span class="set-row__title" data-i18n="set.allow">فهرست IP مجاز پنل</span><span class="set-row__desc" data-i18n="set.allowSub">Enter یا ویرگول برای افزودن</span></label>
+            <div class="ac-tags" data-ac="tags" data-name="ips" data-value="5.112.40.18,94.200.3.77,10.0.0.0/8" data-input-id="set-ips"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- api keys -->
+      <section class="set-group" id="set-api" aria-labelledby="set-h-api">
+        <div class="set-group__head">
+          <h2 class="set-group__title" id="set-h-api" data-i18n="set.api">کلیدهای API</h2>
+          <button class="ac-btn ac-btn--sm" type="button" data-key-new><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="set.newKey">کلید جدید</span></button>
+        </div>
+        <div class="ac-card ac-card--static set-card">
+          <ul class="set-keys" role="list" data-set-keys></ul>
+        </div>
+        <p class="set-group__foot" data-i18n="set.keysFoot">کلیدها فقط یک بار کامل نشان داده می‌شوند؛ آن‌ها را در مخزن رمز نگه دارید، نه در کد.</p>
+      </section>
+
+      <!-- billing -->
+      <section class="set-group" id="set-billing" aria-labelledby="set-h-bill">
+        <h2 class="set-group__title" id="set-h-bill" data-i18n="set.billing">صورتحساب</h2>
+        <div class="ac-card ac-card--static set-card">
+          <div class="set-plan">
+            <div class="set-plan__badge"><svg class="ac-icon" aria-hidden="true"><use href="#i-sparkles"/></svg></div>
+            <div class="set-plan__text"><strong data-i18n="set.plan">پلن Business</strong><span class="ac-text-sm ac-text-muted"><bdi>$149</bdi> <span data-i18n="set.perMonth">در ماه · تمدید ۰۱/۱۲/۲۰۲۶</span></span></div>
+            <a class="ac-btn ac-btn--sm ac-btn--primary" href="#/pricing" data-i18n="set.upgrade">ارتقا</a>
+          </div>
+          <div class="set-row set-row--stack">
+            <div class="ac-limit">
+              <div class="ac-limit__head"><span class="ac-limit__label" data-i18n="set.usageSites">سایت‌ها</span><span class="ac-limit__value ac-num"><bdi>110 / 150</bdi></span></div>
+              <progress class="ac-progress" value="73" max="100" aria-label="Sites" data-i18n-attr="aria-label:set.usageSites"></progress>
+            </div>
+            <div class="ac-limit">
+              <div class="ac-limit__head"><span class="ac-limit__label" data-i18n="set.usageStorage">فضای ذخیره‌سازی</span><span class="ac-limit__value ac-num"><bdi>412 / 500 GB</bdi></span></div>
+              <progress class="ac-progress ac-progress--warning" value="82" max="100" aria-label="Storage" data-i18n-attr="aria-label:set.usageStorage"></progress>
+            </div>
+          </div>
+          <a class="set-row set-row--link" href="#/manage">
+            <span class="set-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-credit-card"/></svg></span>
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.payment">روش پرداخت</span><span class="set-row__desc"><bdi class="ac-mono">•••• 6782</bdi> · 09/29</span></span>
+            <svg class="ac-icon set-row__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+          </a>
+          <a class="set-row set-row--link" href="#/invoice">
+            <span class="set-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-receipt"/></svg></span>
+            <span class="set-row__text"><span class="set-row__title" data-i18n="set.invoices">فاکتورهای اشتراک</span><span class="set-row__desc" data-i18n="set.invoicesSub">۱۲ فاکتور · آخرین در مهر</span></span>
+            <svg class="ac-icon set-row__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

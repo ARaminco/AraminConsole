@@ -1,0 +1,427 @@
+/*! AraminConsole v0.1.0 — module data-display — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+const __R = globalThis.__AC_MODS__ || (globalThis.__AC_MODS__ = {});
+if (!__R["core"]) await import('./core.js');
+
+/* ======== module: data-display ======== */
+if (!__R["data-display"]) __R["data-display"] = (() => {
+const F = {};
+const __ac_m1 = __R["core"].f["js/core.js"];
+/* ---- js/components/list.js ---- */
+const __ac_mo = F["js/components/list.js"] = (() => {
+const { AC, register, on, emit, gesture, isRTL, haptic } = __ac_m1;
+/* Swipe actions (shared by lists and the data table's phone cards).
+   <ul class="ac-list" data-ac="list" role="list">
+     <li class="ac-list__item ac-swipe">
+       <div class="ac-swipe__actions"><button class="ac-swipe__btn" data-action="archive" data-tone="info">…</button></div>
+       <div class="ac-swipe__content">…row…</div></li></ul>
+   Swipe toward the start edge reveals the actions (mirrors in RTL); a fast flick (|vx| > .5) snaps.
+   Events: ac:swipe:open, ac:swipe:action { action, item } (bubbles from the item). */
+
+
+let openItem = null;
+const close = (item) => { if (!item) return; item.removeAttribute('data-open'); item.querySelector('.ac-swipe__content')?.style.setProperty('--ac-drag', '0px'); if (openItem === item) openItem = null; };
+on(document, 'pointerdown', (e) => { if (openItem && !openItem.contains(e.target)) close(openItem); }, { passive: true });
+
+/** Make one `.ac-swipe` element swipeable. Returns destroy(). */
+function swipeable(item) {
+  const content = item.querySelector('.ac-swipe__content');
+  const acts = item.querySelector('.ac-swipe__actions');
+  if (!content || !acts) return () => {};
+  let base = 0;
+  const sign = () => (isRTL(item) ? 1 : -1);
+  const set = (x) => content.style.setProperty('--ac-drag', `${Math.round(x)}px`);
+  const open = () => { if (openItem && openItem !== item) close(openItem); openItem = item; item.setAttribute('data-open', ''); set(sign() * acts.offsetWidth); haptic(); emit(item, 'swipe:open'); };
+  const g = gesture(content, {
+    axis: 'x',
+    onStart() { if (openItem && openItem !== item) close(openItem); base = item.hasAttribute('data-open') ? sign() * acts.offsetWidth : 0; item.setAttribute('data-dragging', ''); },
+    onMove(s) {
+      const max = acts.offsetWidth; let t = (base + s.dx) * sign();
+      if (t < 0) t /= 4; else if (t > max) t = max + (t - max) / 4;
+      set(sign() * t);
+    },
+    onEnd(s) {
+      item.removeAttribute('data-dragging');
+      const t = (base + s.dx) * sign(); const v = s.vx * sign();
+      if (v > 0.5 || (v > -0.5 && t > acts.offsetWidth / 2)) open(); else close(item);
+    },
+  });
+  const offs = [
+    g,
+    on(acts, 'click', '[data-action]', (e, b) => { emit(item, 'swipe:action', { action: b.dataset.action, item }); close(item); }),
+    on(acts, 'focusin', () => { if (!item.hasAttribute('data-open')) open(); }),
+    on(item, 'keydown', (e) => { if (e.key === 'Escape' && item.hasAttribute('data-open')) { close(item); content.focus?.(); } }),
+  ];
+  return () => { offs.forEach((f) => f()); if (openItem === item) openItem = null; };
+}
+const swipe = { close: () => close(openItem) };
+
+register('list', (el) => {
+  const map = new Map();
+  const scan = () => el.querySelectorAll('.ac-swipe').forEach((it) => { if (!map.has(it)) map.set(it, swipeable(it)); });
+  scan();
+  const mo = new MutationObserver(() => { for (const [it, d] of map) if (!it.isConnected) { d(); map.delete(it); } scan(); });
+  mo.observe(el, { childList: true, subtree: true });
+  const off = on(el, 'ac:swipe:action', (e) => emit(el, 'list:action', e.detail));
+  return () => { mo.disconnect(); off(); map.forEach((d) => d()); };
+});
+AC.swipeable = swipeable;
+return Object.freeze({ swipeable, swipe });
+})();
+
+/* ---- js/components/tree.js ---- */
+const __ac_mq = F["js/components/tree.js"] = (() => {
+const { AC, register, instance, on, emit, options, icon, escapeHtml: esc, isRTL } = __ac_m1;
+/* Tree view — WAI-ARIA tree with roving tabindex and full keyboard support.
+   Markup: <ul class="ac-tree" data-ac="tree" aria-label="Files">
+             <li data-icon="folder" data-open><span>src</span><ul><li data-meta="2 KB">index.js</li></ul></li></ul>
+   or AC.tree(el, { items: [{ id, label, icon, meta, open, children: [...] }] }).
+   Keys: ↑ ↓ Home End, → expand / first child, ← collapse / parent, Enter/Space select, letters jump.
+   Events: ac:tree:select { id, item }, ac:tree:toggle { id, open }. */
+
+
+function parse(ul) {
+  return Array.from(ul.children).filter((li) => li.tagName === 'LI').map((li, i) => {
+    const sub = li.querySelector(':scope > ul');
+    const lab = Array.from(li.childNodes).filter((n) => n !== sub).map((n) => n.textContent).join('').trim();
+    return { id: li.dataset.id || `${lab}-${i}`, label: lab, icon: li.dataset.icon, meta: li.dataset.meta, open: li.hasAttribute('data-open'), children: sub ? parse(sub) : null };
+  });
+}
+
+function create(el, cfg) {
+  let items = cfg.items || parse(el);
+  let sel = cfg.selected ?? null;
+  const flat = new Map();
+  const ico = (it) => it.icon || (it.children ? (it.open ? 'folder-open' : 'folder') : 'file');
+  function li(it, lvl) {
+    flat.set(String(it.id), it);
+    const kids = it.children && it.children.length ? it.children : null;
+    return `<li role="treeitem" class="ac-tree__item" data-id="${esc(it.id)}" aria-level="${lvl}"${kids ? ` aria-expanded="${!!it.open}"` : ''} aria-selected="${String(it.id) === String(sel)}" tabindex="-1"><div class="ac-tree__row">${kids ? icon('chevron-right', 'ac-tree__chev ac-flip-rtl') : '<span class="ac-tree__chev"></span>'}${icon(ico(it), 'ac-tree__icon')}<span class="ac-tree__label">${esc(it.label)}</span>${it.meta ? `<span class="ac-tree__meta">${esc(it.meta)}</span>` : ''}</div>${kids ? `<ul role="group">${kids.map((k) => li(k, lvl + 1)).join('')}</ul>` : ''}</li>`;
+  }
+  function render() {
+    flat.clear();
+    el.classList.add('ac-tree');
+    el.setAttribute('role', 'tree');
+    el.innerHTML = items.map((it) => li(it, 1)).join('');
+    const first = el.querySelector('[aria-selected="true"]') || el.querySelector('[role="treeitem"]');
+    if (first) first.tabIndex = 0;
+  }
+  const visible = () => Array.from(el.querySelectorAll('[role="treeitem"]')).filter((n) => !n.parentElement.closest('[aria-expanded="false"]'));
+  const focus = (n) => { if (!n) return; el.querySelectorAll('[tabindex="0"]').forEach((x) => { x.tabIndex = -1; }); n.tabIndex = 0; n.focus(); };
+  function toggle(n, open) {
+    if (!n.hasAttribute('aria-expanded')) return;
+    const it = flat.get(n.dataset.id); open = open ?? n.getAttribute('aria-expanded') !== 'true';
+    it.open = open; n.setAttribute('aria-expanded', String(open));
+    if (!it.icon) n.querySelector('.ac-tree__icon use')?.setAttribute('href', `#i-${ico(it)}`);
+    emit(el, 'tree:toggle', { id: it.id, open });
+  }
+  function select(n) {
+    el.querySelectorAll('[aria-selected="true"]').forEach((x) => x.setAttribute('aria-selected', 'false'));
+    n.setAttribute('aria-selected', 'true'); sel = n.dataset.id;
+    emit(el, 'tree:select', { id: sel, item: flat.get(sel) });
+  }
+  render();
+  const offs = [
+    on(el, 'click', '.ac-tree__row', (e, row) => { const n = row.parentElement; focus(n); select(n); toggle(n); }),
+    on(el, 'keydown', (e) => {
+      const n = e.target.closest('[role="treeitem"]'); if (!n) return;
+      const v = visible(); const i = v.indexOf(n); const exp = n.getAttribute('aria-expanded');
+      const right = isRTL(el) ? 'ArrowLeft' : 'ArrowRight'; const left = isRTL(el) ? 'ArrowRight' : 'ArrowLeft';
+      let handled = true;
+      if (e.key === 'ArrowDown') focus(v[i + 1]);
+      else if (e.key === 'ArrowUp') focus(v[i - 1]);
+      else if (e.key === 'Home') focus(v[0]);
+      else if (e.key === 'End') focus(v[v.length - 1]);
+      else if (e.key === right) { if (exp === 'false') toggle(n, true); else if (exp === 'true') focus(n.querySelector('[role="treeitem"]')); }
+      else if (e.key === left) { if (exp === 'true') toggle(n, false); else focus(n.parentElement.closest('[role="treeitem"]')); }
+      else if (e.key === 'Enter' || e.key === ' ') { select(n); if (e.key === 'Enter') toggle(n); }
+      else if (e.key.length === 1 && /\S/.test(e.key)) { const k = e.key.toLowerCase(); focus(v.slice(i + 1).concat(v.slice(0, i)).find((x) => x.querySelector('.ac-tree__label').textContent.trim().toLowerCase().startsWith(k))); }
+      else handled = false;
+      if (handled) e.preventDefault();
+    }),
+  ];
+  return {
+    el, render, get selected() { return sel; },
+    setItems(next) { items = next; render(); },
+    expandAll(open = true) { el.querySelectorAll('[aria-expanded]').forEach((n) => toggle(n, open)); },
+    destroy() { offs.forEach((f) => f()); },
+  };
+}
+
+register('tree', (el) => {
+  const api = create(el, options(el, {}));
+  instance(el, 'tree', api);
+  return () => api.destroy();
+});
+function tree(target, cfg = {}) {
+  const el = typeof target === 'string' ? document.querySelector(target) : target;
+  instance(el, 'tree')?.destroy();
+  return instance(el, 'tree', create(el, cfg));
+}
+AC.tree = tree;
+return Object.freeze({ tree });
+})();
+
+/* ---- js/components/code.js ---- */
+const __ac_mr = F["js/components/code.js"] = (() => {
+const { AC, register, instance, on, emit, options, icon, escapeHtml: esc } = __ac_m1;
+/* Code block with copy button, language label, light highlighting and optional line numbers.
+   <div class="ac-code" data-ac="code" data-lang="js" [data-lines] [data-title="app.js"]><pre><code>…</code></pre></div>
+   Also: JSON viewer (collapsible) — <div data-ac="json" data-ac-config='{"data":{…},"open":2}'></div>
+   or a JSON text body; AC.json(el, data, { open }). Events: ac:code:copy, ac:json:copy. */
+
+
+const KW = /\b(const|let|var|function|return|if|else|for|while|import|export|from|async|await|new|class|extends|true|false|null|undefined|this|try|catch|throw|public|private|echo|use|namespace|fn|def|sudo|cd|npm|node|git)\b/g;
+function highlight(src, lang) {
+  const out = [];
+  const re = lang === 'json'
+    ? /("(?:\\.|[^"\\])*")(\s*:)?|(-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b)|\b(true|false|null)\b/gi
+    : /^(bash|sh|shell|py|python|ya?ml|ini|conf|nginx)$/.test(lang)
+      ? /(#[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b\d+(?:\.\d+)?\b)/g
+      : /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|(\b\d+(?:\.\d+)?\b)/g;
+  let last = 0; let m;
+  const plain = (s) => esc(s).replace(KW, '<span class="ac-code__k">$1</span>');
+  while ((m = re.exec(src))) {
+    out.push(lang === 'json' ? esc(src.slice(last, m.index)) : plain(src.slice(last, m.index)));
+    if (lang === 'json') out.push(m[1] ? `<span class="ac-code__${m[2] ? 'p' : 's'}">${esc(m[1])}</span>${m[2] || ''}` : `<span class="ac-code__${m[3] ? 'n' : 'k'}">${esc(m[0])}</span>`);
+    else out.push(`<span class="ac-code__${m[1] ? 'c' : m[2] ? 's' : 'n'}">${esc(m[0])}</span>`);
+    last = re.lastIndex;
+  }
+  out.push(lang === 'json' ? esc(src.slice(last)) : plain(src.slice(last)));
+  return out.join('');
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch {
+    const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.className = 'ac-visually-hidden';
+    document.body.append(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch { /* ignore */ } t.remove(); return ok;
+  }
+}
+function copyButton(getText, el, evt) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'ac-code__copy';
+  const label = () => AC.t('common.copy', 'Copy');
+  const set = (done) => { b.innerHTML = `${icon(done ? 'check' : 'copy')}<span>${done ? AC.t('common.copied', 'Copied') : label()}</span>`; b.toggleAttribute('data-done', done); };
+  set(false);
+  let t;
+  b.addEventListener('click', async () => { const text = getText(); if (await copyText(text)) { set(true); emit(el, evt, { text }); clearTimeout(t); t = setTimeout(() => set(false), 1600); } });
+  return b;
+}
+
+register('code', (el) => {
+  const o = options(el, { lang: '', lines: false, highlight: true });
+  const code = el.querySelector('code') || el;
+  const src = code.textContent.replace(/^\n/, '').replace(/\s+$/, '');
+  if (o.highlight !== false) code.innerHTML = highlight(src, o.lang);
+  if (o.lines) { code.innerHTML = code.innerHTML.split('\n').map((l) => `<span class="ac-code__line">${l || ' '}</span>`).join('\n'); el.setAttribute('data-lines', ''); }
+  el.classList.add('ac-code');
+  const head = document.createElement('div'); head.className = 'ac-code__head';
+  head.innerHTML = `<span class="ac-code__lang">${esc(o.title || o.lang || '')}</span>`;
+  head.append(copyButton(() => src, el, 'code:copy'));
+  el.prepend(head);
+  instance(el, 'code', { text: src });
+  return () => head.remove();
+});
+
+function node(v, k, depth, open, last) {
+  const key = k == null ? '' : `<span class="ac-json__k">${esc(typeof k === 'number' ? k : JSON.stringify(k))}</span>: `;
+  const comma = last ? '' : '<span class="ac-json__p">,</span>';
+  if (v && typeof v === 'object') {
+    const arr = Array.isArray(v); const ent = arr ? v.map((x, i) => [i, x]) : Object.entries(v);
+    const [a, b] = arr ? ['[', ']'] : ['{', '}'];
+    if (!ent.length) return `<div class="ac-json__row">${key}<span class="ac-json__p">${a}${b}</span>${comma}</div>`;
+    const n = AC.t(arr ? 'json.items' : 'json.keys', arr ? '{n} items' : '{n} keys', { n: ent.length });
+    return `<details class="ac-json__node"${depth < open ? ' open' : ''}><summary>${key}<span class="ac-json__p">${a}</span><span class="ac-json__n">${esc(n)}</span><span class="ac-json__p ac-json__close">${b}</span></summary><div class="ac-json__kids">${ent.map(([kk, x], i) => node(x, arr ? null : kk, depth + 1, open, i === ent.length - 1)).join('')}</div><span class="ac-json__p">${b}</span>${comma}</details>`;
+  }
+  const t = v === null ? 'null' : typeof v;
+  return `<div class="ac-json__row">${key}<span class="ac-json__v" data-t="${t}">${esc(t === 'string' ? JSON.stringify(v) : String(v))}</span>${comma}</div>`;
+}
+function createJson(el, data, cfg = {}) {
+  el.classList.add('ac-json');
+  const render = (d) => {
+    el.innerHTML = `<div class="ac-json__tree">${node(d, null, 0, cfg.open ?? 1, true)}</div>`;
+    const bar = document.createElement('div'); bar.className = 'ac-json__bar';
+    const tog = document.createElement('button'); tog.type = 'button'; tog.className = 'ac-code__copy';
+    tog.innerHTML = `${icon('chevrons-up-down')}<span>${esc(AC.t('json.toggle', 'Expand all'))}</span>`;
+    tog.addEventListener('click', () => { const all = el.querySelectorAll('details'); const open = Array.from(all).some((x) => !x.open); all.forEach((x) => { x.open = open; }); });
+    bar.append(tog, copyButton(() => JSON.stringify(d, null, 2), el, 'json:copy'));
+    el.prepend(bar);
+  };
+  render(data);
+  return { el, set: render };
+}
+register('json', (el) => {
+  const o = options(el, {});
+  let data = o.data;
+  if (data === undefined) { try { data = JSON.parse(el.textContent); } catch { data = el.textContent; } }
+  instance(el, 'json', createJson(el, data, o));
+});
+function json(target, data, cfg) {
+  const el = typeof target === 'string' ? document.querySelector(target) : target;
+  return instance(el, 'json', createJson(el, data, cfg));
+}
+AC.json = json;
+AC.copyText = copyText;
+return Object.freeze({ copyText, json });
+})();
+
+/* ---- js/components/logview.js ---- */
+const __ac_ms = F["js/components/logview.js"] = (() => {
+const { AC, register, instance, on, emit, options, icon, escapeHtml: esc, debounce, format } = __ac_m1;
+/* Log viewer — level colours + filter chips with counts, search with highlight, pause / follow,
+   timestamps toggle, capped DOM (only the newest `render` matching lines are in the page).
+   <div data-ac="logview" data-ac-config='{"max":5000,"render":500}'></div>
+   const log = AC.logview(el, { lines }); log.push({ ts, level: 'info'|'debug'|'warn'|'error', src, msg }) or log.push('text')
+   API: push(line|lines) clear() pause(bool) follow(bool) filter({ levels, q }) · Events: ac:logview:pause { paused } */
+
+
+const LEVELS = ['debug', 'info', 'warn', 'error'];
+const pad = (n, w = 2) => String(n).padStart(w, '0');
+const clock = (ts) => { const d = new Date(ts); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}`; };
+const norm = (l) => (typeof l === 'string' ? { ts: Date.now(), level: (/\b(debug|info|warn|error)\b/i.exec(l)?.[1] || 'info').toLowerCase(), msg: l } : { ts: Date.now(), level: 'info', ...l });
+
+function create(el, cfg) {
+  const c = { max: 5000, render: 500, levels: LEVELS, timestamps: true, follow: true, ...cfg };
+  const buf = [];
+  const count = Object.fromEntries(c.levels.map((l) => [l, 0]));
+  const st = { on: new Set(c.show || c.levels), q: '', paused: false, follow: c.follow, ts: c.timestamps, pending: 0 };
+  el.classList.add('ac-log');
+  el.innerHTML = `<div class="ac-log__bar"><div class="ac-log__levels" role="group" aria-label="${esc(AC.t('log.levels', 'Levels'))}">${c.levels.map((l) => `<button type="button" class="ac-log__lvl" data-level="${l}" aria-pressed="${st.on.has(l)}"><i></i>${esc(AC.t(`log.${l}`, l))}<span class="ac-log__n">0</span></button>`).join('')}</div>
+<label class="ac-log__search">${icon('search')}<input type="search" placeholder="${esc(AC.t('log.search', 'Filter logs…'))}" aria-label="${esc(AC.t('log.search', 'Filter logs…'))}"></label>
+<div class="ac-log__tools"><button type="button" class="ac-btn ac-btn--sm ac-btn--icon ac-btn--ghost" data-log="ts" aria-pressed="${st.ts}" aria-label="${esc(AC.t('log.timestamps', 'Timestamps'))}" title="${esc(AC.t('log.timestamps', 'Timestamps'))}">${icon('clock')}</button><button type="button" class="ac-btn ac-btn--sm ac-btn--icon ac-btn--ghost" data-log="clear" aria-label="${esc(AC.t('log.clear', 'Clear'))}" title="${esc(AC.t('log.clear', 'Clear'))}">${icon('eraser')}</button><button type="button" class="ac-btn ac-btn--sm ac-log__pause" data-log="pause" aria-pressed="false"></button></div></div>
+<div class="ac-log__view" role="log" aria-live="off" tabindex="0" aria-label="${esc(AC.t('log.title', 'Log stream'))}"></div>
+<div class="ac-log__foot"><span class="ac-log__stat" aria-live="polite"></span><button type="button" class="ac-log__jump" data-log="jump" hidden>${icon('arrow-down')}<span></span></button></div>`;
+  const view = el.querySelector('.ac-log__view'); const stat = el.querySelector('.ac-log__stat'); const jump = el.querySelector('.ac-log__jump');
+  const pauseBtn = el.querySelector('[data-log="pause"]');
+  el.toggleAttribute('data-no-ts', !st.ts);
+  const match = (l) => st.on.has(l.level) && (!st.q || `${l.src || ''} ${l.msg}`.toLowerCase().includes(st.q));
+  const hl = (s) => { s = esc(s); if (!st.q) return s; const q = esc(st.q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); return s.replace(new RegExp(q, 'gi'), (m) => `<mark>${m}</mark>`); };
+  const line = (l) => `<div class="ac-log__line" data-level="${esc(l.level)}"><time datetime="${new Date(l.ts).toISOString()}">${clock(l.ts)}</time><span class="ac-log__lv">${esc(l.level.toUpperCase())}</span>${l.src ? `<span class="ac-log__src">${esc(l.src)}</span>` : ''}<span class="ac-log__msg">${hl(l.msg)}</span></div>`;
+  const atBottom = () => view.scrollHeight - view.scrollTop - view.clientHeight < 24;
+  const toEnd = () => { view.scrollTop = view.scrollHeight; };
+  function status() {
+    el.querySelectorAll('.ac-log__lvl').forEach((b) => { b.querySelector('.ac-log__n').textContent = format.number(count[b.dataset.level] || 0, { compact: true }); });
+    stat.textContent = AC.t('log.stat', '{n} lines · showing {m}', { n: format.number(buf.length), m: format.number(view.childElementCount) });
+    const showJump = st.pending > 0 || !st.follow;
+    jump.hidden = !showJump;
+    jump.querySelector('span').textContent = st.pending ? AC.t('log.new', '{n} new', { n: format.number(st.pending) }) : AC.t('log.latest', 'Latest');
+    pauseBtn.innerHTML = `${icon(st.paused ? 'play' : 'pause')}<span>${esc(st.paused ? AC.t('log.resume', 'Resume') : AC.t('log.pause', 'Pause'))}</span>`;
+    pauseBtn.setAttribute('aria-pressed', String(st.paused));
+  }
+  function full() {
+    const out = []; for (let i = buf.length - 1; i >= 0 && out.length < c.render; i--) if (match(buf[i])) out.push(buf[i]);
+    view.innerHTML = out.reverse().map(line).join('') || `<div class="ac-log__empty">${esc(AC.t('log.empty', 'No matching log lines'))}</div>`;
+    st.pending = 0;
+    if (st.follow) toEnd();
+    status();
+  }
+  const queue = [];
+  let raf = 0;
+  function flush() {
+    raf = 0;
+    if (st.paused) { status(); return; }
+    const add = queue.splice(0).filter(match);
+    if (add.length) {
+      view.querySelector('.ac-log__empty')?.remove();
+      view.insertAdjacentHTML('beforeend', add.slice(-c.render).map(line).join(''));
+      let extra = view.childElementCount - c.render;
+      while (extra-- > 0) view.firstElementChild.remove();
+      if (st.follow) toEnd();
+    }
+    status();
+  }
+  function push(lines) {
+    const list = [].concat(lines).map(norm);
+    for (const l of list) { buf.push(l); count[l.level] = (count[l.level] || 0) + 1; if (st.paused && match(l)) st.pending++; }
+    if (buf.length > c.max) buf.splice(0, buf.length - c.max).forEach((l) => { count[l.level]--; });
+    if (!st.paused) queue.push(...list);
+    if (!raf) raf = requestAnimationFrame(flush);
+    return api;
+  }
+  function pause(v = !st.paused) { st.paused = v; if (!v) { queue.length = 0; full(); } else status(); emit(el, 'logview:pause', { paused: v }); return api; }
+  const offs = [
+    on(el, 'click', '.ac-log__lvl', (e, b) => { const l = b.dataset.level; if (e.altKey || e.metaKey) { st.on = new Set([l]); } else if (st.on.has(l)) st.on.delete(l); else st.on.add(l); el.querySelectorAll('.ac-log__lvl').forEach((x) => x.setAttribute('aria-pressed', String(st.on.has(x.dataset.level)))); full(); }),
+    on(el, 'input', '.ac-log__search input', debounce((e) => { st.q = e.target.value.trim().toLowerCase(); full(); }, 150)),
+    on(el, 'click', '[data-log]', (e, b) => {
+      const k = b.dataset.log;
+      if (k === 'pause') pause();
+      else if (k === 'clear') { buf.length = 0; Object.keys(count).forEach((x) => { count[x] = 0; }); full(); }
+      else if (k === 'ts') { st.ts = !st.ts; b.setAttribute('aria-pressed', String(st.ts)); el.toggleAttribute('data-no-ts', !st.ts); }
+      else if (k === 'jump') { st.follow = true; if (st.paused) pause(false); else { toEnd(); status(); } }
+    }),
+    on(view, 'scroll', () => { const b = atBottom(); if (b !== st.follow) { st.follow = b; status(); } }, { passive: true }),
+  ];
+  const api = {
+    el, push, pause, clear() { buf.length = 0; full(); return api; },
+    follow(v = true) { st.follow = v; if (v) toEnd(); status(); return api; },
+    filter({ levels, q } = {}) { if (levels) st.on = new Set(levels); if (q != null) { st.q = q.toLowerCase(); el.querySelector('.ac-log__search input').value = q; } el.querySelectorAll('.ac-log__lvl').forEach((x) => x.setAttribute('aria-pressed', String(st.on.has(x.dataset.level)))); full(); return api; },
+    get lines() { return buf.slice(); }, get paused() { return st.paused; },
+    destroy() { offs.forEach((f) => f()); cancelAnimationFrame(raf); },
+  };
+  if (c.lines) { c.lines.map(norm).forEach((l) => { buf.push(l); count[l.level] = (count[l.level] || 0) + 1; }); }
+  full();
+  return api;
+}
+
+register('logview', (el) => {
+  const api = create(el, options(el, {}));
+  instance(el, 'logview', api);
+  return () => api.destroy();
+});
+function logview(target, cfg = {}) {
+  const el = typeof target === 'string' ? document.querySelector(target) : target;
+  instance(el, 'logview')?.destroy();
+  return instance(el, 'logview', create(el, cfg));
+}
+AC.logview = logview;
+return Object.freeze({ logview });
+})();
+
+/* ---- js/components/accordion.js ---- */
+const __ac_m17 = F["js/components/accordion.js"] = (() => {
+const { register, instance, on, emit, options, reducedMotion } = __ac_m1;
+/* Accordion — native <details>, animated height, optional single-open.
+   <div class="ac-accordion" data-ac="accordion" [data-single]>
+     <details class="ac-accordion__item"><summary class="ac-accordion__head">Question</summary>
+       <div class="ac-accordion__body">Answer</div></details></div>
+   Event: ac:accordion:toggle { item, open }. API: AC.instance(el,'accordion').toggle(i|details, open?) */
+
+
+register('accordion', (el) => {
+  const o = options(el, { single: false });
+  const anims = new Map();
+  const items = () => Array.from(el.querySelectorAll(':scope > details, :scope > .ac-accordion__item'));
+  function toggle(d, open = !d.open) {
+    if (typeof d === 'number') d = items()[d];
+    if (!d || open === (d.open && !d.hasAttribute('data-closing'))) return;
+    if (open && o.single) items().forEach((x) => { if (x !== d && x.open) toggle(x, false); });
+    anims.get(d)?.cancel();
+    const body = d.querySelector('.ac-accordion__body');
+    emit(d, 'accordion:toggle', { item: d, open });
+    if (reducedMotion() || !body || !d.animate) { d.open = open; return; }
+    const from = d.offsetHeight;
+    d.open = true;
+    const to = open ? d.offsetHeight : d.offsetHeight - body.offsetHeight;
+    d.toggleAttribute('data-closing', !open);
+    d.setAttribute('data-animating', '');
+    const a = d.animate({ height: [`${from}px`, `${to}px`] }, { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    anims.set(d, a);
+    const done = () => { anims.delete(d); d.removeAttribute('data-animating'); d.removeAttribute('data-closing'); };
+    a.onfinish = () => { if (!open) d.open = false; done(); };
+    a.oncancel = done;
+  }
+  const off = on(el, 'click', 'summary', (e, s) => {
+    const d = s.parentElement;
+    if (d.parentElement !== el) return;
+    e.preventDefault();
+    toggle(d, !d.open || d.hasAttribute('data-closing'));
+  });
+  instance(el, 'accordion', { toggle, items });
+  return () => { off(); anims.forEach((a) => a.cancel()); };
+});
+return Object.freeze({  });
+})();
+
+return { f: F, ns: Object.freeze({ "swipeable": __ac_mo["swipeable"], "tree": __ac_mq["tree"], "json": __ac_mr["json"], "copyText": __ac_mr["copyText"], "logview": __ac_ms["logview"] }) };
+})();
+export const { swipeable, tree, json, copyText, logview } = __R["data-display"].ns;
+export default __R["data-display"].ns;

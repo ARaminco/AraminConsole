@@ -1,0 +1,55 @@
+<section class="ac-page" data-page="editor" data-script data-modules="prose data-display overlays">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.pages">صفحه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.editor">ویرایشگر Markdown</h1>
+      <p class="ac-page-head__sub" data-i18n="editor.sub">بنویسید و همزمان پیش‌نمایش امن را ببینید؛ پیش‌نویس خودکار روی همین دستگاه ذخیره می‌شود.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn" type="button" data-mde-reset><svg class="ac-icon" aria-hidden="true"><use href="#i-file-text"/></svg><span data-i18n="editor.sample">نمونه</span></button>
+      <button class="ac-btn ac-btn--primary" type="button" data-mde-copy><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-i18n="editor.copyHtml">کپی HTML</span></button>
+    </div>
+  </header>
+
+  <div class="ac-mde" data-mde data-view="write">
+    <div class="ac-mde__bar" role="toolbar" aria-label="ابزارها" data-i18n-attr="aria-label:editor.toolbar">
+      <button class="ac-mde__tool" type="button" data-cmd="bold" aria-label="پررنگ" data-i18n-attr="aria-label:editor.bold" data-ac-tooltip-kbd="Ctrl B"><svg class="ac-icon" aria-hidden="true"><use href="#i-bold"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="italic" aria-label="کج" data-i18n-attr="aria-label:editor.italic"><svg class="ac-icon" aria-hidden="true"><use href="#i-italic"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="strike" aria-label="خط‌خورده" data-i18n-attr="aria-label:editor.strike"><svg class="ac-icon" aria-hidden="true"><use href="#i-strikethrough"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="heading" aria-label="تیتر" data-i18n-attr="aria-label:editor.heading"><svg class="ac-icon" aria-hidden="true"><use href="#i-heading"/></svg></button>
+      <span class="ac-mde__sep" aria-hidden="true"></span>
+      <button class="ac-mde__tool" type="button" data-cmd="ul" aria-label="فهرست" data-i18n-attr="aria-label:editor.ul"><svg class="ac-icon" aria-hidden="true"><use href="#i-list"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="ol" aria-label="فهرست شماره‌دار" data-i18n-attr="aria-label:editor.ol"><svg class="ac-icon" aria-hidden="true"><use href="#i-list-ordered"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="task" aria-label="فهرست کارها" data-i18n-attr="aria-label:editor.task"><svg class="ac-icon" aria-hidden="true"><use href="#i-list-todo"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="quote" aria-label="نقل‌قول" data-i18n-attr="aria-label:editor.quote"><svg class="ac-icon" aria-hidden="true"><use href="#i-text-quote"/></svg></button>
+      <span class="ac-mde__sep" aria-hidden="true"></span>
+      <button class="ac-mde__tool" type="button" data-cmd="link" aria-label="پیوند" data-i18n-attr="aria-label:editor.link" data-ac-tooltip-kbd="Ctrl K"><svg class="ac-icon" aria-hidden="true"><use href="#i-link"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="image" aria-label="تصویر" data-i18n-attr="aria-label:editor.image"><svg class="ac-icon" aria-hidden="true"><use href="#i-image"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="code" aria-label="کد" data-i18n-attr="aria-label:editor.code"><svg class="ac-icon" aria-hidden="true"><use href="#i-code"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="table" aria-label="جدول" data-i18n-attr="aria-label:editor.table"><svg class="ac-icon" aria-hidden="true"><use href="#i-table"/></svg></button>
+      <button class="ac-mde__tool" type="button" data-cmd="callout" aria-label="کادر نکته" data-i18n-attr="aria-label:editor.callout"><svg class="ac-icon" aria-hidden="true"><use href="#i-lightbulb"/></svg></button>
+      <span class="ac-mde__spacer"></span>
+      <div class="ac-segmented ac-segmented--sm ac-hide-desktop" data-ac="segmented" data-mde-view aria-label="نما" data-i18n-attr="aria-label:editor.view">
+        <button class="ac-segmented__item" type="button" data-value="write" aria-checked="true"><svg class="ac-icon" aria-hidden="true"><use href="#i-pen-line"/></svg><span data-i18n="editor.write">نوشتن</span></button>
+        <button class="ac-segmented__item" type="button" data-value="preview" aria-checked="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-eye"/></svg><span data-i18n="editor.preview">پیش‌نمایش</span></button>
+      </div>
+      <button class="ac-mde__tool" type="button" data-cmd="dir" aria-pressed="false" aria-label="تغییر جهت متن" data-i18n-attr="aria-label:editor.dir"><bdi class="ac-text-xs" dir="ltr" data-mde-dir>RTL</bdi></button>
+    </div>
+    <div class="ac-mde__panes">
+      <div class="ac-mde__pane ac-mde__pane--src">
+        <label class="ac-visually-hidden" for="mde-src" data-i18n="editor.source">متن Markdown</label>
+        <textarea class="ac-mde__src" id="mde-src" spellcheck="false" dir="rtl" data-mde-src></textarea>
+      </div>
+      <div class="ac-mde__pane ac-mde__pane--preview" aria-live="off">
+        <div class="ac-mde__preview"><div class="ac-prose" dir="rtl" data-mde-preview data-numerals="persian"></div></div>
+      </div>
+    </div>
+    <div class="ac-mde__status" aria-live="polite">
+      <span><span data-i18n="editor.words">کلمه</span>: <b><bdi class="ac-num" dir="ltr" data-mde-words>0</bdi></b></span>
+      <span><span data-i18n="editor.chars">نویسه</span>: <b><bdi class="ac-num" dir="ltr" data-mde-chars>0</bdi></b></span>
+      <span><span data-i18n="editor.lines">خط</span>: <b><bdi class="ac-num" dir="ltr" data-mde-lines>0</bdi></b></span>
+      <span data-mde-read></span>
+      <span class="ac-mde__saved" data-mde-saved><svg class="ac-icon ac-icon--sm" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="editor.saved">ذخیره شد</span></span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,373 @@
+<section class="ac-page" data-page="forms" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="forms.eyebrow">ورودی‌ها و فرم‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.forms">فرم‌ها</h1>
+      <p class="ac-page-head__sub" data-i18n="forms.sub">همهٔ ورودی‌ها، اعتبارسنجی زنده و یک ویزارد واقعی؛ با تقویم شمسی، شمارهٔ موبایل و کد ملی ایرانی.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <a class="ac-btn ac-btn--primary" href="#wizard"><svg class="ac-icon" aria-hidden="true"><use href="#i-user-plus"/></svg><span data-i18n="forms.newCustomer">مشتری جدید</span></a>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- wizard -->
+    <article class="ac-card ac-span-8" id="wizard">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.wizTitle">ثبت مشتری جدید</h2><p class="ac-card__sub" data-i18n="forms.wizSub">ویزارد چهار مرحله‌ای با اعتبارسنجی هر مرحله</p></div></div>
+      <div class="ac-card__body">
+        <form class="ac-wizard" data-ac="form wizard" id="customer-form" autocomplete="off">
+          <ol class="ac-stepper">
+            <li class="ac-step" data-state="current"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="forms.s1">هویت</strong><small data-i18n="forms.s1Sub">نام و کد ملی</small></span></li>
+            <li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="forms.s2">تماس</strong><small data-i18n="forms.s2Sub">موبایل و نشانی</small></span></li>
+            <li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="forms.s3">اشتراک</strong><small data-i18n="forms.s3Sub">طرح و علاقه‌ها</small></span></li>
+            <li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="forms.s4">بازبینی</strong><small data-i18n="forms.s4Sub">تأیید نهایی</small></span></li>
+          </ol>
+
+          <section class="ac-wizard__step" aria-labelledby="ws1">
+            <h3 class="ac-form-section__title" id="ws1" data-i18n="forms.s1Title">اطلاعات هویتی</h3>
+            <div class="ac-form-grid">
+              <div class="ac-field">
+                <label class="ac-label" for="c-first"><span data-i18n="forms.firstName">نام</span><span class="ac-label__req">*</span></label>
+                <input class="ac-input" id="c-first" name="firstName" data-ac-rules="required|min:2" autocomplete="given-name">
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-last"><span data-i18n="forms.lastName">نام خانوادگی</span><span class="ac-label__req">*</span></label>
+                <input class="ac-input" id="c-last" name="lastName" data-ac-rules="required|min:2" autocomplete="family-name">
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-nid"><span data-i18n="forms.nationalId">کد ملی</span><span class="ac-label__req">*</span></label>
+                <div class="ac-input-group" data-ac="input" data-counter>
+                  <span class="ac-input-group__affix"><svg class="ac-icon" aria-hidden="true"><use href="#i-id-card"/></svg></span>
+                  <input class="ac-input ac-num ac-ltr" id="c-nid" name="nationalId" inputmode="numeric" maxlength="10" placeholder="0012345679" data-ac-rules="required|iran-national-id">
+                </div>
+                <p class="ac-help" data-i18n="forms.nidHelp">۱۰ رقم؛ رقم کنترل بررسی می‌شود. نمونهٔ معتبر: 0012345679</p>
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-birth"><span data-i18n="forms.birth">تاریخ تولد</span><span class="ac-label__req">*</span></label>
+                <div class="ac-input-group ac-date" data-ac="datepicker" data-name="birthDate" data-calendar="persian" data-max="2010-12-31" data-min="1930-01-01">
+                  <input class="ac-input" id="c-birth" placeholder="1370/01/01" data-ac-rules="required|date">
+                </div>
+                <p class="ac-help" data-i18n="forms.birthHelp">تقویم شمسی؛ مقدار ارسالی میلادی (ISO) است.</p>
+              </div>
+              <fieldset class="ac-field ac-span-full ac-choice-group">
+                <legend class="ac-label" data-i18n="forms.type">نوع مشتری</legend>
+                <div class="ac-form-grid">
+                  <label class="ac-choice ac-choice--card"><input class="ac-radio" type="radio" name="kind" value="person" checked><span><strong data-i18n="forms.person">حقیقی</strong><small data-i18n="forms.personSub">فرد، با کد ملی</small></span></label>
+                  <label class="ac-choice ac-choice--card"><input class="ac-radio" type="radio" name="kind" value="company"><span><strong data-i18n="forms.company">حقوقی</strong><small data-i18n="forms.companySub">شرکت، با شناسهٔ ملی</small></span></label>
+                </div>
+              </fieldset>
+            </div>
+          </section>
+
+          <section class="ac-wizard__step" aria-labelledby="ws2" hidden>
+            <h3 class="ac-form-section__title" id="ws2" data-i18n="forms.s2Title">راه‌های تماس</h3>
+            <div class="ac-form-grid">
+              <div class="ac-field">
+                <label class="ac-label" for="c-mobile"><span data-i18n="forms.mobile">موبایل</span><span class="ac-label__req">*</span></label>
+                <div class="ac-input-group" data-ac="input" data-clear>
+                  <span class="ac-input-group__affix"><svg class="ac-icon" aria-hidden="true"><use href="#i-phone"/></svg></span>
+                  <input class="ac-input ac-num ac-ltr" id="c-mobile" name="mobile" type="tel" inputmode="tel" placeholder="0912 345 6789" data-ac-rules="required|iran-mobile" autocomplete="tel">
+                </div>
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-email"><span data-i18n="forms.email">ایمیل</span><span class="ac-label__opt" data-i18n="forms.optional">اختیاری</span></label>
+                <div class="ac-input-group" data-ac="input">
+                  <span class="ac-input-group__affix"><svg class="ac-icon" aria-hidden="true"><use href="#i-at-sign"/></svg></span>
+                  <input class="ac-input ac-ltr" id="c-email" name="email" type="email" placeholder="name@example.com" data-ac-rules="email" autocomplete="email">
+                </div>
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-city"><span data-i18n="forms.city">شهر</span><span class="ac-label__req">*</span></label>
+                <div class="ac-combo" data-ac="combobox" data-loader="cities" data-placeholder="جستجوی شهر…" data-i18n-attr="data-placeholder:forms.citySearch">
+                  <select id="c-city" name="city" data-ac-rules="required"></select>
+                </div>
+                <p class="ac-help" data-i18n="forms.cityHelp">بارگذاری ناهمگام از سرور (شبیه‌سازی‌شده).</p>
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-postal"><span data-i18n="forms.postal">کد پستی</span></label>
+                <input class="ac-input ac-num ac-ltr" id="c-postal" name="postal" inputmode="numeric" maxlength="10" placeholder="1234567890" data-ac-rules="iran-postal">
+              </div>
+              <div class="ac-field ac-span-full">
+                <label class="ac-label" for="c-address" data-i18n="forms.address">نشانی</label>
+                <div class="ac-input-group" data-ac="input" data-counter>
+                  <textarea class="ac-input" id="c-address" name="address" maxlength="200" rows="2" data-ac-rules="max:200"></textarea>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="ac-wizard__step" aria-labelledby="ws3" hidden>
+            <h3 class="ac-form-section__title" id="ws3" data-i18n="forms.s3Title">طرح اشتراک</h3>
+            <fieldset class="ac-choice-group" data-ac-rules="required" id="c-plan-group">
+              <legend class="ac-visually-hidden" data-i18n="forms.plan">طرح</legend>
+              <div class="ac-form-grid ac-form-grid--3">
+                <label class="ac-choice ac-choice--card"><input class="ac-radio" type="radio" name="plan" value="basic"><span><strong data-i18n="forms.basic">پایه</strong><small data-i18n="forms.basicSub">رایگان، تا ۳ کاربر</small></span></label>
+                <label class="ac-choice ac-choice--card"><input class="ac-radio" type="radio" name="plan" value="pro"><span><strong data-i18n="forms.pro">حرفه‌ای</strong><small data-i18n="forms.proSub">ماهانه ۴۹۰ هزار تومان</small></span></label>
+                <label class="ac-choice ac-choice--card"><input class="ac-radio" type="radio" name="plan" value="team"><span><strong data-i18n="forms.team">تیمی</strong><small data-i18n="forms.teamSub">کاربر نامحدود</small></span></label>
+              </div>
+            </fieldset>
+            <div class="ac-form-grid">
+              <div class="ac-field">
+                <label class="ac-label" for="c-start" data-i18n="forms.startDate">شروع اشتراک</label>
+                <div class="ac-input-group ac-date" data-ac="datepicker" data-name="startDate">
+                  <input class="ac-input" id="c-start" placeholder="1403/08/01" data-ac-rules="date">
+                </div>
+              </div>
+              <div class="ac-field">
+                <label class="ac-label" for="c-interests" data-i18n="forms.interests">علاقه‌مندی‌ها</label>
+                <div class="ac-tags" data-ac="tags" data-name="interests" data-value="فروش,گزارش" data-max="6" data-input-id="c-interests"></div>
+              </div>
+              <label class="ac-choice ac-span-full"><input class="ac-switch" type="checkbox" role="switch" name="newsletter" checked><span><span data-i18n="forms.newsletter">دریافت خبرنامه</span><small data-i18n="forms.newsletterSub">ماهی یک ایمیل، بدون تبلیغ.</small></span></label>
+            </div>
+          </section>
+
+          <section class="ac-wizard__step" aria-labelledby="ws4" hidden>
+            <h3 class="ac-form-section__title" id="ws4" data-i18n="forms.s4Title">بازبینی و تأیید</h3>
+            <dl class="ac-form-summary" data-review></dl>
+            <div class="ac-field">
+              <label class="ac-choice"><input class="ac-check" type="checkbox" name="terms" value="yes" data-ac-rules="required"><span data-i18n="forms.terms">قوانین و حریم خصوصی را می‌پذیرم.</span></label>
+            </div>
+          </section>
+
+          <div class="ac-wizard__nav">
+            <span class="ac-wizard__count ac-num" data-wizard-count></span>
+            <button class="ac-btn" type="button" data-wizard-prev><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-left"/></svg><span data-i18n="forms.back">قبلی</span></button>
+            <button class="ac-btn ac-btn--primary" type="button" data-wizard-next><span data-i18n="forms.next">بعدی</span><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+            <button class="ac-btn ac-btn--gradient" type="submit"><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="forms.finish">ثبت مشتری</span></button>
+          </div>
+        </form>
+      </div>
+    </article>
+
+    <!-- validation -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.valTitle">اعتبارسنجی زنده</h2><p class="ac-card__sub ac-mono ac-ltr">data-ac-rules</p></div></div>
+      <div class="ac-card__body">
+        <form class="ac-form" data-ac="form" id="signup-form">
+          <div class="ac-field">
+            <label class="ac-label" for="v-email" data-i18n="forms.email">ایمیل</label>
+            <input class="ac-input ac-ltr" id="v-email" name="email" type="email" placeholder="you@company.com" data-ac-rules="required|email">
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="v-user" data-i18n="forms.username">نام کاربری</label>
+            <div class="ac-input-group" data-ac="input" data-counter>
+              <span class="ac-input-group__affix ac-input-group__affix--box ac-ltr">@</span>
+              <input class="ac-input ac-ltr" id="v-user" name="username" maxlength="10" data-ac-rules="required|min:3|max:10">
+            </div>
+            <p class="ac-help" data-i18n="forms.userHelp">۳ تا ۱۰ نویسه.</p>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="v-pass" data-i18n="forms.password">رمز عبور</label>
+            <div class="ac-input-group" data-ac="password" data-strength>
+              <input class="ac-input ac-ltr" id="v-pass" name="password" type="password" autocomplete="new-password" data-ac-rules="required|min:8">
+            </div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="v-pass2" data-i18n="forms.password2">تکرار رمز عبور</label>
+            <input class="ac-input ac-ltr" id="v-pass2" name="password2" type="password" autocomplete="new-password" data-ac-rules="required|match:#v-pass">
+          </div>
+          <div class="ac-form-actions">
+            <button class="ac-btn ac-btn--ghost" type="reset" data-i18n="forms.reset">پاک کردن</button>
+            <button class="ac-btn ac-btn--primary" type="submit" data-i18n="forms.create">ساخت حساب</button>
+          </div>
+        </form>
+      </div>
+    </article>
+
+    <!-- text inputs -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.textTitle">ورودی متن</h2><p class="ac-card__sub ac-mono ac-ltr">.ac-input · .ac-input-group · .ac-float</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="ac-field">
+          <label class="ac-label" for="t-search" data-i18n="forms.search">جستجو</label>
+          <div class="ac-input-group" data-ac="input" data-clear>
+            <span class="ac-input-group__affix"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg></span>
+            <input class="ac-input" id="t-search" type="search" value="داشبورد فروش">
+          </div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="t-site" data-i18n="forms.website">وب‌سایت</label>
+          <div class="ac-input-group ac-ltr" data-ac="input">
+            <span class="ac-input-group__affix ac-input-group__affix--box">https://</span>
+            <input class="ac-input" id="t-site" placeholder="example" dir="ltr">
+            <span class="ac-input-group__affix">.ir</span>
+          </div>
+        </div>
+        <div class="ac-form-grid">
+          <div class="ac-input-group ac-float" data-ac="input"><input class="ac-input" id="t-f1"><label for="t-f1" data-i18n="forms.firstName">نام</label></div>
+          <div class="ac-input-group ac-float" data-ac="input"><input class="ac-input" id="t-f2" value="رامین"><label for="t-f2" data-i18n="forms.lastName">نام خانوادگی</label></div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="t-role" data-i18n="forms.role">نقش</label>
+          <select class="ac-select" id="t-role"><option data-i18n="forms.admin">مدیر</option><option data-i18n="forms.editor">ویراستار</option><option data-i18n="forms.viewer">بیننده</option></select>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="t-bio" data-i18n="forms.bio">درباره</label>
+          <div class="ac-input-group" data-ac="input" data-counter><textarea class="ac-input" id="t-bio" maxlength="160" rows="2" placeholder="چند خط دربارهٔ خودتان…" data-i18n-attr="placeholder:forms.bioPh"></textarea></div>
+        </div>
+        <input class="ac-input" disabled value="غیرفعال" aria-label="disabled" data-i18n-attr="value:kit.disabled">
+      </div>
+    </article>
+
+    <!-- choices -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.choiceTitle">گزینه‌ها</h2><p class="ac-card__sub ac-mono ac-ltr">.ac-check · .ac-radio · .ac-switch</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <fieldset class="ac-choice-group">
+          <legend class="kit-label" data-i18n="forms.notify">اعلان‌ها</legend>
+          <label class="ac-choice"><input class="ac-check" type="checkbox" id="ch-all"><span data-i18n="forms.all">همه</span></label>
+          <label class="ac-choice"><input class="ac-check" type="checkbox" checked data-child><span><span data-i18n="forms.orders">سفارش‌ها</span><small data-i18n="forms.ordersSub">هر سفارش جدید</small></span></label>
+          <label class="ac-choice"><input class="ac-check" type="checkbox" data-child><span data-i18n="forms.reports">گزارش هفتگی</span></label>
+          <label class="ac-choice"><input class="ac-check" type="checkbox" disabled><span data-i18n="kit.disabled">غیرفعال</span></label>
+        </fieldset>
+        <fieldset class="ac-choice-group ac-choice-group--row">
+          <legend class="kit-label" data-i18n="forms.density">تراکم</legend>
+          <label class="ac-choice"><input class="ac-radio" type="radio" name="dens" checked><span data-i18n="forms.comfortable">راحت</span></label>
+          <label class="ac-choice"><input class="ac-radio" type="radio" name="dens"><span data-i18n="forms.compact">فشرده</span></label>
+        </fieldset>
+        <div>
+          <p class="kit-label" data-i18n="forms.controls">کنترل‌های کارت</p>
+          <div class="ac-toggle-list">
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-globe"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.online">پرداخت آنلاین</span><span class="ac-toggle-row__desc" data-i18n="forms.onlineSub">خرید اینترنتی، اشتراک‌ها و پرداخت درون‌برنامه‌ای</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-nfc"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.contactless">پرداخت بدون تماس</span><span class="ac-toggle-row__desc" data-i18n="forms.contactlessSub">تا ۲ میلیون تومان در هر پرداخت</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-banknote"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.atm">برداشت از خودپرداز</span><span class="ac-toggle-row__desc" data-i18n="forms.atmSub">تا ۱۰ میلیون تومان در روز</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-plane"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.abroad">استفاده در خارج</span><span class="ac-toggle-row__desc" data-i18n="forms.abroadSub">پرداخت بیرون از ایران</span></span><input class="ac-switch" type="checkbox" role="switch"></label>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- selection -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.selectTitle">انتخاب</h2><p class="ac-card__sub ac-mono ac-ltr">combobox · multiple · tags</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="ac-field">
+          <label class="ac-label" for="s-country" data-i18n="forms.country">کشور</label>
+          <div class="ac-combo" data-ac="combobox" data-placeholder="انتخاب کشور" data-i18n-attr="data-placeholder:forms.countryPh">
+            <select id="s-country" name="country">
+              <optgroup label="خاورمیانه">
+                <option value="ir" data-meta="+98" selected>ایران</option>
+                <option value="ae" data-meta="+971">امارات</option>
+                <option value="tr" data-meta="+90">ترکیه</option>
+                <option value="om" data-meta="+968">عمان</option>
+                <option value="qa" data-meta="+974">قطر</option>
+              </optgroup>
+              <optgroup label="اروپا">
+                <option value="de" data-meta="+49">آلمان</option>
+                <option value="fr" data-meta="+33">فرانسه</option>
+                <option value="gb" data-meta="+44">بریتانیا</option>
+                <option value="nl" data-meta="+31">هلند</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="s-team" data-i18n="forms.assignees">مسئولان</label>
+          <div class="ac-combo" data-ac="combobox" data-multiple>
+            <select id="s-team" name="team" multiple>
+              <option value="sara" selected>سارا محمدی</option>
+              <option value="ali" selected>علی رضایی</option>
+              <option value="neda">ندا کریمی</option>
+              <option value="reza">رضا احمدی</option>
+              <option value="mina">مینا حسینی</option>
+              <option value="omid">امید جعفری</option>
+            </select>
+          </div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="s-tags" data-i18n="forms.tags">برچسب‌ها</label>
+          <div class="ac-tags" data-ac="tags" data-name="tags" data-value="فوری,VIP" data-input-id="s-tags"></div>
+        </div>
+        <div class="ac-field">
+          <span class="ac-label" id="s-color-l" data-i18n="forms.color">رنگ برچسب</span>
+          <div class="ac-swatches" data-ac="swatches" aria-labelledby="s-color-l" data-name="color" data-colors="#6d4aff,#2563eb,#06b6d4,#10b981,#f59e0b,#f43f5e,#334155" data-value="#2563eb" data-custom></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- date & time -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.dateTitle">تاریخ و ساعت</h2><p class="ac-card__sub" data-i18n="forms.dateSub">شمسی و میلادی، بازه، محدودهٔ مجاز</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="ac-field">
+          <label class="ac-label" for="d-due" data-i18n="forms.dueDate">موعد (شمسی)</label>
+          <div class="ac-input-group ac-date" data-ac="datepicker" data-name="due" data-calendar="persian" data-value="2024-10-19">
+            <input class="ac-input" id="d-due">
+          </div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="d-meet" data-i18n="forms.meeting">جلسه (میلادی، فقط ۶۰ روز آینده)</label>
+          <div class="ac-input-group ac-date" data-ac="datepicker" data-name="meeting" data-calendar="gregory" id="d-meet-wrap">
+            <input class="ac-input" id="d-meet" placeholder="2025/01/31">
+          </div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="d-range" data-i18n="forms.range">بازهٔ گزارش</label>
+          <div class="ac-input-group ac-date" data-ac="datepicker" data-range data-name="report" data-value="2024-10-05,2024-10-19">
+            <input class="ac-input" id="d-range">
+          </div>
+        </div>
+        <div class="ac-form-grid">
+          <div class="ac-field">
+            <label class="ac-label" for="d-time" data-i18n="forms.time">ساعت</label>
+            <div class="ac-input-group ac-time" data-ac="timepicker" data-step="15"><input class="ac-input" id="d-time" name="time" value="09:30"></div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="d-qty" data-i18n="forms.qty">تعداد</label>
+            <div class="ac-number" data-ac="number"><input class="ac-input" id="d-qty" type="number" value="2" min="0" max="20"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- otp & sliders -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.otpTitle">کد یک‌بارمصرف و اسلایدر</h2><p class="ac-card__sub ac-mono ac-ltr">otp · range · rating</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="ac-field">
+          <span class="ac-label" id="o-l" data-i18n="forms.otp">کد تأیید پیامکی</span>
+          <div class="ac-otp" data-ac="otp" data-length="6" data-name="otp" aria-labelledby="o-l" id="otp-demo"></div>
+          <p class="ac-help" data-otp-status data-i18n="forms.otpHelp">کد ۶ رقمی را وارد یا جای‌گذاری کنید (۱۲۳۴۵۶ درست است).</p>
+        </div>
+        <div class="ac-field">
+          <span class="ac-label" id="p-l" data-i18n="forms.pin">پین ۴ رقمی</span>
+          <div class="ac-otp" data-ac="otp" data-length="4" data-mask data-name="pin" aria-labelledby="p-l"></div>
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="r-vol"><span data-i18n="forms.discount">تخفیف</span></label>
+          <input class="ac-range" id="r-vol" type="range" min="0" max="50" value="15" data-ac="range" data-bubble data-suffix="%">
+        </div>
+        <div class="ac-limit">
+          <div class="ac-limit__head"><label class="ac-limit__label" for="r-budget" data-i18n="forms.budget">سقف خرید ماهانه (میلیون تومان)</label><output class="ac-limit__value" for="r-budget"></output></div>
+          <input class="ac-range" id="r-budget" type="range" min="10" max="500" step="10" value="120" data-ac="range">
+          <div class="ac-range-scale ac-num"><span>10</span><span>500</span></div>
+          <progress class="ac-progress ac-progress--sm" value="34" max="100" aria-label="Used"></progress>
+          <div class="ac-limit__used"><strong class="ac-num">41</strong><span data-i18n="forms.used">مصرف‌شده · ۳۴٪</span></div>
+        </div>
+        <div class="ac-spread">
+          <div class="ac-rating" data-ac="rating" data-name="score" data-value="4" aria-label="Rating"></div>
+          <div class="ac-row ac-text-sm ac-text-muted"><div class="ac-rating" data-ac="rating" data-value="3" data-readonly></div><span class="ac-num">4.2 (128)</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- upload -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.uploadTitle">بارگذاری فایل</h2><p class="ac-card__sub" data-i18n="forms.uploadSub">کشیدن و رها کردن، پیش‌نمایش و پیشرفت</p></div></div>
+      <div class="ac-card__body">
+        <div class="ac-dropzone" data-ac="dropzone" data-max-files="5" data-max-size="5MB">
+          <input type="file" name="docs" multiple accept="image/*,.pdf" aria-label="Upload" data-i18n-attr="aria-label:forms.uploadTitle">
+        </div>
+      </div>
+    </article>
+
+    <!-- result -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="forms.resultTitle">خروجی فرم</h2><p class="ac-card__sub ac-mono ac-ltr">ac:form:submit → detail.values</p></div></div>
+      <div class="ac-card__body">
+        <p class="ac-help" data-output-empty data-i18n="forms.resultEmpty">هنوز فرمی ارسال نشده است.</p>
+        <dl class="ac-form-summary" data-output hidden></dl>
+      </div>
+    </article>
+  </div>
+</section>

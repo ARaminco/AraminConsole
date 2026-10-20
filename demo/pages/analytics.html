@@ -1,0 +1,123 @@
+<section class="ac-page" data-page="analytics" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="an.eyebrow">ترافیک، تبدیل و رفتار کاربران</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.analytics">تحلیل‌ها</h1>
+      <p class="ac-page-head__sub" data-i18n="an.sub">بازدیدکننده‌ها از کجا می‌آیند و چند نفر به خرید می‌رسند.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <div class="ac-segmented" data-ac="segmented" data-an-range aria-label="Range" data-i18n-attr="aria-label:an.range">
+        <button class="ac-segmented__item" type="button" data-value="7d" data-i18n="an.7d">۷ روز</button>
+        <button class="ac-segmented__item" type="button" data-value="30d" aria-checked="true" data-i18n="an.30d">۳۰ روز</button>
+        <button class="ac-segmented__item" type="button" data-value="90d" data-i18n="an.90d">۳ ماه</button>
+        <button class="ac-segmented__item" type="button" data-value="12m" data-i18n="an.12m">۱۲ ماه</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-6 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="an.visitors">بازدیدکننده</span><span class="ac-trend" data-trend="up" data-an-delta="visitors">—</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-compact data-an-kpi="visitors">0</span></div>
+      <div class="ac-stat__spark" data-ac="chart" data-an-spark="visitors" data-ac-config='{"type":"sparkline","series":[[1,2]]}'></div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-6 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="an.sessions">نشست</span><span class="ac-trend" data-trend="up" data-an-delta="sessions">—</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-compact data-an-kpi="sessions">0</span></div>
+      <div class="ac-stat__spark" data-ac="chart" data-an-spark="sessions" data-ac-config='{"type":"sparkline","series":[[1,2]],"color":2}'></div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-6 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="an.bounce">نرخ پرش</span><span class="ac-trend" data-trend="down">1.8%</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="38.6" data-decimals="1" data-suffix="%">0</span></div>
+      <div class="ac-stat__foot" data-i18n="an.bounceFoot">کمتر بهتر است</div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-6 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="an.duration">میانگین نشست</span><span class="ac-trend" data-trend="up">9%</span></div>
+      <div class="ac-stat__value ac-ltr">3m 42s</div>
+      <div class="ac-stat__foot" data-i18n="an.durationFoot">زمان ماندن در سایت</div>
+    </article>
+
+    <article class="ac-card ac-span-8">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="an.traffic">بازدید و نشست</h2>
+          <p class="ac-card__sub" data-i18n="an.trafficSub">با کلید جهت یا لمس، مقدار هر نقطه را ببینید.</p>
+        </div>
+      </div>
+      <div class="ac-card__body"><div class="ac-chart-slot ac-chart-slot--lg" data-an-traffic></div></div>
+    </article>
+
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.devices">دستگاه‌ها</h2>
+        <p class="ac-card__sub" data-i18n="an.devicesSub">سهم هر نوع دستگاه</p>
+      </div></div>
+      <div class="ac-card__body">
+        <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"donut","title":"an.devices","centerLabel":"an.visits","labels":["an.mobile","an.desktop","an.tablet"],"series":[61240,31980,6780],"legend":true}'></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-span-12">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.heatmap">فعالیت روزانه</h2>
+        <p class="ac-card__sub" data-i18n="an.heatmapSub">تعداد انتشار و تغییرات در یک سال گذشته</p>
+      </div></div>
+      <div class="ac-card__body"><div data-an-heatmap></div></div>
+    </article>
+
+    <article class="ac-card ac-span-md-6 ac-span-6">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.funnel">قیف تبدیل</h2>
+        <p class="ac-card__sub" data-i18n="an.funnelSub">از بازدید تا پرداخت</p>
+      </div></div>
+      <div class="ac-card__body">
+        <div data-ac="chart" data-ac-config='{"type":"funnel","title":"an.funnel","color":2,"labels":["an.f.visit","an.f.product","an.f.cart","an.f.checkout","an.f.paid"],"series":[48210,21460,8930,4120,3247]}'></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-span-md-6 ac-span-6">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.channels">درآمد بر اساس کانال</h2>
+        <p class="ac-card__sub" data-i18n="an.channelsSub">هزار دلار، شش ماه اخیر</p>
+      </div></div>
+      <div class="ac-card__body">
+        <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","stacked":true,"title":"an.channels","labels":"months:6","prefix":"$","suffix":"K","series":[{"name":"an.organic","data":[42,48,51,58,63,71]},{"name":"an.paid","data":[18,22,19,26,24,31]},{"name":"an.email","data":[8,9,12,11,14,15]}]}'></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.countries">کشورها</h2>
+        <p class="ac-card__sub" data-i18n="an.countriesSub">بازدیدکنندهٔ یکتا</p>
+      </div></div>
+      <div class="ac-card__body">
+        <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","horizontal":true,"title":"an.countries","color":2,"labels":["an.c.ir","an.c.ae","an.c.de","an.c.us","an.c.tr"],"series":[{"name":"an.visitors","data":[41200,12800,7400,6100,3900]}]}'></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.goal">هدف ماهانه</h2>
+        <p class="ac-card__sub" data-i18n="an.goalSub">ثبت‌نام‌های جدید</p>
+      </div></div>
+      <div class="ac-card__body">
+        <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"gauge","value":78,"suffix":"%","label":"an.goalLabel","color":2}'></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-span-md-12 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.referrers">ارجاع‌دهنده‌ها</h2>
+      </div></div>
+      <div class="ac-card__body ac-card__body--flush"><div data-an-referrers></div></div>
+    </article>
+
+    <article class="ac-card ac-span-12">
+      <div class="ac-card__head"><div class="ac-card__titles">
+        <h2 class="ac-card__title" data-i18n="an.topPages">صفحه‌های پربازدید</h2>
+        <p class="ac-card__sub" data-i18n="an.topPagesSub">بر اساس بازدید در بازهٔ انتخاب‌شده</p>
+      </div></div>
+      <div class="ac-card__body ac-card__body--flush"><div data-an-pages></div></div>
+    </article>
+  </div>
+</section>

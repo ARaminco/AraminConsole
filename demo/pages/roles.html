@@ -1,0 +1,71 @@
+<section class="ac-page" data-page="roles" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="users.eyebrow">کاربران و دسترسی</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.roles">نقش‌ها و مجوزها</h1>
+      <p class="ac-page-head__sub" data-i18n="roles.sub">برای هر نقش مشخص کنید روی کدام بخش‌ها چه کاری مجاز است.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--primary" type="button" data-ac-open="#role-new"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="roles.create">نقش جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-4">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="roles.list">نقش‌ها</h2>
+          <p class="ac-card__sub" data-i18n="roles.listSub">یک نقش را انتخاب کنید</p>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="roles-list" role="listbox" aria-label="Roles" data-i18n-attr="aria-label:roles.list" data-roles-list></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-8">
+      <div class="ac-card__head pa-head-wrap">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-roles-title>—</h2>
+          <p class="ac-card__sub" data-roles-sub>—</p>
+        </div>
+        <div class="ac-card__actions">
+          <button class="ac-btn ac-btn--sm" type="button" data-roles-reset><svg class="ac-icon" aria-hidden="true"><use href="#i-rotate-ccw"/></svg><span data-i18n="roles.reset">بازگردانی</span></button>
+          <button class="ac-btn ac-btn--sm ac-btn--primary" type="button" data-roles-save disabled><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="prod.save">ذخیره</span></button>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="ac-table-wrap roles-matrix">
+          <table class="ac-table">
+            <thead data-roles-head></thead>
+            <tbody data-roles-body></tbody>
+          </table>
+        </div>
+        <p class="roles-note ac-text-xs ac-text-muted" data-roles-note hidden><svg class="ac-icon ac-icon--sm" aria-hidden="true"><use href="#i-lock"/></svg><span data-i18n="roles.locked">نقش مالک همیشه همهٔ مجوزها را دارد و قابل ویرایش نیست.</span></p>
+      </div>
+    </article>
+  </div>
+
+  <div class="ac-modal" id="role-new" data-ac="modal" data-size="sm" data-initial="#role-name">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head">
+        <div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="roles.create">نقش جدید</h2><p class="ac-dialog__sub" data-i18n="roles.createSub">بعد از ساخت، مجوزهایش را در جدول تنظیم کنید.</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:app.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <form class="ac-dialog__body ac-form" data-ac="form" id="role-form" novalidate>
+        <div class="ac-field">
+          <label class="ac-label" for="role-name"><span data-i18n="roles.name">نام نقش</span> <span class="ac-label__req">*</span></label>
+          <input class="ac-input" id="role-name" name="name" data-ac-rules="required|min:2" placeholder="مثلاً حسابدار" data-i18n-attr="placeholder:roles.namePh">
+        </div>
+        <div class="ac-field">
+          <label class="ac-label" for="role-copy" data-i18n="roles.copyFrom">کپی مجوزها از</label>
+          <select class="ac-select" id="role-copy" name="copy" data-roles-copy></select>
+        </div>
+      </form>
+      <div class="ac-dialog__foot">
+        <button class="ac-btn" type="button" data-ac-close data-i18n="overlay.cancel">انصراف</button>
+        <button class="ac-btn ac-btn--primary" type="submit" form="role-form" data-i18n="roles.createBtn">ساخت نقش</button>
+      </div>
+    </div>
+  </div>
+</section>

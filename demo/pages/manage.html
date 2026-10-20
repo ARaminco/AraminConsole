@@ -1,0 +1,63 @@
+<section class="ac-page" data-page="manage" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <h1 class="ac-page-head__title" data-i18n="nav.manage">مدیریت</h1>
+      <p class="ac-page-head__sub" data-i18n="manage.sub">کارت‌ها را مسدود کنید، سقف‌ها را تنظیم کنید و تصمیم بگیرید کدام کیف‌پول‌ها روشن بمانند.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--primary" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="dash.newCard">کارت جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- your cards -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-7">
+      <div class="ac-card__head">
+        <h2 class="ac-card__title" data-i18n="manage.cards">کارت‌های شما</h2>
+        <span class="ac-text-xs ac-text-muted" data-i18n="manage.cardsCount">۲ کارت</span>
+      </div>
+      <div class="ac-card__body ac-stack ac-gap-4">
+        <div class="ac-inset mng-stage">
+          <div class="mng-bcard" data-ac="bank-card" data-masked data-holder="علی اصغر رامین" data-expiry="05/08" data-cvv="611" id="mng-card"></div>
+          <p class="ac-text-xs ac-text-muted ac-text-center" data-i18n="manage.tapHint">برای چرخاندن روی کارت بزنید</p>
+        </div>
+
+        <div class="ac-cluster" role="group" aria-label="Cards" data-i18n-attr="aria-label:manage.cards">
+          <button class="ac-chip mng-chip" type="button" data-pick="melli" aria-pressed="true"><i class="mng-chip__sw" data-sw="melli"></i><bdi class="ac-mono">•• 0000</bdi></button>
+          <button class="ac-chip mng-chip" type="button" data-pick="mellat" aria-pressed="false"><i class="mng-chip__sw" data-sw="mellat"></i><bdi class="ac-mono">•• 0000</bdi></button>
+          <button class="ac-chip mng-chip mng-chip--add" type="button" aria-label="Add card" data-i18n-attr="aria-label:dash.newCard"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+        </div>
+
+        <div class="mng-actions">
+          <button class="mng-action" type="button" data-act="freeze" aria-pressed="false"><span class="mng-action__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-snowflake"/></svg></span><span data-i18n="manage.freeze">مسدودسازی</span></button>
+          <button class="mng-action" type="button" data-act="show" aria-pressed="false"><span class="mng-action__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-eye"/></svg></span><span data-i18n="manage.show">نمایش شماره</span></button>
+          <button class="mng-action" type="button" data-act="copy"><span class="mng-action__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg></span><span data-i18n="manage.copy">کپی شماره</span></button>
+          <button class="mng-action" type="button" data-act="flip"><span class="mng-action__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-rotate-ccw"/></svg></span><span data-i18n="manage.flipShort">چرخاندن</span></button>
+        </div>
+      </div>
+    </article>
+
+    <!-- card controls -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-5">
+      <div class="ac-card__head">
+        <h2 class="ac-card__title" data-i18n="manage.controls">کنترل‌های کارت</h2>
+        <span class="ac-badge ac-badge--success" data-mng-state data-i18n="manage.active">فعال</span>
+      </div>
+      <div class="ac-card__body ac-stack ac-gap-4">
+        <div class="ac-toggle-list">
+          <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-globe"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.online">پرداخت آنلاین</span><span class="ac-toggle-row__desc" data-i18n="forms.onlineSub">خرید اینترنتی، اشتراک‌ها و پرداخت درون‌برنامه‌ای</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-nfc"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.contactless">پرداخت بدون تماس</span><span class="ac-toggle-row__desc" data-i18n="forms.contactlessSub">تا ۲ میلیون تومان در هر پرداخت</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-banknote"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.atm">برداشت از خودپرداز</span><span class="ac-toggle-row__desc" data-i18n="forms.atmSub">تا ۱۰ میلیون تومان در روز</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-plane"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="forms.abroad">استفاده در خارج</span><span class="ac-toggle-row__desc" data-i18n="forms.abroadSub">پرداخت بیرون از ایران</span></span><input class="ac-switch" type="checkbox" role="switch"></label>
+        </div>
+        <div class="ac-limit">
+          <div class="ac-limit__head"><label class="ac-limit__label" for="mng-limit" data-i18n="manage.limit">سقف هزینهٔ ماهانه (دلار)</label><output class="ac-limit__value" for="mng-limit"></output></div>
+          <input class="ac-range" id="mng-limit" type="range" min="1000" max="20000" step="100" value="5500" data-ac="range">
+          <div class="ac-range-scale ac-num"><span>$1,000</span><span>$20,000</span></div>
+          <progress class="ac-progress ac-progress--sm" value="25" max="100" aria-label="Used" data-i18n-attr="aria-label:dash.spent"></progress>
+          <div class="ac-limit__used"><strong class="ac-num">$1,400.00</strong><span data-i18n="manage.used">مصرف‌شده · ۲۵٪</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

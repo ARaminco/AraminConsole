@@ -1,0 +1,13 @@
+{
+  "$comment": "The demo's own custom build (see docs/modules.md): only the shell-level modules ship up front; every page lazy-loads the rest through AC.use(). Built by `npm run build`.",
+  "modules": [
+    "shell",
+    "overlays",
+    "customizer",
+    "langpicker",
+    "pwa",
+    "notify"
+  ],
+  "out": "../dist/demo",
+  "pages": "pages"
+}

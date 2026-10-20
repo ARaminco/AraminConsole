@@ -1,0 +1,97 @@
+<section class="ac-page" data-page="products" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="ord.eyebrow">فروش</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.products">محصولات</h1>
+      <p class="ac-page-head__sub" data-i18n="prod.sub">کاتالوگ، موجودی و قیمت‌ها را مدیریت کنید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <div class="ac-segmented" data-ac="segmented" data-prod-view aria-label="View" data-i18n-attr="aria-label:prod.view">
+        <button class="ac-segmented__item" type="button" data-value="grid" aria-checked="true" aria-label="Grid" data-i18n-attr="aria-label:kit.grid"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-grid"/></svg><span class="ac-hide-phone" data-i18n="kit.grid">شبکه</span></button>
+        <button class="ac-segmented__item" type="button" data-value="list" aria-label="List" data-i18n-attr="aria-label:kit.list"><svg class="ac-icon" aria-hidden="true"><use href="#i-list"/></svg><span class="ac-hide-phone" data-i18n="kit.list">فهرست</span></button>
+      </div>
+      <button class="ac-btn ac-btn--primary" type="button" data-prod-new><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="prod.new">محصول جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-stack ac-gap-4">
+    <div class="ac-card ac-card--static prod-toolbar">
+      <label class="ac-searchpill prod-search">
+        <svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input type="search" placeholder="جستجوی نام یا SKU" aria-label="Search" data-prod-q data-i18n-attr="placeholder:prod.search; aria-label:prod.search">
+      </label>
+      <div class="prod-cats" role="group" aria-label="Category" data-i18n-attr="aria-label:prod.category" data-prod-cats></div>
+      <label class="prod-sort">
+        <span class="ac-visually-hidden" data-i18n="prod.sort">مرتب‌سازی</span>
+        <select class="ac-select" data-prod-sort>
+          <option value="sales" data-i18n="prod.bySales">پرفروش‌ترین</option>
+          <option value="price-asc" data-i18n="prod.byPriceAsc">ارزان‌ترین</option>
+          <option value="price-desc" data-i18n="prod.byPriceDesc">گران‌ترین</option>
+          <option value="rating" data-i18n="prod.byRating">بیشترین امتیاز</option>
+          <option value="stock" data-i18n="prod.byStock">کمترین موجودی</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="prod-grid ac-stagger" data-prod-list data-view="grid"></div>
+  </div>
+
+  <!-- editor -->
+  <div class="ac-modal" id="prod-editor" data-ac="modal" data-size="lg" data-initial="#prod-name">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head">
+        <div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-prod-title data-i18n="prod.edit">ویرایش محصول</h2><p class="ac-dialog__sub ac-mono" data-prod-sku>SKU</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:app.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <form class="ac-dialog__body ac-form" data-ac="form" id="prod-form" novalidate>
+        <div class="ac-form-grid">
+          <div class="ac-field ac-span-full">
+            <label class="ac-label" for="prod-name"><span data-i18n="prod.name">نام محصول</span> <span class="ac-label__req">*</span></label>
+            <input class="ac-input" id="prod-name" name="name" data-ac-rules="required|min:2">
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="prod-price"><span data-i18n="prod.price">قیمت</span> <span class="ac-label__req">*</span></label>
+            <div class="ac-input-group" data-ac="input"><span class="ac-input-group__affix">$</span><input class="ac-input ac-ltr" id="prod-price" name="price" inputmode="decimal" data-ac-rules="required|numeric"></div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="prod-stock" data-i18n="prod.stock">موجودی</label>
+            <div class="ac-number" data-ac="number"><input class="ac-input" id="prod-stock" name="stock" type="number" min="0" max="9999" step="1" value="0"></div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="prod-cat" data-i18n="prod.category">دسته</label>
+            <div class="ac-combo" data-ac="combobox">
+              <select id="prod-cat" name="category">
+                <option value="Electronics" data-i18n="prod.c.Electronics">الکترونیک</option>
+                <option value="Accessories" data-i18n="prod.c.Accessories">لوازم جانبی</option>
+                <option value="Fashion" data-i18n="prod.c.Fashion">پوشاک و کیف</option>
+                <option value="Home" data-i18n="prod.c.Home">خانه</option>
+                <option value="Grocery" data-i18n="prod.c.Grocery">خواربار</option>
+              </select>
+            </div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="prod-tags-input" data-i18n="prod.tags">برچسب‌ها</label>
+            <div class="ac-tags" data-ac="tags" data-name="tags" data-value="new,bestseller" data-input-id="prod-tags-input"></div>
+          </div>
+          <div class="ac-field ac-span-full">
+            <span class="ac-label" data-i18n="prod.images">تصاویر</span>
+            <div class="ac-dropzone" data-ac="dropzone" data-max-files="6" data-max-size="5MB"><input type="file" name="images" multiple accept="image/*" aria-label="Images" data-i18n-attr="aria-label:prod.images"></div>
+          </div>
+          <div class="ac-field ac-span-full">
+            <label class="ac-label" for="prod-desc" data-i18n="prod.desc">توضیحات</label>
+            <textarea class="ac-input" id="prod-desc" name="desc" rows="3" maxlength="400" data-counter></textarea>
+          </div>
+          <div class="ac-toggle-list ac-span-full">
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-globe"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="prod.published">منتشرشده</span><span class="ac-toggle-row__desc" data-i18n="prod.publishedSub">در فروشگاه آنلاین نمایش داده شود</span></span><input class="ac-switch" type="checkbox" role="switch" name="published" checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-star"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="prod.featured">ویژه</span><span class="ac-toggle-row__desc" data-i18n="prod.featuredSub">در صفحهٔ اول و پیشنهادها</span></span><input class="ac-switch" type="checkbox" role="switch" name="featured"></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-package"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="prod.track">کنترل موجودی</span><span class="ac-toggle-row__desc" data-i18n="prod.trackSub">با تمام شدن موجودی، فروش متوقف شود</span></span><input class="ac-switch" type="checkbox" role="switch" name="track" checked></label>
+          </div>
+        </div>
+      </form>
+      <div class="ac-dialog__foot">
+        <button class="ac-btn" type="button" data-ac-close data-i18n="overlay.cancel">انصراف</button>
+        <button class="ac-btn ac-btn--primary" type="submit" form="prod-form" data-i18n="prod.save">ذخیره</button>
+      </div>
+    </div>
+  </div>
+</section>

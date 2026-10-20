@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" href="../../demo/icons/icon.svg" type="image/svg+xml">
+  <title>Data display fixture · AraminConsole</title>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+</head>
+<body>
+<main class="ac-stack ac-gap-6" id="fixture">
+  <div class="ac-grid-2 ac-gap-6">
+    <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">List · swipe</h2></div>
+      <ul class="ac-list ac-list--divided" data-ac="list" role="list" id="fx-list">
+        <li class="ac-list__item ac-swipe">
+          <div class="ac-swipe__actions"><button class="ac-swipe__btn" type="button" data-action="archive" data-tone="info"><svg class="ac-icon" aria-hidden="true"><use href="#i-archive"/></svg><span>بایگانی</span></button><button class="ac-swipe__btn" type="button" data-action="delete" data-tone="danger"><svg class="ac-icon" aria-hidden="true"><use href="#i-trash-2"/></svg><span>حذف</span></button></div>
+          <div class="ac-swipe__content"><span class="ac-avatar" data-color="2">سا</span><div class="ac-list__main"><span class="ac-list__title">سارا احمدی</span><span class="ac-list__meta">فاکتور #INV-2041 پرداخت شد</span></div><div class="ac-list__end"><strong class="ac-ltr">$1,240</strong><small class="ac-text-muted">۲ دقیقه</small></div></div>
+        </li>
+        <li class="ac-list__item ac-swipe">
+          <div class="ac-swipe__actions"><button class="ac-swipe__btn" type="button" data-action="read" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span>خوانده شد</span></button></div>
+          <div class="ac-swipe__content"><span class="ac-avatar" data-color="4">JM</span><div class="ac-list__main"><span class="ac-list__title">James Miller</span><span class="ac-list__meta">Requested access to Billing</span></div><div class="ac-list__end"><span class="ac-badge ac-badge--warning">جدید</span></div></div>
+        </li>
+      </ul>
+    </section>
+    <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Description list</h2></div><div class="ac-card__body">
+      <dl class="ac-dl"><div><dt>نام</dt><dd>علی‌اصغر رامین</dd></div><div><dt>ایمیل</dt><dd class="ac-ltr">ali@aramin.dev</dd></div><div><dt>نقش</dt><dd>مالک</dd></div><div><dt>تاریخ عضویت</dt><dd>1403/02/11</dd></div></dl>
+    </div></section>
+    <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Timeline</h2></div><div class="ac-card__body">
+      <ol class="ac-timeline">
+        <li class="ac-timeline__item" data-tone="success"><time>10:42</time><div class="ac-timeline__body"><strong>استقرار نسخهٔ 2.4.0</strong><p>روی web-01 و web-02 بدون خطا انجام شد.</p></div></li>
+        <li class="ac-timeline__item" data-tone="warning"><time>09:15</time><div class="ac-timeline__body"><strong>هشدار دیسک db-02</strong><p>مصرف به ۸۵٪ رسید.</p></div></li>
+        <li class="ac-timeline__item"><time>دیروز</time><div class="ac-timeline__body"><strong>Incident closed</strong><p>Payment gateway latency back to normal.</p></div></li>
+      </ol>
+    </div></section>
+    <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Accordion</h2></div><div class="ac-card__body">
+      <div class="ac-accordion" data-ac="accordion" data-single id="fx-acc">
+        <details class="ac-accordion__item" open><summary class="ac-accordion__head">آیا AraminConsole وابستگی دارد؟</summary><div class="ac-accordion__body">خیر؛ یک فایل CSS و یک ماژول JS، بدون هیچ وابستگی.</div></details>
+        <details class="ac-accordion__item"><summary class="ac-accordion__head">تقویم جلالی پشتیبانی می‌شود؟</summary><div class="ac-accordion__body">بله، تاریخ‌ها در فارسی به‌صورت جلالی نمایش داده می‌شوند.</div></details>
+        <details class="ac-accordion__item"><summary class="ac-accordion__head">Does it work in Laravel Blade?</summary><div class="ac-accordion__body">Yes — include the CSS and the module, then use data-ac attributes.</div></details>
+      </div>
+    </div></section>
+    <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Tree</h2></div><div class="ac-card__body">
+      <ul data-ac="tree" aria-label="Files" id="fx-tree">
+        <li data-open data-id="src"><span>src</span><ul>
+          <li data-open data-id="css"><span>css</span><ul><li data-id="tokens" data-meta="9 KB">tokens.css</li><li data-id="base" data-meta="6 KB">base.css</li></ul></li>
+          <li data-id="js"><span>js</span><ul><li data-id="core" data-meta="21 KB">core.js</li><li data-id="index" data-meta="2 KB">index.js</li></ul></li>
+        </ul></li>
+        <li data-id="readme" data-icon="file-text" data-meta="4 KB">README.md</li>
+      </ul>
+    </div></section>
+    <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Code</h2></div><div class="ac-card__body">
+      <div data-ac="code" data-lang="js" data-lines id="fx-code"><pre><code>// render a chart
+import { chart } from './aramin-console.js';
+const c = chart('#rev', { type: 'area', series: [{ name: "Income", data: [42, 48, 58] }] });
+c.push([61]);</code></pre></div>
+    </div></section>
+  </div>
+  <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">JSON</h2></div><div class="ac-card__body">
+    <div data-ac="json" data-ac-config='{"open":2,"data":{"id":1042,"name":"سارا احمدی","active":true,"roles":["admin","billing"],"limits":{"api":5000,"storage":null},"meta":{"created":"2026-10-20T10:00:00Z","tags":[]}}}' id="fx-json"></div>
+  </div></section>
+  <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Log viewer</h2></div><div class="ac-card__body"><div id="fx-log"></div></div></section>
+  <section class="ac-card"><div class="ac-card__head"><h2 class="ac-card__title">Table (JS)</h2></div><div class="ac-card__body ac-card__body--flush"><div id="fx-table"></div></div></section>
+  <section class="ac-card"><div class="ac-card__body"><div class="ac-chart-slot" id="fx-chart"></div></div></section>
+</main>
+<script type="module">
+  import '../../dist/aramin-console.js';
+  import { users, logs, makeLog } from '../../demo/data.js';
+  const AC = window.AC;
+  AC.ready(() => {
+    window.fxLog = AC.logview('#fx-log', { lines: logs });
+    window.fxLogTimer = setInterval(() => window.fxLog.push(makeLog()), 700);
+    window.fxTable = AC.table('#fx-table', {
+      id: 'fx', selectable: true, pageSize: 10, exportName: 'fx-users',
+      columns: [
+        { key: 'name', label: 'User', type: 'avatar', sub: 'email', primary: true },
+        { key: 'status', label: 'Status', type: 'badge', filter: 'select', badges: { active: { tone: 'success', label: 'Active' }, invited: { tone: 'warning', label: 'Invited' }, suspended: { tone: 'danger', label: 'Suspended' } } },
+        { key: 'team', label: 'Team', filter: 'select' },
+        { key: 'joined', label: 'Joined', type: 'date' },
+        { key: 'spend', label: 'Spend', type: 'money' },
+      ],
+      rows: users, actions: [{ id: 'edit', label: 'Edit', icon: 'pencil' }, { id: 'delete', label: 'Delete', icon: 'trash-2', tone: 'danger' }],
+      bulkActions: [{ id: 'delete', label: 'Delete', icon: 'trash-2', tone: 'danger' }],
+      expand: (r) => `<p>${AC.escapeHtml(r.email)}</p>`,
+    });
+    window.fxChart = AC.chart('#fx-chart', { type: 'line', title: 'Fixture', labels: ['A', 'B', 'C', 'D', 'E', 'F'], series: [{ name: 'One', data: [3, 7, 4, 9, 6, 11] }, { name: 'Two', data: [2, 3, 5, 4, 7, 6] }] });
+    document.documentElement.dataset.fxReady = '';
+  });
+</script>
+</body>
+</html>

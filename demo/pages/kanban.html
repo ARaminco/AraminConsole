@@ -1,0 +1,32 @@
+<section class="ac-page" data-page="kanban" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.apps">برنامه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.kanban">کانبان</h1>
+      <p class="ac-page-head__sub" data-i18n="kanban.sub">کارها را بین ستون‌ها بکشید؛ روی گوشی کارت را کمی نگه دارید تا برداشته شود.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--outline ac-hide-phone" type="button" data-kb-newcol><svg class="ac-icon" aria-hidden="true"><use href="#i-columns-3"/></svg><span data-i18n="kanban.addColumn">ستون جدید</span></button>
+      <button class="ac-btn ac-btn--primary" type="button" data-kb-newcard><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="kanban.newCard">کار جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-apptoolbar ac-animate-in">
+    <div class="ac-segmented ac-segmented--sm" data-ac="segmented" aria-label="Filter" data-i18n-attr="aria-label:kanban.filter" data-kb-filter>
+      <button class="ac-segmented__item" type="button" aria-checked="true" data-value="all" data-i18n="kanban.all">همه</button>
+      <button class="ac-segmented__item" type="button" aria-checked="false" data-value="mine" data-i18n="kanban.mine">کارهای من</button>
+      <button class="ac-segmented__item" type="button" aria-checked="false" data-value="urgent" data-i18n="kanban.urgent">فوری</button>
+    </div>
+    <label class="ac-searchpill">
+      <svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg>
+      <input type="search" placeholder="جستجو در کارها" aria-label="Search" data-i18n-attr="placeholder:kanban.search; aria-label:kanban.search" data-kb-search>
+    </label>
+    <div class="ac-apptoolbar__end">
+      <div class="ac-avatar-group ac-hide-phone" data-kb-team></div>
+      <button class="ac-btn ac-btn--sm ac-btn--outline" type="button" data-kb-invite><svg class="ac-icon" aria-hidden="true"><use href="#i-user-plus"/></svg><span class="ac-hide-phone" data-i18n="kanban.share">اشتراک</span></button>
+    </div>
+  </div>
+
+  <nav class="ac-kanban-pager" aria-label="Columns" data-i18n-attr="aria-label:kanban.columns" data-kb-pager></nav>
+  <div class="ac-kanban ac-stagger" data-ac="kanban" data-kb-board aria-label="Board" data-i18n-attr="aria-label:nav.kanban"></div>
+</section>

@@ -1,0 +1,312 @@
+<section class="ac-page" data-page="components">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="kit.eyebrow">کیت رابط کاربری</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.components">کامپوننت‌ها</h1>
+      <p class="ac-page-head__sub" data-i18n="kit.sub">راهنمای زندهٔ همهٔ کامپوننت‌ها و حالت‌هایشان. هر چیزی که اینجا می‌بینید فقط با کلاس‌ها و توکن‌های AraminConsole ساخته شده است.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <a class="ac-btn" href="https://github.com/ARaminco/AraminConsole" target="_blank" rel="noopener"><svg class="ac-icon" aria-hidden="true"><use href="#i-external-link"/></svg><span>GitHub</span></a>
+    </div>
+  </header>
+
+  <div class="kit-grid ac-stagger">
+    <!-- buttons -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.buttons">دکمه‌ها</h2><p class="ac-card__sub">.ac-btn</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--primary" type="button" data-i18n="kit.primary">اصلی</button>
+          <button class="ac-btn" type="button" data-i18n="kit.secondary">ثانویه</button>
+          <button class="ac-btn ac-btn--soft" type="button" data-i18n="kit.soft">ملایم</button>
+          <button class="ac-btn ac-btn--ghost" type="button" data-i18n="kit.ghost">شبح</button>
+          <button class="ac-btn ac-btn--danger" type="button" data-i18n="kit.danger">حذف</button>
+          <button class="ac-btn ac-btn--link" type="button" data-i18n="kit.link">پیوند</button>
+        </div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--gradient ac-btn--lg ac-btn--pill" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-sparkles"/></svg><span data-i18n="kit.upgrade">ارتقا به پرو</span></button>
+          <button class="ac-btn ac-btn--primary" type="button" aria-busy="true"><span data-i18n="kit.saving">در حال ذخیره</span></button>
+          <button class="ac-btn" type="button" disabled data-i18n="kit.disabled">غیرفعال</button>
+        </div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--sm" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-filter"/></svg><span data-i18n="kit.small">کوچک</span></button>
+          <div class="ac-btn-group" role="group" aria-label="View">
+            <button class="ac-btn" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-pencil"/></svg><span data-i18n="kit.edit">ویرایش</span></button>
+            <button class="ac-btn" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-i18n="kit.copy">کپی</span></button>
+            <button class="ac-btn ac-btn--icon" type="button" aria-label="More"><svg class="ac-icon" aria-hidden="true"><use href="#i-ellipsis"/></svg></button>
+          </div>
+          <button class="ac-btn ac-btn--icon ac-btn--soft" type="button" aria-label="Add"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+          <button class="ac-btn ac-btn--icon ac-btn--danger-soft" type="button" aria-label="Delete"><svg class="ac-icon" aria-hidden="true"><use href="#i-trash-2"/></svg></button>
+        </div>
+      </div>
+    </article>
+
+    <!-- badges & chips -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.badges">نشان‌ها و چیپ‌ها</h2><p class="ac-card__sub">.ac-badge · .ac-chip · .ac-status · .ac-kbd</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <span class="ac-badge ac-badge--success ac-badge--dot" data-i18n="status.paid">پرداخت‌شده</span>
+          <span class="ac-badge ac-badge--warning ac-badge--dot" data-i18n="status.pending">در انتظار</span>
+          <span class="ac-badge ac-badge--danger ac-badge--dot" data-i18n="status.refunded">مرجوعی</span>
+          <span class="ac-badge ac-badge--info" data-i18n="status.shipped">ارسال‌شده</span>
+          <span class="ac-badge ac-badge--accent">Beta</span>
+          <span class="ac-badge">v2.4.0</span>
+          <span class="ac-badge ac-badge--accent ac-badge--solid">New</span>
+          <span class="ac-badge ac-badge--outline">Draft</span>
+          <span class="ac-count">9</span>
+        </div>
+        <div class="kit-demo">
+          <button class="ac-chip" type="button" aria-pressed="true"><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="kit.all">همه</span></button>
+          <button class="ac-chip" type="button" aria-pressed="false" data-i18n="kit.active">فعال</button>
+          <button class="ac-chip" type="button" aria-pressed="false" data-i18n="kit.archived">بایگانی</button>
+          <span class="ac-chip"><span class="ac-avatar ac-avatar--xs" data-color="3">SA</span>Sara<button class="ac-chip__remove" type="button" aria-label="Remove"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></span>
+        </div>
+        <div class="kit-demo">
+          <span class="ac-row ac-gap-2"><span class="ac-status ac-status--pulse" data-status="online"></span><span data-i18n="kit.online">آنلاین</span></span>
+          <span class="ac-row ac-gap-2"><span class="ac-status" data-status="away"></span><span data-i18n="kit.away">دور</span></span>
+          <span class="ac-row ac-gap-2"><span class="ac-status" data-status="busy"></span><span data-i18n="kit.busy">مشغول</span></span>
+          <span class="ac-row ac-gap-2"><span class="ac-status" data-status="offline"></span><span data-i18n="kit.offline">آفلاین</span></span>
+          <span class="ac-row ac-gap-1"><kbd class="ac-kbd">Ctrl</kbd><kbd class="ac-kbd">K</kbd></span>
+        </div>
+      </div>
+    </article>
+
+    <!-- avatars -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.avatars">آواتارها</h2><p class="ac-card__sub">.ac-avatar · .ac-avatar-group</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <span class="ac-avatar ac-avatar--xs" data-color="1">A</span>
+          <span class="ac-avatar ac-avatar--sm" data-color="2">مر</span>
+          <span class="ac-avatar" data-color="3">JD<span class="ac-status" data-status="online"></span></span>
+          <span class="ac-avatar ac-avatar--lg" data-color="4">سا<span class="ac-status" data-status="away"></span></span>
+          <span class="ac-avatar ac-avatar--xl ac-avatar--gradient">ع‌ر</span>
+          <span class="ac-avatar ac-avatar--lg ac-avatar--square" data-color="5">AC</span>
+        </div>
+        <div class="kit-demo">
+          <div class="ac-avatar-group">
+            <span class="ac-avatar" data-color="1">نک</span>
+            <span class="ac-avatar" data-color="2">JM</span>
+            <span class="ac-avatar" data-color="4">مر</span>
+            <span class="ac-avatar" data-color="5">FA</span>
+            <span class="ac-avatar ac-avatar-group__more">+8</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- tabs -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.tabs">زبانه‌ها</h2><p class="ac-card__sub">data-ac="tabs"</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="ac-tabs" data-ac="tabs">
+          <div class="ac-tabs__list" role="tablist" aria-label="Demo tabs">
+            <button class="ac-tabs__tab" role="tab" type="button" aria-selected="true" aria-controls="kit-tab-1" data-i18n="kit.overview">نمای کلی</button>
+            <button class="ac-tabs__tab" role="tab" type="button" aria-controls="kit-tab-2"><span data-i18n="kit.activity">فعالیت</span><span class="ac-tabs__count">12</span></button>
+            <button class="ac-tabs__tab" role="tab" type="button" aria-controls="kit-tab-3" data-i18n="kit.security">امنیت</button>
+          </div>
+          <div id="kit-tab-1" class="ac-text-soft" data-i18n="kit.tab1">نشانگر زبانه با یک حرکت فنری جابه‌جا می‌شود و با کلیدهای جهت‌نما کار می‌کند.</div>
+          <div id="kit-tab-2" class="ac-text-soft" hidden data-i18n="kit.tab2">دوازده رویداد جدید در این هفته ثبت شده است.</div>
+          <div id="kit-tab-3" class="ac-text-soft" hidden data-i18n="kit.tab3">احراز هویت دومرحله‌ای فعال است.</div>
+        </div>
+        <div class="ac-tabs ac-tabs--pills" data-ac="tabs">
+          <div class="ac-tabs__list" role="tablist" aria-label="Pills">
+            <button class="ac-tabs__tab" role="tab" type="button" aria-selected="true" data-i18n="kit.all">همه</button>
+            <button class="ac-tabs__tab" role="tab" type="button" data-i18n="kit.active">فعال</button>
+            <button class="ac-tabs__tab" role="tab" type="button" data-i18n="kit.archived">بایگانی</button>
+          </div>
+        </div>
+        <div class="kit-demo">
+          <div class="ac-segmented" data-ac="segmented" aria-label="View">
+            <button class="ac-segmented__item" type="button" aria-checked="true" data-value="grid"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-grid"/></svg><span data-i18n="kit.grid">شبکه</span></button>
+            <button class="ac-segmented__item" type="button" data-value="list"><svg class="ac-icon" aria-hidden="true"><use href="#i-list"/></svg><span data-i18n="kit.list">فهرست</span></button>
+          </div>
+          <div class="ac-segmented ac-segmented--sm" data-ac="segmented" aria-label="Size">
+            <button class="ac-segmented__item" type="button">S</button>
+            <button class="ac-segmented__item" type="button" aria-checked="true">M</button>
+            <button class="ac-segmented__item" type="button">L</button>
+            <button class="ac-segmented__item" type="button">XL</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- navigation -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.navigation">ناوبری</h2><p class="ac-card__sub">.ac-breadcrumbs · .ac-pagination · .ac-stepper</p></div></div>
+      <div class="ac-card__body ac-stack ac-gap-6">
+        <nav class="ac-breadcrumbs" aria-label="Breadcrumb">
+          <ol><li><a href="#/dashboard" data-i18n="nav.dashboard">داشبورد</a></li><li><a href="#/orders" data-i18n="nav.orders">سفارش‌ها</a></li><li><span aria-current="page" class="ac-ltr">#INV-2041</span></li></ol>
+        </nav>
+        <ol class="ac-stepper">
+          <li class="ac-step" data-state="done"><span class="ac-step__dot"><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="ac-step__text"><strong data-i18n="kit.stepCart">سبد</strong></span></li>
+          <li class="ac-step" data-state="current"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="kit.stepShipping">ارسال</strong><small data-i18n="kit.stepNow">مرحلهٔ فعلی</small></span></li>
+          <li class="ac-step" data-state="upcoming"><span class="ac-step__dot"></span><span class="ac-step__text"><strong data-i18n="kit.stepPay">پرداخت</strong></span></li>
+        </ol>
+        <nav class="ac-pagination" aria-label="Pagination">
+          <span class="ac-pagination__info ac-hide-phone">1–10 / 248</span>
+          <ul class="ac-pagination__list">
+            <li><button class="ac-pagination__btn" type="button" aria-label="Previous" disabled><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-left"/></svg></button></li>
+            <li><button class="ac-pagination__btn" type="button" aria-current="page">1</button></li>
+            <li><button class="ac-pagination__btn" type="button">2</button></li>
+            <li><button class="ac-pagination__btn" type="button">3</button></li>
+            <li><span class="ac-pagination__gap">…</span></li>
+            <li><button class="ac-pagination__btn" type="button">25</button></li>
+            <li><button class="ac-pagination__btn" type="button" aria-label="Next"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></button></li>
+          </ul>
+        </nav>
+      </div>
+    </article>
+
+    <!-- progress -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.progress">پیشرفت</h2><p class="ac-card__sub">progress.ac-progress · data-ac="ring"</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div><div class="ac-spread ac-text-sm"><span data-i18n="kit.storage">فضای ذخیره‌سازی</span><span class="ac-num">62%</span></div><progress class="ac-progress" value="62" max="100"></progress></div>
+        <div><div class="ac-spread ac-text-sm"><span data-i18n="kit.uploads">بارگذاری</span><span class="ac-num">88%</span></div><progress class="ac-progress ac-progress--success" value="88" max="100"></progress></div>
+        <div><div class="ac-spread ac-text-sm"><span data-i18n="kit.quota">سهمیهٔ API</span><span class="ac-num">94%</span></div><progress class="ac-progress ac-progress--danger ac-progress--sm" value="94" max="100"></progress></div>
+        <progress class="ac-progress ac-progress--sm"></progress>
+        <div class="kit-demo">
+          <div class="ac-ring" data-ac="ring" data-value="72"><span class="ac-ring__label">72%</span></div>
+          <div class="ac-ring" data-ac="ring" data-value="45" data-tone="warning"><span class="ac-ring__label">45%</span></div>
+          <div class="ac-ring ac-ring--sm" data-ac="ring" data-value="90" data-tone="success"><span class="ac-ring__label">90</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- skeleton -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.skeleton">اسکلت بارگذاری</h2><p class="ac-card__sub">.ac-skeleton</p></div></div>
+      <div class="ac-card__body ac-stack ac-gap-3" aria-hidden="true">
+        <div class="ac-row"><span class="ac-skeleton ac-skeleton--circle"></span><div class="ac-grow ac-stack ac-gap-2"><span class="ac-skeleton ac-skeleton--text ac-skeleton--w-50"></span><span class="ac-skeleton ac-skeleton--text ac-skeleton--w-25"></span></div></div>
+        <span class="ac-skeleton ac-skeleton--block"></span>
+        <span class="ac-skeleton ac-skeleton--text"></span>
+        <span class="ac-skeleton ac-skeleton--text ac-skeleton--w-75"></span>
+      </div>
+    </article>
+
+    <!-- stat tiles -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.stats">کاشی آمار</h2><p class="ac-card__sub">.ac-stat · data-ac="counter"</p></div></div>
+      <div class="ac-card__body ac-grid-2">
+        <div class="ac-card ac-card--flat ac-stat">
+          <div class="ac-stat__head"><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="ac-stat__label" data-i18n="dash.revenue">درآمد</span></div>
+          <div class="ac-stat__value"><span data-ac="counter" data-to="48210" data-currency="USD">0</span></div>
+          <div class="ac-stat__foot"><span class="ac-trend" data-trend="up">12%</span></div>
+        </div>
+        <div class="ac-card ac-card--flat ac-stat">
+          <div class="ac-stat__head"><span class="ac-stat__icon" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-users"/></svg></span><span class="ac-stat__label" data-i18n="dash.users">کاربران فعال</span></div>
+          <div class="ac-stat__value"><span data-ac="counter" data-to="1284">0</span></div>
+          <div class="ac-stat__foot"><span class="ac-trend" data-trend="down">3%</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- cards -->
+    <article class="ac-card ac-card--aurora">
+      <div class="ac-hero">
+        <div>
+          <h2 class="ac-hero__title" data-i18n="kit.heroTitle">کارت اورورا</h2>
+          <p class="ac-hero__text" data-i18n="kit.heroText">برای بخش‌های معرفی و خوش‌آمدگویی، با گرادیان ملایم رنگ اصلی.</p>
+        </div>
+        <button class="ac-btn ac-btn--primary" type="button" data-i18n="kit.getStarted">شروع کنید</button>
+      </div>
+    </article>
+
+    <a class="ac-card ac-card--interactive ac-tile" href="#/dashboard">
+      <span class="ac-tile__icon" data-tone="info"><svg class="ac-icon ac-icon--lg" aria-hidden="true"><use href="#i-layers"/></svg></span>
+      <span class="ac-tile__title" data-i18n="kit.interactive">کارت تعاملی</span>
+      <span class="ac-tile__text" data-i18n="kit.interactiveText">با هاور کمی بالا می‌آید و با لمس فشرده می‌شود.</span>
+    </a>
+
+    <!-- empty state -->
+    <article class="ac-card">
+      <div class="ac-empty">
+        <div class="ac-empty__art"><svg class="ac-icon" aria-hidden="true"><use href="#i-inbox"/></svg></div>
+        <h2 class="ac-empty__title" data-i18n="kit.emptyTitle">هنوز چیزی اینجا نیست</h2>
+        <p class="ac-empty__text" data-i18n="kit.emptyText">اولین مورد را بسازید تا فهرست شکل بگیرد.</p>
+        <div class="ac-empty__actions"><button class="ac-btn ac-btn--primary" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="kit.create">ایجاد</span></button></div>
+      </div>
+    </article>
+
+    <article class="ac-card ac-card--accent ac-card--pad">
+      <div class="ac-stack ac-gap-2">
+        <span class="ac-stat__label" data-i18n="kit.accentCard">کارت رنگی</span>
+        <strong class="ac-h2">Pro plan</strong>
+        <p class="ac-card__sub" data-i18n="kit.accentCardText">برای برجسته‌کردن مهم‌ترین عدد صفحه.</p>
+      </div>
+    </article>
+
+    <!-- accordion -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.accordion">آکاردئون</h2><p class="ac-card__sub">data-ac="accordion" data-single</p></div></div>
+      <div class="ac-card__body">
+        <div class="ac-accordion" data-ac="accordion" data-single>
+          <details class="ac-accordion__item" open><summary class="ac-accordion__head" data-i18n="kit.acc1q">آیا AraminConsole وابستگی دارد؟</summary><div class="ac-accordion__body" data-i18n="kit.acc1a">خیر؛ یک فایل CSS و یک ماژول JS، بدون هیچ وابستگی.</div></details>
+          <details class="ac-accordion__item"><summary class="ac-accordion__head" data-i18n="kit.acc2q">تقویم شمسی پشتیبانی می‌شود؟</summary><div class="ac-accordion__body" data-i18n="kit.acc2a">بله؛ تاریخ‌ها در فارسی شمسی نمایش داده می‌شوند و انتخاب‌گر تاریخ هر دو تقویم را دارد.</div></details>
+          <details class="ac-accordion__item"><summary class="ac-accordion__head" data-i18n="kit.acc3q">در Laravel Blade کار می‌کند؟</summary><div class="ac-accordion__body" data-i18n="kit.acc3a">بله؛ CSS و ماژول را اضافه کنید و از ویژگی‌های data-ac استفاده کنید.</div></details>
+        </div>
+      </div>
+    </article>
+
+    <!-- tree -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.tree">درخت</h2><p class="ac-card__sub">data-ac="tree" · ↑ ↓ ← →</p></div></div>
+      <div class="ac-card__body">
+        <ul data-ac="tree" aria-label="Files" data-i18n-attr="aria-label:nav.files">
+          <li data-open data-id="srv"><span>srv.cohub.co</span><ul>
+            <li data-open data-id="sites"><span>/var/www</span><ul><li data-id="s1" data-icon="globe" data-meta="PHP 8.3">negahefanavari.com</li><li data-id="s2" data-icon="globe" data-meta="Laravel">nobatgir.com</li><li data-id="s3" data-icon="globe" data-meta="WordPress">drlawyer.ir</li></ul></li>
+            <li data-id="nginx"><span>/etc/nginx</span><ul><li data-id="n1" data-icon="file-text" data-meta="4 KB">nginx.conf</li><li data-id="n2" data-icon="folder" data-meta="110">sites-enabled</li></ul></li>
+          </ul></li>
+          <li data-id="wapi" data-icon="message-circle" data-meta="2 gateways">wapi</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- code block -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.code">بلوک کد</h2><p class="ac-card__sub">data-ac="code" · copy</p></div></div>
+      <div class="ac-card__body">
+        <div data-ac="code" data-lang="php" data-lines data-title="routes/web.php"><pre><code>&lt;?php
+// Laravel: a JSON endpoint the console polls
+Route::get('/api/status', function () {
+    return response()->json([
+        'sites'  =&gt; Site::online()-&gt;count(),
+        'queue'  =&gt; Queue::size('default'),
+        'uptime' =&gt; 99.98,
+    ]);
+});</code></pre></div>
+      </div>
+    </article>
+
+    <!-- json viewer -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.json">نمایشگر JSON</h2><p class="ac-card__sub">data-ac="json"</p></div></div>
+      <div class="ac-card__body">
+        <div data-ac="json" data-ac-config='{"open":2,"data":{"id":"wapi-2","status":"degraded","latency_ms":940,"queue":{"pending":230,"failed":0},"tags":["whatsapp","gateway"],"owner":{"name":"Ali","2fa":true},"last_incident":null}}'></div>
+      </div>
+    </article>
+
+    <!-- swipe list -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="kit.swipe">فهرست با کشیدن</h2><p class="ac-card__sub" data-i18n="kit.swipeSub">روی گوشی ردیف را به سمت شروع بکشید</p></div></div>
+      <div class="ac-card__body ac-card__body--flush">
+        <ul class="ac-list ac-list--divided" data-ac="list" role="list">
+          <li class="ac-list__item ac-swipe">
+            <div class="ac-swipe__actions"><button class="ac-swipe__btn" type="button" data-action="archive" data-tone="info"><svg class="ac-icon" aria-hidden="true"><use href="#i-archive"/></svg><span data-i18n="kit.archive">بایگانی</span></button><button class="ac-swipe__btn" type="button" data-action="delete" data-tone="danger"><svg class="ac-icon" aria-hidden="true"><use href="#i-trash-2"/></svg><span data-i18n="common.delete">حذف</span></button></div>
+            <div class="ac-swipe__content"><span class="ac-avatar" data-color="2">سا</span><div class="ac-list__main"><span class="ac-list__title">سارا احمدی</span><span class="ac-list__meta">فاکتور <bdi>INV-2041</bdi> پرداخت شد</span></div><div class="ac-list__end"><strong><bdi>$1,240</bdi></strong></div></div>
+          </li>
+          <li class="ac-list__item ac-swipe">
+            <div class="ac-swipe__actions"><button class="ac-swipe__btn" type="button" data-action="read" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="kit.read">خوانده شد</span></button></div>
+            <div class="ac-swipe__content"><span class="ac-avatar" data-color="4">JM</span><div class="ac-list__main"><span class="ac-list__title">James Miller</span><span class="ac-list__meta" dir="auto">Requested access to Billing</span></div><div class="ac-list__end"><span class="ac-badge ac-badge--warning" data-i18n="kit.new">جدید</span></div></div>
+          </li>
+          <li class="ac-list__item ac-swipe">
+            <div class="ac-swipe__actions"><button class="ac-swipe__btn" type="button" data-action="archive" data-tone="info"><svg class="ac-icon" aria-hidden="true"><use href="#i-archive"/></svg><span data-i18n="kit.archive">بایگانی</span></button></div>
+            <div class="ac-swipe__content"><span class="ac-avatar" data-color="6">wa</span><div class="ac-list__main"><span class="ac-list__title" dir="auto">wapi-2</span><span class="ac-list__meta">صف ارسال ۲۳۰ پیام دارد</span></div><div class="ac-list__end"><span class="ac-badge ac-badge--danger ac-badge--dot" data-i18n="ops.st.degraded">کند</span></div></div>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>

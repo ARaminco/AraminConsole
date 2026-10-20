@@ -1,0 +1,145 @@
+<section class="ac-page" data-page="notify-lab" data-script data-modules="notify pwa">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="kit.eyebrow">کیت رابط کاربری</span>
+      <h1 class="ac-page-head__title" data-i18n="nlab.title">آزمایشگاه اعلان و PWA</h1>
+      <p class="ac-page-head__sub" data-i18n="nlab.sub">هر نوع اعلان را بسازید و امتحان کنید، دعوت به نصب، به‌روزرسانی و پوش را شبیه‌سازی کنید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn" type="button" data-lab="clear"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg><span data-i18n="nlab.clear">پاک کردن همه</span></button>
+      <button class="ac-btn ac-btn--primary" type="button" data-lab="fire"><svg class="ac-icon" aria-hidden="true"><use href="#i-send"/></svg><span data-i18n="nlab.fire">ارسال اعلان</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- ============================================================ playground -->
+    <div class="ac-card ac-span-md-12 ac-span-7">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="nlab.playground">زمین بازی</h2><p class="ac-card__sub" data-i18n="nlab.playgroundSub">همه‌چیز قابل تنظیم است؛ کد همان لحظه ساخته می‌شود.</p></div></div>
+      <div class="ac-card__body ac-stack nlab">
+        <div class="nlab__row">
+          <span class="ac-label" data-i18n="nlab.variant">نوع</span>
+          <div class="nlab__chips" role="radiogroup" data-lab-field="variant" aria-label="Variant" data-i18n-attr="aria-label:nlab.variant">
+            <button class="ac-chip" role="radio" type="button" data-value="toast" aria-checked="true">Toast</button>
+            <button class="ac-chip" role="radio" type="button" data-value="card" aria-checked="false">Card</button>
+            <button class="ac-chip" role="radio" type="button" data-value="banner" aria-checked="false">Banner</button>
+            <button class="ac-chip" role="radio" type="button" data-value="snackbar" aria-checked="false">Snackbar</button>
+            <button class="ac-chip" role="radio" type="button" data-value="progress" aria-checked="false">Progress</button>
+            <button class="ac-chip" role="radio" type="button" data-value="island" aria-checked="false">Island</button>
+            <button class="ac-chip" role="radio" type="button" data-value="inline" aria-checked="false">Inline</button>
+            <button class="ac-chip" role="radio" type="button" data-value="system" aria-checked="false">System</button>
+            <button class="ac-chip" role="radio" type="button" data-value="center" aria-checked="false">Inbox</button>
+          </div>
+        </div>
+        <div class="ac-grid ac-grid-2 ac-gap-3">
+          <div class="ac-field"><label class="ac-label" for="nlab-title" data-i18n="nlab.fTitle">عنوان</label><input class="ac-input" id="nlab-title" data-lab-field="title" value="سارا کریمی شما را منشن کرد"></div>
+          <div class="ac-field"><label class="ac-label" for="nlab-text" data-i18n="nlab.fText">متن</label><input class="ac-input" id="nlab-text" data-lab-field="text" value="«گزارش فروش این هفته را می‌توانی تا ساعت ۵ بفرستی؟»"></div>
+        </div>
+        <div class="nlab__row">
+          <span class="ac-label" data-i18n="nlab.tone">رنگ</span>
+          <div class="nlab__chips" role="radiogroup" data-lab-field="tone" aria-label="Tone" data-i18n-attr="aria-label:nlab.tone">
+            <button class="ac-chip" role="radio" type="button" data-value="neutral" aria-checked="true"><span class="nlab__dot" data-tone="neutral"></span><span data-i18n="nlab.tNeutral">خنثی</span></button>
+            <button class="ac-chip" role="radio" type="button" data-value="accent" aria-checked="false"><span class="nlab__dot" data-tone="accent"></span><span data-i18n="nlab.tAccent">اصلی</span></button>
+            <button class="ac-chip" role="radio" type="button" data-value="success" aria-checked="false"><span class="nlab__dot" data-tone="success"></span><span data-i18n="nlab.tSuccess">موفق</span></button>
+            <button class="ac-chip" role="radio" type="button" data-value="warning" aria-checked="false"><span class="nlab__dot" data-tone="warning"></span><span data-i18n="nlab.tWarning">هشدار</span></button>
+            <button class="ac-chip" role="radio" type="button" data-value="danger" aria-checked="false"><span class="nlab__dot" data-tone="danger"></span><span data-i18n="nlab.tDanger">خطا</span></button>
+            <button class="ac-chip" role="radio" type="button" data-value="info" aria-checked="false"><span class="nlab__dot" data-tone="info"></span><span data-i18n="nlab.tInfo">اطلاع</span></button>
+          </div>
+        </div>
+        <div class="nlab__row">
+          <span class="ac-label" data-i18n="nlab.priority">اولویت</span>
+          <div class="ac-segmented ac-segmented--sm" data-ac="segmented" data-lab-field="priority" aria-label="Priority" data-i18n-attr="aria-label:nlab.priority">
+            <button class="ac-segmented__item" type="button" data-value="low" data-i18n="nlab.pLow">کم</button>
+            <button class="ac-segmented__item" type="button" data-value="normal" aria-checked="true" data-i18n="nlab.pNormal">عادی</button>
+            <button class="ac-segmented__item" type="button" data-value="high" data-i18n="nlab.pHigh">زیاد</button>
+            <button class="ac-segmented__item" type="button" data-value="urgent" data-i18n="nlab.pUrgent">فوری</button>
+          </div>
+        </div>
+        <div class="ac-grid ac-grid-2 ac-gap-3">
+          <div class="nlab__row">
+            <span class="ac-label" data-i18n="nlab.position">محل نمایش</span>
+            <div class="nlab__pos" data-lab-pos></div>
+          </div>
+          <div class="nlab__row">
+            <span class="ac-label" data-i18n="nlab.swipe">جهت کشیدن برای بستن</span>
+            <div class="ac-segmented ac-segmented--sm" data-ac="segmented" data-lab-field="swipe" aria-label="Swipe" data-i18n-attr="aria-label:nlab.swipe">
+              <button class="ac-segmented__item" type="button" data-value="x" aria-checked="true" data-i18n="nlab.sX">افقی</button>
+              <button class="ac-segmented__item" type="button" data-value="y" data-i18n="nlab.sY">عمودی</button>
+            </div>
+          </div>
+        </div>
+        <div class="ac-grid ac-grid-2 ac-gap-3">
+          <div class="ac-field"><label class="ac-label" for="nlab-dur"><span data-i18n="nlab.duration">مدت نمایش</span> · <output class="ac-num" data-lab-out="duration">6</output>s</label><input class="ac-range" type="range" id="nlab-dur" min="0" max="15" step="1" value="6" data-lab-field="duration"></div>
+          <div class="ac-field"><label class="ac-label" for="nlab-max"><span data-i18n="nlab.max">حداکثر هم‌زمان</span> · <output class="ac-num" data-lab-out="max">3</output></label><input class="ac-range" type="range" id="nlab-max" min="1" max="6" step="1" value="3" data-lab-field="max"></div>
+        </div>
+        <div class="nlab__toggles">
+          <label class="ac-toggle-row"><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="nlab.avatar">آواتار</span></span><input class="ac-switch" type="checkbox" role="switch" data-lab-field="avatar" checked></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="nlab.image">تصویر</span></span><input class="ac-switch" type="checkbox" role="switch" data-lab-field="image"></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="nlab.actions">دکمه‌ها</span></span><input class="ac-switch" type="checkbox" role="switch" data-lab-field="actions" checked></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="nlab.group">گروه‌بندی</span></span><input class="ac-switch" type="checkbox" role="switch" data-lab-field="group"></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="nlab.sound">صدا</span></span><input class="ac-switch" type="checkbox" role="switch" data-lab-field="sound"></label>
+          <label class="ac-toggle-row"><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="nlab.haptic">لرزش</span></span><input class="ac-switch" type="checkbox" role="switch" data-lab-field="haptic" checked></label>
+        </div>
+        <pre class="nlab__code" dir="ltr" aria-label="Code"><code data-lab-code></code></pre>
+        <div class="ac-cluster">
+          <button class="ac-btn ac-btn--primary" type="button" data-lab="fire"><svg class="ac-icon" aria-hidden="true"><use href="#i-send"/></svg><span data-i18n="nlab.fire">ارسال اعلان</span></button>
+          <button class="ac-btn" type="button" data-lab="burst"><svg class="ac-icon" aria-hidden="true"><use href="#i-layers"/></svg><span data-i18n="nlab.burst">پنج تا پشت هم</span></button>
+          <button class="ac-btn ac-btn--ghost" type="button" data-lab="copy"><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-i18n="nlab.copy">کپی کد</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ quick fire -->
+    <div class="ac-card ac-span-md-12 ac-span-5">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="nlab.quick">نمونه‌های آماده</h2><p class="ac-card__sub" data-i18n="nlab.quickSub">هر کدام یک سناریوی واقعی.</p></div></div>
+      <div class="ac-card__body">
+        <div class="nlab__tiles">
+          <button class="nlab__tile" type="button" data-demo="toast"><span class="ac-ntf__icon" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-circle-check"/></svg></span><strong>Toast</strong><small data-i18n="nlab.dToast">ذخیره شد</small></button>
+          <button class="nlab__tile" type="button" data-demo="card"><span class="ac-ntf__icon" data-tone="accent"><svg class="ac-icon" aria-hidden="true"><use href="#i-at-sign"/></svg></span><strong>Rich card</strong><small data-i18n="nlab.dCard">منشن با پاسخ سریع</small></button>
+          <button class="nlab__tile" type="button" data-demo="banner"><span class="ac-ntf__icon" data-tone="danger"><svg class="ac-icon" aria-hidden="true"><use href="#i-shield-check"/></svg></span><strong>Banner</strong><small data-i18n="nlab.dBanner">ورود مشکوک</small></button>
+          <button class="nlab__tile" type="button" data-demo="snackbar"><span class="ac-ntf__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-undo-2"/></svg></span><strong>Snackbar</strong><small data-i18n="nlab.dSnack">بایگانی با بازگردانی</small></button>
+          <button class="nlab__tile" type="button" data-demo="progress"><span class="ac-ntf__icon" data-tone="info"><svg class="ac-icon" aria-hidden="true"><use href="#i-cloud-upload"/></svg></span><strong>Progress</strong><small data-i18n="nlab.dProgress">بارگذاری فایل</small></button>
+          <button class="nlab__tile" type="button" data-demo="island"><span class="ac-ntf__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-server"/></svg></span><strong>Island</strong><small data-i18n="nlab.dIsland">استقرار در جریان</small></button>
+          <button class="nlab__tile" type="button" data-demo="inline"><span class="ac-ntf__icon" data-tone="warning"><svg class="ac-icon" aria-hidden="true"><use href="#i-triangle-alert"/></svg></span><strong>Inline</strong><small data-i18n="nlab.dInline">داخل کارت پایین</small></button>
+          <button class="nlab__tile" type="button" data-demo="system"><span class="ac-ntf__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-monitor-smartphone"/></svg></span><strong>System</strong><small data-i18n="nlab.dSystem">اعلان سیستم‌عامل</small></button>
+          <button class="nlab__tile" type="button" data-demo="push"><span class="ac-ntf__icon" data-tone="accent"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell-ring"/></svg></span><strong>Push</strong><small data-i18n="nlab.dPush">پوش شبیه‌سازی‌شده</small></button>
+        </div>
+        <div class="nlab__inline" data-lab-inline aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================ PWA / install -->
+    <div class="ac-card ac-span-md-12 ac-span-7">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="nlab.pwa">نصب و PWA</h2><p class="ac-card__sub" data-i18n="nlab.pwaSub">دعوت به نصب در چهار شکل، راهنمای iOS، به‌روزرسانی، نشان روی آیکن و اشتراک‌گذاری.</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <dl class="nlab__state" data-lab-state></dl>
+        <div class="ac-cluster">
+          <button class="ac-btn" type="button" data-install="sheet"><svg class="ac-icon" aria-hidden="true"><use href="#i-panel-top"/></svg><span data-i18n="nlab.iSheet">شیت نصب</span></button>
+          <button class="ac-btn" type="button" data-install="banner"><svg class="ac-icon" aria-hidden="true"><use href="#i-app-window"/></svg><span data-i18n="nlab.iBanner">بنر بالا</span></button>
+          <button class="ac-btn" type="button" data-install="card"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-template"/></svg><span data-i18n="nlab.iCard">کارت شناور</span></button>
+          <button class="ac-btn" type="button" data-install="ios"><svg class="ac-icon" aria-hidden="true"><use href="#i-smartphone"/></svg><span data-i18n="nlab.iIos">راهنمای iOS</span></button>
+        </div>
+        <div class="ac-cluster">
+          <button class="ac-btn ac-btn--soft" type="button" data-lab="bip"><svg class="ac-icon" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="nlab.bip">شبیه‌سازی پیشنهاد نصب مرورگر</span></button>
+          <button class="ac-btn ac-btn--soft" type="button" data-lab="update"><svg class="ac-icon" aria-hidden="true"><use href="#i-sparkles"/></svg><span data-i18n="nlab.update">شبیه‌سازی نسخهٔ تازه</span></button>
+          <button class="ac-btn ac-btn--soft" type="button" data-lab="share"><svg class="ac-icon" aria-hidden="true"><use href="#i-share-2"/></svg><span data-i18n="nlab.share">اشتراک‌گذاری</span></button>
+          <button class="ac-btn ac-btn--soft" type="button" data-lab="outbox"><svg class="ac-icon" aria-hidden="true"><use href="#i-cloud-off"/></svg><span data-i18n="nlab.outbox">ارسال در صف آفلاین</span></button>
+        </div>
+        <div class="nlab__badge">
+          <span class="ac-label" data-i18n="nlab.badge">نشان روی آیکن اپ</span>
+          <div class="ac-cluster">
+            <button class="ac-btn ac-btn--icon ac-btn--sm" type="button" data-badge="-1" aria-label="−">−</button>
+            <output class="ac-num nlab__count" data-lab-badge>0</output>
+            <button class="ac-btn ac-btn--icon ac-btn--sm" type="button" data-badge="1" aria-label="+">+</button>
+            <button class="ac-btn ac-btn--ghost ac-btn--sm" type="button" data-badge="0" data-i18n="nlab.badgeClear">صفر کن</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ inline install card -->
+    <div class="ac-span-md-12 ac-span-5" data-ac="install-card"></div>
+
+    <!-- ============================================================ preferences -->
+    <div class="ac-span-12" data-ac="notify-prefs"></div>
+  </div>
+</section>

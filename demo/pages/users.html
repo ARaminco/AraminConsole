@@ -1,0 +1,48 @@
+<section class="ac-page" data-page="users" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="users.eyebrow">کاربران و دسترسی</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.users">کاربران</h1>
+      <p class="ac-page-head__sub" data-i18n="users.sub">اعضای تیم، نقش‌ها و وضعیت حساب‌ها را مدیریت کنید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-hide-phone" type="button" data-users-export><svg class="ac-icon" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="common.export">خروجی</span></button>
+      <button class="ac-btn ac-btn--primary" type="button" data-users-invite><svg class="ac-icon" aria-hidden="true"><use href="#i-user-plus"/></svg><span data-i18n="users.invite">دعوت کاربر</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="users.total">همهٔ کاربران</span><span class="ac-trend" data-trend="up">6.2%</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-users-count="all">0</span></div>
+      <div class="ac-stat__foot" data-i18n="users.totalFoot">در همهٔ تیم‌ها</div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="status.active">فعال</span><span class="ac-badge ac-badge--success ac-badge--dot" data-i18n="users.online">آنلاین</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-users-count="active">0</span></div>
+      <div class="ac-stat__foot" data-i18n="users.activeFoot">ورود در ۳۰ روز گذشته</div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="status.invited">دعوت‌شده</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-users-count="invited">0</span></div>
+      <div class="ac-stat__foot" data-i18n="users.invitedFoot">منتظر پذیرش دعوت</div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="users.twoFactor">ورود دومرحله‌ای</span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-users-count="2fa" data-suffix="%">0</span></div>
+      <div class="ac-stat__foot" data-i18n="users.twoFactorFoot">از حساب‌های فعال</div>
+    </article>
+
+    <article class="ac-card ac-span-12">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="users.directory">فهرست اعضا</h2>
+          <p class="ac-card__sub" data-i18n="users.directorySub">مرتب‌سازی با کلیک روی ستون، چندگانه با Shift؛ روی گوشی ردیف را بکشید.</p>
+        </div>
+      </div>
+      <div class="ac-card__body ac-card__body--flush">
+        <div data-users-table></div>
+      </div>
+    </article>
+  </div>
+</section>

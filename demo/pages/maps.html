@@ -1,0 +1,152 @@
+<section class="ac-page mp" data-page="maps" data-script>
+  <header class="ac-page-head mp-head">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="mp.eyebrow">عملیات میدانی</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.maps">نقشه و ناوگان</h1>
+      <p class="ac-page-head__sub" data-i18n="mp.sub">شعبه‌ها، خودروهای در حرکت، محدوده‌ها و تراکم سفارش‌ها را روی یک نقشه ببینید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <div class="ac-segmented" data-ac="segmented" data-mp-city aria-label="City" data-i18n-attr="aria-label:mp.city">
+        <button class="ac-segmented__item" type="button" data-value="tehran" aria-checked="true" data-i18n="mp.tehran">تهران</button>
+        <button class="ac-segmented__item" type="button" data-value="dubai" data-i18n="mp.dubai">دبی</button>
+      </div>
+      <button class="ac-btn ac-btn--primary" type="button" data-mp-add><svg class="ac-icon" aria-hidden="true"><use href="#i-map-pin-plus"/></svg><span data-i18n="mp.add">افزودن مکان</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger mp-stats">
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="mp.locations">مکان‌ها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-map-pinned"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-mp-stat="places">0</span></div>
+      <div class="ac-stat__foot"><span class="ac-badge ac-badge--success ac-badge--dot"><span data-mp-stat="open">0</span>&nbsp;<span data-i18n="mp.st.open">باز</span></span></div>
+    </article>
+    <article class="ac-card ac-stat ac-card--accent ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="mp.moving">خودروهای در حرکت</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-truck"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-mp-stat="moving">0</span></div>
+      <div class="ac-stat__foot"><span data-i18n="mp.ofFleet">از کل ناوگان</span> <b class="ac-num" data-mp-stat="fleet">0</b></div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="mp.zones">محدوده‌ها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shapes"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-mp-stat="zones">0</span></div>
+      <div class="ac-stat__foot" data-i18n="mp.zonesFoot">ژئوفنس فعال</div>
+    </article>
+    <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="mp.orders">سفارش‌های امروز</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-flame"/></svg></span></div>
+      <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-mp-stat="orders">0</span></div>
+      <div class="ac-stat__foot"><span class="ac-trend" data-trend="up">9%</span><span data-i18n="mp.vsYesterday">نسبت به دیروز</span></div>
+    </article>
+  </div>
+
+  <div class="ac-card ac-card--static mp-panel">
+    <aside class="mp-side" aria-label="Locations" data-i18n-attr="aria-label:mp.panel">
+      <div class="mp-side__grip" aria-hidden="true"></div>
+      <div class="mp-side__head">
+        <div class="mp-side__bar">
+          <div class="mp-side__summary" data-mp-summary></div>
+          <div class="mp-side__acts">
+            <button class="ac-btn ac-btn--sm" type="button" data-mp-cityswap aria-label="Switch city" data-i18n-attr="aria-label:mp.city"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-left-right"/></svg><span data-mp-othercity></span></button>
+            <button class="ac-btn ac-btn--sm ac-btn--primary ac-btn--icon" type="button" data-mp-add aria-label="Add location" data-i18n-attr="aria-label:mp.add"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+          </div>
+        </div>
+        <div class="ac-segmented ac-segmented--block ac-segmented--sm" data-ac="segmented" data-mp-tab aria-label="View" data-i18n-attr="aria-label:mp.view">
+          <button class="ac-segmented__item" type="button" data-value="places" aria-checked="true" data-i18n="mp.locations">مکان‌ها</button>
+          <button class="ac-segmented__item" type="button" data-value="fleet" data-i18n="mp.fleet">ناوگان</button>
+          <button class="ac-segmented__item" type="button" data-value="zones" data-i18n="mp.zones">محدوده‌ها</button>
+        </div>
+      </div>
+
+      <div class="mp-pane" data-mp-pane="places">
+        <div class="mp-tools">
+          <label class="ac-searchpill mp-search">
+            <svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <input type="search" placeholder="جستجوی مکان" aria-label="Search places" data-mp-q data-i18n-attr="placeholder:mp.search; aria-label:mp.search">
+          </label>
+          <select class="ac-select mp-status" data-mp-status aria-label="Status" data-i18n-attr="aria-label:mp.status">
+            <option value="" data-i18n="mp.allStatus">همهٔ وضعیت‌ها</option>
+            <option value="open" data-i18n="mp.st.open">باز</option>
+            <option value="busy" data-i18n="mp.st.busy">شلوغ</option>
+            <option value="closed" data-i18n="mp.st.closed">بسته</option>
+          </select>
+        </div>
+        <div class="mp-chips" role="group" aria-label="Type" data-i18n-attr="aria-label:mp.type" data-mp-types>
+          <button class="ac-chip" type="button" aria-pressed="true" data-type=""><span data-i18n="mp.all">همه</span></button>
+          <button class="ac-chip" type="button" aria-pressed="false" data-type="branch"><svg class="ac-icon" aria-hidden="true"><use href="#i-store"/></svg><span data-i18n="mp.t.branch">شعبه</span></button>
+          <button class="ac-chip" type="button" aria-pressed="false" data-type="warehouse"><svg class="ac-icon" aria-hidden="true"><use href="#i-warehouse"/></svg><span data-i18n="mp.t.warehouse">انبار</span></button>
+          <button class="ac-chip" type="button" aria-pressed="false" data-type="pickup"><svg class="ac-icon" aria-hidden="true"><use href="#i-package"/></svg><span data-i18n="mp.t.pickup">نقطهٔ تحویل</span></button>
+          <button class="ac-chip" type="button" aria-pressed="false" data-type="office"><svg class="ac-icon" aria-hidden="true"><use href="#i-building-2"/></svg><span data-i18n="mp.t.office">دفتر</span></button>
+        </div>
+        <ul class="mp-list" role="list" data-mp-list></ul>
+      </div>
+
+      <div class="mp-pane" data-mp-pane="fleet" hidden>
+        <div class="mp-tools mp-tools--spread">
+          <span class="ac-text-sm ac-text-muted" data-i18n="mp.fleetHint">برای دنبال‌کردن، روی خودرو بزنید.</span>
+          <button class="ac-btn ac-btn--sm" type="button" data-mp-pause aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-pause"/></svg><span data-i18n="mp.pause">توقف زنده</span></button>
+        </div>
+        <ul class="mp-list" role="list" data-mp-fleet></ul>
+      </div>
+
+      <div class="mp-pane" data-mp-pane="zones" hidden>
+        <div class="mp-tools">
+          <button class="ac-btn ac-btn--sm" type="button" data-mp-newzone="polygon"><svg class="ac-icon" aria-hidden="true"><use href="#i-pentagon"/></svg><span data-i18n="mp.newPolygon">محدودهٔ چندضلعی</span></button>
+          <button class="ac-btn ac-btn--sm" type="button" data-mp-newzone="circle"><svg class="ac-icon" aria-hidden="true"><use href="#i-circle-dot"/></svg><span data-i18n="mp.newCircle">محدودهٔ دایره‌ای</span></button>
+        </div>
+        <ul class="mp-list" role="list" data-mp-zones></ul>
+      </div>
+    </aside>
+
+    <div class="mp-stage">
+      <div class="mp-map" data-mp-map></div>
+      <div class="mp-quick" role="group" aria-label="Layers" data-i18n-attr="aria-label:mp.layers">
+        <button class="mp-quick__btn" type="button" data-mp-layer="fleet" aria-pressed="true"><svg class="ac-icon" aria-hidden="true"><use href="#i-truck"/></svg><span data-i18n="mp.live">زنده</span></button>
+        <button class="mp-quick__btn" type="button" data-mp-layer="heat" aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-flame"/></svg><span data-i18n="mp.heat">تراکم سفارش</span></button>
+        <button class="mp-quick__btn" type="button" data-mp-layer="zones" aria-pressed="true"><svg class="ac-icon" aria-hidden="true"><use href="#i-shapes"/></svg><span data-i18n="mp.zones">محدوده‌ها</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ac-modal" id="mp-add" data-ac="modal" data-size="md" data-initial="#mp-name">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head">
+        <div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="mp.addTitle">افزودن مکان جدید</h2><p class="ac-dialog__sub" data-i18n="mp.addSub">نام، نوع و موقعیت دقیق را وارد کنید.</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:app.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="ac-dialog__body">
+        <form class="ac-form" data-mp-form novalidate>
+          <div class="ac-form-grid">
+            <div class="ac-field ac-span-full">
+              <label class="ac-label" for="mp-name"><span data-i18n="mp.name">نام مکان</span> <span class="ac-label__req">*</span></label>
+              <input class="ac-input" id="mp-name" name="name" required autocomplete="off" placeholder="مثلاً شعبهٔ ونک" data-i18n-attr="placeholder:mp.namePh">
+            </div>
+            <div class="ac-field">
+              <label class="ac-label" for="mp-type" data-i18n="mp.type">نوع</label>
+              <select class="ac-select" id="mp-type" name="type">
+                <option value="branch" data-i18n="mp.t.branch">شعبه</option>
+                <option value="warehouse" data-i18n="mp.t.warehouse">انبار</option>
+                <option value="pickup" data-i18n="mp.t.pickup">نقطهٔ تحویل</option>
+                <option value="office" data-i18n="mp.t.office">دفتر</option>
+              </select>
+            </div>
+            <div class="ac-field">
+              <label class="ac-label" for="mp-st" data-i18n="mp.status">وضعیت</label>
+              <select class="ac-select" id="mp-st" name="status">
+                <option value="open" data-i18n="mp.st.open">باز</option>
+                <option value="busy" data-i18n="mp.st.busy">شلوغ</option>
+                <option value="closed" data-i18n="mp.st.closed">بسته</option>
+              </select>
+            </div>
+            <div class="ac-field ac-span-full">
+              <span class="ac-label"><span data-i18n="mp.location">موقعیت</span> <span class="ac-label__req">*</span></span>
+              <div data-ac="location-picker" data-name="location" data-mp-picker></div>
+              <p class="ac-help" data-mp-pick-err hidden data-i18n="mp.pickErr">موقعیت را روی نقشه انتخاب کنید.</p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="ac-dialog__foot">
+        <button class="ac-btn" type="button" data-ac-close data-i18n="mp.cancel">انصراف</button>
+        <button class="ac-btn ac-btn--primary" type="button" data-mp-save><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="mp.save">ذخیرهٔ مکان</span></button>
+      </div>
+    </div>
+  </div>
+</section>

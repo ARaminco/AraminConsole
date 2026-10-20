@@ -1,0 +1,337 @@
+/*! AraminConsole v0.1.0 — module support-chat — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+const __R = globalThis.__AC_MODS__ || (globalThis.__AC_MODS__ = {});
+if (!__R["core"]) await import('./core.js');
+
+/* ======== module: support-chat ======== */
+if (!__R["support-chat"]) __R["support-chat"] = (() => {
+const F = {};
+
+/* ---- modules/support-chat/support-chat.js ---- */
+const __ac_m1m = F["modules/support-chat/support-chat.js"] = (() => {
+/* Support chat module — an Intercom-style floating launcher + panel: home (greeting, team, response time, recent
+   conversations, help search), conversation (bubbles, typing indicator, quick replies, attachments, emoji, read
+   receipts), offline form, minimize. Phones: a full-screen sheet (drag the header down to dismiss).
+   const chat = AC.supportChat.init({
+     title: 'پشتیبانی آرامین', greeting: 'سلام 👋', subtitle, agents: [{ name, initials, color, online }], responseTime: 5,
+     color: '#f0532d' | 'accent', position: 'end' | 'start', online: true, articles: [{ id, title, cat, icon, body }],
+     conversations: [{ id, title, preview, time }], quickReplies: ['…'], unread: 1, welcome: 'first agent message',
+     onSend: async (text, { files, chat }) => ({ text, quick: [...] } | 'text' | null),   // return a reply (shown after typing)
+     onOffline: async ({ name, email, message }) => {} });
+   chat.open('home'|'chat'|'offline') · close() · toggle() · receive({ text, quick }) · typing(true) · unread · destroy()
+   Events on document: ac:support-chat:open · close · send {text} · receive {text}
+   Dependency-free: install(AC) wires it into window.AC (auto when window.AC exists); the stylesheet is injected once. */
+
+const STR = {
+  fa: {
+    launcher: 'گفتگو با پشتیبانی', minimize: 'کوچک کردن', back: 'بازگشت', greetingSub: 'چطور می‌توانیم کمک کنیم؟',
+    reply: 'معمولا در کمتر از {n} دقیقه پاسخ می‌دهیم', online: 'آنلاین', away: 'خارج از ساعت کاری',
+    newChat: 'گفتگوی جدید', newChatSub: 'پیام بدهید، کنارتان هستیم', recent: 'گفتگوهای اخیر', help: 'جستجو در راهنما',
+    searchHelp: 'سؤال‌تان را جستجو کنید…', noArticles: 'مقاله‌ای پیدا نشد', type: 'پیام خود را بنویسید…', send: 'ارسال',
+    attach: 'پیوست', emoji: 'شکلک', sent: 'ارسال شد', read: 'خوانده شد', typing: 'در حال نوشتن…', today: 'امروز',
+    offTitle: 'الان آنلاین نیستیم', offText: 'پیام بگذارید؛ در اولین فرصت با ایمیل پاسخ می‌دهیم.', name: 'نام', email: 'ایمیل', message: 'پیام',
+    offSend: 'ثبت پیام', offDone: 'پیام شما ثبت شد', offDoneText: 'پاسخ را به {email} می‌فرستیم.', helpful: 'این مقاله مفید بود؟', thanks: 'ممنون از بازخوردتان!',
+    team: 'تیم پشتیبانی', you: 'شما', home: 'خانه', powered: 'قدرت‌گرفته از آرامین', conv: 'گفتگو', min: 'دقیقه', mins: '{n} دقیقه پیش', now: 'همین الان',
+  },
+  en: {
+    launcher: 'Chat with support', minimize: 'Minimize', back: 'Back', greetingSub: 'How can we help?',
+    reply: 'We usually reply in under {n} minutes', online: 'Online', away: 'Outside business hours',
+    newChat: 'New conversation', newChatSub: 'Send us a message, we are here', recent: 'Recent conversations', help: 'Search help',
+    searchHelp: 'Search for answers…', noArticles: 'No articles found', type: 'Write a message…', send: 'Send',
+    attach: 'Attach', emoji: 'Emoji', sent: 'Sent', read: 'Seen', typing: 'typing…', today: 'Today',
+    offTitle: 'We are offline right now', offText: 'Leave a message and we will reply by email.', name: 'Name', email: 'Email', message: 'Message',
+    offSend: 'Send message', offDone: 'Message received', offDoneText: 'We will reply to {email}.', helpful: 'Was this helpful?', thanks: 'Thanks for the feedback!',
+    team: 'Support team', you: 'You', home: 'Home', powered: 'Powered by Aramin', conv: 'Conversation', min: 'min', mins: '{n} min ago', now: 'Just now',
+  },
+  ar: {
+    launcher: 'تحدث مع الدعم', minimize: 'تصغير', back: 'رجوع', greetingSub: 'كيف يمكننا المساعدة؟',
+    reply: 'نرد عادة خلال أقل من {n} دقائق', online: 'متصل', away: 'خارج ساعات العمل',
+    newChat: 'محادثة جديدة', newChatSub: 'أرسل رسالة، نحن هنا', recent: 'المحادثات الأخيرة', help: 'ابحث في المساعدة',
+    searchHelp: 'ابحث عن إجابة…', noArticles: 'لا توجد مقالات', type: 'اكتب رسالتك…', send: 'إرسال',
+    attach: 'إرفاق', emoji: 'رموز', sent: 'أُرسلت', read: 'قُرئت', typing: 'يكتب…', today: 'اليوم',
+    offTitle: 'نحن غير متصلين الآن', offText: 'اترك رسالة وسنرد عبر البريد.', name: 'الاسم', email: 'البريد', message: 'الرسالة',
+    offSend: 'إرسال الرسالة', offDone: 'استلمنا رسالتك', offDoneText: 'سنرد إلى {email}.', helpful: 'هل كان مفيدًا؟', thanks: 'شكرًا لملاحظتك!',
+    team: 'فريق الدعم', you: 'أنت', home: 'الرئيسية', powered: 'بدعم من آرامين', conv: 'محادثة', min: 'دقيقة', mins: 'قبل {n} دقيقة', now: 'الآن',
+  },
+};
+const EMOJI = ['😀', '😂', '😊', '😍', '🤔', '😅', '😢', '😡', '👍', '👎', '🙏', '👏', '🎉', '🔥', '❤️', '💯', '✅', '❌', '⏳', '📦', '💳', '📎', '👋', '🌹'];
+
+let AC = null;
+let instanceApi = null;
+function cssOnce() {
+  if (typeof document === 'undefined' || document.querySelector('[data-ac-module="support-chat"]')) return;
+  try {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = new URL('./support-chat.css', (globalThis.__AC_MODS__?.__base || import.meta.url)).href; link.dataset.acModule = 'support-chat';
+    document.head.append(link);
+  } catch { /* bundled builds ship the CSS themselves */ }
+}
+const lang = () => (AC.i18n.lang || 'fa').split('-')[0];
+const t = (k, vars) => AC.t(`sc.${k}`, (STR[lang()] || STR.en)[k] ?? STR.en[k] ?? k, vars);
+const esc = (s) => AC.escapeHtml(s);
+const ic = (n, c) => AC.icon(n, c);
+const phone = () => matchMedia('(max-width: 639.98px)').matches;
+const hhmm = (d) => AC.format.date(d, { hour: '2-digit', minute: '2-digit' });
+const ago = (d) => { const m = Math.round((Date.now() - new Date(d)) / 60000); return m < 1 ? t('now') : m < 60 ? t('mins', { n: AC.format.number(m) }) : AC.format.relative(d); };
+const avatar = (a, cls = '') => `<span class="ac-avatar ac-avatar--sm ${cls}" data-color="${a.color || 1}" aria-hidden="true">${esc(a.initials || (a.name || '?').slice(0, 2))}</span>`;
+
+function init(cfg = {}) {
+  if (instanceApi) instanceApi.destroy();
+  const o = { title: 'Support', greeting: '', subtitle: '', agents: [], responseTime: 5, color: 'accent', position: 'end', online: true, articles: [], conversations: [], quickReplies: [], unread: 0, welcome: '', ...cfg };
+  const id = AC.uid ? AC.uid('sc') : `sc-${Date.now()}`;
+  const msgs = [];          // { id, from: 'me'|'agent'|'bot', text, time, files, status: 'sent'|'read', quick }
+  let view = 'home'; let open = false; let unread = Number(o.unread) || 0; let busy = false; let article = null; let lastFocus = null;
+  if (o.welcome) msgs.push({ id: 'w', from: 'agent', text: o.welcome, time: new Date(Date.now() - 60000).toISOString(), quick: o.quickReplies });
+
+  const root = AC.h('div', { class: 'ac-sc', 'data-position': o.position === 'start' ? 'start' : 'end', 'data-state': 'closed' });
+  if (o.color && o.color !== 'accent') root.style.setProperty('--sc-accent', o.color);
+  const lead = o.agents[0] || { name: o.title, initials: 'A', color: 1 };
+
+  const launcher = () => `<button type="button" class="ac-sc__launcher" aria-expanded="false" aria-controls="${id}" aria-label="${esc(t('launcher'))}">
+      <span class="ac-sc__lic ac-sc__lic--open">${ic('message-circle-more')}</span><span class="ac-sc__lic ac-sc__lic--close">${ic('chevron-down')}</span>
+      <span class="ac-sc__badge ac-num" data-sc-badge ${unread ? '' : 'hidden'}>${esc(AC.format.number(unread))}</span></button>`;
+  root.innerHTML = `${launcher()}<div class="ac-sc__panel" id="${id}" role="dialog" aria-modal="false" aria-label="${esc(o.title)}" tabindex="-1"><div class="ac-sc__grab" aria-hidden="true"></div><div class="ac-sc__views"></div></div>`;
+  document.body.append(root);
+  const panel = root.querySelector('.ac-sc__panel');
+  const views = root.querySelector('.ac-sc__views');
+  const btn = root.querySelector('.ac-sc__launcher');
+
+  /* ---------- views */
+  const team = () => `<span class="ac-sc__team">${o.agents.slice(0, 3).map((a) => avatar(a, 'ac-sc__tav')).join('')}</span>`;
+  const homeHtml = () => {
+    const last = msgs.filter((m) => m.from !== 'me').slice(-1)[0] || msgs.slice(-1)[0];
+    const recents = [...(msgs.length > (o.welcome ? 1 : 0) ? [{ id: 'live', title: o.title, preview: msgs[msgs.length - 1].text || '📎', time: msgs[msgs.length - 1].time, live: true }] : []), ...o.conversations];
+    return `<section class="ac-sc__view ac-sc__home" data-view="home">
+      <header class="ac-sc__hero">
+        <div class="ac-sc__hero-top"><span class="ac-sc__brand">${ic('life-buoy')}<b>${esc(o.title)}</b></span>${team()}<button type="button" class="ac-sc__icon ac-sc__icon--light" data-sc-min aria-label="${esc(t('minimize'))}">${ic('x')}</button></div>
+        <h2 class="ac-sc__greet">${esc(o.greeting || '👋')}</h2>
+        <p class="ac-sc__greet-sub">${esc(o.subtitle || t('greetingSub'))}</p>
+      </header>
+      <div class="ac-sc__scroll">
+        <button type="button" class="ac-sc__card ac-sc__start" data-sc-go="${o.online ? 'chat' : 'offline'}">
+          <span class="ac-sc__start-main"><b>${esc(t('newChat'))}</b><small><i class="ac-sc__dot" data-on="${o.online}"></i>${esc(o.online ? t('reply', { n: AC.format.number(o.responseTime) }) : t('away'))}</small></span>
+          <span class="ac-sc__send-ic">${ic('send', 'ac-flip-rtl')}</span>
+        </button>
+        ${recents.length ? `<div class="ac-sc__card ac-sc__recent"><h3>${esc(t('recent'))}</h3>${recents.slice(0, 3).map((c) => `<button type="button" class="ac-sc__row" data-sc-go="chat" ${c.live ? '' : 'data-sc-old'}>${avatar(lead)}<span class="ac-sc__row-main"><b>${esc(c.title)}</b><span class="ac-truncate">${esc(c.preview)}</span></span><time>${esc(ago(c.time))}</time>${c.live && unread ? '<i class="ac-sc__unread" aria-hidden="true"></i>' : ''}</button>`).join('')}</div>` : ''}
+        ${o.articles.length ? `<div class="ac-sc__card ac-sc__help"><h3>${esc(t('help'))}</h3><label class="ac-sc__search">${ic('search')}<input type="search" data-sc-q placeholder="${esc(t('searchHelp'))}" aria-label="${esc(t('help'))}"></label><div class="ac-sc__articles" data-sc-articles>${articlesHtml('')}</div></div>` : ''}
+        <p class="ac-sc__powered">${ic('zap', 'ac-icon--sm')}${esc(t('powered'))}</p>
+      </div>
+    </section>`;
+  };
+  const norm = (s) => String(s).toLowerCase().replace(/ي/g, 'ی').replace(/ك/g, 'ک');
+  function articlesHtml(q) {
+    const list = o.articles.filter((a) => !q || norm(`${a.title} ${a.cat || ''}`).includes(norm(q))).slice(0, 5);
+    return list.length ? list.map((a) => `<button type="button" class="ac-sc__article" data-sc-article="${esc(a.id)}">${ic(a.icon || 'book-open')}<span><b>${esc(a.title)}</b>${a.cat ? `<small>${esc(a.cat)}</small>` : ''}</span>${ic('chevron-right', 'ac-sc__chev ac-flip-rtl')}</button>`).join('') : `<p class="ac-sc__none">${esc(t('noArticles'))}</p>`;
+  }
+  const headHtml = (title, sub, withTeam) => `<header class="ac-sc__bar">
+      <button type="button" class="ac-sc__icon" data-sc-go="home" aria-label="${esc(t('back'))}">${ic('chevron-left', 'ac-flip-rtl')}</button>
+      ${withTeam ? `<span class="ac-sc__bar-av">${avatar(lead)}<i class="ac-sc__dot" data-on="${!!lead.online}"></i></span>` : ''}
+      <span class="ac-sc__bar-main"><b>${esc(title)}</b>${sub ? `<small data-sc-status>${esc(sub)}</small>` : ''}</span>
+      <button type="button" class="ac-sc__icon" data-sc-min aria-label="${esc(t('minimize'))}">${ic('chevron-down')}</button>
+    </header>`;
+  const chatHtml = () => `<section class="ac-sc__view ac-sc__chat" data-view="chat">
+      ${headHtml(lead.name || o.title, o.online ? t('reply', { n: AC.format.number(o.responseTime) }) : t('away'), true)}
+      <div class="ac-sc__msgs" role="log" aria-live="polite" tabindex="0"><div class="ac-sc__day">${esc(t('today'))}</div>${msgs.map((m) => msgHtml(m)).join('')}</div>
+      <div class="ac-sc__quick" data-sc-quick></div>
+      <form class="ac-sc__composer" data-sc-form>
+        <div class="ac-sc__emoji" data-sc-emoji hidden role="listbox" aria-label="${esc(t('emoji'))}">${EMOJI.map((e) => `<button type="button" role="option" data-sc-e="${e}">${e}</button>`).join('')}</div>
+        <textarea rows="1" data-sc-input placeholder="${esc(t('type'))}" aria-label="${esc(t('type'))}" enterkeyhint="send"></textarea>
+        <div class="ac-sc__tools">
+          <button type="button" class="ac-sc__icon" data-sc-emoji-btn aria-label="${esc(t('emoji'))}" aria-expanded="false">${ic('smile')}</button>
+          <label class="ac-sc__icon" aria-label="${esc(t('attach'))}"><input type="file" class="ac-visually-hidden" data-sc-file aria-label="${esc(t('attach'))}">${ic('paperclip')}</label>
+          <button type="submit" class="ac-sc__send" data-sc-send aria-label="${esc(t('send'))}" disabled>${ic('arrow-up')}</button>
+        </div>
+      </form>
+    </section>`;
+  const offlineHtml = (done) => `<section class="ac-sc__view ac-sc__offline" data-view="offline">
+      ${headHtml(o.title, t('away'))}
+      <div class="ac-sc__scroll">${done ? `<div class="ac-sc__done">${ic('circle-check-big')}<h3>${esc(t('offDone'))}</h3><p>${esc(t('offDoneText', { email: done }))}</p><button type="button" class="ac-btn ac-btn--sm" data-sc-go="home">${esc(t('home'))}</button></div>`
+    : `<div class="ac-sc__card"><h3>${ic('moon', 'ac-icon--sm')} ${esc(t('offTitle'))}</h3><p class="ac-sc__muted">${esc(t('offText'))}</p>
+        <form class="ac-sc__off-form" data-sc-off novalidate>
+          <label><span>${esc(t('name'))}</span><input class="ac-input" name="name" required autocomplete="name"></label>
+          <label><span>${esc(t('email'))}</span><input class="ac-input ac-ltr" name="email" type="email" required autocomplete="email"></label>
+          <label><span>${esc(t('message'))}</span><textarea class="ac-input" name="message" rows="3" required></textarea></label>
+          <button type="submit" class="ac-btn ac-btn--primary ac-btn--block">${ic('send', 'ac-flip-rtl')}<span>${esc(t('offSend'))}</span></button>
+        </form></div>`}</div>
+    </section>`;
+  const articleHtml = (a) => `<section class="ac-sc__view ac-sc__art" data-view="article">
+      ${headHtml(a.cat || t('help'), '')}
+      <div class="ac-sc__scroll"><article class="ac-sc__card ac-sc__article-body"><span class="ac-sc__art-ic">${ic(a.icon || 'book-open')}</span><h3>${esc(a.title)}</h3><p>${esc(a.body || a.title)}</p>
+        <div class="ac-sc__helpful" data-sc-helpful><span>${esc(t('helpful'))}</span><button type="button" class="ac-sc__icon" data-sc-vote aria-label="👍">${ic('thumbs-up')}</button><button type="button" class="ac-sc__icon" data-sc-vote aria-label="👎">${ic('thumbs-down')}</button></div></article>
+        <button type="button" class="ac-sc__card ac-sc__start" data-sc-go="${o.online ? 'chat' : 'offline'}"><span class="ac-sc__start-main"><b>${esc(t('newChat'))}</b><small>${esc(t('newChatSub'))}</small></span><span class="ac-sc__send-ic">${ic('send', 'ac-flip-rtl')}</span></button></div>
+    </section>`;
+  function msgHtml(m, isNew) {
+    const mine = m.from === 'me';
+    const files = (m.files || []).map((f) => `<span class="ac-sc__file">${ic(f.type === 'image' ? 'image' : 'file-text')}<bdi>${esc(f.name)}</bdi><small class="ac-num">${esc(f.size)}</small></span>`).join('');
+    const status = mine ? `<span class="ac-sc__receipt" data-status="${m.status}" aria-label="${esc(t(m.status === 'read' ? 'read' : 'sent'))}">${ic(m.status === 'read' ? 'check-check' : 'check')}</span>` : '';
+    return `<div class="ac-sc__msg" data-mine="${mine}" data-id="${esc(m.id)}"${isNew ? ' data-new' : ''}>${mine ? '' : avatar(lead, 'ac-sc__mav')}<div class="ac-sc__bubble">${m.text ? `<p>${esc(m.text)}</p>` : ''}${files}<span class="ac-sc__meta"><time>${esc(hhmm(m.time))}</time>${status}</span></div></div>`;
+  }
+
+  /* ---------- rendering + navigation */
+  function show(v, opts = {}) {
+    const prev = view; view = v;
+    const html = v === 'home' ? homeHtml() : v === 'chat' ? chatHtml() : v === 'offline' ? offlineHtml(opts.done) : articleHtml(article);
+    const dir = v === 'home' ? -1 : prev === 'home' ? 1 : 0;
+    const old = views.firstElementChild;
+    views.insertAdjacentHTML('beforeend', html);
+    const nu = views.lastElementChild;
+    if (old && dir && !AC.reducedMotion() && open) {
+      old.setAttribute('data-leaving', ''); nu.setAttribute('data-entering', String(dir));
+      requestAnimationFrame(() => requestAnimationFrame(() => nu.removeAttribute('data-entering')));
+      old.style.setProperty('--sc-out', String(-dir));
+      setTimeout(() => old.remove(), 280);
+    } else old?.remove();
+    if (v === 'chat') {
+      const box = nu.querySelector('.ac-sc__msgs'); box.scrollTop = box.scrollHeight;
+      renderQuick(msgs.slice(-1)[0]?.quick || []);
+      setUnread(0);
+      if (open && !opts.silent) setTimeout(() => nu.querySelector('[data-sc-input]')?.focus({ preventScroll: true }), phone() ? 320 : 60);
+    }
+  }
+  function renderQuick(list) {
+    const q = views.querySelector('[data-sc-quick]'); if (!q) return;
+    q.innerHTML = (list || []).map((s) => `<button type="button" class="ac-sc__chip" data-sc-chip>${esc(s)}</button>`).join('');
+    q.hidden = !list?.length;
+  }
+  function setUnread(n) {
+    const bumped = n > unread;
+    unread = n;
+    const b = root.querySelector('[data-sc-badge]');
+    b.textContent = AC.format.number(n); b.hidden = !n;
+    btn.setAttribute('aria-label', n ? `${t('launcher')} (${AC.format.number(n)})` : t('launcher'));
+    if (bumped && !AC.reducedMotion()) b.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.45)' }, { transform: 'scale(0.92)' }, { transform: 'scale(1)' }], { duration: 520, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' });
+    if (bumped && !open && !AC.reducedMotion()) btn.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-12deg)' }, { transform: 'rotate(10deg)' }, { transform: 'rotate(0)' }], { duration: 480, easing: 'ease-out' });
+  }
+  function append(m) {
+    msgs.push(m);
+    const box = views.querySelector('.ac-sc__msgs');
+    if (box && view === 'chat') {
+      box.querySelector('.ac-sc__typing')?.remove();
+      box.insertAdjacentHTML('beforeend', msgHtml(m, true));
+      box.scrollTo({ top: box.scrollHeight, behavior: AC.reducedMotion() ? 'instant' : 'smooth' });
+    }
+  }
+  function typing(on) {
+    const box = views.querySelector('.ac-sc__msgs');
+    const st = views.querySelector('[data-sc-status]');
+    if (st) { st.textContent = on ? t('typing') : (o.online ? t('reply', { n: AC.format.number(o.responseTime) }) : t('away')); st.toggleAttribute('data-typing', on); }
+    if (!box) return;
+    box.querySelector('.ac-sc__typing')?.remove();
+    if (on) { box.insertAdjacentHTML('beforeend', `<div class="ac-sc__msg ac-sc__typing" data-mine="false" aria-label="${esc(t('typing'))}">${avatar(lead, 'ac-sc__mav')}<div class="ac-sc__bubble"><i></i><i></i><i></i></div></div>`); box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' }); }
+  }
+  function markRead() {
+    for (const m of msgs) if (m.from === 'me') m.status = 'read';
+    views.querySelectorAll('.ac-sc__receipt[data-status="sent"]').forEach((r) => { r.dataset.status = 'read'; r.innerHTML = ic('check-check'); r.setAttribute('aria-label', t('read')); });
+  }
+  function receive(r) {
+    if (!r) return;
+    const reply = typeof r === 'string' ? { text: r } : r;
+    const m = { id: AC.uid ? AC.uid('scm') : String(Date.now()), from: reply.from || 'agent', text: reply.text, time: new Date().toISOString(), quick: reply.quick || [], files: reply.files || [] };
+    typing(false); append(m); renderQuick(m.quick);
+    if (!open || view !== 'chat') setUnread(unread + 1);
+    AC.emit(document, 'support-chat:receive', { text: m.text });
+  }
+  async function send(text, files = []) {
+    text = (text || '').trim();
+    if ((!text && !files.length) || busy) return;
+    const m = { id: AC.uid ? AC.uid('scm') : String(Date.now()), from: 'me', text, files, time: new Date().toISOString(), status: 'sent' };
+    append(m); renderQuick([]);
+    AC.haptic?.(6);
+    AC.emit(document, 'support-chat:send', { text, files });
+    if (!o.onSend) return;
+    busy = true;
+    setTimeout(() => { markRead(); typing(true); }, 700);
+    try {
+      const reply = await o.onSend(text, { files, chat: api });
+      await new Promise((res) => setTimeout(res, 1400));
+      if (reply) receive(reply); else typing(false);
+    } catch { typing(false); } finally { busy = false; }
+  }
+
+  /* ---------- open / close */
+  const sheetDrag = AC.gesture ? AC.gesture(panel, {
+    axis: 'y',
+    filter: (e) => phone() && open && !!e.target.closest('.ac-sc__grab, .ac-sc__bar, .ac-sc__hero'),
+    onStart: () => panel.setAttribute('data-dragging', ''),
+    onMove: (s) => { const d = s.dy > 0 ? s.dy : s.dy / 6; panel.style.transform = `translateY(${d}px)`; },
+    onEnd: (s) => { panel.removeAttribute('data-dragging'); panel.style.transform = ''; if (s.dy > 140 || s.vy > 0.5) close(); },
+  }) : () => {};
+  function setOpen(v, target) {
+    if (v === open && !target) return;
+    if (v) {
+      lastFocus = document.activeElement;
+      if (target && target !== view) show(target, { silent: true });
+      open = true; root.dataset.state = 'open'; btn.setAttribute('aria-expanded', 'true');
+      if (phone()) AC.scrollLock?.lock();
+      if (view === 'chat') { setUnread(0); setTimeout(() => views.querySelector('[data-sc-input]')?.focus({ preventScroll: true }), phone() ? 340 : 80); } else setTimeout(() => panel.focus({ preventScroll: true }), 60);
+      AC.emit(document, 'support-chat:open', { view });
+    } else {
+      open = false; root.dataset.state = 'closed'; btn.setAttribute('aria-expanded', 'false');
+      if (document.documentElement.hasAttribute('data-scroll-locked') && root.hasAttribute('data-locked')) AC.scrollLock?.unlock();
+      views.querySelector('[data-sc-emoji]')?.setAttribute('hidden', '');
+      if (panel.contains(document.activeElement)) (lastFocus?.isConnected && lastFocus !== document.body ? lastFocus : btn).focus({ preventScroll: true });
+      AC.emit(document, 'support-chat:close', {});
+    }
+    root.toggleAttribute('data-locked', open && phone());
+  }
+  const close = () => setOpen(false);
+
+  /* ---------- events */
+  const autoGrow = (ta) => { ta.style.height = 'auto'; ta.style.height = `${Math.min(ta.scrollHeight, 132)}px`; };
+  const offs = [
+    AC.on(btn, 'click', () => setOpen(!open)),
+    AC.on(root, 'click', '[data-sc-min]', close),
+    AC.on(root, 'click', '[data-sc-go]', (e, b) => { if (b.dataset.scGo === 'chat' && !o.online) show('offline'); else show(b.dataset.scGo); }),
+    AC.on(root, 'click', '[data-sc-article]', (e, b) => { article = o.articles.find((a) => a.id === b.dataset.scArticle); if (article) show('article'); }),
+    AC.on(root, 'click', '[data-sc-vote]', (e, b) => { b.closest('[data-sc-helpful]').innerHTML = `<span>${ic('heart', 'ac-icon--sm')} ${esc(t('thanks'))}</span>`; }),
+    AC.on(root, 'input', '[data-sc-q]', (e, input) => { root.querySelector('[data-sc-articles]').innerHTML = articlesHtml(input.value.trim()); }),
+    AC.on(root, 'input', '[data-sc-input]', (e, ta) => { autoGrow(ta); root.querySelector('[data-sc-send]').disabled = !ta.value.trim(); }),
+    AC.on(root, 'keydown', '[data-sc-input]', (e, ta) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !phone()) { e.preventDefault(); ta.form.requestSubmit(); } }),
+    AC.on(root, 'submit', '[data-sc-form]', (e, f) => { e.preventDefault(); const ta = f.querySelector('textarea'); send(ta.value); ta.value = ''; autoGrow(ta); f.querySelector('[data-sc-send]').disabled = true; f.querySelector('[data-sc-emoji]').hidden = true; }),
+    AC.on(root, 'click', '[data-sc-chip]', (e, b) => send(b.textContent)),
+    AC.on(root, 'click', '[data-sc-emoji-btn]', (e, b) => { const p = root.querySelector('[data-sc-emoji]'); p.hidden = !p.hidden; b.setAttribute('aria-expanded', String(!p.hidden)); }),
+    AC.on(root, 'click', '[data-sc-e]', (e, b) => { const ta = root.querySelector('[data-sc-input]'); const s = ta.selectionStart ?? ta.value.length; ta.value = ta.value.slice(0, s) + b.dataset.scE + ta.value.slice(ta.selectionEnd ?? s); ta.focus(); ta.setSelectionRange(s + b.dataset.scE.length, s + b.dataset.scE.length); ta.dispatchEvent(new Event('input', { bubbles: true })); }),
+    AC.on(root, 'change', '[data-sc-file]', (e, input) => { const files = [...input.files].map((f) => ({ name: f.name, size: f.size > 1048576 ? `${(f.size / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(f.size / 1024))} KB`, type: f.type.startsWith('image/') ? 'image' : 'file' })); input.value = ''; send('', files); }),
+    AC.on(root, 'submit', '[data-sc-off]', async (e, f) => {
+      e.preventDefault();
+      if (!f.checkValidity()) { f.reportValidity(); return; }
+      const data = Object.fromEntries(new FormData(f));
+      f.querySelector('[type="submit"]').setAttribute('aria-busy', 'true');
+      await o.onOffline?.(data);
+      show('offline', { done: data.email });
+    }),
+    AC.on(document, 'keydown', (e) => { if (e.key === 'Escape' && open && !document.querySelector('.ac-modal[data-state="open"], .ac-sheet[data-state="open"], .ac-menu[data-state="open"], .ac-palette[data-state="open"]')) { const p = root.querySelector('[data-sc-emoji]:not([hidden])'); if (p) p.hidden = true; else close(); } }),
+    AC.on(document, 'pointerdown', (e) => { if (open && !phone() && !root.contains(e.target) && !e.target.closest('.ac-modal, .ac-sheet, .ac-menu, .ac-popover, .ac-toast')) close(); }),
+    AC.on(document, 'ac:i18n:change', () => { btn.setAttribute('aria-label', t('launcher')); show(view, { silent: true }); }),
+    AC.on(window, 'hashchange', () => { if (open && phone()) close(); }),
+  ];
+  show('home', { silent: true });
+  requestAnimationFrame(() => root.setAttribute('data-ready', ''));
+
+  const api = {
+    el: root, open: (v) => setOpen(true, v), close, toggle: () => setOpen(!open), minimize: close, receive, typing, send,
+    get unread() { return unread; }, set unread(n) { setUnread(n); }, get isOpen() { return open; }, get messages() { return msgs.slice(); }, get view() { return view; },
+    destroy() { offs.forEach((f) => f()); sheetDrag(); if (root.hasAttribute('data-locked')) AC.scrollLock?.unlock(); root.remove(); if (instanceApi === api) instanceApi = null; },
+  };
+  instanceApi = api;
+  return api;
+}
+
+const supportChat = { init, get current() { return instanceApi; }, open: (v) => instanceApi?.open(v), close: () => instanceApi?.close(), toggle: () => instanceApi?.toggle(), receive: (r) => instanceApi?.receive(r) };
+
+/** Wire the module into an AC instance: AC.supportChat.init(cfg). Dependency-free (no core import). */
+function install(ac) {
+  if (!ac || ac.supportChat) return ac?.supportChat;
+  AC = ac;
+  cssOnce();
+  ac.supportChat = supportChat;
+  return supportChat;
+}
+
+if (typeof window !== 'undefined' && window.AC) install(window.AC);
+return Object.freeze({ init, supportChat, install });
+})();
+
+return { f: F, ns: Object.freeze({ "init": __ac_m1m["init"], "supportChat": __ac_m1m["supportChat"], "install": __ac_m1m["install"] }) };
+})();
+export const { init, supportChat, install } = __R["support-chat"].ns;
+export default __R["support-chat"].ns;

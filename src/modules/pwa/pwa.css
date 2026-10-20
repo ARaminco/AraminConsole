@@ -1,0 +1,168 @@
+/* PWA module — install invitation (sheet / banner / floating card / inline card / iOS steps), splash, standalone tweaks. */
+
+/* ---------------------------------------------------------------- shared atoms */
+.ac-install { display: grid; gap: var(--ac-s-5); }
+.ac-install__hero { display: flex; align-items: center; gap: var(--ac-s-4); }
+.ac-install__icon {
+  flex: none; display: grid; place-items: center; inline-size: 4.5rem; block-size: 4.5rem; border-radius: 22%;
+  background: var(--ac-surface-2); overflow: hidden; color: var(--ac-ink);
+  box-shadow: 0 0 0 1px var(--ac-border), 0 8px 20px -10px rgb(0 0 0 / 0.35);
+}
+.ac-install__icon img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.ac-install__icon .ac-icon { inline-size: 45%; block-size: 45%; }
+.ac-install__icon--sm { inline-size: 2.5rem; block-size: 2.5rem; border-radius: 24%; box-shadow: 0 0 0 1px var(--ac-border); }
+.ac-install__titles { min-width: 0; display: grid; gap: 2px; }
+.ac-install__name { margin: 0; font-size: var(--ac-fs-2xl); font-weight: var(--ac-fw-bold, 700); line-height: var(--ac-lh-tight); letter-spacing: -0.01em; }
+.ac-install__by { margin: 0; color: var(--ac-muted); font-size: var(--ac-fs-sm); }
+.ac-install__stars { color: var(--ac-warning, #f5a524); letter-spacing: 1px; font-size: 0.7em; margin-inline-start: 0.35em; }
+
+.ac-install__stats {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding-block: var(--ac-s-3);
+  border-block: 1px solid var(--ac-border);
+}
+.ac-install__stat { display: grid; gap: 2px; justify-items: center; text-align: center; padding-inline: var(--ac-s-2); }
+.ac-install__stat + .ac-install__stat { border-inline-start: 1px solid var(--ac-border); }
+.ac-install__stat dt { font-weight: var(--ac-fw-semibold, 600); font-size: var(--ac-fs-lg); display: flex; flex-direction: column; align-items: center; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.ac-install__stat dt .ac-install__stars { margin: 2px 0 0; font-size: 0.6rem; }
+.ac-install__stat dd { margin: 0; color: var(--ac-muted); font-size: var(--ac-fs-xs); }
+
+.ac-install__shots {
+  display: flex; gap: var(--ac-s-3); overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  margin-inline: calc(var(--ac-s-5) * -1); padding-inline: var(--ac-s-5); padding-block-end: var(--ac-s-1); scrollbar-width: none;
+}
+.ac-install__shots::-webkit-scrollbar { display: none; }
+.ac-install__shots img {
+  flex: none; scroll-snap-align: start; block-size: 15rem; inline-size: auto; aspect-ratio: 9 / 19.5; object-fit: cover;
+  border-radius: var(--ac-r-lg); background: var(--ac-surface-2); box-shadow: 0 0 0 1px var(--ac-border);
+}
+.ac-install__shots[data-ff="wide"] img { block-size: 11rem; aspect-ratio: 16 / 10; }
+.ac-install__shots:focus-visible { outline: none; box-shadow: var(--ac-focus); border-radius: var(--ac-r-lg); }
+
+.ac-install__benefits { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ac-s-3); }
+.ac-install__benefits li { display: flex; gap: var(--ac-s-3); align-items: flex-start; }
+.ac-install__benefits strong { display: block; font-weight: var(--ac-fw-semibold, 600); }
+.ac-install__benefits small { display: block; color: var(--ac-muted); font-size: var(--ac-fs-sm); line-height: var(--ac-lh-snug); }
+.ac-install__bicon { flex: none; display: grid; place-items: center; inline-size: 2.25rem; block-size: 2.25rem; border-radius: var(--ac-r-md); background: var(--ac-surface-2); color: var(--ac-ink); }
+.ac-install__bicon .ac-icon { inline-size: 1.1rem; block-size: 1.1rem; }
+
+.ac-install__actions { display: grid; grid-template-columns: 1fr auto; gap: var(--ac-s-2); }
+.ac-install__actions--one { grid-template-columns: 1fr; margin-block-start: var(--ac-s-4); }
+.ac-install__go { justify-content: center; }
+.ac-install__note { margin: 0; display: flex; align-items: center; justify-content: center; gap: var(--ac-s-1); color: var(--ac-muted); font-size: var(--ac-fs-xs); }
+
+/* sheet variant: the dialog carries the content; tighten its chrome */
+.ac-install-sheet .ac-dialog__head { padding-block-end: 0; }
+.ac-install-sheet .ac-dialog__body { padding-block-start: 0; }
+.ac-install-sheet .ac-install__hero { animation: ac-install-rise var(--ac-dur-4, 320ms) var(--ac-ease-out, ease-out) both; }
+.ac-install-sheet .ac-install > :nth-child(n + 2) { animation: ac-install-rise var(--ac-dur-4, 320ms) var(--ac-ease-out, ease-out) both; animation-delay: 40ms; }
+.ac-install-sheet .ac-install > :nth-child(n + 3) { animation-delay: 80ms; }
+.ac-install-sheet .ac-install > :nth-child(n + 4) { animation-delay: 120ms; }
+@keyframes ac-install-rise { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------------------------------------------------------------- banner (top, full width) */
+.ac-install-banner {
+  position: fixed; z-index: var(--ac-z-toast); inset-block-start: calc(var(--ac-s-3) + var(--ac-safe-top, 0px)); inset-inline: var(--ac-s-3);
+  margin-inline: auto; max-inline-size: 40rem; display: flex; align-items: center; gap: var(--ac-s-3);
+  padding: var(--ac-s-2) var(--ac-s-2) var(--ac-s-2) var(--ac-s-3); padding-inline: var(--ac-s-3) var(--ac-s-2);
+  background: var(--ac-glass-bg-strong, var(--ac-elevated)); -webkit-backdrop-filter: blur(var(--ac-glass-blur, 18px)) saturate(1.6); backdrop-filter: blur(var(--ac-glass-blur, 18px)) saturate(1.6);
+  border: 1px solid var(--ac-glass-border, var(--ac-border)); border-radius: var(--ac-r-pill); box-shadow: var(--ac-shadow-lg);
+  transition: transform var(--ac-dur-3) var(--ac-ease-out, ease-out), opacity var(--ac-dur-2) var(--ac-ease-out, ease-out);
+}
+.ac-install-banner[data-state="enter"], .ac-install-banner[data-state="exit"] { opacity: 0; transform: translateY(calc(-100% - var(--ac-s-4))); }
+.ac-install-banner[data-state="exit"] { transition-duration: var(--ac-dur-2); }
+.ac-install-banner__text { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+.ac-install-banner__text strong { font-weight: var(--ac-fw-semibold, 600); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ac-install-banner__text small { color: var(--ac-muted); font-size: var(--ac-fs-xs); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ac-install-banner__text .ac-install__stars { margin: 0; font-size: 0.6rem; }
+.ac-install-banner__close, .ac-install-card__close {
+  flex: none; display: grid; place-items: center; inline-size: 2rem; block-size: 2rem; border: 0; border-radius: 50%;
+  background: transparent; color: var(--ac-muted); cursor: pointer; transition: background var(--ac-dur-1) var(--ac-ease), transform var(--ac-dur-1) var(--ac-ease);
+}
+.ac-install-banner__close:hover, .ac-install-card__close:hover { background: var(--ac-hover); color: var(--ac-text); }
+.ac-install-banner__close:active, .ac-install-card__close:active { transform: scale(0.92); }
+.ac-install-banner__close:focus-visible, .ac-install-card__close:focus-visible { outline: none; box-shadow: var(--ac-focus); }
+.ac-install-banner__close .ac-icon, .ac-install-card__close .ac-icon { inline-size: 1rem; block-size: 1rem; }
+
+/* ---------------------------------------------------------------- floating card + inline settings card */
+.ac-install-card {
+  position: relative; display: grid; gap: var(--ac-s-3); padding: var(--ac-s-4);
+  background: var(--ac-elevated); border: 1px solid var(--ac-border); border-radius: var(--ac-r-2xl);
+}
+.ac-install-card[data-variant="card"] {
+  position: fixed; z-index: var(--ac-z-toast); inline-size: min(23rem, calc(100vw - 2 * var(--ac-s-3)));
+  inset-block-end: calc(var(--ac-s-5) + var(--ac-safe-bottom, 0px)); inset-inline-end: calc(var(--ac-s-5) + var(--ac-safe-end, 0px));
+  box-shadow: var(--ac-shadow-xl); transform-origin: 100% 100%;
+  transition: transform var(--ac-dur-3) var(--ac-ease-spring, var(--ac-ease)), opacity var(--ac-dur-2) var(--ac-ease-out, ease-out);
+}
+[dir="rtl"] .ac-install-card[data-variant="card"] { transform-origin: 0 100%; }
+.ac-install-card[data-variant="card"][data-state="enter"], .ac-install-card[data-variant="card"][data-state="exit"] { opacity: 0; transform: translateY(12px) scale(0.96); }
+@media (max-width: 1023.98px) {
+  .ac-install-card[data-variant="card"] { inset-inline: var(--ac-s-3); inline-size: auto; inset-block-end: calc(var(--ac-tabbar-h, 4rem) + var(--ac-safe-bottom, 0px) + var(--ac-s-3)); }
+}
+.ac-install-card__close { position: absolute; inset-block-start: var(--ac-s-2); inset-inline-end: var(--ac-s-2); }
+.ac-install-card__head { display: flex; gap: var(--ac-s-3); align-items: center; padding-inline-end: var(--ac-s-6); }
+.ac-install-card__head .ac-install__icon { inline-size: 3.25rem; block-size: 3.25rem; }
+.ac-install-card__title { display: block; font-weight: var(--ac-fw-semibold, 600); font-size: var(--ac-fs-lg); }
+.ac-install-card__text { margin: 2px 0 0; color: var(--ac-muted); font-size: var(--ac-fs-sm); line-height: var(--ac-lh-snug); }
+.ac-install-card__chips { display: flex; flex-wrap: wrap; gap: var(--ac-s-1); }
+.ac-install-card__chips .ac-chip { pointer-events: none; }
+.ac-install-card__actions { display: flex; gap: var(--ac-s-2); align-items: center; }
+.ac-install-card__actions .ac-btn--primary { flex: 1; justify-content: center; }
+.ac-install-card[data-variant="inline"] .ac-install-card__actions .ac-btn--primary { flex: none; }
+
+/* ---------------------------------------------------------------- iOS instructions (animated SVG) */
+.ac-ios { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ac-s-3); }
+.ac-ios__step { display: flex; gap: var(--ac-s-4); align-items: center; padding: var(--ac-s-3); border-radius: var(--ac-r-xl); background: var(--ac-surface-2); }
+.ac-ios__art { flex: none; inline-size: 5.5rem; block-size: 5.5rem; }
+.ac-ios__frame { fill: var(--ac-elevated); stroke: var(--ac-border-strong); stroke-width: 1.5; }
+.ac-ios__screen { fill: var(--ac-bg); }
+.ac-ios__bar { fill: var(--ac-surface-3); }
+.ac-ios__pulse { fill: color-mix(in oklab, var(--ac-info, #3b82f6) 22%, transparent); transform-box: fill-box; transform-origin: center; animation: ac-ios-pulse 1.6s var(--ac-ease-out, ease-out) infinite; }
+.ac-ios__glyph { fill: none; stroke: var(--ac-info, #3b82f6); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ac-ios__glyph--inv { stroke: #fff; }
+.ac-ios__panel { fill: var(--ac-elevated); stroke: var(--ac-border); }
+.ac-ios__sheet { animation: ac-ios-sheet 2.4s var(--ac-ease-out, ease-out) infinite; }
+.ac-ios__row { fill: var(--ac-surface-2); }
+.ac-ios__row--hl { fill: color-mix(in oklab, var(--ac-info, #3b82f6) 18%, var(--ac-surface-2)); animation: ac-ios-hl 2.4s ease infinite; }
+.ac-ios__plus { stroke: var(--ac-text); stroke-width: 1.4; stroke-linecap: round; }
+.ac-ios__app { fill: var(--ac-surface-3); }
+.ac-ios__mine { fill: var(--ac-ink); }
+.ac-ios__new { transform-box: fill-box; transform-origin: center; animation: ac-ios-land 2.4s var(--ac-ease-spring, cubic-bezier(.34, 1.56, .64, 1)) infinite; }
+.ac-ios__text { display: grid; gap: 2px; min-width: 0; }
+.ac-ios__text strong { font-weight: var(--ac-fw-semibold, 600); }
+.ac-ios__text small { color: var(--ac-muted); font-size: var(--ac-fs-sm); line-height: var(--ac-lh-snug); }
+.ac-ios__n { display: inline-grid; place-items: center; inline-size: 1.4rem; block-size: 1.4rem; border-radius: 50%; background: var(--ac-ink); color: var(--ac-ink-contrast, #fff); font-size: var(--ac-fs-xs); font-weight: 700; margin-block-end: 2px; }
+.ac-ios__step { animation: ac-install-rise var(--ac-dur-4, 320ms) var(--ac-ease-out, ease-out) both; }
+.ac-ios__step:nth-child(2) { animation-delay: 60ms; }
+.ac-ios__step:nth-child(3) { animation-delay: 120ms; }
+@keyframes ac-ios-pulse { 0% { transform: scale(0.7); opacity: 1; } 70%, 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes ac-ios-sheet { 0% { transform: translateY(40px); opacity: 0; } 25%, 85% { transform: none; opacity: 1; } 100% { transform: none; opacity: 0; } }
+@keyframes ac-ios-hl { 0%, 40% { opacity: 0.4; } 55%, 85% { opacity: 1; } 100% { opacity: 0.4; } }
+@keyframes ac-ios-land { 0%, 20% { transform: translateY(-14px) scale(0.6); opacity: 0; } 45%, 90% { transform: none; opacity: 1; } 100% { opacity: 0; } }
+
+/* ---------------------------------------------------------------- splash + standalone */
+.ac-splash {
+  position: fixed; inset: 0; z-index: calc(var(--ac-z-tooltip, 900) + 10); display: grid; place-content: center; justify-items: center; gap: var(--ac-s-4);
+  background: var(--ac-bg); color: var(--ac-text); transition: opacity 360ms var(--ac-ease-out, ease-out), transform 360ms var(--ac-ease-out, ease-out);
+}
+.ac-splash[data-state="out"] { opacity: 0; transform: scale(1.04); pointer-events: none; }
+.ac-splash__mark { display: grid; place-items: center; inline-size: 5rem; block-size: 5rem; border-radius: 24%; background: var(--ac-ink); color: var(--ac-ink-contrast, #fff); box-shadow: var(--ac-shadow-lg); animation: ac-install-rise 420ms var(--ac-ease-out, ease-out) both; }
+.ac-splash__mark svg, .ac-splash__mark img { inline-size: 55%; block-size: 55%; }
+.ac-splash__name { font-weight: 700; font-size: var(--ac-fs-xl); letter-spacing: -0.01em; }
+.ac-splash__bar { inline-size: 6rem; block-size: 3px; border-radius: 3px; background: var(--ac-surface-3); overflow: hidden; }
+.ac-splash__bar span { display: block; inline-size: 40%; block-size: 100%; background: var(--ac-accent); border-radius: inherit; animation: ac-splash-bar 1s ease-in-out infinite; }
+@keyframes ac-splash-bar { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+[dir="rtl"] .ac-splash__bar span { animation-direction: reverse; }
+
+html[data-standalone] { overscroll-behavior-y: none; }
+html[data-standalone] body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+html[data-standalone] .ac-appbar, html[data-standalone] .ac-tabbar, html[data-standalone] .ac-dock { -webkit-user-select: none; user-select: none; }
+/* window-controls-overlay: keep the floating top bar clear of the title-bar buttons */
+@media (display-mode: window-controls-overlay) {
+  .ac-appbar { padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw) - env(titlebar-area-x, 0px)); -webkit-app-region: drag; app-region: drag; }
+  .ac-appbar a, .ac-appbar button, .ac-appbar input { -webkit-app-region: no-drag; app-region: no-drag; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac-ios__pulse, .ac-ios__sheet, .ac-ios__row--hl, .ac-ios__new, .ac-splash__bar span { animation: none; }
+}
