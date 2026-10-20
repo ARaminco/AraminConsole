@@ -37,7 +37,7 @@ One CSS file, one ES module. Plain HTML, Laravel Blade, Next.js, or anything els
 - **Built for Iran.** Rial/Toman, Jalali and Hijri calendars, bank cards and logos, Sheba, national ID and mobile validation, official invoice.
 - **Declarative.** `data-ac="…"` attributes start components, even on HTML injected later. Each also has an API on `window.AC`.
 - **Modular.** 26 modules; bundle all, some, or lazy-load with `AC.use('maps')`.
-- **AI-friendly.** [`AGENTS.md`](AGENTS.md), [`llms.txt`](llms.txt), and an [Agent Skill](skills/aramin-console/SKILL.md) let any coding assistant build with it correctly.
+- **AI-friendly.** [`AGENTS.md`](AGENTS.md), [`llms.txt`](llms.txt), and an [Agent Skill](skills/aramin-console/SKILL.md) let any coding assistant build with it correctly. Design system: [docs/design-system](docs/design-system/README.md) (Persian), tokens in `dist/tokens.json`, skill [`aramin-design-system`](skills/aramin-design-system/SKILL.md), and a [skills guide](docs/skills-guide.md).
 
 ## Features and modules
 Sizes are minified + gzip, from `dist/modules/modules.json`.
@@ -345,6 +345,161 @@ Dashboard (KPI counters + chart bento) · CRUD table page (table + modal form + 
 - Verify visually at 390px width and in dark mode before finishing.
 
 More: `reference/components.md` (class names per area), `reference/recipes.md`, `reference/theming-and-modules.md`.
+
+<!-- ===== skills/aramin-design-system/SKILL.md ===== -->
+
+---
+name: aramin-design-system
+description: Design or review user interfaces with the AraminConsole design system - --ac-* tokens (colour, type, space, radius, shadow, motion, z-index), Air theme, page/dashboard/table/form/empty-state/mobile patterns, RTL and Persian UX copy. Use when designing, styling, polishing or reviewing a Persian/RTL admin UI, dashboard or panel ("طراحی پنل", "سیستم طراحی", "بازبینی UI"), when choosing colours, spacing, motion or components, or when the user mentions AraminConsole tokens, Air theme or ac-* classes. For component markup and APIs use the aramin-console skill.
+---
+
+# AraminConsole design system
+
+Full docs (Persian): `docs/design-system/README.md` · token tables: `docs/design-system/tokens.md` · machine tokens: `dist/tokens.json` · live page: `demo/#/design-system`. Component APIs and markup: the **aramin-console** skill (`skills/aramin-console/`). Reply to Persian users in plain Persian; keep code in English.
+
+## Hard rules
+1. Colour, spacing, radius, shadow, motion = `var(--ac-*)` only. No hex, px-radius, raw `z-index`, raw durations.
+2. CSS logical properties only (`margin-inline-start`, `inset-inline-end`, `text-align:start`); never `left/right/float`. Direction transforms: `translateX(calc(24px * var(--ac-dir)))`.
+3. Directional icons get `.ac-flip-rtl`. Latin runs inside Persian text (card no., IBAN, email, time) go in `<bdi>` or `.ac-ltr`.
+4. One primary action per page: ink button (`.ac-btn--primary`). Accent is for emphasis (focus, switch, progress, one chart series); at most one filled accent KPI; one warm spot (`--ac-highlight`).
+5. Cards: `.ac-card` (white, hairline border, almost no shadow). Separate with space and border before shadow.
+6. Animate only `transform/opacity/filter/clip-path`; ease-out for enter/exit (`--ac-ease`), never ease-in; UI < 300 ms; exits faster (`--ac-dur-exit`); respect `data-motion="reduced"`.
+7. Text contrast >= 4.5:1; use `*-ink` for coloured text, `--ac-accent-contrast` on solid accent, never rely on colour alone; touch target >= `--ac-touch` (44px); keep focus ring (`--ac-focus`).
+8. Reuse a `data-ac` component/class before inventing markup. Missing icon = add name to `src/icons/icons.txt`, rebuild.
+9. Persian copy: «شما»، فعل مشخص روی دکمه («ذخیره تغییرات»)، خطا = چه شد + چه کنیم، واحد پول همیشه کنار مبلغ (تومان = 10 ریال)، ارقام یکدست.
+
+## Token cheat-sheet (default Air; attributes on `<html>`: `data-theme` light|dark, `data-accent` air|orange|violet|blue|emerald|rose|amber|slate, `data-density` comfortable|compact, `data-radius` sharp|default|round)
+| Group | Tokens |
+|---|---|
+| Surface | `--ac-bg` canvas, `--ac-surface-1` card, `-2` inset/KPI, `-3` track, `--ac-elevated` menus, `--ac-chrome-bg` floating pills |
+| Text | `--ac-text`, `--ac-text-soft`, `--ac-muted` (labels), `--ac-faint` (decorative only) |
+| Border | `--ac-border` hairline, `--ac-border-strong` |
+| Brand | `--ac-ink` (+`-hover`,`-contrast`), `--ac-accent` (+`-2`,`-contrast`,`-soft`,`-ink`), `--ac-highlight` |
+| Status | `--ac-{success,warning,danger,info,neutral}` + `-soft` bg + `-ink` text |
+| Type | `--ac-font`, `--ac-fs-2xs..4xl` (11,12,13,**14 body**,16,18,22,28,36 px), `--ac-lh-tight/snug/normal`, `--ac-fw-regular..black` |
+| Space | `--ac-s-1..12` (4px steps), `--ac-gap` 16, `--ac-card-pad`, `--ac-control-h` 40, `--ac-touch` 44 |
+| Radius | `--ac-r-xs 6, sm 10, md 12, lg 16, xl 22 (card), 2xl 28 (sheet), pill` |
+| Shadow | `--ac-shadow-xs..xl`, `-chrome`, `-glow` |
+| Motion | `--ac-ease` `-out` `-in-out` `-move` `-drawer` `-hover`, `--ac-spring`, `--ac-dur-0..4` (100/140/180/240/300), `--ac-dur-sheet` 420, `--ac-dur-exit` 140, `--ac-stagger` 45 |
+| Z | `--ac-z-sticky 20, rail 40, appbar 50, tabbar 55, dropdown 60, drawer 70, sheet 80, modal 90, toast 100, palette 110, tooltip 120` |
+| Layout | breakpoints 640 / 1024 / 1280 px; `.ac-bento` 12 cols (`ac-span-xs-6`, `ac-span-md-*`, `ac-span-*`, `ac-span-xl-*`); `--ac-safe-*` safe areas |
+
+Brand override (after the framework CSS): `:root{--ac-accent:#0e9f6e;--ac-accent-2:#34d399}` + dark variant; derived tokens follow. The AIR logo is a trademark (not MIT): replace it in other products.
+
+## Pattern recipes (details: `docs/design-system/patterns.md`)
+- Page: `section.ac-page > header.ac-page-head[data-ac=largetitle] + .ac-bento.ac-stagger`; one `h1`.
+- Dashboard: 3-4 `.ac-stat` KPIs (counter) -> main chart -> short table.
+- CRUD: card with flush body + `data-ac="table"`; edit in modal/drawer; delete via `AC.confirm({tone:'danger'})` then toast.
+- States: every list has loading (`.ac-skeleton` shaped like content), empty (`.ac-empty` with next step), error (`.ac-alert` + retry).
+- Mobile (< 640px): floating tab bar, sheets for overlays, large collapsing title, swipe actions with an alternative, safe-area padding.
+
+## Do / Don't
+| Do | Don't |
+|---|---|
+| `color: var(--ac-muted)` | `color: #888` |
+| `padding-inline: var(--ac-s-4)` | `padding: 0 16px 0 16px` / `margin-left` |
+| status badge = soft bg + ink text + label | red text only |
+| `.ac-btn--primary` once per page | three filled coloured buttons |
+| `AC.money.format(n,{currency:'IRT'})` | `n + ' تومان'` by hand |
+| skeleton shaped like content | full-page spinner |
+| reuse `data-ac="modal"` | custom overlay with `z-index:9999` |
+
+## Review checklist (run through, then report findings with file:line)
+1. No raw colours/px radii/z-index/durations; tokens exist for everything.
+2. No physical `left/right`; arrows flipped; mixed-direction runs isolated; checked `fa` + `en`, no horizontal scroll at 390px.
+3. Light **and** dark checked; custom colours have contrast >= 4.5:1.
+4. One primary action; hierarchy by size/weight/space, not extra colour.
+5. Loading/empty/error states exist; destructive actions confirmed.
+6. Keyboard path works; icons-only buttons have `aria-label`; focus ring visible; targets >= 44px on touch.
+7. Motion: transform/opacity only, < 300 ms, no ease-in, reduced-motion handled.
+8. Persian copy: plain, specific button verbs, units on money, consistent digits and dates (Jalali by default).
+9. Existing `data-ac` component used where one exists.
+
+Verification tip: `node tests/rtl.mjs --static` scans CSS for physical properties; `npm run tokens` regenerates the token docs after editing `src/css/tokens.css`.
+
+<!-- ===== docs/design-system/README.md ===== -->
+
+# سیستم طراحی AraminConsole
+
+این پوشه مرجع کامل طراحی رابط در AraminConsole است: اصول، توکن‌ها، الگوها و راهنمای نوشتار. همهٔ مقادیر از کد واقعی (`src/css/tokens.css`، `motion.css`، `base.css`، `layout.css`) گرفته شده‌اند؛ اگر چیزی با کد نخواند، کد درست است.
+
+**نسخهٔ زنده:** صفحهٔ «سیستم طراحی» در دمو: <https://araminco.github.io/AraminConsole/demo/#/design-system> (رنگ‌ها با کلیک کپی می‌شوند، منحنی‌های حرکت قابل اجرا هستند).
+
+## فهرست
+
+| فایل | موضوع |
+|---|---|
+| [principles.md](principles.md) | اصول طراحی |
+| [color.md](color.md) | رنگ: نقش‌ها، روشن/تیره، Air و پریست‌ها، کنتراست |
+| [typography.md](typography.md) | قلم، مقیاس، وزن، اعداد فارسی |
+| [spacing-layout.md](spacing-layout.md) | فاصله‌گذاری، شبکهٔ bento، نقاط شکست، ناحیهٔ امن |
+| [shape-elevation.md](shape-elevation.md) | گوشه، سایه، لایه‌ها (z-index) |
+| [motion.md](motion.md) | حرکت، منحنی‌ها، فنر، کاهش حرکت |
+| [icons.md](icons.md) | آیکون‌ها (Lucide)، اسپرایت، وارونگی در RTL |
+| [rtl-i18n.md](rtl-i18n.md) | راست‌به‌چپ و چندزبانه |
+| [accessibility.md](accessibility.md) | دسترس‌پذیری |
+| [patterns.md](patterns.md) | الگوها: صفحه، داشبورد، جدول، فرم، حالت‌ها، موبایل |
+| [components.md](components.md) | فهرست کامپوننت‌ها: `data-ac` و زمان استفاده |
+| [ux-writing.md](ux-writing.md) | نوشتار رابط فارسی: لحن، عدد، تاریخ، پول |
+| [brand.md](brand.md) | برند Air و ساخت پریست برند |
+| [tokens.md](tokens.md) | جدول توکن‌ها (تولیدشده با اسکریپت) |
+
+## توکن‌ها برای ابزارها
+
+```bash
+npm run tokens      # می‌سازد: docs/design-system/tokens.md  و  dist/tokens.json
+```
+
+`dist/tokens.json` فرمت W3C Design Tokens دارد (`$value` و `$type`) و می‌توان آن را در Figma (Tokens Studio)، Style Dictionary یا هر ابزار دیگری خواند. این دستور بخشی از `npm run build` هم هست.
+
+## دو قانون طلایی
+
+1. **رنگ، فاصله، گوشه و حرکتِ خام ننویسید؛ فقط `var(--ac-*)`.** تم تیره، پریست‌ها، تراکم و شعاع همه با عوض‌شدن توکن‌ها کار می‌کنند.
+2. **فقط ویژگی‌های منطقی CSS** (`margin-inline-start`، نه `margin-left`)؛ تا همه‌چیز در RTL و LTR درست بماند.
+
+مرجع API کامل کامپوننت‌ها: `skills/aramin-console/` و `llms-full.txt`. مهارت (Skill) همین سیستم طراحی: `skills/aramin-design-system/SKILL.md`؛ راهنمای نصب: [skills-guide.fa.md](../skills-guide.fa.md).
+
+<!-- ===== docs/skills-guide.md ===== -->
+
+# Skills guide
+
+AraminConsole ships two Agent Skills (Persian guide: [skills-guide.fa.md](skills-guide.fa.md)):
+
+| Skill | Folder | Use for |
+|---|---|---|
+| `aramin-console` | `skills/aramin-console/` | Building: markup, classes, `data-ac` components, APIs, recipes |
+| `aramin-design-system` | `skills/aramin-design-system/` | Designing and reviewing: tokens, patterns, RTL rules, Persian UX copy, review checklist |
+
+A skill is a folder with a `SKILL.md` (YAML `name` + `description`). The assistant always sees the description and loads the full text only when the task matches.
+
+## Claude Code
+Project-level (recommended) or user-level:
+```bash
+mkdir -p .claude/skills && cp -r AraminConsole/skills/aramin-console AraminConsole/skills/aramin-design-system .claude/skills/
+# all projects: ~/.claude/skills/
+```
+```powershell
+New-Item -ItemType Directory -Force .claude\skills | Out-Null
+Copy-Item -Recurse AraminConsole\skills\aramin-console, AraminConsole\skills\aramin-design-system .claude\skills\
+```
+Restart Claude Code; check with `/skills`.
+
+## Claude.ai / Desktop
+Zip each skill folder (the folder itself inside the zip), then Settings -> Capabilities -> Skills -> Upload skill.
+
+## Codex, Cursor, Copilot
+No skill format: feed the same text as project instructions. Codex reads `AGENTS.md` (this repo has one; add a line pointing to `skills/aramin-design-system/SKILL.md`). Cursor: put the `SKILL.md` body in `.cursor/rules/aramin-design-system.mdc`. Copilot: append to `.github/copilot-instructions.md`.
+
+## llms.txt
+Give the assistant `https://raw.githubusercontent.com/ARaminco/AraminConsole/main/llms.txt` (index) or `llms-full.txt` (everything; large).
+
+## Keeping skills current
+Copies do not update themselves: `git pull` the repo and copy the folders again whenever you upgrade AraminConsole. The design skill's token facts come from `src/css/tokens.css`; `npm run tokens` regenerates `docs/design-system/tokens.md` and `dist/tokens.json`.
+
+## Example prompts
+- "Using AraminConsole, build a user-management page: table with search and status filter, a New user modal, confirm before delete. RTL and mobile."
+- "Review this page against the AraminConsole design system and list issues with line numbers."
+- "Create a brand preset for accent `#0e9f6e` and check contrast in light and dark."
 
 <!-- ===== docs/CONVENTIONS.md ===== -->
 
@@ -2015,6 +2170,185 @@ AraminConsole is RTL-first (fa, ar) and must be pixel-correct in LTR (en). `i18n
 
 ## Test coverage (`tests/rtl.mjs`)
 Static scan of `src/**/*.css`; in fa and en: document dir, dock side and inset, top-nav order, page-title edge, dropdown anchor, submenu side, flyout side, language picker anchor and row layout, toast corner, sliding highlight exactly on the hovered row (menu, rail), phone tab-bar order, no horizontal overflow at 390 px, tab bar fully on screen, and a live fa → en switch that moves the dock and re-seats the nav pill.
+
+<!-- ===== docs/skills-guide.fa.md ===== -->
+
+# راهنمای استفاده از مهارت‌ها (Skills)
+
+AraminConsole دو مهارت آماده برای دستیارهای هوش مصنوعی دارد:
+
+| مهارت | پوشه | برای چه |
+|---|---|---|
+| `aramin-console` | `skills/aramin-console/` | **ساختن**: نشانه‌گذاری، کلاس‌ها، کامپوننت‌های `data-ac`، API، دستورهای آماده |
+| `aramin-design-system` | `skills/aramin-design-system/` | **طراحی و بازبینی**: توکن‌ها، الگوها، قواعد RTL، متن رابط، فهرست وارسی |
+
+هر دو کنار هم بهترین نتیجه را می‌دهند: اولی می‌داند «چه بنویسد»، دومی می‌داند «چطور باشد».
+
+## مهارت چیست؟
+
+مهارت (Agent Skill) یک پوشه با فایل `SKILL.md` است. بالای فایل دو خط `name` و `description` (توضیح «چه وقت استفاده شود») قرار دارد. دستیار فقط توضیح را همیشه می‌بیند و وقتی کار شما به آن مربوط شد، متن کامل را بارگذاری می‌کند. پس هزینهٔ توکن کم است و دستیار قواعد پروژه را «از حفظ» رعایت می‌کند.
+
+## نصب در Claude Code
+
+### برای یک پروژه (پیشنهادی)
+
+bash (لینوکس، مک، Git Bash):
+
+```bash
+mkdir -p .claude/skills
+cp -r path/to/AraminConsole/skills/aramin-console .claude/skills/
+cp -r path/to/AraminConsole/skills/aramin-design-system .claude/skills/
+```
+
+PowerShell (ویندوز):
+
+```powershell
+New-Item -ItemType Directory -Force .claude\skills | Out-Null
+Copy-Item -Recurse path\to\AraminConsole\skills\aramin-console .claude\skills\
+Copy-Item -Recurse path\to\AraminConsole\skills\aramin-design-system .claude\skills\
+```
+
+### برای همهٔ پروژه‌ها
+
+bash:
+
+```bash
+mkdir -p ~/.claude/skills
+cp -r AraminConsole/skills/aramin-console AraminConsole/skills/aramin-design-system ~/.claude/skills/
+```
+
+PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force $HOME\.claude\skills | Out-Null
+Copy-Item -Recurse AraminConsole\skills\aramin-console, AraminConsole\skills\aramin-design-system $HOME\.claude\skills\
+```
+
+بعد Claude Code را دوباره باز کنید (یا یک گفتگوی تازه شروع کنید). بررسی: بپرسید «چه مهارت‌هایی داری؟» یا دستور `/skills` را بزنید.
+
+### بدون کپی: دانلود مستقیم
+
+```bash
+mkdir -p .claude/skills/aramin-design-system
+curl -L https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-design-system/SKILL.md -o .claude/skills/aramin-design-system/SKILL.md
+```
+
+(مهارت `aramin-console` پوشهٔ `reference/` هم دارد؛ برای آن بهتر است کل پوشه را کپی کنید.)
+
+## نصب در Claude.ai و برنامهٔ دسکتاپ
+
+1. پوشهٔ مهارت را zip کنید (خودِ پوشه داخل zip باشد، نه فقط فایل‌هایش):
+   - bash: `cd skills && zip -r aramin-design-system.zip aramin-design-system`
+   - PowerShell: `Compress-Archive skills\aramin-design-system aramin-design-system.zip`
+2. در Claude: **Settings ← Capabilities ← Skills ← Upload skill** و فایل zip را انتخاب کنید (در برخی نسخه‌ها مسیر در Customize ← Skills است).
+3. مهارت را روشن کنید. همین کار را برای `aramin-console` انجام دهید.
+
+## Codex، Cursor، Copilot و دستیارهای دیگر
+
+این ابزارها قالب «مهارت» ندارند، اما همان متن را به‌صورت دستورالعمل پروژه می‌خوانند:
+
+| ابزار | کار |
+|---|---|
+| **Codex / ابزارهای AGENTS.md** | فایل `AGENTS.md` ریشهٔ مخزن را بخوانند؛ این مخزن یکی دارد. در پروژهٔ خودتان آن را کپی کنید و خط «طراحی: `skills/aramin-design-system/SKILL.md` را بخوان» اضافه کنید |
+| **Cursor** | محتوای `SKILL.md` را در `.cursor/rules/aramin-design-system.mdc` بگذارید (بالای فایل `description:` و `alwaysApply: false` یا `globs: "**/*.html,**/*.css"`) |
+| **GitHub Copilot** | محتوا را در `.github/copilot-instructions.md` اضافه کنید |
+| **Windsurf / دیگران** | همان متن را در فایل قواعد پروژه |
+
+برای Cursor: فایل `.cursor/rules/aramin-design-system.mdc` را بسازید، بالای آن این چهار خط را بگذارید: `---` / `description: AraminConsole design system rules` / `alwaysApply: false` / `---` بگذارید و زیرش بخش بعد از frontmatter فایل `SKILL.md` را کپی کنید.
+
+## استفاده از llms.txt
+
+`llms.txt` فهرست مستندات برای مدل‌هاست و `llms-full.txt` همهٔ مستندات در یک فایل. دو راه:
+
+- آدرس را در گفتگو بدهید: «این را بخوان: `https://raw.githubusercontent.com/ARaminco/AraminConsole/main/llms.txt`». دستیار فقط فایل‌های لازم را می‌خواند.
+- در ابزارهایی که «Docs/Context» دارند (مثل Cursor ← Docs) همان آدرس را اضافه کنید.
+
+از `llms-full.txt` فقط در گفتگوهای کوتاه و مستقل استفاده کنید؛ حجم زیادی دارد.
+
+## نمونه درخواست‌ها
+
+با کامپوننت‌ها (مهارت `aramin-console`):
+
+> با آرامین‌کنسول یک صفحهٔ مدیریت کاربران بساز: جدول با جستجو و فیلتر وضعیت، دکمهٔ «کاربر جدید» که مودال فرم باز کند، و تأیید قبل از حذف. موبایل و RTL را رعایت کن.
+
+> یک داشبورد فروش بساز با چهار KPI، نمودار ناحیه‌ای ماهانه و جدول آخرین سفارش‌ها. مبلغ‌ها به تومان.
+
+> فرم ثبت‌نام با اعتبارسنجی موبایل و کد ملی و انتخاب تاریخ تولد شمسی.
+
+با طراحی (مهارت `aramin-design-system`):
+
+> این صفحه را با سیستم طراحی آرامین‌کنسول بازبینی کن و مشکلات را با شمارهٔ خط بنویس: رنگ خام، left/right، کنتراست، حالت خالی.
+
+> برای برند ما یک پریست رنگی بساز (رنگ اصلی `#0e9f6e`) و کنتراست روشن و تیره را بسنج.
+
+> متن‌های رابط این صفحه را طبق راهنمای نوشتار فارسی اصلاح کن.
+
+> به این صفحه حالت‌های بارگذاری، خالی و خطا اضافه کن.
+
+نکته: صریح بگویید «از مهارت X استفاده کن» تا مطمئن شوید بارگذاری شد؛ ولی معمولاً کلمه‌هایی مثل «پنل مدیریت»، «داشبورد» یا «آرامین‌کنسول» خودکار آن را فعال می‌کنند.
+
+## به‌روز نگه‌داشتن
+
+مهارت‌ها یک نسخهٔ کپی از مخزن‌اند و خودکار به‌روز نمی‌شوند.
+
+- اگر مخزن را clone کرده‌اید: `git pull` و دوباره کپی (دستورهای بالا روی نسخهٔ قبلی می‌نویسند).
+- اگر به `dist/` وابسته‌اید: همزمان `dist/` را هم به‌روز کنید تا نام‌ها با مهارت بخواند.
+- تغییرات را در `CHANGELOG.md` ببینید.
+- مهارت طراحی با `npm run tokens` و `docs/design-system/tokens.md` هم‌گام است؛ اگر `tokens.css` را سفارشی کرده‌اید، قواعد مهارت را در پوشهٔ پروژهٔ خودتان با مقادیر خودتان ویرایش کنید (کپی شما مال شماست).
+- یک یادآور بگذارید: ماهی یک بار یا هر بار که نسخهٔ AraminConsole را بالا می‌برید.
+
+## عیب‌یابی
+
+| مشکل | راه‌حل |
+|---|---|
+| مهارت دیده نمی‌شود | مسیر درست است؟ `.claude/skills/<name>/SKILL.md`؛ برنامه را دوباره باز کنید |
+| فعال نمی‌شود | نام مهارت را صریح بگویید؛ `description` را بررسی کنید |
+| دستیار از `left/right` یا رنگ خام استفاده می‌کند | بخواهید «طبق مهارت aramin-design-system بازبینی کن» |
+| آیکون وجود ندارد | نام را به `src/icons/icons.txt` اضافه و `npm run build` |
+
+مرجع انگلیسی کوتاه: [skills-guide.md](skills-guide.md). سیستم طراحی: [design-system/README.md](design-system/README.md).
+
+<!-- ===== docs/skills-guide.md ===== -->
+
+# Skills guide
+
+AraminConsole ships two Agent Skills (Persian guide: [skills-guide.fa.md](skills-guide.fa.md)):
+
+| Skill | Folder | Use for |
+|---|---|---|
+| `aramin-console` | `skills/aramin-console/` | Building: markup, classes, `data-ac` components, APIs, recipes |
+| `aramin-design-system` | `skills/aramin-design-system/` | Designing and reviewing: tokens, patterns, RTL rules, Persian UX copy, review checklist |
+
+A skill is a folder with a `SKILL.md` (YAML `name` + `description`). The assistant always sees the description and loads the full text only when the task matches.
+
+## Claude Code
+Project-level (recommended) or user-level:
+```bash
+mkdir -p .claude/skills && cp -r AraminConsole/skills/aramin-console AraminConsole/skills/aramin-design-system .claude/skills/
+# all projects: ~/.claude/skills/
+```
+```powershell
+New-Item -ItemType Directory -Force .claude\skills | Out-Null
+Copy-Item -Recurse AraminConsole\skills\aramin-console, AraminConsole\skills\aramin-design-system .claude\skills\
+```
+Restart Claude Code; check with `/skills`.
+
+## Claude.ai / Desktop
+Zip each skill folder (the folder itself inside the zip), then Settings -> Capabilities -> Skills -> Upload skill.
+
+## Codex, Cursor, Copilot
+No skill format: feed the same text as project instructions. Codex reads `AGENTS.md` (this repo has one; add a line pointing to `skills/aramin-design-system/SKILL.md`). Cursor: put the `SKILL.md` body in `.cursor/rules/aramin-design-system.mdc`. Copilot: append to `.github/copilot-instructions.md`.
+
+## llms.txt
+Give the assistant `https://raw.githubusercontent.com/ARaminco/AraminConsole/main/llms.txt` (index) or `llms-full.txt` (everything; large).
+
+## Keeping skills current
+Copies do not update themselves: `git pull` the repo and copy the folders again whenever you upgrade AraminConsole. The design skill's token facts come from `src/css/tokens.css`; `npm run tokens` regenerates `docs/design-system/tokens.md` and `dist/tokens.json`.
+
+## Example prompts
+- "Using AraminConsole, build a user-management page: table with search and status filter, a New user modal, confirm before delete. RTL and mobile."
+- "Review this page against the AraminConsole design system and list issues with line numbers."
+- "Create a brand preset for accent `#0e9f6e` and check contrast in light and dark."
 
 <!-- ===== docs/starters.md ===== -->
 

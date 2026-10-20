@@ -32,7 +32,7 @@ One CSS file, one ES module. Plain HTML, Laravel Blade, Next.js, or anything els
 - **Built for Iran.** Rial/Toman, Jalali and Hijri calendars, bank cards and logos, Sheba, national ID and mobile validation, official invoice.
 - **Declarative.** `data-ac="…"` attributes start components, even on HTML injected later. Each also has an API on `window.AC`.
 - **Modular.** 26 modules; bundle all, some, or lazy-load with `AC.use('maps')`.
-- **AI-friendly.** [`AGENTS.md`](AGENTS.md), [`llms.txt`](llms.txt), and an [Agent Skill](skills/aramin-console/SKILL.md) let any coding assistant build with it correctly.
+- **AI-friendly.** [`AGENTS.md`](AGENTS.md), [`llms.txt`](llms.txt), and an [Agent Skill](skills/aramin-console/SKILL.md) let any coding assistant build with it correctly. Design system: [docs/design-system](docs/design-system/README.md) (Persian), tokens in `dist/tokens.json`, skill [`aramin-design-system`](skills/aramin-design-system/SKILL.md), and a [skills guide](docs/skills-guide.md).
 
 ## Features and modules
 Sizes are minified + gzip, from `dist/modules/modules.json`.
