@@ -1,0 +1,2428 @@
+# AraminConsole 0.1.0 — full documentation
+
+
+<!-- ===== README.md ===== -->
+
+<div align="center">
+
+<img src="demo/icons/icon.svg" alt="AraminConsole logo" width="96" height="96">
+
+# AraminConsole
+
+**The zero-dependency, RTL-first admin UI framework that feels like a native app on phones.**
+One CSS file, one ES module. Plain HTML, Laravel Blade, Next.js, or anything else.
+
+[![CI](https://github.com/ARaminco/AraminConsole/actions/workflows/ci.yml/badge.svg)](https://github.com/ARaminco/AraminConsole/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](CHANGELOG.md)
+![Dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
+![RTL first](https://img.shields.io/badge/RTL-first-8a2be2.svg)
+![PWA ready](https://img.shields.io/badge/PWA-ready-5a0fc8.svg)
+![Core size](https://img.shields.io/badge/core-40%20KB%20gzip-informational.svg)
+[![Live demo](https://img.shields.io/badge/demo-GitHub%20Pages-success.svg)](https://araminco.github.io/AraminConsole/demo/)
+
+[**Live demo**](https://araminco.github.io/AraminConsole/demo/) · [Getting started](docs/getting-started.md) · [Modules](docs/modules.md) · [Starters](docs/starters.md) · [AI guide](AGENTS.md) · [فارسی](README.fa.md)
+
+</div>
+
+| Dashboard | Phone | Dark mode |
+|---|---|---|
+| ![Dashboard on desktop](docs/screens/dashboard-desktop.png) | ![Dashboard on a phone](docs/screens/dashboard-phone.png) | ![Dark mode](docs/screens/dashboard-dark.png) |
+| ![Sign-in page](docs/screens/login-desktop.png) | ![Sign-in on a phone](docs/screens/login-phone.png) | ![Error page](docs/screens/404-dark.png) |
+
+## Why AraminConsole
+- **Zero dependencies, zero build to use it.** Copy `dist/`, add one `<link>` and one `<script type="module">`.
+- **RTL first, not RTL patched.** Logical CSS properties only; Persian, Arabic, and English switch live.
+- **App-like on phones.** Floating tab bar with FAB, collapsing large titles, bottom sheets, swipe actions, pull-to-refresh, safe areas.
+- **Built for Iran.** Rial/Toman, Jalali and Hijri calendars, bank cards and logos, Sheba, national ID and mobile validation, official invoice.
+- **Declarative.** `data-ac="…"` attributes start components, even on HTML injected later. Each also has an API on `window.AC`.
+- **Modular.** 26 modules; bundle all, some, or lazy-load with `AC.use('maps')`.
+- **AI-friendly.** [`AGENTS.md`](AGENTS.md), [`llms.txt`](llms.txt), and an [Agent Skill](skills/aramin-console/SKILL.md) let any coding assistant build with it correctly.
+
+## Features and modules
+Sizes are minified + gzip, from `dist/modules/modules.json`.
+
+| Module | What it does | Docs | JS gzip | CSS gzip |
+|---|---|---|---:|---:|
+| `core` | Tokens, app shell, buttons/cards/tables/forms, `AC` runtime, i18n, theme, formatting | [getting-started.md](docs/getting-started.md) | 16.5 KB | 24.0 KB |
+| `shell` | Rail, dock, tab bar, large titles, tabs, command palette, pull-to-refresh | [CONVENTIONS.md](docs/CONVENTIONS.md) | 8.3 KB | 2.9 KB |
+| `overlays` | Modal, bottom sheet, drawer, menus, popover, tooltip, confirm/prompt, toast | [overlays.md](docs/overlays.md) | 15.7 KB | 5.2 KB |
+| `customizer` | Live theme customizer drawer | [theming.md](docs/theming.md) | 3.1 KB | — |
+| `langpicker` | Language picker (fa/en/ar) | [rtl.md](docs/rtl.md) | 2.9 KB | 1.6 KB |
+| `forms` | Inputs, OTP, combobox, tags, dropzone, validation, wizard | [forms.md](docs/forms.md) | 17.9 KB | — |
+| `datepicker` | Jalali / Gregorian date and time pickers | [forms.md](docs/forms.md) | 8.6 KB | 2.1 KB |
+| `data-display` | Lists with swipe actions, tree, accordion, code / JSON / log viewers | [data.md](docs/data.md) | 7.1 KB | 3.0 KB |
+| `table` | Data table: sort, filter, paging, selection, card mode on phones | [data.md](docs/data.md) | 8.4 KB | — |
+| `chart` | Inline-SVG line, area, bar, donut, gauge, sparkline, heatmap | [data.md](docs/data.md) | 9.9 KB | 2.4 KB |
+| `apps` | Kanban, split view, calendar-style app screens | [data.md](docs/data.md) | 4.0 KB | 6.4 KB |
+| `money` | Rial/Toman, bank cards, Sheba, bank logos, finance kit | [finance.md](docs/finance.md) | 15.8 KB | 3.2 KB |
+| `chat` | Chat UI | [support-chat.md](docs/support-chat.md) | 16.4 KB | 6.5 KB |
+| `files` | File manager with uploads and previews | [files.md](docs/files.md) | 50.7 KB | 11.1 KB |
+| `invoice-ir` | Official Iranian invoice (print-ready) | [invoice-ir.md](docs/invoice-ir.md) | 11.1 KB | 4.2 KB |
+| `mail` | Mail client UI | [data.md](docs/data.md) | 18.4 KB | 5.6 KB |
+| `maps` | Map and location picker (no API key) | [maps.md](docs/maps.md) | 26.7 KB | 5.2 KB |
+| `marketing` | Landing blocks: hero, pricing, testimonials | [marketing.md](docs/marketing.md) | 13.2 KB | 3.5 KB |
+| `notify` | Notification center and preferences | [notifications.md](docs/notifications.md) | 12.8 KB | 3.9 KB |
+| `prose` | Rich-text / article typography and editor | [prose.md](docs/prose.md) | 11.3 KB | 6.8 KB |
+| `pwa` | Install card, offline, update flow | [pwa.md](docs/pwa.md) | 10.2 KB | 3.0 KB |
+| `support-chat` | Support chat widget | [support-chat.md](docs/support-chat.md) | 8.3 KB | 4.1 KB |
+| `terminal` | Terminal view | [data.md](docs/data.md) | 2.0 KB | 1.1 KB |
+| `tickets` | Ticketing with SLA timers | [tickets.md](docs/tickets.md) | 15.4 KB | 4.8 KB |
+| `uptime` | Uptime / status bars | [data.md](docs/data.md) | 1.1 KB | 0.7 KB |
+| `user-panel` | Profile completeness, privacy settings | [forms.md](docs/forms.md) | 2.1 KB | 2.8 KB |
+
+## Quick start
+```bash
+git clone https://github.com/ARaminco/AraminConsole.git
+cp -r AraminConsole/dist ./public/aramin     # dist/ is committed: no npm install needed
+```
+```html
+<!doctype html>
+<html lang="en" dir="ltr" data-ac-icons="/aramin/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="/aramin/aramin-console-boot.js"></script>   <!-- saved theme/lang before first paint -->
+  <link rel="stylesheet" href="/aramin/aramin-console.min.css">
+  <script type="module" src="/aramin/aramin-console.min.js"></script>
+</head>
+<body>
+  <div class="ac-card"><div class="ac-card__body">
+    <button class="ac-btn ac-btn--primary" type="button"
+            onclick="AC.toast({ title: 'Saved', tone: 'success' })">Save</button>
+  </div></div>
+</body>
+</html>
+```
+Ready-made projects: [`starters/html`](starters/html), [`starters/laravel-blade`](starters/laravel-blade), [`starters/nextjs`](starters/nextjs) ([docs/starters.md](docs/starters.md)). This repository is also a GitHub template: click **Use this template**.
+
+## `data-ac` usage
+```html
+<div class="ac-segmented" data-ac="segmented">…</div>             <!-- ac:segmented:change -->
+<form class="ac-form" data-ac="form">                              <!-- validation + ac:form:submit -->
+  <input class="ac-input" name="mobile" data-ac-rules="required|iran-mobile">
+</form>
+<div class="ac-otp" data-ac="otp" data-length="6"></div>           <!-- ac:otp:complete -->
+<div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","series":[{"data":[3,5,2]}]}'></div>
+<span data-ac="counter" data-to="498601.92" data-decimals="2" data-prefix="$">0</span>
+```
+```js
+import { AC } from './aramin-console.js';           // also available as window.AC
+AC.modal.open('#edit');  await AC.confirm({ title: 'Delete?' });  AC.theme.set({ theme: 'dark', accent: 'blue' });
+document.addEventListener('ac:form:submit', (e) => e.detail.waitUntil(fetch('/api', { method: 'POST', body: e.detail.formData })));
+```
+Events always follow `ac:<component>:<event>` and bubble.
+
+## Modular and custom builds
+```bash
+node scripts/build.mjs --modules=forms,table,chart --out=dist/custom     # core + chosen modules (+ dependencies)
+```
+```js
+await AC.use('maps');                  // lazy-load a module (JS + CSS) on demand
+```
+Or keep an `aramin.config.json` in your project. Details in [docs/modules.md](docs/modules.md).
+
+## Theming tokens
+Everything is a CSS custom property (`--ac-*`); dark mode is a token swap.
+
+| Token | Purpose |
+|---|---|
+| `--ac-accent`, `--ac-accent-2` | accent and gradient partner |
+| `--ac-ink`, `--ac-ink-contrast` | primary buttons, active nav pill |
+| `--ac-bg`, `--ac-surface-1/2/3`, `--ac-border` | canvas, cards, hairlines |
+| `--ac-text`, `--ac-muted`, `--ac-faint` | text levels |
+| `--ac-r-xl`, `--ac-r-pill`, `--ac-control-h` | radius and density |
+| `--ac-font` | one font (Vazirmatn) for every script |
+
+Switches on `<html>`: `data-theme="light|dark"`, `data-accent="orange|violet|blue|emerald|rose|amber|slate"`, `data-density="comfortable|compact"`, `data-radius="sharp|default|round"`. Full list: [docs/theming.md](docs/theming.md).
+
+## RTL and i18n
+Set `<html lang="fa" dir="rtl">` or call `AC.i18n.set('en')`; it switches `lang`, `dir`, and every `[data-i18n]` text from JSON dictionaries (`AC.i18n.configure({ url: '/i18n/{lang}.json' })`). Latin digits by default, Persian digits with `AC.i18n.setDigits('native')`. See [docs/rtl.md](docs/rtl.md).
+
+## Iranian toolkit
+Rial and Toman (`data-ac="money"`, `money-unit`), Jalali and Hijri calendars on `Intl` with no date library, bank cards with Iranian bank logos, Sheba field with bank detection, `iran-mobile` and `iran-national-id` validators, and a print-ready official invoice. See [docs/finance.md](docs/finance.md), [docs/invoice-ir.md](docs/invoice-ir.md), [docs/forms.md](docs/forms.md).
+
+## Browser support
+Current Chrome, Edge, Firefox, Safari (desktop and iOS 16.4+), Samsung Internet. Uses CSS logical properties, `color-mix()`, `:has()`, `dvh`, and the Popover API (with fallback); View Transitions when available.
+
+## Accessibility
+Focus traps, roving tabindex, ARIA states, visible focus rings, 44px touch targets, `prefers-reduced-motion` support, and contrast-checked tokens in both themes.
+
+## "Powered by AIR" credit
+The base template shows a small `.ac-powered` link («قدرت گرفته از ایر» / "Powered by AIR" / «مدعوم من AIR») to <https://air.co.ir/>: bottom of the rail on desktop, end of content on phones, footer of auth and error pages. The MIT license lets you remove or replace it:
+- delete the `<a class="ac-powered" …>` elements in your pages, or
+- change the text with the `credit.powered` key in your i18n JSON and the `href` on the link.
+
+We kindly ask that you keep it in the base template and starters you redistribute.
+
+## Roadmap
+- npm publication and a versioned CDN build
+- More starters (Vue, SvelteKit, Django templates)
+- Visual regression tests in CI
+- Figma tokens export
+
+## Contributing
+Issues and pull requests are welcome: [CONTRIBUTING.md](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md), [Security policy](SECURITY.md). Run `npm run dev`, then open http://localhost:5178/demo/. AI assistants: read [AGENTS.md](AGENTS.md) first.
+
+## Credits
+- Icons: [Lucide](https://lucide.dev), ISC License (`dist/LICENSE-lucide.txt`).
+- Font: [Vazirmatn](https://github.com/rastikerdar/vazirmatn) by Saber Rastikerdar, SIL Open Font License 1.1 (`src/fonts/OFL.txt`).
+- Visual direction inspired by the "Dashboard V14 — Modern & Minimal UI" concept by code.xr.
+- Bank logos (`dist/banks.svg`): Iranian banks from [@iran-utils/iranian-banks-icons-core](https://github.com/houtan-rocky/iranian-banks-react-icons) (MIT); card networks and international banks from [simple-icons](https://simpleicons.org) (CC0); a few are generated monograms. **All bank and card-network logos are trademarks of their respective owners and are included for identification only.** Sources: `src/banks/SOURCES.md`, notice: `dist/LICENSE-bank-logos.txt`.
+
+## License
+[MIT](LICENSE) © 2026 Ali Asghar Ramin
+
+<div align="center">
+
+**Powered by [AIR](https://air.co.ir/)** — https://air.co.ir/
+
+</div>
+
+<!-- ===== AGENTS.md ===== -->
+
+# AGENTS.md — AraminConsole operating guide for AI coding assistants
+
+AraminConsole is a zero-dependency, RTL-first admin UI framework: **one CSS file + one ES module** (`window.AC`). No npm runtime deps, no framework, no bundler required to use it. Read this file first, then `docs/CONVENTIONS.md` (the full rulebook) and `llms.txt` (index of every doc). Building an app *with* AraminConsole (not changing it)? Use the Agent Skill in `skills/aramin-console/SKILL.md`.
+
+## Architecture map
+```
+src/css/            tokens.css base.css layout.css motion.css  +  components/*.css   (design system; tokens = --ac-*)
+src/js/core.js      AC namespace, register() auto-init, i18n, theme, format, gesture, trapFocus
+src/js/components/  one file per component (register('name', el => …))
+src/modules/<name>/ optional feature modules (maps, tickets, files, invoice-ir, …) with module.json
+src/modules.json    module manifest (core + shell + overlays + …; sizes written by the build)
+src/icons/          icons.txt = Lucide names put into the sprite (dist/icons.svg)
+dist/               COMMITTED build output (aramin-console[.min].{css,js}, boot, icons.svg, modules/)
+demo/               the live demo app (index.html shell, pages/*.html fragments, auth/, errors/, i18n/{fa,en,ar}.json)
+docs/               per-area documentation (also index in llms.txt)
+starters/           copy-ready projects: html, laravel-blade, nextjs
+skills/aramin-console/  Agent Skill (cheat-sheet + recipes) for building with the framework
+tests/              Playwright suites, run through tests/run.mjs
+scripts/            build.mjs, minify.mjs, serve.mjs, llms.mjs
+```
+
+## Commands
+| Task | Command |
+|---|---|
+| Build everything into `dist/` | `npm run build` |
+| Dev server (http://localhost:5178/demo/) | `npm run dev` |
+| Regenerate `llms.txt` / `llms-full.txt` | `npm run llms` |
+| Full tests (build + all suites) | `npm test` |
+| Selected suites | `node tests/run.mjs shell standalone` (names = files in `tests/` without `.mjs`) |
+| Custom build | `node scripts/build.mjs --modules=forms,table --out=dist/custom` |
+
+Always run `npm run build` after touching `src/` and commit the resulting `dist/` (CI checks it; consumers copy `dist/` directly).
+
+## Conventions (non-negotiable)
+- **Components** start from `data-ac="name"` and are registered with `register('name', (el) => { …; return destroy; })`. Options come from `data-*` attributes or `data-ac-config='{json}'` through `options(el, defaults)`. Public API goes on `AC.<name>`. Events: `emit(el, 'name:event', detail)` → `ac:name:event` (bubbles).
+- **Bundler limits**: only `import {a} from './x.js'`, `export function|const|class`, `export {…}`; no default exports, no circular imports, no npm imports.
+- **CSS**: BEM-ish `.ac-block__element--modifier`; state through ARIA/data attributes (`[aria-selected]`, `[data-state]`); **logical properties only** (`margin-inline-start`, `inset-inline-end`, never `left/right`, except JS-measured indicators); directional icons get `.ac-flip-rtl`.
+- **Tokens only**: colours, radii, spacing, motion via `var(--ac-*)`. No hex colours. Dark mode is a token swap, not per-component overrides.
+- **No inline `style=""`** in markup; no `<script>` inside page fragments.
+- **i18n**: Persian text in markup + `data-i18n="area.key"`; attributes via `data-i18n-attr="aria-label:area.key"`. New keys go into **all three** `demo/i18n/{fa,en,ar}.json`.
+- **Mobile**: touch targets ≥ 44px (`--ac-touch`), no hover-only affordances, modals become bottom sheets on phones, tables stack (`.ac-table--stack` + `data-label`).
+- **Accessibility**: focus trap in overlays, roving tabindex in widgets, visible focus, honour `AC.reducedMotion()`.
+- Icons: add the Lucide name to `src/icons/icons.txt`, rebuild, use `<svg class="ac-icon"><use href="#i-name"/></svg>`.
+
+## How to add…
+**A component** — `src/js/components/<name>.js` with `register()`; CSS in `src/css/components/<name>.css`; list both in the owning module in `src/modules.json` (or in a module folder); document in the matching `docs/*.md`; add a test in `tests/`; `npm run build`.
+**A module** — folder `src/modules/<name>/` with `<name>.js`, `<name>.css`, `module.json` (`description`, `dependencies`); picked up automatically; `node scripts/build.mjs --sync-manifest` records sizes; document in `docs/modules.md`.
+**A demo page** — `demo/pages/<name>.html` (fragment shape in `docs/CONVENTIONS.md` §7), rail link `#/<name>`, optional `demo/pages/<name>.js` default export `mount(root, AC)`.
+
+## Do
+- Reuse existing atoms (`.ac-card`, `.ac-btn`, `.ac-bento`, `.ac-stat`, …) before inventing classes.
+- Keep it dependency-free; keep modules independent (declare `dependencies`).
+- Keep docs and `llms.txt` in sync (`npm run llms`).
+- Keep the `.ac-powered` credit in the base template and starters (users may remove it; MIT).
+
+## Don't
+- Don't add runtime dependencies, CDNs, or build steps required by consumers.
+- Don't hard-code colours, `left/right`, `px` font sizes, or `!important` (except documented utilities).
+- Don't edit files in `dist/` by hand; don't commit `node_modules/`.
+- Don't remove or rename public `AC.*` APIs, `data-ac` names, or `--ac-*` tokens without a CHANGELOG entry.
+
+License: MIT © 2026 Ali Asghar Ramin. Powered by AIR — https://air.co.ir/
+
+<!-- ===== skills/aramin-console/SKILL.md ===== -->
+
+---
+name: aramin-console
+description: Build admin panels, dashboards, consoles, CRUD screens, auth pages and invoices with AraminConsole, the zero-dependency RTL-first (Persian/Arabic/English) UI framework with data-ac components, --ac-* design tokens, Jalali dates, Rial/Toman money and a PWA-ready mobile app shell. Use whenever the user asks for an admin UI, dashboard, panel, "پنل مدیریت", RTL/Persian interface, or mentions AraminConsole / aramin-console / data-ac / ac-card.
+---
+
+# AraminConsole skill
+
+AraminConsole = **one CSS + one ES module** (`dist/`). No npm install, no framework. Components start from `data-ac="name"` attributes (also on HTML injected later) and expose `window.AC`. Repo: https://github.com/ARaminco/AraminConsole · demo: https://araminco.github.io/AraminConsole/demo/ · full docs: `llms-full.txt`.
+
+Install this skill: copy this folder to `~/.claude/skills/aramin-console/` (all projects) or `<project>/.claude/skills/aramin-console/`.
+
+## 1. Setup (any stack)
+```bash
+cp -r AraminConsole/dist ./public/aramin     # or download dist/ from the repo
+```
+```html
+<html lang="fa" dir="rtl" data-ac-icons="/aramin/icons.svg">   <!-- lang="en" dir="ltr" for English -->
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="/aramin/aramin-console-boot.js"></script>      <!-- classic script, in <head>, before CSS -->
+  <link rel="stylesheet" href="/aramin/aramin-console.min.css">
+  <script type="module" src="/aramin/aramin-console.min.js"></script>
+</head>
+```
+Ready projects: `starters/html`, `starters/laravel-blade`, `starters/nextjs` (copy the closest one first). Keep `fonts/` next to the CSS.
+
+## 2. Rules
+- Reuse classes (`.ac-card`, `.ac-btn`, `.ac-bento`, `.ac-stat`, `.ac-table`, …); never invent colours: use `var(--ac-*)`.
+- Logical CSS only (`margin-inline-start`, never `left/right`); flip directional icons with `.ac-flip-rtl`; no inline `style=""`.
+- Static text: Persian in markup + `data-i18n="area.key"` and dictionaries via `AC.i18n.configure({ url: '/i18n/{lang}.json' })`.
+- Icons are a Lucide sprite: `<svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg>`. Only icons listed in `src/icons/icons.txt` exist; for others rebuild with the name added.
+- Events are `ac:<component>:<event>` (bubble). Options: `data-*` or `data-ac-config='{json}'`. Instance: `AC.instance(el, 'name')`.
+- Keep the small `.ac-powered` credit («قدرت گرفته از ایر», https://air.co.ir/) in base layouts unless the user asks to remove it.
+
+## 3. Layout building blocks
+| Need | Markup |
+|---|---|
+| App shell | `.ac-shell > header.ac-appbar[data-ac=appbar] + aside.ac-rail[data-ac=rail] + .ac-scrim + .ac-main > main.ac-content#ac-content + nav.ac-tabbar[data-ac=tabbar]` + `.ac-toasts#ac-toasts` |
+| Page | `section.ac-page > header.ac-page-head[data-ac=largetitle] (.ac-page-head__titles > __eyebrow/__title/__sub, __actions)` then `.ac-bento.ac-stagger` |
+| Grid | `.ac-bento` 12 cols; children `ac-span-xs-6` (phone half), `ac-span-md-{3,4,6,8,12}`, `ac-span-{2..9,12}` (desktop) |
+| Card | `.ac-card > __head(__titles > __title/__sub, __actions) + __body(--flush) + __foot` |
+| KPI | `.ac-kpis > .ac-kpi` or `.ac-stat(__label/__value/__foot)` with `data-ac="counter" data-to="1200" data-decimals data-prefix data-suffix` |
+| Utilities | `ac-stack ac-cluster ac-row ac-spread ac-grid ac-gap-N ac-hide-mobile ac-hide-desktop ac-hide-phone ac-ltr ac-num ac-text-muted` |
+| Tones | `data-tone="accent|success|warning|danger|info|neutral"`; badges `.ac-badge--success` etc. |
+
+## 4. Component cheat-sheet (`data-ac` names)
+| Name | Key options / markup | Events / API |
+|---|---|---|
+| `form` | `<form class="ac-form" data-ac="form">`, field rules `data-ac-rules="required|email|iran-mobile|iran-national-id|min:3"` | `ac:form:submit {formData, waitUntil(promise)}`, `ac:form:invalid` |
+| `input` | `data-clear`, `data-counter` | |
+| `password` | `data-strength`, `data-checklist` | |
+| `otp` | `data-length=6`, `data-name`, `data-mask` | `ac:otp:complete {value}` |
+| `number`, `range` | `data-bubble`, `data-prefix/suffix` | |
+| `rating`, `swatches` | `data-max`, `data-value`; `data-colors` | `ac:rating:change`, `ac:swatches:change` |
+| `combobox` | `data-multiple`, `data-loader`, `data-min-chars` | `ac:combobox:change` |
+| `tags` | `data-name`, `data-max` | `ac:tags:change` |
+| `datepicker`, `timepicker` | `data-calendar=persian|gregory|islamic`, `data-range`, `data-name`, `data-min/max`, `data-calendars` | `ac:datepicker:change`, `ac:timepicker:change` |
+| `dropzone` | `data-max-files`, `data-max-size`, `data-uploader` | `ac:dropzone:add/done/remove` |
+| `wizard` | stepper + panes | `ac:wizard:change` |
+| `modal` | `.ac-modal[data-ac=modal][data-size=sm|md|lg|full]`; phone = bottom sheet | `AC.modal.open('#id')`, `ac:modal:open/close` |
+| `sheet`, `drawer` | bottom sheet with snaps / side drawer | `AC.sheet.open`, `AC.drawer.open('#id')` |
+| `dropdown`, `popover` | `data-placement` | `ac:menu:select` |
+| `tabs`, `segmented`, `navpill` | ARIA tablist / radio group | `ac:tabs:change`, `ac:segmented:change {value}` |
+| `accordion` | `data-single` | `ac:accordion:toggle` |
+| `table` | `<div data-ac="table" data-ac-config='{"pageSize":10}'><table>…` ; `th data-type=number|date data-filter=select data-sortable=false`, `td data-value` | `ac:table:sort/select/bulk/action` |
+| `list` | rows with swipe actions | `ac:list:action` |
+| `tree`, `kanban`, `split` | hierarchical, drag board, resizable panes | `ac:tree:select`, `ac:kanban:move` |
+| `chart` | `data-ac-config='{"type":"line|area|bar|donut|gauge|sparkline|heatmap","labels":["a","b"],"series":[{"name":"X","data":[1,2]}]}'` | `AC.chart(el, cfg)` |
+| `code`, `json`, `logview` | `data-lang`, `data-lines`; JSON `data-ac-config='{"data":{}}'` | `ac:code:copy` |
+| `ring` | `data-value`, `data-max`, `data-tone` | |
+| `counter` | `data-to data-decimals data-duration data-compact data-currency` | |
+| `alert` | dismissible `.ac-alert` | `ac:alert:close` |
+| `money`, `money-unit` | `data-currency=IRT|IRR|USD`, `data-currencies`, `data-words` | `ac:money:change` |
+| `bank-card`, `card-form`, `sheba` | `data-number data-holder data-expiry`; bank detected from number/Sheba | `ac:bank-card:bank`, `ac:sheba:change` |
+| `map`, `location-picker` | `data-center="35.7,51.4" data-zoom data-controls`; picker `data-name` | `ac:map:ready`, `ac:location-picker:change` |
+| `files` | file manager, adapter-based (module `files`) | `ac:files:open/select/upload` |
+| `invoice-ir` | `data-ac-config='{"type":"proforma","data":{…}}'` (module `invoice-ir`) | `ac:invoice-ir:change` |
+| `chat`, `mail`, `terminal`, `uptime`, `sla` | respective modules | `ac:chat:send`, `ac:mail:open` |
+| `notifications`, `langpicker`, `rail`, `dock`, `tabbar`, `pull-refresh`, `largetitle`, `appbar` | shell behaviours | `ac:pull-refresh:refresh {waitUntil}` |
+| `prose`, `completeness`, `privacy`, `notify-prefs`, `install-card` | content, profile, PWA | |
+
+## 5. Runtime API (`window.AC` / ES exports)
+`AC.toast(opts|text)` · `AC.toast.success|error|warning|info(title)` · `AC.toast.promise(p,{loading,success,error})` · `await AC.confirm({title,text,tone})` → boolean · `await AC.prompt({...})` · `AC.modal.open|close(sel)` · `AC.theme.set({theme,accent,density,radius})` / `.toggle()` · `AC.i18n.set('fa'|'en'|'ar')`, `AC.t(key, fallback, vars)`, `AC.i18n.setDigits('native')` · `AC.format.number|date|relative` (`calendar:'persian'`) · `AC.palette.add([{id,title,href|run}])` · `AC.rail.open|close` · `AC.use('maps')` lazy module · `AC.scan(root)` start components in new DOM · `AC.copyText(t)` · `AC.validate`.
+
+## 6. Theming
+`<html data-theme="light|dark" data-accent="orange|violet|blue|emerald|rose|amber|slate" data-density="comfortable|compact" data-radius="sharp|default|round">`. Override tokens in `:root`: `--ac-accent`, `--ac-ink`, `--ac-bg`, `--ac-surface-1/2/3`, `--ac-border`, `--ac-text`, `--ac-muted`, `--ac-r-xl`, `--ac-control-h`, `--ac-font`. Details: `reference/theming-and-modules.md`.
+
+## 7. Recipes (full markup in `reference/recipes.md`)
+Dashboard (KPI counters + chart bento) · CRUD table page (table + modal form + toast + confirm delete) · Form with Iranian validation (mobile, national id, Jalali date, Sheba, money) · Official invoice · Map with picker · File manager · Login/OTP page. Read the recipe before writing the page.
+
+## 8. Pitfalls
+- `fetch()`-loaded fragments need an http server, not `file://`.
+- Don't put `<script>` in injected fragments; wire behaviour with delegated listeners or `AC.instance`.
+- Next.js/React: load the module client-side once; call `AC.scan(container)` after route changes (see `starters/nextjs`).
+- Rebuilding a custom bundle: `node scripts/build.mjs --modules=forms,table,chart --out=public/aramin`.
+- Verify visually at 390px width and in dark mode before finishing.
+
+More: `reference/components.md` (class names per area), `reference/recipes.md`, `reference/theming-and-modules.md`.
+
+<!-- ===== docs/CONVENTIONS.md ===== -->
+
+# AraminConsole — Conventions (Phase 2 builders read this first)
+
+`docs/SPEC.md` is the contract; this is how the foundation implements it. Follow it exactly.
+
+## 1. Workflow
+- `npm run build` (or `node scripts/build.mjs --watch`) → `dist/`. `npm run serve` → http://localhost:5178/demo/
+- Check: `node tests/shots.mjs <page> [--full]` (390×844 + 1440×900, light/dark, fa/en → `tests/screens/`, prints console errors + horizontal overflow). `node tests/shell.mjs`, `node tests/pwa.mjs`.
+- The demo SW is **off on localhost** (stale caches). Enable with `localStorage['ac:sw']='1'`.
+- Budget: CSS < 120 KB min for the WHOLE framework; the foundation already uses ~80 KB. Keep each new component file lean (aim ≤ 6 KB min), no comment banners per rule, reuse tokens/utilities.
+
+## 2. File ownership
+| Owner | Files |
+|---|---|
+| Foundation (do not edit — ask) | `tokens.css`, `base.css`, `layout.css`, `components/{button,nav,card,misc,palette}.css`, `src/js/core.js`, `components/{rail,tabbar,largetitle,tabs,palette,press,pull-refresh,ring}.js`, `index.js`, `scripts/*`, `demo/index.html`, `demo/app.js` |
+| Data-table engineer | `components/table.css` (base styles exist — extend), `table.js` |
+| Others | one new CSS file per family: `form.css`, `overlay.css`, `feedback.css`, `data-display.css`, `chart.css`, `kanban.css`, `calendar.css`, `chat.css`; one JS module per component |
+| Pages | `demo/pages/<name>.html` (+ optional `<name>.js`), `demo/auth/*.html`, `demo/errors/*.html` |
+
+Shared files you may append to (add, never reorder/remove): `src/icons/icons.txt`, `demo/i18n/{fa,en,ar}.json`, `src/js/index.js` (one `import './components/x.js'` line + optional `export { x } from …`).
+The build concatenates `components/*.css` alphabetically — never rely on another component file's order.
+
+## 3. Registering a component
+```js
+// src/js/components/sheet.js
+import { AC, register, on, emit, options, trapFocus, scrollLock, gesture, instance } from '../core.js';
+register('sheet', (el) => {                  // runs for every [data-ac~="sheet"], now and when injected later
+  const o = options(el, { snap: 0.5 });       // data-* attrs + data-ac-config='{json}'
+  const off = on(el, 'click', '[data-close]', () => close());
+  function close() { emit(el, 'sheet:close'); }   // → CustomEvent "ac:sheet:close", bubbles
+  instance(el, 'sheet', { close });            // AC.instance(el,'sheet').close()
+  return () => off();                          // destroy: called when el leaves the DOM
+});
+export const sheet = { open(sel) { /* imperative API */ } };
+AC.sheet = sheet;
+```
+Bundler limits (scripts/build.mjs): only `import {a, b as c} from './x.js'`, `import './x.js'`, `export function|const|let|class`, `export {…}`, `export {…} from`, `export * from`. No default exports, no circular imports, no npm imports.
+Multiple components on one element: `data-ac="tabs counter"`.
+
+## 4. Core JS API (`window.AC`, also ES exports)
+- DOM: `$`, `$$`, `on(target, type, [selector], fn)` → off(), `h(tag, attrs, ...children)`, `emit(el, 'name:event', detail)`, `uid()`, `escapeHtml`, `icon(name, cls)` → svg string, `options(el, defaults)`.
+- Overlays: `trapFocus(container, {initial, returnFocus})` → release(); `scrollLock.lock()/unlock()` (ref-counted, sets `html[data-scroll-locked]`); `focusables(el)`.
+- Gestures: `gesture(el, { axis:'x'|'y'|'both', threshold:8, filter(e), onStart(s), onMove(s), onEnd(s) })` → destroy. `s = {dx, dy, vx, vy (px/ms), axis, pointerType, target, cancelled}`. Axis-locked: a vertical move on an `axis:'x'` gesture is released to the browser. Set CSS `touch-action: pan-y` (horizontal swipe) / `pan-x` / `none` (kanban drag). The click after a real drag is swallowed. Drive visuals with CSS vars: `el.style.setProperty('--ac-drag', dx+'px')`.
+- State: `store.get/set/remove` (JSON, localStorage). Keys: `ac:theme ac:accent ac:density ac:radius ac:lang ac:rail ac:digits`.
+- `theme.get()` → `{theme:'auto|light|dark', resolved, accent, density, radius}`; `theme.set({...})`; `theme.toggle()`; event `ac:theme:change`.
+- `i18n.set('en')` (async), `i18n.t(key, fallback, vars)` = `AC.t`, `i18n.extend(lang, dict)`, `i18n.lang/dir/locale`, event `ac:i18n:change` on document — re-render any JS-generated text on it.
+- Formatting: `format.number(n, {decimals, compact, currency:'USD', percent})`, `format.date(d, {dateStyle, calendar:'persian'|'gregory'})`, `format.relative(d)`. Latin digits by default (`i18n.setDigits('native')` for Persian digits).
+- Misc: `reducedMotion()`, `isRTL()`, `isMobile()` (<1024px), `haptic()`, `rafThrottle(fn)`, `debounce(fn)`, `ready(fn)`, `rail.open/close/toggle/collapse`, `palette.add([{id,title,i18n?,hint?,group?,icon?,keywords?,shortcut?,href?,run?}])/open/close`.
+- Declarative helpers: `data-ac="counter"` (`data-to data-decimals data-prefix data-suffix data-compact data-currency`), `data-ac="ring"` (`data-value data-max data-tone`), `data-ac="tabs"`, `data-ac="segmented"`, `data-ac="largetitle"`, `data-ac="pull-refresh"`, `[data-ac-palette-open]`, `[data-ac-rail-open|-close|-toggle]`, `[data-ripple]`.
+- Events are always `ac:<component>:<event>` (`ac:tabs:change`, `ac:segmented:change {value}`, `ac:pull-refresh:refresh {waitUntil(promise)}`).
+
+## 5. Tokens cheat-sheet (`--ac-*`, never hard-code colours)
+- Surfaces: `bg bg-subtle surface-1 surface-2 surface-3 elevated hover active scrim` · lines `border border-strong` · text `text text-soft muted faint`
+- Ink (black primary; white in dark): `ink ink-hover ink-contrast` · chrome `chrome-bg pill-bg pill-bg-hover shadow-chrome` · `lift` (hover translate) · `pill-h flyout-w`
+- Accent (orange `#f0532d` default, use sparingly): `accent accent-2 accent-hover accent-soft accent-soft-2 accent-ink`(readable accent text) `accent-contrast`(text on solid accent) `ring focus gradient aurora`
+- Status: `success|warning|danger|info` + `-soft` + `-ink`; `neutral-soft neutral-ink`; charts `chart-1..8 chart-grid`
+- Glass: `glass-bg glass-bg-strong glass-border glass-blur` · shadows `shadow-xs sm md lg xl glow inset`
+- Radius `r-xs sm md lg xl 2xl pill` · space `s-0..12` (0.25rem steps) · type `fs-2xs xs sm md lg xl 2xl 3xl 4xl`, `lh-tight snug normal`, `fw-*`
+- Metrics (density-aware): `control-h control-h-sm control-h-lg control-px card-pad row-h gap touch`
+- Motion: `ease ease-out ease-in ease-spring dur-1..4 press` · z: `z-sticky rail appbar tabbar dropdown drawer sheet modal toast palette tooltip`
+- Layout: `appbar-h tabbar-h rail-w rail-w-collapsed content-max content-pad safe-top/bottom/start/end`
+- Tones: any component colouring itself from `--_tone` gets `data-tone="accent|success|warning|danger|info|neutral"` for free.
+- Private per-component vars start with `--_` (e.g. `--_bg`). Dark mode = token swap only: if you need `:root[data-theme="dark"] .x`, you are probably missing a token.
+
+## 6. Class naming
+`.ac-block`, `.ac-block__element`, `.ac-block--modifier`; state via ARIA/data attributes (`[aria-selected="true"]`, `[aria-expanded]`, `[aria-current="page"]`, `[data-state="open|closed"]`, `[aria-busy="true"]`, `[disabled]`). Logical properties only (`inset-inline-start`, `margin-inline-end`, `padding-block`); physical `left` only for JS-measured indicators/charts. Directional icons get `.ac-flip-rtl`. No inline `style=""` in markup.
+Existing atoms to reuse: `.ac-btn(--primary|secondary|outline|accent|soft|ghost|danger|danger-soft|link|gradient|sm|lg|icon|square|block)` (all pills; primary = ink), `.ac-searchpill`, `.ac-kpis > .ac-kpi(--accent)(__head|__label|__value|__foot)`, `.ac-inset(__head)`, `.ac-label`, `.ac-figure`, `.ac-flag[data-flag=us|eu|ae|ir|gb|tr]`, `.ac-legend--inline`, `.ac-btn-group`, `.ac-card(__head|__titles|__title|__sub|__actions|__body|__body--flush|__foot)(--flat|inset|glass|interactive|aurora|accent|pad)`, `.ac-stat(__head|__icon|__label|__value|__unit|__foot|__spark)`, `.ac-trend[data-trend=up|down|flat]`, `.ac-badge(--accent|success|warning|danger|info|neutral|solid|outline|dot|lg)`, `.ac-count`, `.ac-chip(+__remove, aria-pressed)`, `.ac-status[data-status]`, `.ac-avatar(--xs|sm|lg|xl|square|gradient)[data-color=1..8]`, `.ac-avatar-group`, `.ac-kbd`, `.ac-divider(--label|--vertical)`, `.ac-skeleton(--text|title|circle|block|w-25|w-50|w-75)`, `progress.ac-progress(--success|warning|danger|sm|lg)`, `.ac-ring`, `.ac-empty(__art|__title|__text|__actions)`, `.ac-list(__item|__thumb|__main|__title|__meta|__end)(--divided|--inset)`, `.ac-feed(__item|__icon|__body)`, `.ac-tabs(--pills)`, `.ac-segmented(--block|--sm)`, `.ac-breadcrumbs`, `.ac-pagination`, `.ac-stepper(--vertical)>.ac-step[data-state]`, `.ac-table(--stack)`, `.ac-chart-slot(--sm|--lg|--square)`, `.ac-legend`, `.ac-hero`, `.ac-tile`, `.ac-section(__head|__title|__sub)`.
+Utilities: `.ac-stack .ac-cluster .ac-row .ac-spread .ac-grow .ac-grid .ac-grid-2/3/4 .ac-gap-0..8 .ac-truncate .ac-clamp-2 .ac-visually-hidden .ac-hide-mobile(<1024) .ac-hide-desktop .ac-hide-phone(<640) .ac-num .ac-mono .ac-ltr .ac-text-(xs|sm|lg|soft|muted|accent|success|warning|danger|start|center|end) .ac-stagger .ac-animate-in .ac-pressable .ac-only-light .ac-only-dark`.
+Bento: `.ac-bento` (12 cols) + children `.ac-span-xs-6` (phone half), `.ac-span-md-{3,4,6,8,12}` (≥640), `.ac-span-{2..9,12}` / `.ac-row-2` (≥1024), `.ac-span-xl-{3,4,6,8}` (≥1280). Default = full width. Don't combine `ac-span-12` with another lg span.
+
+## 7. Page fragment shape (`demo/pages/<name>.html`)
+```html
+<section class="ac-page" data-page="users" [data-script]>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow">…</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.users">کاربران</h1>
+      <p class="ac-page-head__sub">…</p>
+    </div>
+    <div class="ac-page-head__actions">…buttons…</div>
+  </header>
+  <div class="ac-bento ac-stagger"> … cards … </div>
+</section>
+```
+No `<script>` tags inside fragments. With `data-script`, the router imports `demo/pages/<name>.js`: `export default function mount(root, AC) { …; return () => cleanup }`. Mock data → `demo/data.js`. Every rail link `#/<name>` maps to `pages/<name>.html`; missing pages show "coming soon" (and a 404 in the console — so ship every page). Auth/error pages are standalone HTML documents: copy the `<head>` of `demo/offline.html` (boot script + CSS) and use `.ac-auth` / `.ac-fullpage`.
+
+## 8. Icons
+Add the Lucide name to `src/icons/icons.txt` (check `node_modules/lucide-static/icons/<name>.svg` exists; the build warns otherwise), rebuild, use `<svg class="ac-icon" aria-hidden="true"><use href="#i-name"/></svg>` (sizes `.ac-icon--sm|md|lg|xl`). In JS: `AC.icon('name')`. Custom icon: drop `src/icons/<name>.svg` and list it.
+
+## 9. i18n
+Static text: Persian in markup + `data-i18n="area.key"`; attributes: `data-i18n-attr="placeholder:area.key; aria-label:area.key2"`. Add the key to **all three** `demo/i18n/*.json` (keep alphabetical). Prefix keys by area: `nav.* group.* app.* common.* status.* col.*` (shared) and `<page>.*` (page-local: `users.*`, `kanban.*`). JS text: `AC.t('key', 'fallback')` and re-render on `ac:i18n:change`. Injected HTML is translated automatically.
+
+## 10. Mobile patterns (must use)
+- Shell: <1024px rail → drawer, bottom tab bar, large titles. Content already pads for the tab bar + safe areas. Fixed elements near the bottom: `calc(var(--ac-tabbar-h) + var(--ac-safe-bottom) + …)` on mobile.
+- Modal on phone = bottom sheet (`overlay.css`): same markup, `@media (max-width: 639.98px)` restyles it with a grab handle and drag-to-dismiss via `AC.gesture(el, {axis:'y'})`.
+- Tables → cards: `.ac-table--stack` + `<td data-label="…" data-i18n-attr="data-label:col.x">`; the data table may render a real card list instead.
+- Swipe actions on rows: `gesture(row, {axis:'x'})` + `touch-action: pan-y`, reveal actions underneath, snap by velocity (`|vx| > 0.5`).
+- Touch targets ≥ 44px (`--ac-touch`); no hover-only affordances; `:active` press = `transform: var(--ac-press)`.
+- Every animation ≤ 320 ms with `var(--ac-ease)`; reduced motion is globally handled — but guard JS animations with `AC.reducedMotion()`.
+
+## 11. Shell v2 — floating pills (docs/DESIGN.md)
+Light warm-gray canvas, white hairline cards (`--ac-r-xl` 22px, no shadow, hover lift inside `.ac-bento`; opt out `.ac-card--static`), black primary pills, orange accent only for: one filled KPI (`.ac-kpi--accent` / `.ac-card--accent`), switches, ranges, progress, chart highlight (`chart-1` = ink, `chart-2` = accent), brand mark, FAB.
+- **Top bar** `header.ac-appbar[data-ac=appbar]` → `.ac-appbar__inner` = start (`a.ac-chrome.ac-brand` > `.ac-brand__mark` + `.ac-brand__name`) · center (`#ac-appbar-title.ac-appbar__title` phone-only collapsing title + `nav.ac-chrome.ac-topnav[data-ac=navpill]` > `.ac-topnav__link`, the router sets `aria-current`, a sliding ink pill follows) · end (`.ac-chrome.ac-utilbar` > `.ac-iconbtn` buttons, `.ac-appbar__count`; `a.ac-chrome.ac-userchip`). `.ac-chrome` = any white floating pill; `[data-hide-phone]`, `[data-mobile-only]` inside the bar.
+- **Dock** `aside.ac-dock[data-ac=dock]` (≥1024px, fixed, start edge): `.ac-dock__pill` groups of `.ac-dock__btn` — theme pill `[data-theme-set=light|dark]` (aria-pressed synced), section buttons `[data-ac-rail-group="<id>"]` (open the flyout; the group holding the current page gets `[data-active]` = ink circle), links (`aria-current`), `.ac-dock__foot` (help / sign out), `.ac-dock__dot`. Tooltips come from `aria-label`.
+- **Rail** `aside.ac-rail#ac-rail[data-ac=rail]`: groups `div.ac-rail__group[data-group="<id>"]` (+ `.ac-rail__label`, `.ac-rail__link`, `details.ac-rail__sub`). Desktop = flyout next to the dock showing one group; phone/tablet = floating drawer with all groups. `.ac-rail__head` (`.ac-rail__heading-text`, `.ac-rail__close`), `.ac-rail__search`, `.ac-rail__foot` (drawer only). API `AC.rail.open(group?) / close() / toggle(group?)`; triggers `[data-ac-rail-group] [data-ac-rail-open] [data-ac-rail-toggle] [data-ac-rail-close]`. `collapse()` is kept but no longer changes the layout.
+- **Tab bar** `.ac-tabbar` (<1024px) is a floating pill, icons only (labels stay for screen readers), sliding ink circle, center `.ac-tabbar__fab` orange.
+- **Page head**: greeting-style `.ac-page-head__title` (semibold), muted `__sub`, primary action = `.ac-btn--primary` (black pill).
+- Defaults: `theme: light`, `accent: orange` (`theme.accents` starts with `orange`).
+
+<!-- ===== docs/DESIGN.md ===== -->
+
+# AraminConsole — Visual Direction (binding, supersedes SPEC §2 visuals)
+
+The owner rejected the first look (dark rail, violet accent). The target is the reference reel
+"Dashboard V14 — Modern & Minimal UI" (code.xr, product name "Vertix"). Frames: `docs/reference/ref-overview.png`, `ref-manage.png`.
+Match its feel closely, then make it RTL-first and app-like on phones.
+
+## What the reference looks like
+- **Canvas:** very light warm-gray page (`~#f3f3f4`), content sits in one big rounded white "app frame" feel; cards are **pure white, radius ~20–24px, hairline border (`~#ececee`) and almost no shadow**. Lots of air; 16–20px gaps.
+- **Top bar = three floating white pills** on the canvas:
+  1. brand pill (logo mark in a filled orange-red circle + product name),
+  2. **centered segmented nav** inside a white pill: Overview · Activity · Manage · Program · Account · Reports — the active item is a **solid black pill with white text** that slides (animated) between items,
+  3. utilities pill: search, bell, clock/history icon buttons + user chip (avatar, name, email, chevron).
+- **Side rail = slim floating vertical white pill** (≈48px wide) at the start edge, icon-only: theme toggle (sun/moon) on top in its own small pill, then section icons (active = black filled circle with white icon), and at the bottom a separate small pill with help/logout. Not a wide dark sidebar.
+- **Page head:** big greeting / title in dark ink ("Good morning, Code XR" — ours: «صبح بخیر، علی») with a one-line muted subtitle; primary action at the end as a **black pill button** ("+ New card").
+- **Accent:** orange-red `#f0532d`-ish (gradient `#ff6a3d → #ee4a22`) used sparingly: the one highlighted KPI tile (filled orange gradient card with white text), toggles/switches ON state, sliders/progress fill, chart highlight bars, brand mark. Everything else is black/gray/white. Positive deltas in small green pill (`+5%`), negatives in small red pill.
+- **Buttons:** primary = black pill (`#111`), white text, icon + label; secondary = light gray pill (`#f2f2f3`) dark text; small chip-style filters (Search field pill, "Filter ▾" pill).
+- **KPI cards:** small label with an icon circle at the end, big number (counting-up animation), small delta pill + "This month" muted. One card filled orange.
+- **Charts:** rounded bars, black + orange series, light gray grid, tiny labels; legend as dots.
+- **Tables:** inside white card, header row on very light gray rounded strip, small text, status as dot + label, search pill + filter pill in the card header.
+- **Credit card / object visuals:** dark glossy card with subtle pattern; controls list with labeled toggles (title + muted description) separated by hairlines.
+- **Typography:** clean geometric sans (Latin: Inter-like system stack; Persian/Arabic: Vazirmatn), headings semi-bold not heavy, numbers tabular, small muted labels (11–12px).
+- **Motion (framer-motion style):** cards lift `translateY(-4px)` with softer shadow on hover, staggered fade-up entrance of cards on page load, nav pill slides, numbers count up, bars grow from baseline, toggles spring.
+- **Dark mode:** same structure, canvas `#0b0b0c`, cards `#161618`, hairline `#232326`, active pill becomes **white with black text**, accent stays orange.
+
+## Translating to our framework
+- Desktop (≥1024px): floating slim rail + top pills layout above. Top segmented nav shows the main sections of the current workspace (Dashboard, Analytics, Users, Orders, Console, Reports…) with an overflow "More ▾" pill; the slim rail holds app-level destinations/groups (icons with tooltips) and opens a **flyout panel** for groups with many pages.
+- Tablet (640–1023): top pills collapse: brand + utilities; nav pill scrolls horizontally; rail hidden → bottom tab bar.
+- Phone (<640): app-like: large greeting title that collapses into a compact top bar on scroll; **bottom tab bar is a floating white pill** (not full-width bar) with the active tab as black circle/pill and a center orange FAB; sheets, swipe, pull-to-refresh as before.
+- RTL: rail on the right, everything mirrored via logical properties.
+- Accent presets remain (orange default + others), but the **default theme is light with orange accent and black primary**.
+
+<!-- ===== docs/SPEC.md ===== -->
+
+# AraminConsole — Build Contract (v0.1)
+
+This is the single source of truth every builder follows. If something is not here, choose the option that keeps the framework zero-dependency, RTL-first, accessible and app-like on phones.
+
+## 1. What it is
+An open-source (MIT) **admin panel UI/UX framework**: a CSS design system + a small vanilla-JS runtime of components + a complete demo app that shows every screen an admin panel or ops console needs. No framework, no runtime dependencies, no build step required to *use* it (one CSS file + one ES module). Works inside plain HTML, Node servers, Laravel Blade, Next.js, anything.
+
+Consumers: the owner's panels (Gisoo, AStack console, NetArz, CoHub, Laravel/Filament admin replacements) and the public.
+
+## 2. Design direction
+- **Feel:** premium, calm, modern SaaS (Linear / Vercel / Apple-level polish), not a Bootstrap template. Soft depth (layered shadows), glass chrome (backdrop-filter blur on app bar / tab bar / sheets), generous radii (12–20px), subtle aurora gradient accent in hero areas, crisp 1px borders, tabular numbers.
+- **Motion:** every interaction has motion, all of it short (120–320ms) with spring-like easing `cubic-bezier(.2,.8,.2,1)`; respects `prefers-reduced-motion` (all motion off). Page transitions via View Transitions API with fallback fade/slide. Press feedback: `scale(.97)` on buttons/cards/tabs. Animated tab indicator, animated number counters on stat tiles, chart draw-in, skeleton shimmer, staggered list entrance.
+- **Mobile = native app:** below 1024px the side rail disappears and a **bottom tab bar** (5 slots, glass, animated pill indicator, center FAB optional) appears; iOS-style **large title** collapses into the app bar on scroll; **bottom sheets** with drag handle and drag-to-dismiss; **swipe actions** on list rows; **pull-to-refresh**; safe-area insets (`env(safe-area-inset-*)`); 44px minimum touch targets; no hover-only affordances; tables turn into cards; modals become sheets. Installable PWA (manifest + service worker + offline page), `theme-color` follows theme.
+- **Font:** Vazirmatn variable (`src/fonts/vazirmatn-variable.woff2`, OFL) for all scripts; Latin digits in data tables unless the locale switch selects Persian digits.
+- **Icons:** Lucide (ISC), from `node_modules/lucide-static/icons/<name>.svg`. The build script assembles a sprite `dist/icons.svg` containing ONLY the icons listed in `src/icons/icons.txt` (one name per line). Usage: `<svg class="ac-icon"><use href="#i-<name>"/></svg>` — the runtime injects the sprite inline at boot (`AC.icons.load()`), so `href="#i-house"` works. Builders: add every icon you use to `icons.txt`.
+- **Themes:** `data-theme="light|dark"` on `<html>` (auto from `prefers-color-scheme` when unset), accent presets via `data-accent="violet|blue|emerald|rose|amber|slate"` (default violet `#6d4aff`), density `data-density="comfortable|compact"`, radius `data-radius="sharp|default|round"`. Theme customizer drawer in the demo.
+- **Direction & language:** `dir="rtl"` default (fa), `dir="ltr"` (en), Arabic (ar, rtl). Use CSS **logical properties only** (`margin-inline-start`, `inset-inline-end`, `padding-block`, `border-start-start-radius`…) — never `left/right` except for physical things like chart axes. Directional icons (chevrons, arrows) flip with `.ac-flip-rtl`.
+
+## 3. Naming
+- CSS: prefix `ac-`. BEM-ish: `.ac-card`, `.ac-card__head`, `.ac-card--flat`. State via attributes/ARIA (`[aria-selected=true]`, `[data-state=open]`, `[disabled]`), not `.is-*` classes where ARIA exists.
+- Tokens: CSS custom properties `--ac-*` defined in `src/css/tokens.css`. Components use ONLY tokens for color, radius, shadow, spacing, motion. Dark mode must work purely by token swap.
+- JS: global namespace `window.AC` and ES module exports from `dist/aramin-console.js`. Declarative first: components auto-initialise from `data-ac="<component>"` attributes (`data-ac="tabs"`, `data-ac="table"`, `data-ac="sheet-trigger"`…) via a MutationObserver, so injected HTML just works. Each component also has an imperative API (`AC.toast({...})`, `AC.modal.open('#id')`, `AC.sheet.open(...)`, `AC.confirm({...})` → Promise<boolean>, `AC.palette.open()`, `AC.theme.set({...})`, `AC.i18n.set('en')`).
+- Events: `CustomEvent`s named `ac:<component>:<event>` bubbling from the element (`ac:tabs:change`, `ac:table:select`, `ac:sheet:close`).
+
+## 4. Required token groups (`src/css/tokens.css`)
+Color (bg, surface 1–3, elevated, border, border-strong, text, text-soft, muted, accent + accent-soft + accent-ink + ring, success/warning/danger/info each with soft + ink, chart-1..8), glass (chrome bg + blur), shadows (xs, sm, md, lg, xl, glow), radius (xs..2xl, pill), space scale (0.25rem steps `--ac-s-1..12`), type scale (`--ac-fs-xs..4xl` + line heights), z-index layers (rail, appbar, tabbar, dropdown, sheet, modal, toast, palette), motion (`--ac-ease`, `--ac-ease-out`, `--ac-dur-1..4`), layout (`--ac-appbar-h`, `--ac-tabbar-h`, `--ac-rail-w`, `--ac-rail-w-collapsed`, `--ac-content-max`).
+
+## 5. File layout
+```
+src/css/tokens.css          tokens + themes + accents + density
+src/css/base.css            reset, typography, font-face, focus ring, scrollbars, selection, utilities (stack, cluster, grid, text, visually-hidden)
+src/css/layout.css          app shell: rail (collapsible, groups, badges), app bar, content, large title, bottom tab bar, FAB, page header, responsive grid, auth layout
+src/css/components/*.css    one file per component family (button, form, card, table, overlay, nav, feedback, data-display, chart, kanban, calendar, chat, misc)
+src/js/core.js              AC namespace, auto-init registry, events, dom helpers, focus trap, scroll lock, storage, gestures (drag/swipe)
+src/js/components/*.js      one module per component; each exports `init(el)` and registers itself
+src/js/index.js             entry: imports everything, boots, exposes window.AC
+src/icons/icons.txt         icon names used
+scripts/build.mjs           concat CSS → dist/aramin-console.css (+ .min), bundle JS modules → dist/aramin-console.js (simple concat of ES modules into one module is fine; or copy src/js to dist/js and make dist/aramin-console.js re-export), sprite → dist/icons.svg, copy fonts → dist/fonts
+scripts/serve.mjs           zero-dep static server on http://localhost:5178 serving repo root, SPA fallback for /demo/
+demo/index.html             the demo app shell (SPA)
+demo/app.js                 demo router + mock data wiring
+demo/data.js                realistic mock data (Persian + English names, Jalali dates, IRR/AED/USD amounts)
+demo/pages/<page>.html      one HTML fragment per screen, loaded by the router into the shell
+demo/manifest.webmanifest, demo/sw.js, demo/offline.html
+docs/                       component docs (markdown) — one file per component family
+tests/                      Playwright (playwright-core, system chromium at %LOCALAPPDATA%/ms-playwright) smoke + screenshot tests
+```
+
+## 6. Component inventory (all required for v0.1)
+**Shell & navigation:** side rail (collapsible to icons, nested groups, badges, workspace switcher, user card), app bar (search trigger, notifications bell with count, theme toggle, language switch, user menu), breadcrumbs, bottom tab bar + FAB, large collapsing title, page header with actions, tabs (underline + pills), segmented control, pagination, stepper, command palette (Ctrl/⌘+K, fuzzy search over pages and actions, recent, keyboard nav), quick search.
+**Inputs:** button (primary, secondary, ghost, soft, danger, link; sizes; icon-only; loading; group), input/textarea with prefix/suffix/clear/counter, floating label variant, select, combobox (searchable, async), multi-select with chips, tag input, checkbox, radio, switch, slider/range, rating, OTP/PIN input, number stepper, password (show/strength), color swatch picker, **date picker with Jalali (Persian) AND Gregorian calendars** (uses `Intl.DateTimeFormat('fa-IR-u-ca-persian')`, no deps), date range, time picker, file dropzone with previews & progress, form layout, inline validation (`data-ac-rules="required|email|min:3|iran-mobile|iran-national-id"`), wizard form.
+**Overlays:** modal/dialog (sizes, fullscreen-on-mobile → sheet), drawer (side), bottom sheet (snap points, drag), dropdown menu, context menu (right click / long press), popover, tooltip, confirm dialog (Promise), toast (stack, actions, undo, progress, swipe-to-dismiss), alert/banner, notification center panel.
+**Data display:** card variants (stat tile with trend + sparkline + animated counter, bento grid), **data table** (sort, global search, column filters, pagination, page size, row selection + bulk action bar, column visibility, sticky header, row expansion, inline row actions, CSV export, empty/loading states, responsive → card list on mobile with swipe actions), list (with avatars, meta, swipe actions), description list, badges/chips/status dots, avatars + group, progress (bar, ring), skeletons, empty states with illustration (inline SVG), timeline/activity feed, accordion, tree view, code block with copy, key/value JSON viewer, diff/log viewer.
+**Charts (inline SVG, no deps):** line, area (gradient), bar (grouped/stacked), donut/pie, radial gauge, sparkline, heatmap (contributions-style), with tooltips, legend, responsive resize, RTL-aware axes, draw-in animation. API: `AC.chart(el, {type, series, labels, ...})` and `data-ac="chart" data-ac-config='{...}'`.
+**Apps / screens in the demo (each a page fragment):**
+1. `dashboard` — KPI bento, revenue area chart, orders bar chart, traffic donut, recent orders table, activity feed, top products, goals ring.
+2. `analytics` — date-range filters, multi charts, heatmap, funnel.
+3. `users` — full data table with filters, bulk actions, user drawer/sheet, create user modal form.
+4. `user-profile` — cover, tabs (overview, activity, security, sessions).
+5. `roles` — roles & permissions matrix with toggles.
+6. `orders` + `invoice` — order list, printable invoice page (`@media print`).
+7. `products` — grid/list toggle, filters, product editor form with images.
+8. `kanban` — drag & drop board (pointer events, works with touch), add card.
+9. `calendar` — month/week views, Jalali + Gregorian toggle, events.
+10. `chat` — conversations list + thread, bubbles, attachments, typing indicator; mobile = two screens with push transition.
+11. `mail` — inbox three-pane, mobile stacked.
+12. `files` — file manager grid/list, upload dropzone, breadcrumbs, context menu.
+13. `notifications` — notification center page.
+14. `console` — **ops console**: live log stream viewer (filter by level, pause, follow), server/service status cards, uptime bars, terminal-style command box, jobs/queue table, incidents timeline.
+15. `monitoring` — CPU/RAM/disk gauges, realtime-updating sparkline charts.
+16. `settings` — sectioned settings (general, appearance with theme customizer, notifications, security, API keys with copy/regenerate, billing), mobile = iOS-style grouped list.
+17. `forms` — showcase of every input + validation + wizard.
+18. `components` — living style guide: every component with variants.
+19. `pricing`, `faq` (accordion), `timeline`.
+20. Auth (standalone pages, no shell): `login`, `register`, `forgot`, `otp`, `lock` — split layout desktop, full-screen app-like mobile.
+21. Errors: `404`, `500`, `maintenance`, `offline`.
+
+## 7. Demo app behaviour
+- Hash router (`#/dashboard`), page fragments fetched from `demo/pages/`, injected into `<main>`, components auto-init, page transition animation, title + active nav updated, scroll restored. Auth/error pages are standalone `demo/auth/*.html`, `demo/errors/*.html`.
+- Language switch fa/en/ar swaps `dir`, `lang`, and text via `data-i18n` keys from `demo/i18n/{fa,en,ar}.json` (shell + nav + common UI at minimum; page body content may stay Persian with English in en for main headings).
+- Settings persist in `localStorage` (`ac:theme`, `ac:accent`, `ac:lang`, `ac:rail`).
+
+## 8. Quality bar
+- Lighthouse-grade a11y: semantic HTML, labelled controls, focus visible, focus trap in overlays, Esc closes, roving tabindex in menus/tabs, `aria-*` correct, contrast AA in both themes.
+- No inline `style=""` in markup (CSP friendly); JS may set CSS variables via `el.style.setProperty`.
+- No console errors on any page at 390×844 (phone), 820×1180 (tablet), 1440×900 (desktop), in fa/rtl and en/ltr, light and dark.
+- No horizontal overflow on phone on any page.
+- Performance: CSS < 120KB min, JS < 120KB min (unminified source size may be larger).
+
+<!-- ===== docs/data.md ===== -->
+
+# Data display — tables, charts, lists, logs
+
+Files: `src/js/components/{table,chart,list,accordion,tree,code,logview}.js`, `src/css/components/{table,chart,data}.css`.
+Demo: `#/users`, `#/analytics`, `#/dashboard`. Mock data: `demo/data.js` (named exports `users orders products servers logs makeLog dailyVisits activity trafficFor topPages referrers rng daysAgo`).
+Tests: `node tests/data.mjs --base=http://localhost:5178`.
+
+Strings shown to the user go through `AC.t()` (keys `table.* chart.* log.* json.* common.copy|copied`) and re-render on `ac:i18n:change`. Numbers use `AC.format` (Latin digits unless `AC.i18n.setDigits('native')`).
+
+## Charts — `AC.chart(el, cfg)` (stable API)
+
+```html
+<div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","labels":"days:7","series":[{"name":"dash.online","data":[120,152,138]}]}'></div>
+```
+```js
+const c = AC.chart('#rev', { type: 'area', labels: 'months:12', series: [{ name: 'Income', data: [...] }] });
+c.update({ series })   // or c.update(seriesArray) — redraw with new data/options (keeps hidden-legend state)
+c.push([v1, v2], 'label')   // realtime: append one point per series, keep the last `window` points
+c.set(cfg)             // replace config (resets legend state) · c.redraw() · c.destroy() · c.config
+AC.instance(el, 'chart')   // the same API for declarative charts
+```
+The element should have a height (`.ac-chart-slot`, `--sm|--lg|--square`, `.ac-stat__spark`); otherwise `height` (px, default 240) is applied. `heatmap` and `funnel` size themselves.
+
+| option | meaning |
+|---|---|
+| `type` | `line` `area` `bar` `sparkline` `donut` `pie` `gauge` `heatmap` `funnel` |
+| `series` | `[{ name, data:[…], color?, dashed? }]` or `[[…]]`; donut/pie/funnel: `[n, n, …]` |
+| `labels` | array (ISO dates are formatted with `labelFormat`, Jalali in fa) or generator `"months:12"`, `"days:7"`, `"dates:30"` |
+| `name`, `labels`, `title`, `centerLabel`, `label`, `unit` | plain text **or an i18n key** (`"dash.income"`) — translated and re-rendered on language change |
+| `color` / series `color` | `1..8` (`--ac-chart-N`), `accent success warning danger info neutral contrast` |
+| `stacked`, `horizontal` | bar variants; `values:false` hides horizontal value labels |
+| `format`, `prefix`, `suffix` | passed to `AC.format.number` (e.g. `{"currency":"USD"}`), text around values |
+| `smooth` (true), `zero`, `yMin`, `yMax`, `axis` (true), `legend` (auto), `gap`, `radius`, `window` | |
+| gauge | `value`, `min`, `max`, `thresholds:[warn, danger]` |
+| heatmap | `data:[{date, value}]`, `end`, `weeks` (53), `weekStart` (Sat in fa/ar), `levels:[a,b,c]` |
+| `animate:false` | no draw-in (also off with reduced motion) |
+
+Look (DESIGN.md): series 1 = `--ac-chart-1` (ink), series 2 = `--ac-chart-2` (orange accent); rounded bar tops; bars grow from the baseline when scrolled into view; dot legends (click toggles a series, `ac:chart:toggle`); light grid; tooltip with crosshair on hover/touch; arrow keys/Home/End inspect points when the plot is focused. RTL mirrors the x axis (time flows right→left). Theme and language changes redraw. Every chart gets `role="figure"`, an `aria-label` and a visually-hidden data table.
+
+## Data table — `data-ac="table"` / `AC.table(el, cfg)`
+
+Progressive enhancement: `<div data-ac="table" data-ac-config='{"pageSize":5}'><table>…</table></div>` reads the header/body cells (`<th data-type="number|date" data-filter="select" data-primary data-sortable="false">`, `<td data-value="…">` for sort values) and keeps the cell HTML.
+
+```js
+const t = AC.table(el, {
+  id: 'users',                 // persists hidden columns / page size / density in localStorage
+  rows, rowId: 'id', pageSize: 10, pageSizes: [10, 25, 50, 100], sort: { key: 'joined', dir: 'desc' },
+  selectable: true, bulkActions: [{ id: 'delete', label, i18n, icon, tone: 'danger' }],
+  actions: [{ id: 'edit', label, i18n, icon: 'pencil', tone, when: (row) => bool }],
+  expand: (row) => '<dl class="ac-dl">…</dl>',
+  columns: [{ key, label, i18n, type, primary, sortable, filter: 'text'|'select', options, hidden, hideable,
+              align: 'end', mobile: false, value(r), text(r), render(r), sortValue(r), csv: false|fn,
+              /* type extras */ currency, decimals, compact, dateOptions, badges: { v: { tone, label, i18n } }, sub, image, initials, color }],
+  search: true, toolbar: true, columnsMenu: true, density: true, exportable: true, pagination: true, info: true,
+  cards: true /* phone card list */, maxHeight: 480 /* sticky header inside a scroll box */, loading: false, caption, exportName, tools: '<button…>',
+});
+```
+Cell types: `badge` (dot + label), `avatar` (avatar + name + `sub`), `money`, `number`, `date` (Jalali in fa), `progress`, `html` (from markup).
+API: `setRows setColumns setLoading search filter sort page select clearSelection selected toCSV exportCSV refresh destroy`, getters `rows view state`.
+Events (bubble from the element): `ac:table:sort {sort}` `search {query}` `filter {filters}` `page {page}` `select {ids, rows}` `expand {id, open}` `action {action, id, row}` `bulk {action, ids, rows}` `export {csv, name}` (preventDefault to handle the file yourself).
+Behaviour: click header = sort, Shift+click = multi-sort (numbered); `aria-sort` on headers; the bulk bar is sticky under the app bar on desktop and a floating glass pill above the tab bar on phones; CSV is UTF-8 with BOM (Persian opens correctly in Excel) and exports the selection if any; below 640px rows render as cards (primary column + status + 2-column key/value grid) with swipe-to-reveal actions; loading skeleton and empty state with "clear filters". Row action menus use inline icon buttons; pages may put an overlay `menu` in `tools`/`render` instead.
+
+## Lists and swipe — `data-ac="list"`, `AC.swipeable(item)`
+```html
+<ul class="ac-list" data-ac="list" role="list"><li class="ac-list__item ac-swipe">
+  <div class="ac-swipe__actions"><button class="ac-swipe__btn" data-action="archive" data-tone="info"><svg…/>Archive</button></div>
+  <div class="ac-swipe__content">…avatar · .ac-list__main · .ac-list__end…</div></li></ul>
+```
+Swipe toward the inline start reveals actions (mirrored in RTL), flick velocity > 0.5 snaps, one row open at a time, Esc closes. Events `ac:swipe:open`, `ac:swipe:action {action, item}`, `ac:list:action`.
+
+## Description list, timeline
+`<dl class="ac-dl [ac-dl--cols-2]"><div><dt/><dd/></div></dl>` · `<ol class="ac-timeline"><li class="ac-timeline__item" data-tone="success"><time/><div class="ac-timeline__body"><strong/><p/></div></li></ol>` (the existing `.ac-feed` is the activity feed).
+
+## Accordion — `data-ac="accordion" [data-single]`
+`<details class="ac-accordion__item"><summary class="ac-accordion__head">Q</summary><div class="ac-accordion__body">A</div></details>`; animated height (Web Animations, off with reduced motion); `ac:accordion:toggle`; `AC.instance(el,'accordion').toggle(i, open?)`.
+
+## Tree — `data-ac="tree"` / `AC.tree(el, { items:[{ id, label, icon, meta, open, children }] })`
+ARIA tree, roving tabindex; ↑ ↓ Home End, → expand/first child, ← collapse/parent (mirrored in RTL), Enter/Space select, type-ahead. Events `ac:tree:select {id, item}`, `ac:tree:toggle`. API `setItems expandAll selected`.
+
+## Code block and JSON viewer
+`<div data-ac="code" data-lang="js|json|bash|php…" [data-lines] [data-title]><pre><code>…</code></pre></div>` — copy button (`ac:code:copy`), light highlighting, always LTR.
+`<div data-ac="json" data-ac-config='{"data":{…},"open":2}'></div>` or `AC.json(el, data, { open })` — collapsible nodes with counts, expand-all and copy. `AC.copyText(text)` → Promise<boolean>.
+
+## Log viewer — `data-ac="logview"` / `AC.logview(el, cfg)`
+```js
+const log = AC.logview(el, { lines, max: 5000, render: 500, levels: ['debug','info','warn','error'], timestamps: true });
+log.push({ ts, level, src, msg }); log.push('plain text line'); log.pause(true); log.follow(); log.filter({ levels: ['error'], q: 'timeout' }); log.clear();
+```
+Level chips with live counts (Alt+click = only this level), search with highlight, timestamps toggle, pause/resume (new lines are counted while paused), follow-tail with a "N new / Latest" jump pill when scrolled up, DOM capped to `render` lines (buffer keeps `max`). Event `ac:logview:pause {paused}`.
+
+## Testing
+- `node tests/data.mjs` — demo pages (users, analytics, dashboard): table, charts, log viewer, overflow and console errors.
+- `node tests/data-fixture.mjs` — standalone fixture `tests/fixtures/data.html` (no shell): multi-sort, CSV of a selection (UTF-8 BOM), phone swipe → `ac:table:action`, chart keyboard and `push()`, log pause/search, tree keys (RTL-aware), accordion, JSON, code.
+- Both take `--base=http://localhost:<port>`; open the fixture in a browser to see every data-display component at once.
+
+<!-- ===== docs/files.md ===== -->
+
+# Files — file, document and records manager
+
+A Finder / File Explorer-class manager as a module: `src/modules/files/` (`files.js`, `files.css`, `files-icons.js`,
+`files-adapter.js`, `files-preview.js`, `module.json`). Demo: `demo/#/files` (sample content in `demo/content/files/`,
+regenerated by `node tests/make-files-content.mjs`). Tests: `node tests/files.mjs --base=http://localhost:5178`;
+screenshots: `node tests/files-shots.mjs`.
+
+```js
+await AC.use('files');                       // or the full bundle / import { install } from 'src/modules/files/files.js'
+const fm = AC.files('#files', {
+  adapter,                                   // storage adapter (below); default: an empty in-memory adapter
+  id: 'docs',                                // persists view, sort, group, icon size, column widths, panes (ac:files:<id>)
+  view: 'icons',                             // icons | list | columns | gallery  (phones: list | icons | gallery)
+  start: 'root',                             // first location (phones default to the Browse screen '@browse')
+  favorites: ['contracts', 'finance'],       // folder ids pinned in the sidebar
+  calendar: 'auto',                          // auto (Jalali in fa) | persian | gregory
+  iconSize: 76,                              // 48–128, also the status-bar slider
+  docTypes: ['قرارداد اجاره', 'فاکتور'],     // suggestions for the "Document type" field
+});
+fm.go('@starred'); fm.open(id); fm.select([ids]); fm.setView('list'); fm.quickLook(id); fm.info(true);
+fm.upload(fileList, folderId); fm.rename(id); fm.trash(ids); fm.refresh(); fm.selection; fm.state; fm.destroy();
+```
+Declarative: `<div data-ac="files"></div>` (empty in-memory adapter). The element gets `.ac-fm`; give it a height with
+`--fm-h` (desktop/tablet). On phones it flows with the page (window scroll, sticky large title).
+
+## Storage adapter
+Every method is async (returns a Promise) and returns plain objects. Only `list` and `stat` are required; missing
+methods hide the matching UI. `AC.files.memoryAdapter(seed, opts)` is the reference implementation.
+
+| Method | Returns | Notes |
+|---|---|---|
+| `info()` | `{ root, name }` | id of the root folder |
+| `list(id)` | `Entry[]` | a folder's children, or a virtual list: `@recent`, `@starred`, `@shared`, `@trash`, `@tag:<tagId>` |
+| `stat(id)` | `Entry` | must include `path: [{ id, name }]` from the root (breadcrumbs, Get Info "Where") |
+| `read(id, { peek })` | `{ kind, url?, text?, poster? }` | `kind`: `image pdf video audio text office none`. `peek: true` must not touch "last opened" (thumbnails) |
+| `thumbnail(entry, size)` | `url \| null` | optional server rendition (PDF first page, Office render, video poster). `null` → the UI renders one |
+| `upload(folder, file, { onProgress(loaded, total), signal, isPaused(), conflict, name, url })` | `Entry` | `conflict`: `replace` (new version) \| `keep` (unique name). Honour `signal` (cancel); `isPaused` only if `capabilities.pause` |
+| `exists(folder, name)` | `id \| null` | used for conflict detection (falls back to `list`) |
+| `mkdir(folder, name)` | `Entry` | |
+| `rename(id, name)` | `Entry` | throw `{ code: 'EXIST' }` on a clash, `{ code: 'EINVAL' }` for bad names |
+| `move(ids, folder)` · `copy(ids, folder, { suffix })` | `Entry[]` | refuse moving a folder into itself |
+| `compress(ids, folder, name)` | `Entry` | |
+| `trash(ids)` · `restore(ids)` · `remove(ids)` · `emptyTrash()` | `true` | `remove` is permanent |
+| `search(query, { scope, kind, date, size, tag })` | `Entry[]` | `scope` = folder id or null (everywhere); `kind`: `folder document pdf image video audio xls zip`; `date`: `today week month year`; `size`: `small medium large` |
+| `share(id, { expires (days, 0 = never), password, permission })` | `{ url, expires, password, permission }` | |
+| `versions(id)` · `restoreVersion(id, versionId)` | `[{ id, date, size, by, current? }]` · `Entry` | |
+| `activity(id)` | `[{ action, at, by }]` | actions: upload create rename move copy trash restore share edit replace compress restoreVersion sign review view |
+| `update(id, patch)` | `Entry` | `starred tags comment doc status ocr shared color` |
+| `tag(ids, tagId, on)` | `true` | bulk tagging |
+| `tags()` · `users()` · `locations()` · `freeSpace()` | | sidebar tags `{ id, name, color, count }`, people `{ id, name, email, color }`, storage `{ id, name, icon, used, total, root? }` |
+
+`capabilities: { pause, versions, share, tags, trash, search, upload, comments }`. Names of tags, users and locations
+may be `{ fa, en, ar }`.
+
+**Entry**: `{ id, name, kind: 'file'|'folder', type, parent, size, created, modified, opened, path, count (folders),
+tags: [tagId], starred, shared: [{ user, role: 'owner'|'editor'|'commenter'|'viewer' }], comment, url, thumb, duration (s),
+dims: [w, h], glyph (folder emblem: docs money id lock scan code media images archive shared download), color (folder tint),
+doc: { type, number, date, parties, expiry, remind }, status: 'draft'|'review'|'approved'|'signed', ocr: 'done'|'pending'|'' }`.
+`type` is derived from the extension when absent (`typeOf(name)`: folder pdf doc xls ppt image video audio zip code txt unknown).
+
+A REST adapter is a thin mapping — see `demo/content/files/files-adapter.js` for a sketch.
+
+## Content previews (real thumbnails)
+Order: `adapter.thumbnail()` → client rendering from `adapter.read(id, { peek: true })`, cached per id + modified date,
+loaded lazily by one `IntersectionObserver`:
+- images — decoded and downscaled on a canvas (≤ 360 px, WebP blob URL); SVG used as is;
+- video — a frame at ~1 s drawn to a canvas, play badge + duration;
+- text / code / Markdown / CSV — the first lines rendered as a mini page (CSV as a small table);
+- audio — a waveform from `OfflineAudioContext.decodeAudioData`;
+- Office files — the server rendition when the adapter returns one, otherwise a styled first-page placeholder;
+- PDF — the server rendition, or the first page through **pdf.js as an optional plugin** (never bundled; Apache-2.0):
+  `AC.files.plugins.pdfjs = { src: '/vendor/pdf.min.mjs', worker: '/vendor/pdf.worker.min.mjs' }` (or `AC.files.pdfjs`).
+  Without either, the PDF keeps its document artwork.
+
+The large live preview (preview pane, column view preview column, gallery stage, Quick Look) shows the full image, a video /
+audio player, CSV as a table, Markdown rendered (`AC.markdown` from the `prose` module when loaded, else a built-in safe
+renderer), plain text / code in monospace, and PDFs in the browser's own viewer (`<object>`, pages scroll) with a
+first-page fallback where the browser has none.
+
+## Interface
+- **Toolbar**: sidebar toggle, back / forward (mirrored in RTL), breadcrumb (click a segment; click empty space,
+  double-click or Ctrl+L for the editable path field), view switcher, sort & group menu, share, preview pane, Get Info,
+  more menu, search (scope: this folder / everywhere; filter chips kind, date, size, tag), new folder, Upload.
+- **Sidebar**: Favorites (All Files, Recents, Starred, Shared, pinned folders), Locations with usage bars, Tags (coloured
+  dots, counts), Trash. Every entry is a drop target (drop on a tag = tag it, on Trash = trash it).
+- **Views**: icons (custom artwork per type, live thumbnails, Persian-aware middle truncation that keeps the extension,
+  icon-size slider), list (sortable + resizable columns name / date modified (Jalali in fa) / size / kind / tags / status,
+  disclosure triangles that expand folders inline), columns (Miller columns + preview column), gallery (large preview +
+  filmstrip). Group by kind / date / tags. Status bar: count, selection size, free space.
+- **Records**: approval chip (draft / under review / approved / signed), OCR badge (+ "Run OCR" placeholder), expiry badge
+  (≤ 45 days warning, expired danger) with a reminder switch; record fields (type, number, date, parties, expiry) in Get Info.
+- **Get Info** (side panel ≥ 1100 px container, drawer on tablets, sheet on phones): preview, kind, size (bytes), where,
+  created / modified in Jalali + Gregorian, dimensions / duration, record, tags editor, comments, sharing & permissions
+  (role per person), version history with restore, activity.
+- **Share dialog**: link, expiry, password switch, permission; people with access.
+- **Uploads**: floating card at the bottom inline-end: per-file progress rings, pause / resume, cancel, retry, done / error
+  states, overall bar, collapse; name clashes ask Replace / Keep Both / Skip (+ apply to all). Drop files from the desktop
+  anywhere (onto a folder to upload into it).
+
+## Keyboard & pointer
+| Keys | Action |
+|---|---|
+| arrows (spatial in icons; RTL aware), Home / End, type-ahead | move; Shift extends |
+| Enter, Ctrl+↓ | open · Space = Quick Look (Space / Esc closes, ← → page, + / − zoom) |
+| Backspace, Alt+←, Ctrl+[ · Alt+→, Ctrl+] · Ctrl+↑ | back · forward · enclosing folder |
+| F2 · Delete · Ctrl+A · Ctrl+C / X / V · Ctrl+D · Ctrl+I · Ctrl+Shift+N · Ctrl+F · Ctrl+L · Ctrl+1…4 | rename · trash (undo toast) · select all · clipboard · duplicate · info · new folder · search · path · views |
+| list view → / ← (mirrored) | expand / collapse a folder |
+Click, Ctrl/⌘-click, Shift-click, rubber-band marquee on empty space (Ctrl adds), double-click opens. Drag items onto
+folders, breadcrumbs, sidebar entries, tags or Trash (Alt/Ctrl = copy); hovering a folder for 0.8 s springs it open.
+Right-click (or long-press on tablets) opens the context menu: Open, Quick Look, Get Info, Rename, Duplicate, Compress,
+Move to ▸, Copy, Cut, Copy Link, Share…, Tags ▸, Star, Move to Trash (Trash: Put Back / Delete Immediately).
+
+## Phones and tablets
+Phones (< 640 px) get a native Files-app layout: Browse screen (favorites, locations, tags as inset grouped lists), list-first
+folders with a large title, back button with the previous location, a search bar that collapses on scroll, rows with
+date · size · tags and record chips, swipe a row to Star / Trash, long-press to enter selection mode (checkboxes, title
+"n selected", Select All / Done) with a selection bar replacing the tab bar, menus as action sheets, Quick Look full-screen
+with swipe between files and swipe-down to close. Inputs are ≥ 16 px. Tablets: two panes (sidebar + view), Get Info as a drawer.
+
+## Motion
+Items stagger in on folder change; opening a folder zooms from it (back zooms out); sorting and view switches FLIP the
+artwork to its new place (spring easing from `AC.motion` when present); selection highlights spring; the drag ghost lifts,
+tilts and shows a count badge; Quick Look zooms from the thumbnail. With reduced motion the module keeps the fades and
+drops the travel.
+
+## Events
+`ac:files:navigate {loc, entry}` · `ac:files:select {ids}` · `ac:files:open {entry}` (cancelable — default opens Quick Look) ·
+`ac:files:change {action, ids}` (trash restore delete emptytrash move copy duplicate compress rename mkdir star tag) ·
+`ac:files:upload {entry}`.
+
+## i18n
+Built-in fa / en / ar strings; any `fm.<key>` in the app dictionary overrides them (keys: see `S` at the top of `files.js`).
+
+<!-- ===== docs/finance.md ===== -->
+
+# Iranian finance kit — money, calendars, banks, bank card
+
+Files: `src/js/components/{money,date,bank,bank-card}.js` (+ calendar engine in `datepicker.js`), `src/css/components/finance.css`, `src/banks/` (metadata, logos, `SOURCES.md`). Module: `money` (+ `datepicker` for `AC.date`).
+Build output: `dist/banks.svg` (logo sprite, lazy-loaded on first use, ≈410 KB / 66 KB gzip), `dist/banks.json`, `dist/LICENSE-bank-logos.txt`.
+Demo: `#/finance` (and `#/manage`). Test: `node tests/finance.mjs [--base=http://localhost:5178]`.
+
+> **Trademarks.** Bank and card-network logos are trademarks of their respective owners and are included for identification only. Sources and licences per logo: `src/banks/SOURCES.md`.
+
+## Bidi rules (RTL pages)
+Card numbers, Sheba/IBAN and amounts are always isolated LTR inside RTL text: live amounts render `<bdi dir="ltr">number</bdi> unit` inside an element whose `dir` follows the language, so a minus sign stays next to the digits («‎-4,275,000 تومان»). The bank card itself is laid out LTR (like a physical card); Iranian cards put the logo, holder and expiry on the right.
+
+## Money — `AC.money`
+Currencies: `IRR` (ریال), `IRT` (تومان = 10 ریال; not an ISO code), `USD EUR AED GBP TRY CNY`, and `GOLD` (گرم طلا ۱۸) / `COIN` (سکه).
+```js
+AC.money.format(12500000, { currency: 'IRT' })                         // "12,500,000 تومان" (fa) · "12,500,000 Toman" (en)
+AC.money.format(125e6, { from: 'IRR', currency: 'IRT', compact: true }) // "12.5 میلیون تومان"
+AC.money.format(3e9, { currency: 'IRR', compact: true })               // "3 میلیارد ریال"  · ≥ 10¹² Toman → "2.5 همت"
+AC.money.format(1250, { currency: 'USD', lang: 'en' })                 // "$1,250"   · { digits: 'native' } → "۱۲٬۵۰۰٬۰۰۰ تومان"
+AC.money.parts(-4275000, { currency: 'IRT' })                          // { num: '-4,275,000', unit: 'تومان', pre: false, dir: 'rtl', text }
+AC.money.toWords(1200000)                                              // "یک میلیون و دویست هزار"  · { lang: 'en' } → "one million two hundred thousand"
+AC.money.words(12.5, { currency: 'USD' })                              // "دوازده دلار و پنجاه سنت"
+AC.money.convert(1000, 'IRT', 'IRR')                                   // 10000 — other pairs need AC.money.setRates({ USD: 1050000, … }) (rials per unit)
+AC.money.parse('۱۲٬۵۰۰٫۵')                                            // 12500.5
+AC.money.setUnit('IRR')                                                // page-wide display unit, persisted in ac:money-unit; event ac:money:unit
+```
+Options for `format`/`parts`: `currency`, `from` (stored currency, converted), `compact`, `display: auto|symbol|name|code|none`, `decimals`, `digits: latn|native`, `lang`, `sign`.
+Persian/Arabic put the unit name after the number; English puts `$ € £ ¥ ₺` before and `IRR`/`AED` as a code prefix.
+
+### Live amounts and the Rial/Toman switch
+```html
+<span data-ac-money="48250000000" data-currency="IRR" data-compact data-words></span>   <!-- follows the page unit -->
+<span data-ac-money="1200000" data-currency="IRT" data-to="USD"></span>                 <!-- fixed target currency -->
+<div data-ac="money-unit"></div>                                                        <!-- segmented «ریال / تومان» -->
+```
+Stored amounts in `IRR`/`IRT` follow `AC.money.unit`; switching re-renders every `[data-ac-money]` with a short number ticker (pop-in for compact values; off with reduced motion). `AC.money.html(amount, { currency, to, compact })` returns the same markup. Language and digit changes re-render too. `data-words` puts the amount in words in `title`.
+
+### Money input — `data-ac="money"`
+```html
+<div class="ac-field">
+  <label class="ac-label" for="amt">مبلغ</label>
+  <div class="ac-input-group ac-money" data-ac="money" data-name="amount" data-currency="IRT" data-currencies="IRT,IRR,USD"><input class="ac-input" id="amt"></div>
+</div>
+```
+Live thousand separators while typing (caret stays next to the same digit), Persian/Arabic digits accepted (shown in the active digit style), decimals only for currencies that have them, a unit picker when `data-currencies` lists more than one (switching Toman↔Rial converts the amount), and the amount in words under the field (`data-words="false"` to hide). Hidden inputs: `amount` (raw number) and `amount_currency`. Event `ac:money:change {value, currency, text, words}`; API `.value .currency .set(v, currency?) .clear()`.
+
+### Tables and stat tiles
+`AC.table` columns with `type: 'money'` and `currency: 'IRR'|'IRT'` (or `GOLD`/`COIN`) format through `AC.money` and follow the Rial/Toman switch; other ISO currencies keep `AC.format.number`. In KPI tiles put `<span data-ac-money=… data-compact>` in `.ac-kpi__value`.
+
+## Dates — `AC.date` and the date picker
+Calendars: `persian` (Jalali/Shamsi, default for fa), `gregory`, `islamic` (Hijri lunar, Umm al-Qura via `Intl`). Month and weekday names come from `Intl` in the active language; weeks start on Saturday for fa/ar.
+```js
+AC.date.format('2026-10-20', { calendar: 'persian', style: 'numeric', digits: 'native' }) // "۱۴۰۵/۰۷/۲۸"
+AC.date.format('2026-10-20', { style: 'long' })     // "سه‌شنبه ۲۸ مهر ۱۴۰۵"  (styles: numeric short medium long month relative)
+AC.date.format(d, { style: 'relative' })            // "۳ روز پیش"
+AC.date.parts('2024-03-11', 'islamic')              // { y: 1445, m: 9, d: 1 }
+AC.date.toDate(1405, 7, 28, 'persian')              // Date (UTC midnight) · AC.date.toISO(…) · AC.date.today()
+AC.date.convert({ y: 1403, m: 1, d: 1 }, 'persian', 'gregory') // { y: 2024, m: 3, d: 20 }
+AC.date.holidays(1405)                              // [{ iso, name, en, kind: 'solar'|'lunar' }]
+AC.date.holiday('2026-03-21')                       // { name: 'جشن نوروز', … } · AC.date.isHoliday(d) (holiday or Friday)
+AC.date.adjustHijri({ '1447-1': 1 })                // shift a Hijri month to Iran's announced date
+```
+ISO strings (`YYYY-MM-DD`) are taken literally; `Date` objects use their local Y/M/D.
+
+**Holidays.** Solar holidays (Nowruz 1–4 Farvardin, 12 and 13 Farvardin, 14–15 Khordad, 22 Bahman, 29 Esfand) are fixed Jalali dates, checked against the official 1404–1406 calendars. Lunar holidays (Tasua, Ashura, Arbaeen, 28 Safar, last day of Safar, 8 and 17 Rabi al-Awwal, 3 Jumada al-Thani, 13 and 27 Rajab, 15 Sha'ban, 21 Ramadan, Eid al-Fitr ×2, 25 Shawwal, Eid al-Adha, Ghadir) are computed from their fixed Hijri dates with Umm al-Qura. **Approximation:** Iran fixes lunar months by local moon sighting, so a lunar holiday can be one day off (e.g. Ashura 1404: Umm al-Qura 2025-07-05, official 2025-07-06). Correct known months with `AC.date.adjustHijri`. Fridays are weekend.
+
+**Date picker additions** (`data-ac="datepicker"`): the switch now offers شمسی / میلادی / قمری (`data-calendars="persian,gregory"` limits it); `data-secondary="gregory|persian|islamic|auto"` prints the equivalent day small under each day; Fridays and official holidays are red with the holiday name as tooltip/label (default on in fa; `data-holidays="true|false"`). Hidden values remain ISO Gregorian.
+
+## Banks — `AC.bank`
+```js
+AC.bank.detect('6037991234567890')     // { slug: 'melli', fa, short, en, colors: [c1, c2], accent, bins, sheba, logo, country: 'IR' }
+AC.bank.network('4111…')               // shetab | visa | mastercard | amex | unionpay | mir | jcb | discover | diners | null (Iranian BINs win)
+AC.bank.luhn(n) · AC.bank.formatCard(n, { sep: '-', mask }) // "6037-9912-3456-7890" · AC.bank.mask(n) → "6037-99••-••••-7890"
+AC.bank.sheba.valid('IR82 0540 1026 8002 0817 9090 02') · .bank(v) → parsian · .normalize(v) · .format(v)
+AC.bank.iban.valid('DE89 3704 0044 0532 0130 00') · .format(v) · .country(v) · .checksum('IR', bban)
+AC.bank.list() · .foreign() · .networks() · .get(slug)
+AC.bank.logo('melli', { mono, network, class, title })  // <svg class="ac-bank-logo"><use href="#bank-melli"/></svg>
+```
+Validation rules added to forms: `data-ac-rules="sheba"`, `"iban"`, `"card"` (Luhn, any network).
+Logos: `<svg class="ac-bank-logo [ac-bank-logo--sm|--lg]"><use href="#bank-melli"/></svg>`; `#bank-<slug>-mono` is single-colour (`currentColor`); networks are `#net-<slug>`. The sprite is fetched once (`AC.bank.load()`, next to the bundle, or `<html data-ac-banks="url">`).
+Metadata (`src/banks/banks.json`): 37 Iranian banks and credit institutions (incl. the five merged into Sepah), 9 international banks, 10 networks — slug, fa/en names, card colours, BINs, Sheba code, logo kind.
+
+## Bank card — `data-ac="bank-card"` / `AC.bankCard()`
+```html
+<div data-ac="bank-card" data-number="6037991044123459" data-holder="علی رامین" data-expiry="05/08" data-cvv="482"
+     [data-bank="hsbc"] [data-expiry-format="jalali|gregorian"] [data-masked] [data-size="sm|md|lg|fluid"] [data-flip="false"] [data-tilt="false"]></div>
+```
+```js
+const card = AC.bankCard('#card', { number, holder, expiry, cvv, bank, masked });
+card.set({ number }); card.flip(); card.mask(true); card.bank; card.network; card.flipped
+```
+ISO/IEC 7810 ID-1 proportions (85.60 × 53.98 mm, ratio 1.586, corner radius 3.18 mm scaled with container units), EMV chip, contactless mark, bank logo and name (top right for Iranian cards), embossed number in groups (Amex 4-6-5), holder, expiry (`YY/MM` in Persian digits for Iranian cards in fa), network logo; theme gradient from the detected BIN with guilloche and grain; back with magnetic stripe, signature panel and CVV2. Motion: pointer tilt with glare (mouse only, off for touch and reduced motion), light sweep on hover/focus, spring 3D flip (click, Enter/Space), crossfade of theme and logo when the bank changes, digit tick while typing. `data-frozen` greys it out. Events `ac:bank-card:flip {flipped}`, `ac:bank-card:bank {bank, network}`.
+
+### Live card form — `data-ac="card-form"`
+Put a `[data-ac="bank-card"]` and inputs `[data-card="number|holder|expiry|cvv"]` inside: the number is grouped while typing, the bank is detected from six digits (badge with logo in the field, card theme morphs), Luhn marks complete numbers, expiry gets its slash, CVV2 focus flips the card. Combine with `data-ac="card-form form"` for validation (`data-ac-rules="card"`).
+
+### Sheba input — `data-ac="sheba"`
+`<div class="ac-input-group ac-sheba" data-ac="sheba" data-name="iban"><input class="ac-input"></div>` — `IR` prefix, 24 digits grouped by 4, bank logo from the bank code, live status line (valid / invalid / bank name), hidden value `IR…` only when valid. Event `ac:sheba:change {value, valid, bank}`; API `.value .set(v)`.
+
+<!-- ===== docs/forms.md ===== -->
+
+# Forms & inputs
+
+Files: `src/css/components/form.css`, `src/css/components/datepicker.css`, `src/js/components/form-{core,input,select,file,validate}.js`, `src/js/components/datepicker.js`. Demo: `#/forms`. Test: `node tests/forms.mjs [--base=http://localhost:5178] [--shots]`.
+
+Every component initialises from `data-ac`, keeps a real form control (often hidden) as the source of truth so `FormData` works, accepts Persian/Arabic digits (normalised to Latin), and translates its own UI text (`form.*` keys; a built-in fa/en/ar table is used when the app dictionary has none).
+
+## Layout
+```html
+<form class="ac-form" data-ac="form">
+  <div class="ac-form-grid">                  <!-- 1 col on phones, 2 from 640px; --3 for three; .ac-span-full -->
+    <div class="ac-field">
+      <label class="ac-label" for="x">Name <span class="ac-label__req">*</span></label>
+      <input class="ac-input" id="x" name="name" data-ac-rules="required|min:2">
+      <p class="ac-help">Help text (hidden while an error shows)</p>
+    </div>
+  </div>
+  <div class="ac-form-actions">…buttons…</div>
+</form>
+```
+Sections: `.ac-form-section > .ac-form-section__title/__sub` (2-column on desktop). Review list: `<dl class="ac-form-summary">`.
+
+## Text inputs
+| Need | Markup |
+|---|---|
+| Plain | `<input class="ac-input">`, `<textarea class="ac-input">` (auto-grows), `<select class="ac-select">` |
+| Prefix / suffix | `<div class="ac-input-group" data-ac="input"><span class="ac-input-group__affix">…</span><input class="ac-input">…</div>`; boxed affix: `ac-input-group__affix--box` |
+| Clear button | `data-clear` on the group |
+| Counter | `data-counter` + `maxlength` on the input |
+| Floating label | group + `.ac-float`, `<label>` right after the input |
+| Password | `<div class="ac-input-group" data-ac="password" [data-strength]>`; score helper `passwordScore(v)` (0–4) |
+| Number stepper | `<div class="ac-number" data-ac="number"><input class="ac-input" type="number" min max step></div>` (press-and-hold repeats) |
+
+## Choices
+`<label class="ac-choice"><input class="ac-check|ac-radio|ac-switch" type="checkbox|radio"><span>Text<small>Hint</small></span></label>`; card style `.ac-choice--card`; groups `<fieldset class="ac-choice-group [--row]">`. Switches use `role="switch"`. `indeterminate` is styled. Checked check/radio = ink (black, white in dark); switch ON = accent.
+
+Settings-style toggle rows (icon · title + muted description · switch, hairline separators):
+```html
+<div class="ac-toggle-list">
+  <label class="ac-toggle-row">
+    <span class="ac-toggle-row__icon"><svg class="ac-icon"><use href="#i-globe"/></svg></span>
+    <span class="ac-toggle-row__text"><span class="ac-toggle-row__title">Online payments</span><span class="ac-toggle-row__desc">Shops and subscriptions</span></span>
+    <input class="ac-switch" type="checkbox" role="switch" checked>
+  </label>
+</div>
+```
+Limit block (value + accent slider + min/max scale): `<div class="ac-limit"><div class="ac-limit__head"><label class="ac-limit__label" for="x">…</label><output class="ac-limit__value" for="x"></output></div><input class="ac-range" id="x" type="range" data-ac="range"><div class="ac-range-scale"><span>min</span><span>max</span></div></div>`.
+
+## Range, rating, swatches, OTP
+- `<input class="ac-range" type="range" data-ac="range" [data-bubble] [data-prefix] [data-suffix]>`. The fill follows direction (RTL-aware). `<output for="id">` is updated automatically.
+- `<div class="ac-rating" data-ac="rating" data-name="score" data-value="3" [data-max="5"] [data-readonly]>`: arrow keys (RTL-aware), Home/End. Event `ac:rating:change {value}`.
+- `<div class="ac-swatches" data-ac="swatches" data-name="color" data-colors="#6d4aff,#2563eb" data-value="#2563eb" [data-custom]>`. Event `ac:swatches:change {value}`.
+- `<div class="ac-otp" data-ac="otp" data-length="6" data-name="otp" [data-mask]>`: auto-advance, paste fills every box, Backspace goes back, always LTR. Event `ac:otp:complete {value}`; API `.clear() .focus() .value`.
+
+## Combobox, multi-select, tags
+```html
+<div class="ac-combo" data-ac="combobox" [data-multiple] [data-loader="cities"] [data-placeholder="…"] [data-min-chars="1"]>
+  <select id="city" name="city" data-ac-rules="required"><optgroup label="…"><option value="thr" data-meta="021">Tehran</option></optgroup></select>
+</div>
+```
+Type to filter (matches are highlighted; ی/ي and ک/ك are treated as equal). Keys: ↓/↑, PageUp/PageDown, Enter, Esc, and Backspace removes the last chip. Async source:
+```js
+AC.combobox.loader('cities', async (query, { signal }) => (await fetch(`/api/cities?q=${query}`, { signal })).json()); // [{ value, label, meta? }]
+```
+Event `ac:combobox:change {value, values, option}`; API `.set(v|[v]) .clear() .open() .close() .values`.
+Tags: `<div class="ac-tags" data-ac="tags" data-name="skills" data-value="a,b" [data-max] [data-input-id]>`. Enter or comma adds, paste splits on commas and line breaks, duplicates are rejected. Hidden value is comma-joined. Event `ac:tags:change {values}`.
+
+## Date & time (Jalali + Gregorian)
+```html
+<div class="ac-input-group ac-date" data-ac="datepicker" data-name="due" [data-calendar="persian|gregory"]
+     [data-value="2024-10-19"] [data-min="…"] [data-max="…"] [data-week-start="6"]>
+  <input class="ac-input" id="due">
+</div>
+<!-- range: data-range data-name-from="from" data-name-to="to" data-value="2024-10-01,2024-10-07" -->
+```
+- Hidden inputs always carry ISO Gregorian `YYYY-MM-DD`; the text box shows `1403/07/28` in the active calendar (users can type it, with any digits).
+- Month and year views (click the title), Today, Clear, and a Jalali/Gregorian switch inside the panel. `data-min`/`data-max` are read live.
+- Keyboard: arrows (RTL-aware), Home/End = start/end of week, PageUp/PageDown = month, Shift+PageUp/PageDown = year, Enter, Esc.
+- On phones (<640px) the panel is a bottom sheet (drag to dismiss), and on touch devices the input is read-only so the keyboard does not cover it. A range shows two months on desktop.
+- Calendar maths uses `Intl.DateTimeFormat('…-u-ca-persian')`. Helpers: `AC.jalali.toJalali(date)`, `AC.jalali.toDate(y,m,d)`, `AC.jalali.monthLength(y,m)`.
+- Event `ac:datepicker:change {value, from, to, calendar, text}`; API `.set() .clear() .calendar('gregory') .open() .value .valid`.
+- Time: `<div class="ac-input-group ac-time" data-ac="timepicker" [data-step="5"]><input class="ac-input" name="at"></div>`: hour and minute wheels, value `HH:MM`, event `ac:timepicker:change`.
+
+## File dropzone
+`<div class="ac-dropzone" data-ac="dropzone" [data-max-files="5"] [data-max-size="5MB"] [data-uploader="name"]><input type="file" name="docs" multiple accept="image/*,.pdf"></div>`. You get previews, per-file progress (simulated unless `AC.dropzone.uploader('name', (file, { progress, signal }) => Promise)` is set), size errors and remove buttons; `input.files` stays in sync. Events `ac:dropzone:add|remove|done`.
+
+## Validation
+`data-ac-rules="required|email|min:3|max:10|iran-mobile|iran-national-id|match:#id"` on any control, or on a component container or fieldset (radio groups).
+Rules: `required email url numeric integer min:n max:n length:n between:a,b match:#sel iran-mobile iran-national-id iran-postal iran-card date`. `min`/`max` count characters, but use the value for `type=number`/`[data-ac=number]` and the number of items for multi-values.
+- A field validates on blur, then live on every change once touched. Errors: `.ac-field__error` (`role=alert`), `aria-invalid`, `aria-describedby`, `.ac-field[data-invalid|data-valid]`.
+- Custom message: `data-ac-msg="…"`. Custom rule: `AC.validate.add('even', (v) => v % 2 === 0, 'my.i18n.key')`.
+- Submit: invalid → focus and shake the first error, then `ac:form:invalid {errors}`. Valid → `ac:form:submit {values, formData, form, submitter, waitUntil(promise)}` (the submit button shows busy until the promise settles). Native submit instead: `data-native`.
+- API: `AC.instance(form,'form').validate(scope?) .values() .errors() .setErrors({name: msg}) .reset()`.
+
+## Wizard
+```html
+<form class="ac-wizard" data-ac="form wizard">
+  <ol class="ac-stepper"><li class="ac-step"><span class="ac-step__dot"></span><span class="ac-step__text"><strong>…</strong></span></li>…</ol>
+  <section class="ac-wizard__step">…</section>  <section class="ac-wizard__step" hidden>…</section>
+  <div class="ac-wizard__nav"><span class="ac-wizard__count" data-wizard-count></span>
+    <button class="ac-btn" type="button" data-wizard-prev>Back</button>
+    <button class="ac-btn ac-btn--primary" type="button" data-wizard-next>Next</button>
+    <button class="ac-btn ac-btn--primary" type="submit">Finish</button></div>
+</form>
+```
+Each step is validated before moving on (a step that fails is marked `data-state="error"`). Enter on an intermediate step goes to the next step. Completed steps are clickable. Direction-aware slide animation. On phones the nav bar is sticky above the tab bar. Event `ac:wizard:change {index, total}`; API `.go(i) .next() .prev() .index`.
+
+## Pop panels
+Combobox, date and time panels use the Popover API (top layer, never clipped by cards), positioned under or above their field and following scroll and resize. Without popover support they fall back to `hidden`.
+
+<!-- ===== docs/getting-started.md ===== -->
+
+# Getting started
+
+AraminConsole ships as static files in `dist/`. Nothing needs to be installed:
+
+| File | What it is |
+|---|---|
+| `aramin-console-boot.js` | Tiny classic script for `<head>`. It applies the saved theme, accent, density, and language **before first paint** (so the page never flashes the wrong theme). |
+| `aramin-console.css` / `.min.css` | The whole design system. |
+| `aramin-console.js` / `.min.js` | One ES module. It also sets `window.AC` and auto-starts components from `data-ac`. |
+| `icons.svg` | Lucide icon sprite, loaded from `<html data-ac-icons="…">`. |
+| `fonts/` | Vazirmatn variable font and its license. The CSS loads it with a relative URL, so keep `fonts/` next to the CSS. |
+
+## 1. Plain HTML
+
+```html
+<!doctype html>
+<html lang="fa" dir="rtl" data-ac-icons="aramin/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Panel</title>
+  <script src="aramin/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="aramin/aramin-console.min.css">
+  <script type="module" src="aramin/aramin-console.min.js"></script>
+</head>
+<body>
+  <main class="ac-content">
+    <section class="ac-page">
+      <header class="ac-page-head">
+        <div class="ac-page-head__titles"><h1 class="ac-page-head__title">سلام</h1></div>
+        <div class="ac-page-head__actions"><button class="ac-btn ac-btn--primary" type="button" id="hi">ذخیره</button></div>
+      </header>
+      <div class="ac-bento">
+        <article class="ac-card ac-span-4"><div class="ac-card__body">
+          <span class="ac-label">Revenue</span>
+          <div class="ac-figure"><span data-ac="counter" data-to="12840" data-prefix="$">0</span></div>
+        </div></article>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+    import { AC } from './aramin/aramin-console.min.js';
+    AC.ready(() => document.getElementById('hi').addEventListener('click', () => AC.toast({ title: 'ذخیره شد', tone: 'success' })));
+  </script>
+</body>
+</html>
+```
+
+For the full app shell (top pills, dock, rail flyout, phone tab bar), copy the `<body>` of [`demo/index.html`](../demo/index.html). The hash router in `demo/app.js` is only a demo. Use your own routing and set `aria-current="page"` on the active link.
+
+Standalone screens (sign-in, errors) use `.ac-auth` and `.ac-fullpage`. See `demo/auth/*.html` and `demo/errors/*.html`.
+
+## 2. Laravel (Blade)
+
+Copy `dist/` to `public/vendor/aramin/`, then create a layout:
+
+```blade
+{{-- resources/views/layouts/panel.blade.php --}}
+<!doctype html>
+<html lang="{{ app()->getLocale() }}" dir="{{ in_array(app()->getLocale(), ['fa', 'ar']) ? 'rtl' : 'ltr' }}"
+      data-ac-icons="{{ asset('vendor/aramin/icons.svg') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>@yield('title', 'Panel')</title>
+  <script src="{{ asset('vendor/aramin/aramin-console-boot.js') }}"></script>
+  <link rel="stylesheet" href="{{ asset('vendor/aramin/aramin-console.min.css') }}">
+  <script type="module" src="{{ asset('vendor/aramin/aramin-console.min.js') }}"></script>
+</head>
+<body>
+  <main class="ac-content">@yield('content')</main>
+  @stack('scripts')
+</body>
+</html>
+```
+
+A form with client-side validation and a normal POST (`data-native` keeps the browser submit after validation passes):
+
+```blade
+@extends('layouts.panel')
+@section('content')
+<form class="ac-form" data-ac="form" data-native method="POST" action="{{ route('users.store') }}">
+  @csrf
+  <div class="ac-field">
+    <label class="ac-label" for="mobile">موبایل</label>
+    <input class="ac-input ac-ltr" id="mobile" name="mobile" value="{{ old('mobile') }}" data-ac-rules="required|iran-mobile">
+    @error('mobile')<p class="ac-field__error" role="alert">{{ $message }}</p>@enderror
+  </div>
+  <button class="ac-btn ac-btn--primary" type="submit">ذخیره</button>
+</form>
+@endsection
+```
+
+To submit with `fetch` instead, leave out `data-native` and listen for the event:
+```js
+document.addEventListener('ac:form:submit', (e) => {
+  const token = document.querySelector('meta[name=csrf-token]').content;
+  e.detail.waitUntil(fetch(e.detail.form.action, { method: 'POST', headers: { 'X-CSRF-TOKEN': token }, body: e.detail.formData }));
+});
+```
+
+## 3. Next.js (App Router)
+
+Copy `dist/` to `public/aramin/`. Load it once in the root layout:
+
+```tsx
+// app/layout.tsx
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    // the boot script sets data-theme / dir before hydration
+    <html lang="fa" dir="rtl" data-ac-icons="/aramin/icons.svg" suppressHydrationWarning>
+      <head>
+        <script src="/aramin/aramin-console-boot.js" />
+        <link rel="stylesheet" href="/aramin/aramin-console.min.css" />
+        <script type="module" src="/aramin/aramin-console.min.js" />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+Components start from `data-ac` attributes through a MutationObserver, so JSX works as written. Call the API from client components through `window.AC`:
+
+```tsx
+'use client';
+import { useEffect, useRef } from 'react';
+declare global { interface Window { AC: any } }
+
+export function SaveButton() {
+  return <button className="ac-btn ac-btn--primary" onClick={() => window.AC?.toast({ title: 'Saved', tone: 'success' })}>Save</button>;
+}
+
+export function Plan() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current!;
+    const on = (e: Event) => console.log((e as CustomEvent).detail.value);
+    el.addEventListener('ac:segmented:change', on);
+    return () => el.removeEventListener('ac:segmented:change', on);
+  }, []);
+  return (
+    <div ref={ref} className="ac-segmented" data-ac="segmented">
+      <button type="button" className="ac-segmented__item" data-value="month" aria-checked="true">Month</button>
+      <button type="button" className="ac-segmented__item" data-value="year" aria-checked="false">Year</button>
+    </div>
+  );
+}
+```
+
+## Next steps
+- [Theming](theming.md): tokens, accents, dark mode, and density.
+- [Forms](forms.md), [Overlays](overlays.md), [Data display](data.md): every component with its markup.
+- [Conventions](CONVENTIONS.md): naming, events, and the shell structure.
+
+<!-- ===== docs/invoice-ir.md ===== -->
+
+# Iranian invoices — `invoice-ir` module
+
+Files: `src/modules/invoice-ir/{invoice-ir.js,invoice-ir.css}`. Demo: `#/invoice-official`, `#/invoice-proforma`, `#/invoice-editor`. Test: `node tests/invoice-marketing.mjs --base=http://localhost:5178` (writes A4/A5 PDFs to `tests/screens/`).
+
+Two documents from one data object:
+
+- **Official** — «صورتحساب فروش کالا و خدمات», laid out like the tax organisation's standard form used with سامانهٔ مؤدیان: title, serial, Jalali date and «شماره منحصربه‌فرد مالیاتی»; «مشخصات فروشنده» / «مشخصات خریدار» (name, national ID / شناسه ملی, کد اقتصادی, شماره ثبت, کد پستی, phone, full address); the 11 standard columns (ردیف، کد کالا، شرح، تعداد/مقدار، واحد اندازه‌گیری، مبلغ واحد، مبلغ کل، مبلغ تخفیف، مبلغ کل پس از تخفیف، جمع مالیات و عوارض ارزش افزوده، جمع کل), totals row, amount in words, شرایط و نحوه فروش (نقدی / غیرنقدی), notes, seller and buyer stamp boxes.
+- **Proforma (پیش‌فاکتور)** — brand header (logo or a generated mark), from / bill-to cards, a simpler table, totals with the amount due, bank accounts (bank logo, card number, Sheba, account no.), a QR **placeholder** (deterministic pattern, not a scannable code — render a real QR yourself and pass an image if you need one), notes, signatures and a "not an official tax invoice" line.
+
+The module does **not** submit anything to سامانهٔ مؤدیان; it renders and prints. The unique tax ID is whatever your integration returns.
+
+## API
+
+```js
+import { install } from 'aramin-console/src/modules/invoice-ir/invoice-ir.js'; // or the per-module bundle
+install(AC);                                   // automatic when window.AC exists
+
+const inv = AC.invoiceIR.render('#host', data, {
+  type: 'official',            // 'official' | 'proforma' (default: data.type)
+  unit: 'IRR',                 // display unit 'IRR' | 'IRT' (official defaults to Rial, proforma to AC.money.unit)
+  digits: 'latn',              // 'latn' | 'fa'  (defaults to AC.i18n.digits)
+  paper: 'a4l',                // 'a4' | 'a4l' | 'a5' | 'a5l' (official: a4l, proforma: a4)
+  toolbar: true,               // Rial/Toman · ۱۲۳/123 · paper · Print/PDF
+  labels: { official: '…' },   // override any label
+});
+inv.update(nextData); inv.set({ unit: 'IRT', paper: 'a5' }); inv.print(); inv.totals; inv.destroy();
+
+AC.invoiceIR.totals(data)  // → { lines:[{qty, price, gross, discount, net, vat, total}], gross, discount, net, vat, shipping, total, rate }
+
+const ed = AC.invoiceIR.editor('#form', { data, preview: inv, storageKey: 'ac:invoice-ir:draft' });
+```
+Declarative: `<div data-ac="invoice-ir" data-ac-config='{"type":"proforma","data":{…}}'></div>`.
+Events: `ac:invoice-ir:change {opts}` (toolbar) · `ac:invoice-ir:edit {data}` (editor, after each change).
+
+## Data shape
+
+```js
+{
+  type: 'official',               // or 'proforma'
+  currency: 'IRR',                // the unit amounts are stored in ('IRR' | 'IRT')
+  serial: '1405-0287', date: '2026-10-20', validUntil: '2026-10-27',   // ISO; shown as Jalali
+  taxId: 'A1F2C9D41B0000A3E7C2F1',
+  vatRate: 10,                    // percent; per line: item.vatRate, item.vatExempt
+  payment: 'cash',                // 'cash' | 'credit' | 'mixed'
+  seller: { name, brand, tagline, logo, nationalId, economicCode, regNo, postalCode, phone, address },
+  buyer:  { name, nationalId, economicCode, regNo, postalCode, phone, address },
+  items: [{ code, title, note, qty, unit, price, discount /* amount */ , discountPercent, vatRate, vatExempt }],
+  shipping: 0, shippingLabel: 'ارسال',
+  bankAccounts: [{ holder, card, sheba, account, bank /* slug, optional */ }],   // proforma
+  qr: 'https://pay.example/…', notes: '…', title: 'پیش‌فاکتور',
+}
+```
+Maths: `gross = qty × price`, `net = gross − discount`, `vat = round(net × rate / 100)` **per line**, `total = Σ(net + vat) + shipping`. Toman display divides Rial by 10 (one decimal kept when needed). Inputs accept Persian/Arabic digits and separators (`AC.invoiceIR.parseNum`).
+
+## VAT rate — keep it configurable
+
+Iran's VAT («مالیات و عوارض ارزش افزوده») is set in law and has changed over the years: 9% (6% tax + 3% duties) for several years up to 1402, and 10% from 1403 under the budget law of that year. **I could not verify the rate for 1404/1405 at the time of writing** (no web access from the build machine), so the module defaults to `10` and every invoice can set `vatRate` (and each line `vatRate` / `vatExempt` for exempt goods and services). Check the rate with the tax organisation (intamedia.ir) or your accountant for the invoice's year before issuing.
+
+## Print / PDF
+
+- `inv.print()` (or the toolbar button) calls `window.print()`; "Save as PDF" in the dialog gives the PDF. Automated: Playwright `page.emulateMedia({ media: 'print' })` + `page.pdf({ preferCSSPageSize: true, printBackground: true })`.
+- In print the shell, page head, toolbar, editor and floating widgets are hidden; the sheet prints 1:1 with no shadow.
+- `@page { size; margin }` is written by the module for the chosen paper (A4/A5, portrait/landscape).
+- `thead` repeats on every page, totals print once at the end, rows never split, and the words / terms / signatures block stays together.
+- On screen the sheet is sized in mm and scaled to fit (`--aci-zoom`); it stays white paper in dark mode.
+
+## Dependencies
+
+Uses `AC.money.words` (amount in words), `AC.date.format` (Jalali), `AC.bank` (`detect`, `sheba.bank`, `logo`, `formatCard`, `sheba.format`) when present; falls back to a built-in Persian number-to-words, `Intl` Persian calendar and plain grouping otherwise. Labels are built in for fa / en (ar uses fa); any `invoiceIR.<key>` in the app dictionary overrides them.
+
+<!-- ===== docs/maps.md ===== -->
+
+# Maps
+
+A zero-dependency slippy-map module: raster XYZ tiles in Web Mercator, markers, clustering, popups, vectors,
+heatmap, GeoJSON, draw/edit/measure, geocoder search, locate-me and a location-picker form control.
+Files: `src/modules/maps/{maps.js,maps.css}` (also part of the full bundle and of `dist/modules/maps.*`).
+Demo: `#/maps` (`demo/pages/maps.{html,js,css}`). Test: `node tests/maps.mjs --base=http://localhost:5192 [--shots]`.
+
+```js
+const m = AC.map('#map', { center: [35.6997, 51.338], zoom: 12, tiles: 'osm', controls: ['zoom', 'locate', 'fullscreen', 'scale'] });
+m.marker([35.7576, 51.41], { icon: 'store', title: 'Vanak', drop: true }).bindPopup('<b>Vanak branch</b>');
+m.flyTo([25.1972, 55.2744], 13);
+```
+```html
+<div data-ac="map" data-center="35.7,51.4" data-zoom="12" data-controls="zoom,locate,search,layers"></div>
+<div data-ac="location-picker" data-name="branch"></div>   <!-- posts branch[lat], branch[lng], branch[address] -->
+```
+
+## Engine
+- Tiles are `<img>`s in one layer per integer zoom; pan / zoom / pinch / fly only rewrite `transform` on a handful of
+  layer elements (compositor-only). Fractional zoom is a `scale()` of the nearest level; the next level fades in on top
+  and the old one is dropped when it is covered. Level switches are throttled during animations (keeps tile requests low).
+- Markers, popups and handles live in one float pane (one transform while panning; positions are recomputed only when the zoom changes).
+  Vectors share one SVG and the heatmap one canvas; both are re-rendered when the map settles and transformed in between.
+- Input: core `gesture` for pan (inertia from release velocity), two-pointer pinch around the midpoint, wheel/trackpad zoom
+  (smoothed toward a target zoom, anchored at the cursor), double-click / double-tap zoom (+Shift = out), keyboard
+  (arrows pan, `+`/`-` zoom, Esc closes popups / cancels drawing). A single map click waits ~260 ms so a double tap stays a zoom.
+- `flyTo` uses the van Wijk–Nuij zoom-out/pan/zoom-in curve. Reduced motion → instant `setView`.
+- Offline / blocked tiles: the map keeps working on a styled grid that pans and zooms with it, plus an "unavailable" notice.
+- RTL: the canvas is always LTR internally; controls sit in logical corners (`top-start`, `top-end`, …) so they mirror.
+  Coordinates are always Latin digits.
+
+## Options
+| option | default | |
+|---|---|---|
+| `center`, `zoom`, `minZoom`, `maxZoom` | Tehran, 11, 2, 19 | `center`: `[lat, lng]`, `{lat, lng}` or `"lat,lng"` |
+| `tiles` | `'osm'` | provider id, provider object, or `{ light, dark }` (switches with the theme) |
+| `muted` | `false` | desaturates the tiles so black/orange markers stand out |
+| `controls` | `zoom fullscreen locate scale` | + `search` (needs `geocoder`), `layers`, `coords`, `draw` |
+| `geocoder`, `reverse` | `null`, `false` | `reverse: true` → click shows address + decimal/DMS coordinates + copy |
+| `baseLayers` | osm, opentopomap, none | for the layer switcher: ids or `{ id, label }` |
+| `interactive`, `wheel`, `keyboard`, `inertia` | `true` | |
+
+## API
+View: `setView(c, z)`, `flyTo(c, z, {duration})`, `panTo`, `panBy(dx, dy)`, `zoomIn/zoomOut/setZoom`, `fitBounds(bounds|points, {padding, maxZoom})`,
+`getCenter/getZoom`, `bounds`, `latLngToPoint`, `pointToLatLng`, `setPadding({top,right,bottom,left})` (e.g. a bottom sheet),
+`setTiles(spec)`, `invalidateSize()`, `toggleFullscreen()`, `locate()`, `destroy()`. Controls offset via CSS `--ac-map-pad-top|bottom|start|end`.
+
+Layers (all return the layer; `layer.remove()`, `setVisible(bool)`, `bindPopup(html | (layer) => html)`, `on('click', fn)`):
+- `marker(latlng, { kind: 'pin'|'dot'|'vehicle'|'me'|'label', icon, tone: 'ink'|'accent'|'success'|…, title, label, html, draggable, drop, data, onClick })`
+  → `setLatLng`, `setHeading(deg)` (vehicles), `setTone`. Pins are black (or orange) SVG teardrops with a drop/bounce entrance.
+- `cluster(points, { radius: 64, maxZoom: 17, marker(p) → marker options, popup(p) })` — grid clustering; clusters split out of / merge into
+  their parent with a 300 ms transform animation; click zooms to the members. `setPoints(points)`.
+- `polyline(points, { tone, weight, casing, flow, dash })` (`flow` = animated dash), `polygon(rings, …)`, `circle(center, radiusMetres, …)`.
+- `heatmap([[lat, lng, weight]…], { radius })` — canvas, self-normalising, black→orange→red palette. `setPoints`.
+- `geojson(object | url, { style(feature), popup(feature, layer), point(feature, latlng), onEach })` → group (Promise for a URL).
+  Point features with `properties.radius` become circles.
+- `group(layers)`, `addOverlay(id, label, layer, { icon })` (listed in the layer switcher), `setOverlay(id, visible)`.
+- Popups: `openPopup(latlng, html|node, { offset, wide })`, `closePopup()`; auto-pan into view.
+
+Draw / edit / measure (`controls: ['draw']` or `m.enableDraw()` → `m.draw`): tools point, line, polygon, circle, measure distance,
+measure area. Line/polygon: click to add, double-click / Enter / Finish to end, click the first vertex to close, Backspace undo,
+Esc cancel. Circle: centre, then edge. Clicking a drawn shape selects it: vertex handles, mid-point handles (drag to insert),
+circle centre + radius handles; Delete removes it. `draw.start(mode)`, `cancel()`, `add(feature)`, `select(id)`, `remove(id)`,
+`clear()`, `list`, `get(id)`, `toGeoJSON()` (circles → Point + `radius`).
+
+Events (bubble from the map element): `ac:map:ready`, `moveend {center, zoom}`, `zoomend`, `click {latlng}`, `contextmenu`,
+`marker:click {marker, data}`, `marker:dragend`, `shape:click`, `popup:open|close`, `locate {latlng, accuracy}`, `locate:error`,
+`search:select {result}`, `reverse {result}`, `base:change {id}`, `overlay {id, visible}`, `draw:start|create|edit|delete|select|deselect|cancel {feature}`,
+`measure {type, value, text}`. Per-frame `move` is only on the JS bus: `m.on('move', fn)`.
+
+Static: `AC.map.providers`, `AC.map.geocoders`, `AC.map.pick(opts)` → `Promise<{lat, lng, address} | null>`,
+`AC.map.utils` (`project unproject distance pathLength area bounds formatLatLng formatDistance formatArea`), classes `Marker Path Heat Cluster Group MapView`.
+
+## Location picker
+`<div data-ac="location-picker" data-name="location" [data-center="lat,lng"] [data-zoom] [data-tiles]>` renders a summary row
+(address, coordinates, "Choose on map") and keeps hidden inputs `location[lat]`, `location[lng]`, `location[address]` (so `FormData` works).
+The button opens `AC.map.pick()` in a modal (bottom sheet on phones): a fixed centre pin that lifts while the map moves and drops with a small
+bounce, live coordinates, reverse-geocoded address, search and locate. Geocoder: `el.geocoder` or `AC.map.defaultGeocoder`.
+Event `ac:location-picker:change {lat, lng, address}`; API `AC.instance(el, 'location-picker').value / set(v) / open()`.
+
+## Tile providers and their terms (read before shipping)
+| id | Use |
+|---|---|
+| `osm` (default) | **Demo / light use only.** OpenStreetMap's tile servers are run by volunteers on donated resources. The [Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/) requires visible attribution («© OpenStreetMap contributors» linked to the copyright page — our attribution control does this and must not be hidden), a valid Referer/User-Agent, honouring cache headers, and **no heavy use, bulk downloading, prefetching or offline packs**. Access can be blocked without notice. For production traffic run your own tile server (OSM data is ODbL) or use a commercial provider. Dark theme = a CSS filter on the same tiles (no second provider). |
+| `opentopomap` | Topographic style, CC-BY-SA; same light-use spirit as OSM (fair use, attribution required). |
+| `carto-light`, `carto-dark`, `carto-voyager` | CARTO basemaps (Positron / Dark Matter / Voyager). Attribution «© OpenStreetMap contributors © CARTO». **When checked on 2026-10-20 the public URLs answered with an "API KEY REQUIRED" image**, so they need a CARTO account: register the URL your plan gives you with `AC.map.providers.register('carto-light', { url, subdomains, attribution, retina: true })` and follow CARTO's current terms (historically free only for non-commercial use under a monthly view limit; commercial use needs a CARTO licence). |
+| `none` | No tiles: the styled grid only (fully offline). |
+
+Custom / keyed providers: `AC.map.providers.register(id, { name, url, subdomains, maxZoom, retina, attribution, darkFilter, key })`.
+`url` is a template (`{z} {x} {y} {s} {r} {key}`) or a function `(z, x, y, { retina }) → url | Promise<url>`; the function form lets you
+fetch with an API-key **header** and return a blob URL (revoked when the tile is dropped). Never commit keys; load them from your backend/config.
+
+### Iranian providers (hooks, no keys included)
+Both are API-key services with their own terms and attribution; take the exact endpoints from their current documentation.
+- **Map.ir** — raster tiles and search/reverse APIs authenticate with an `x-api-key` header, so use the function form:
+  ```js
+  AC.map.providers.register('mapir', { name: 'Map.ir', maxZoom: 19, attribution: '© Map.ir © OpenStreetMap contributors',
+    url: async (z, x, y) => URL.createObjectURL(await (await fetch(MAPIR_TILE_URL(z, x, y), { headers: { 'x-api-key': KEY } })).blob()) });
+  ```
+- **Neshan** — keys are per product (map key for the web SDK/tiles, service key `Api-Key` header for search / reverse). Same pattern.
+- Geocoders: wrap their search / reverse endpoints in the geocoder interface below (`live: true` only if their terms allow search-as-you-type).
+
+## Geocoders
+Interface: `{ live?: boolean, search(text, { signal, lang, near }) → Promise<[{ label, sub, lat, lng, bbox? }]>, reverse(lat, lng, { signal, lang }) → Promise<{ label, sub } | null> }`.
+The search box debounces (300 ms) and aborts stale requests when `live` is true; with `live: false` it searches on Enter only.
+- `AC.map.geocoders.local(items | () => items)` — offline search over your own list (`{ label, sub, lat, lng, keywords }`), nearest-item reverse. Used by the demo.
+- `AC.map.geocoders.nominatim({ url, email, countrycodes, viewbox })` — OSM Nominatim. [Usage policy](https://operations.osmfoundation.org/policies/nominatim/):
+  **max 1 request/second** (the adapter enforces it), identify your app (`email`), show attribution, cache results, and **no client-side autocomplete**
+  — hence `live: false`. Heavy use → host Nominatim yourself (`url`) or use a commercial geocoder.
+
+## Mobile
+Touch targets ≥ 40 px (handles have a 40 px invisible hit area), `touch-action: none` only on the map canvas, pull-to-refresh is kept out of map drags,
+16 px search input (no iOS zoom), hover styles gated by `(hover: hover)`. The demo page shows the native-maps pattern: full-screen map under the
+floating app bar, a draggable bottom sheet (3 snap points, velocity aware) and `setPadding({ bottom })` so fly-to targets land above the sheet.
+
+## Icons
+`map map-pin map-pinned map-pin-plus locate-fixed maximize minimize layers plus minus search x spline pentagon circle-dot ruler square-dashed
+undo-2 trash-2 check copy pencil truck wifi-off` (listed in `src/icons/icons.txt`).
+
+<!-- ===== docs/marketing.md ===== -->
+
+# Marketing dashboards — `marketing` module
+
+Files: `src/modules/marketing/{marketing.js,marketing.css}`. Demo: `#/search-console`, `#/marketing` (mock data: `gscData`, `mkData`, `mkRealtime` in `demo/data.js`). Test: `node tests/invoice-marketing.mjs`.
+
+Both dashboards take a `load()` function, so the demo's mock generators can be swapped for real API calls without touching the UI. Charts and tables use the core `AC.chart` / `AC.table` (sortable, searchable, CSV, phone cards); the Search Console chart is the module's own multi-axis SVG (each metric keeps its own scale, average position is drawn inverted like Google's).
+
+## Search Console report
+
+```js
+const gsc = AC.marketing.searchConsole('#host', {
+  range: '28d',                                   // '7d' | '28d' | '3m' | '16m' (compare is off for 16m, as in GSC)
+  load: async (range, compare) => fetchGsc(range, compare),
+});
+gsc.reload(); gsc.exportCSV(); gsc.state; gsc.destroy();
+```
+UI: four toggle cards (Total clicks = accent, impressions = ink, CTR = green, position = blue; one line always stays on), chart with crosshair tooltip and ←/→ keys, tabs Queries · Pages · Countries · Devices · Search appearance · Dates (meter bar per row, deltas when comparing), index coverage (indexed vs not indexed, weekly stacked bars, reasons with source and trend), Core Web Vitals (good / needs improvement / poor stacked bars + LCP / INP / CLS chips for mobile and desktop), sitemaps, links.
+Events: `ac:marketing:range {range, compare}`, `ac:marketing:metric {key, on}`.
+
+`load()` returns:
+```js
+{
+  dates: ['2026-09-23', …],                                // one per day
+  series: { clicks: [], impressions: [], ctr: [/* % */], position: [] },
+  previous: { dates, series } | null,                     // when compare
+  totals: { clicks, impressions, ctr, position }, prevTotals: {…} | null,
+  tabs: { queries|pages|countries|devices|appearance: [{ key, clicks, impressions, ctr, position, prev?: {…} }] },
+  coverage: { indexed, notIndexed, history: [{ date, indexed, notIndexed }], reasons: [{ reason, source: 'google'|'website', pages, trend: 'up'|'down'|'flat' }] },
+  cwv: { mobile|desktop: { good, ni, poor, metrics: { lcp: [2.6, 'ni'], inp: [180, 'good'], cls: [0.08, 'good'] } } },
+  sitemaps: [{ url, type: 'index'|'sitemap'|'news', submitted, lastRead, status: 'success'|'warning'|'error', discovered }],
+  links: { external, internal, topLinked: [[path, n]], topSites: [[host, n]], topAnchors: [[text, n]] },
+}
+```
+Wiring to Google (server side, OAuth scope `webmasters.readonly`):
+- `series`: `searchanalytics.query` with `dimensions: ['date']` for the range (and the previous range when comparing); `ctr` × 100.
+- `tabs.*`: the same call with `dimensions: ['query']`, `['page']`, `['country']` (ISO alpha-3 in the API — map to alpha-2), `['device']` (`MOBILE` → `mobile`…), `['searchAppearance']`; `rowLimit` 25–1000.
+- `sitemaps`: `sitemaps.list`. `coverage`, `cwv` and `links` are not in the Search Console API: use URL Inspection API samples / your own crawl, the CrUX API (`queryRecord`, p75 values) and your link data respectively, or hide those cards.
+
+## Marketing overview (GA4-like)
+
+```js
+const ov = AC.marketing.overview('#host', {
+  range: '28d',                                    // '7d' | '28d' | '3m'
+  load: async (range) => fetchOverview(range),
+  realtime: { load: async () => fetchRealtime(), interval: 5000 },   // paused while the tab is hidden
+});
+```
+`load()` returns:
+```js
+{
+  dates: [], series: { users: [], newUsers: [], sessions: [], conversions: [] },
+  kpis: { users: [value, deltaPct], sessions, engagementRate, avgEngagement /* seconds */, conversions, revenue /* Rial */ },
+  channels: [{ key: 'organic'|'direct'|'paidSearch'|'organicSocial'|'paidSocial'|'referral'|'email'|'display', users, sessions, engagementRate, conversions, revenue }],
+  campaigns: [{ id, name, platform: 'google'|'meta', type, spend, impressions, clicks, conversions, revenue }],   // CTR, CPC, ROAS are derived
+  funnel: { labels: ['visit','search','profile','slot','booked'], values: [] },
+  landing: [{ id, path, sessions, engagementRate, conversions }],
+  social: { months: [], networks: [{ key, name, color: 1..8, data: [] }] },
+  email: [{ id, name, sent, open, ctr, unsub, date }],
+}
+// realtime.load() → { active, perMinute: [30 numbers], countries: [{ code, fa, en, users }], pages: [{ path, users }] }
+```
+Wiring: GA4 Data API `runReport` (`metrics: activeUsers, newUsers, sessions, engagementRate, userEngagementDuration, conversions|keyEvents, totalRevenue`; `dimensions: date`, `sessionDefaultChannelGroup`, `landingPage`), `runFunnelReport` for the funnel, `runRealtimeReport` (`activeUsers` by `minutesAgo`, `country`, `unifiedScreenName`) for the live card; Google Ads API (`campaign`, `metrics.cost_micros / 1e6`, clicks, impressions, conversions, conversions_value) and Meta Marketing API insights for campaigns; social and email from their platform APIs. Money is shown with `AC.money.format` in the page unit (Rial/Toman).
+
+## Blocks
+
+`AC.marketing.metricChart(el, { dates, series: [{ key, name, data, color, invert, format, short, prev, on }] })` → `update redraw destroy` · `AC.marketing.realtime(el, { load, interval })` → `tick destroy` · `AC.marketing.cwv(el, data)` · `AC.marketing.meter(value, max, tone)` → HTML.
+Labels are built in for fa / en (ar uses fa); any `mk.<key>` in the app dictionary overrides them. Numbers follow `AC.format` (Latin digits unless `AC.i18n.setDigits('native')`).
+
+<!-- ===== docs/modules.md ===== -->
+
+# Modules — include all, include some, remove one, lazy-load, write your own
+
+AraminConsole is split into **modules**. `core` is always present; everything else is optional and can be bundled up front,
+left out, or loaded on demand. The source of truth is [`src/modules.json`](../src/modules.json) plus every folder in
+`src/modules/<name>/` (discovered automatically).
+
+| Module | What it is | Depends on |
+|---|---|---|
+| `core` *(always)* | tokens, base, app-shell layout, motion, atoms (button, card, misc), **base form controls and tables** (static markup is always styled), runtime (`AC`, auto-init, i18n, theme, format, gestures, focus trap) and the `AC.use()` loader | — |
+| `shell` | rail / dock, tab bar, large title, tabs & segmented, command palette, press ripple, pull-to-refresh, ring | core |
+| `overlays` | layers & positioning, modal, sheet, drawer, menus, popover, tooltip, confirm/prompt, toast, alert, notification center | core |
+| `customizer`, `langpicker` | theme customizer drawer, language picker | overlays (+ shell) |
+| `forms`, `datepicker` | input behaviours, combobox, dropzone, validation, wizard; Jalali/Gregorian pickers | core / forms |
+| `data-display`, `table`, `chart`, `apps`, `money` | lists, tree, code/JSON/log viewers · data table · SVG charts · kanban/split + app screens · money, banks, cards | … |
+| `src/modules/*` | `pwa`, `notify`, `tickets`, `support-chat`, `chat`, `mail`, `maps`, `marketing`, `invoice-ir`, `prose`, `terminal`, `uptime`, `user-panel`, `files`, … | declared per module |
+
+`npm run build` prints the size table (raw / min / gzip) for every module; `dist/modules/modules.json` has the resolved graph and sizes.
+
+## Outputs
+| File | Use |
+|---|---|
+| `dist/aramin-console.{css,js}` (+ `.min`) | **everything** — every module's CSS and JS. Static markup of any module is styled. |
+| `dist/modules/<name>.{css,js}` (+ `.min`) | one module; its JS imports its dependencies (`./core.js`, …) only if they are not loaded yet |
+| `<out>/aramin-console.{css,js}` | a **custom build** with only the modules you chose (+ their dependencies) |
+
+All bundles share one registry (`globalThis.__AC_MODS__`): a module is evaluated once, whichever bundle brought it.
+
+## Include all
+```html
+<link rel="stylesheet" href="dist/aramin-console.min.css">
+<script type="module" src="dist/aramin-console.min.js"></script>
+```
+
+## Include some (custom build)
+```bash
+node scripts/build.mjs --modules=forms,table,chart --out=dist/custom        # core + forms + table (+ data-display) + chart
+```
+or put an `aramin.config.json` in your project and run the package's build from there:
+```json
+{ "modules": ["shell", "overlays", "forms", "table"], "out": "public/aramin", "name": "aramin-console", "modulesBase": "/aramin/modules/" }
+```
+```bash
+node node_modules/aramin-console/scripts/build.mjs            # reads ./aramin.config.json
+node node_modules/aramin-console/scripts/build.mjs --config=path/to/aramin.config.json
+```
+Builds outside the package copy `fonts/` and `icons.svg` next to the bundle. `modulesBase` tells `AC.use()` where the
+per-module files are served from (copy `dist/modules/` there if you lazy-load). The demo itself is a custom build:
+[`demo/aramin.config.json`](../demo/aramin.config.json).
+
+## Remove one
+* **Full bundle:** set `"bundle": false` in `src/modules/<name>/module.json` (or in `src/modules.json`) and rebuild.
+* **Custom build:** just don't list it.
+* A whole `src/modules/<name>` folder can be deleted — the manifest picks that up (run `--sync-manifest` to tidy `src/modules.json`).
+Dependants are reported at build time (`module x imports from "y" — add it to its dependencies`).
+
+## Lazy-load
+```js
+await AC.use('maps');                    // JS + CSS of maps and its dependencies, once; CSS is awaited (no flash)
+const [chart, table] = await AC.use('chart', 'table');
+AC.use.preload('marketing');             // <link rel="modulepreload"> (e.g. on hover of a link)
+AC.use.loaded('maps') · AC.use.list() · AC.use.base = 'https://cdn.example/aramin/dist/modules/'
+```
+Module CSS is inserted right after the framework stylesheet (`link[data-ac-css]`), so app / page stylesheets after it still win.
+A `.min` bundle lazy-loads `.min` modules. The page router of the demo does this per page:
+the build writes a page → modules map (from `data-ac`, `data-ac-*`, owned block classes and `AC.<api>` used by the page script),
+and a fragment can add `data-modules="maps marketing"`. Event: `ac:module:load {name}`.
+
+**Measured on the demo dashboard** (cold load, gzip): before (full bundle) JS 333 KB + CSS 110 KB → after (shell build + lazy
+`chart`) JS 117 KB + CSS 44 KB.
+
+## Write a module
+`src/modules/<name>/<name>.js` (+ `<name>.css`, optional `module.json`). Contract — see [`src/modules/README.md`](../src/modules/README.md):
+```js
+export function install(AC) {
+  if (!AC || AC.hello) return AC?.hello;
+  AC.hello = (el, cfg) => { /* … */ };
+  AC.register?.('hello', (el) => { /* init */ return () => { /* destroy */ }; });
+  return AC.hello;
+}
+if (typeof window !== 'undefined' && window.AC) install(window.AC);
+```
+```json
+// src/modules/hello/module.json (optional)
+{ "description": "What it does", "dependencies": ["overlays"], "bundle": true }
+```
+* No `import` of core files — use the `AC` you are given (works bundled, per-module and straight from `src/`).
+* Inject your stylesheet once with `<link data-ac-module="hello">` from `new URL('./hello.css', import.meta.url)`; bundles mark
+  their own CSS as present, and the bundler points `import.meta.url` at `dist/modules/` so the URL always exists.
+* Bundler syntax: `import {a} from './x.js'`, `export function|const|class`, `export {…}`, `export … from`. No default exports.
+* Run `npm run build` — the module appears in the size table, in `dist/modules/`, in the full bundle and in `AC.use()`.
+
+## Build safety nets
+* `node tests/build.mjs` — the minifier keeps strings / regexes / templates / ASI (tricky fixture is evaluated before and after),
+  every emitted bundle parses, and a custom build evaluates with exactly the chosen modules.
+* The build fails when any file referenced from `demo/` (HTML `src`/`href`, JS imports, CSS `url()`, SW precache list,
+  manifest icons) is missing.
+
+<!-- ===== docs/motion.md ===== -->
+
+# Motion system
+
+Files: `src/css/tokens.css` (motion tokens), `src/css/motion.css` (system + micro-interactions, built **last** so it refines every component), `src/js/motion.js` (`AC.motion`). Bar: Emil Kowalski / Linear / Vercel — fast, purposeful, interruptible.
+
+## Rules of the house
+- Animate only `transform`, `opacity`, `filter`, `clip-path`. Colour changes use `--ac-ease-hover`.
+- Entering / exiting → ease-out curves. Moving on screen → ease-in-out or a spring. **Never ease-in.**
+- Exits are faster than entrances (`--ac-dur-exit`). UI stays under 300 ms; sheets ride the drawer curve (~420 ms).
+- Press feedback on `:active` at once (100 ms in, spring back out). Hover *motion* only under `(hover: hover) and (pointer: fine)`.
+- Keyboard-driven changes are instant (highlight moves, palette rows): things used 100×/day must not wait for animation.
+- Popovers scale from their trigger (`--ac-origin`, set by position.js); modals scale from the centre.
+
+## Tokens
+| Token | Value | Use |
+|---|---|---|
+| `--ac-ease` | `cubic-bezier(.23,1,.32,1)` | default UI ease-out |
+| `--ac-ease-out` | `cubic-bezier(.19,1,.22,1)` | expo-out: reveals, lifts, stagger |
+| `--ac-ease-in-out` | `cubic-bezier(.77,0,.175,1)` | on-screen movement, chart line draw |
+| `--ac-ease-move` | `cubic-bezier(.25,1,.5,1)` | slides / panels |
+| `--ac-ease-drawer` | `cubic-bezier(.32,.72,0,1)` | sheets, drawers (iOS / Vaul) |
+| `--ac-spring` + `--ac-spring-dur` | `linear(…)` 400 ms | real spring k=520 c=34 (2.9 % overshoot) sampled into `linear()` — pills, thumbs, cards |
+| `--ac-spring-bounce` + `-dur` | `linear(…)` 700 ms | k=380 c=20 (15 %) — icons, checks, badges (rare, playful) |
+| `--ac-dur-0…4`, `--ac-dur-sheet`, `--ac-dur-exit` | 100 / 140 / 180 / 240 / 300 / 420 / 140 ms | |
+| `--ac-stagger` | 45 ms | sibling entrance step (capped at 7 steps) |
+| `--ac-press`, `--ac-press-sm`, `--ac-lift` | `scale(.97)`, `scale(.92)`, `translateY(-4px)` | |
+| `--ac-dir` | `1` / `-1` | inline direction multiplier for `translateX` (see rtl.md) |
+| `--ac-travel` | `1` / `0` | distance factor; `0` under reduced motion |
+
+## `AC.motion` (JS)
+```js
+AC.motion.spring(el, { x: 120, scale: [0.9, 1], opacity: 1 }, { stiffness, damping, mass }) // WAAPI, interruptible, keeps velocity
+AC.motion.springValue(0, 100, { onUpdate: (v) => … })      // rAF spring for anything that is not a transform
+AC.motion.slide(indicator, { x, w, y?, h? }, { instant, also: [layer] }) // indicator geometry; leading edge stiffer → stretch
+AC.motion.inkLayer(container, '.item')                     // Emil's duplicate-and-clip: label colour flips exactly under the pill
+AC.motion.track(container, { active: '[data-active]' })     // ink pill that springs to the active child (dock uses it)
+AC.motion.highlight(list, { items: '.row' })               // sliding hover highlight for a custom list
+AC.motion.followSelection(list)                            // one indicator follows the aria-selected row (palette)
+AC.motion.flip(targets, () => mutate())                    // FLIP layout transition
+AC.motion.stagger(els, keyframes, { step: 45 }) · enter(els)
+AC.motion.countUp(el, 1234, { format }) · bump(badge) · reveal(contentThatReplacedASkeleton)
+AC.motion.transition(update, { kind: 'page'|'lang'|'theme', direction })   // View Transitions
+AC.motion.navigate(update, { from, to })                   // page transition; direction from nav order
+AC.motion.springEasing(springs.gentle) → { easing: 'linear(…)', duration }
+AC.motion.preference = 'system' | 'full' | 'reduced'       // persisted (ac:motion)
+```
+Declarative: `data-ac="bump"` (count bumps when its text changes; shell badges get it automatically), `data-ac="motion-pref"` (System / Full / Reduced segmented control for settings pages), `data-ac="counter"` (count-up).
+
+## What moves where
+- **Navigation**: top nav, segmented, pill tabs, tab bar and dock share one spring indicator with stretch + ink layer. Route changes mark the target link *before* fetching, so the pill answers the click at once. Only `.ac-content` is captured by the page View Transition (`:root` is excluded) — the chrome stays live and keeps animating. Pages slide toward the direction of travel in the nav (mirrored in RTL) with a 2 px blur bridge.
+- **Lists**: menus, rail flyout, language picker get a sliding hover highlight (instant on keyboard); the command palette has one indicator for hover + arrow keys.
+- **Overlays**: dropdown/popover scale .95 → 1 from the trigger in 180 ms, exit in 140 ms; tooltips delay 450 ms, then neighbours open instantly with no animation; modals scale from centre; sheets/drawers use the drawer curve; menus on phones become action sheets.
+- **Controls**: buttons press .97 and spring back; loading morphs (label blurs out, spinner pops in); switch thumb springs with squash; checkbox check is drawn (clip reveal); radio dot bounces; focus ring grows; float labels glide.
+- **Data**: KPI count-ups; bars grow from the baseline column by column (`--i`, `--_base`) with a spring; lines draw (`stroke-dashoffset`); donut sweeps; hover dims other columns; tooltip follows on a spring (transform only); legend hover spotlights a series; legend toggle and `update()` morph paths (CSS `d`) instead of jumping; bulk bar springs in.
+- **Shell**: staggered card entrance; card hover lift; language switch = whole-document blur crossfade; theme switch = circular reveal from the pressed control; badges bump; tab icon pops.
+
+## Reduced motion — a preference, not a kill switch
+`<html data-motion="full|reduced">` is resolved pre-paint by `boot.js` from `ac:motion` (`system` follows `prefers-reduced-motion`). Windows with "Animation effects" off makes every browser report *reduce* — users who still want the full experience pick **Full** in the customizer («حرکت و انیمیشن») or a settings page (`data-ac="motion-pref"`).
+
+Reduced keeps fades, colour, blur crossfades, count-ups, chart reveals and page/language crossfades; it drops travel (every keyframe multiplies its distance by `--ac-travel`), springs (JS jumps to the end state), transform transitions (`transition-property` is limited to non-spatial properties) and decorative loops (shimmer, pulse). `data-motion="off"` still turns everything off. In JS, `AC.reducedMotion()` means "skip spatial motion", not "skip all feedback".
+
+## Verifying motion
+Slow it down: CDP `Animation.setPlaybackRate` (0.1–0.25) for CSS/WAAPI, and `AC.motion.timeScale` for rAF springs; capture frames at fixed animation times. Test both `page.emulateMedia({ reducedMotion: 'reduce' })` with preference `system` and `full`. rAF springs are measured in-page (screenshots stall frames).
+
+<!-- ===== docs/notifications.md ===== -->
+
+# Notifications — `AC.notify`
+
+Module `notify` (`src/modules/notify/`). Builds on the existing `AC.toast` and `AC.notifications` (docs/overlays.md — unchanged).
+Live playground: `demo/#/notify-lab`. Tests: `node tests/notify.mjs --base=…`.
+
+```js
+AC.notify('Saved');                                          // toast
+AC.notify({
+  variant: 'toast' | 'card' | 'banner' | 'inline' | 'snackbar' | 'progress' | 'island' | 'system' | 'center',
+  title, text, tone: 'neutral|accent|success|warning|danger|info', icon, avatar: 'ع‌ر' | { src }, image, meta,
+  actions: [{ label, primary, keep, onClick(handle) }],
+  position: 'top-start|top-center|top-end|bottom-start|bottom-center|bottom-end',   // logical: start = right in RTL
+  duration: 6000 /* 0 = sticky */, priority: 'low|normal|high|urgent', group: 'chat:42',
+  sound: true, haptic: true, swipe: 'x' | 'y', target /* inline */, onUndo /* snackbar */, onClose(reason), href, id,
+  event: 'mention',                                           // route through the user's preferences instead of a fixed variant
+});
+// → { id, el, variant, close(reason), update(patch) }   progress: update({ progress: .4 }), done(text), fail(text)
+AC.notify.toast|card|banner|inline|snackbar|progress|island|system|center(opts) · AC.notify.clear(variant?)
+```
+Text fields accept `{ fa, en, ar }`. Mixed-script lines take the direction of their first strong letter.
+
+## Variants
+| Variant | Behaviour |
+|---|---|
+| `toast` | `AC.toast` (Sonner-like stack). `group` collapses repeats into one toast with a count. |
+| `card` | rich card — avatar or icon, title + meta, body, image, actions; stacked per position, newest at the edge, **max visible** (prefs, default 3) with a "+N more" control that expands the stack; hover/focus pauses the timer; swipe to dismiss (`x` or `y`). |
+| `progress` | card with a progress bar; `update({ progress })`, `done()` turns it green and auto-closes, `fail()`. |
+| `banner` | full-width top bar (tone colours), one at a time, queued; `urgent` jumps the queue; pushes top stacks down. |
+| `snackbar` | inverse pill at the bottom with countdown ring and **Undo** (`onUndo`; `onCommit` when it expires). One at a time. |
+| `island` | "dynamic island" — black pill at the top centre; tap / hover / `expand: true` springs it open (text, progress, actions); `update({ badge, progress })` while it lives. |
+| `inline` | `.ac-alert` rendered inside `target` (dismissible). |
+| `system` | Notification API (through the service worker when present, so it works with actions); falls back to a toast without permission. |
+| `center` | adds to the notification center (`AC.notifications.add`). |
+
+## Preferences — per user, per event type
+```js
+AC.notify.events.define({ id: 'deploy', label: { fa: 'استقرار', en: 'Deploys' }, icon: 'rocket',
+  defaults: { inapp: 'island', center: true, system: false, sound: false } });
+AC.notify({ event: 'deploy', title: 'v2.4 is live' });       // in-app variant + inbox + system (when the tab is hidden) + sound
+AC.notify.prefs() · AC.notify.setPrefs({ position, sound, haptic, quiet, max, swipe, events: { deploy: { system: true } } })
+<div data-ac="notify-prefs"></div>                          // settings card: global switches, position picker, push, matrix
+```
+Built-in event types: `mention`, `order`, `invoice`, `security`, `system`, `marketing`. **Do not disturb** (`quiet`) silences routed
+notifications except `urgent`; direct calls (an undo snackbar after the user's own action) are never silenced. Preferences live in
+`localStorage['ac:notify']`; event `ac:notify:prefs`.
+
+**Sound** is synthesized (WebAudio, no asset) and off by default; **haptics** use `navigator.vibrate` with a pattern per priority.
+
+## Web Push
+```js
+await AC.notify.permission();                                 // 'granted' | 'denied' | 'default' | 'unsupported'
+await AC.notify.push.subscribe({ vapidKey: 'B…', endpoint: '/api/push/subscribe' });   // POSTs the PushSubscription JSON
+await AC.notify.push.unsubscribe({ endpoint: '/api/push/subscribe' });                  // DELETE { endpoint }
+await AC.notify.push.state();                                 // 'subscribed' | 'simulated' | 'off' | 'blocked' | 'unsupported'
+AC.notify.push.simulate({ title, body, url, tone });          // demo: runs the SW push handler (or an in-page card)
+```
+The settings card takes `data-vapid-key` / `data-endpoint`; without a key it uses **demo mode** (simulated push).
+The service worker (`demo/sw.js`) shows the notification on `push`, echoes it to open pages (`{type:'PUSH'}` → added to the inbox)
+and on `notificationclick` focuses or opens the app at `data.url`.
+
+**Server setup (VAPID)** — keys are never committed:
+```bash
+npx web-push generate-vapid-keys            # once; keep the private key in your secret store
+```
+```php
+// PHP (minishlink/web-push): send to a stored subscription
+$push = new Minishlink\WebPush\WebPush(['VAPID' => ['subject' => 'mailto:ops@example.com',
+  'publicKey' => getenv('VAPID_PUBLIC'), 'privateKey' => getenv('VAPID_PRIVATE')]]);
+$push->sendOneNotification(Minishlink\WebPush\Subscription::create($subscriptionArray),
+  json_encode(['title' => 'Invoice paid', 'body' => '#1204 · 4,800,000 IRR', 'url' => '/#/finance', 'tag' => 'invoice']));
+```
+```js
+// Node (web-push)
+webpush.setVapidDetails('mailto:ops@example.com', process.env.VAPID_PUBLIC, process.env.VAPID_PRIVATE);
+await webpush.sendNotification(subscription, JSON.stringify({ title: 'Invoice paid', body: '#1204', url: '/#/finance' }));
+```
+Payload fields the worker understands: `title, body, icon, image, url, tag|group, priority ('urgent' → requireInteraction), actions[{action,title}]`.
+
+## Events
+`ac:notify:show {variant,id}` · `ac:notify:close {variant,id,reason}` · `ac:notify:action {id,label}` · `ac:notify:prefs` ·
+`ac:notify:click` (system / push notification clicked) · `ac:notify:push-state {state}`.
+
+## Accessibility & motion
+Cards / banners / snackbars are `role="status"` (danger / urgent: `alert`) inside `aria-live` regions; every close button is labelled;
+the island is keyboard-operable (Enter / Space toggles, Esc closes); timers pause on hover and focus; reduced motion removes
+movement and timers' visual bars.
+
+<!-- ===== docs/overlays.md ===== -->
+
+# Overlays & feedback
+
+Modal, bottom sheet, drawer, dropdown / context menu / action sheet, popover, tooltip, confirm & prompt,
+toast, alert / banner, notification center and the theme customizer.
+Files: `src/js/components/{position,sheet,modal,drawer,menu,popover,tooltip,toast,confirm,alert,notifications,customizer}.js`,
+`src/css/components/{overlay,feedback}.css`. Live demo: `demo/#/overlays`, `demo/#/notifications`. Tests: `node tests/overlays.mjs --base=http://localhost:5178`.
+
+Visual language (docs/DESIGN.md): white `--ac-elevated` surfaces, `--ac-r-2xl` radius, hairline `--ac-border`, one soft large shadow,
+black pill primary (`.ac-btn--primary`) and gray pill secondary in footers. Tokens only — dark mode is a token swap.
+
+## Shared behaviour
+- Every layer is portaled to `<body>` while open and put back afterwards, so it escapes transformed / clipped parents.
+  Closed layers are `display: none` (`data-state="closed"`); during the exit animation `data-state="closing"`.
+- One layer stack (`AC.layers`): **Esc** and **outside click** go to the top-most layer only. Navigation (`hashchange`) closes all.
+- Dialog layers (modal / sheet / drawer / confirm): `role="dialog"` + `aria-modal="true"`, labelled by `.ac-dialog__title`
+  and described by `.ac-dialog__text`; focus trap (`AC.trapFocus`); focus returns to the trigger; `AC.scrollLock` (ref-counted).
+- Generic triggers: `[data-ac-open="#id"]` opens/toggles any modal, sheet, drawer, dropdown or popover; `[data-ac-close]` inside closes
+  (its value becomes the close `reason`).
+- Reduced motion: CSS durations are globally zeroed; JS timers skip animation when `AC.reducedMotion()`.
+
+## Dialog markup (modal / sheet / drawer share it)
+```html
+<button class="ac-btn" data-ac-open="#new-ws">New workspace</button>
+<div class="ac-modal" id="new-ws" data-ac="modal" data-size="md" data-initial="#ws-name">
+  <div class="ac-dialog">
+    <div class="ac-dialog__head">
+      <div class="ac-dialog__titles"><h2 class="ac-dialog__title">Create workspace</h2><p class="ac-dialog__sub">…</p></div>
+      <button class="ac-dialog__close" data-ac-close aria-label="Close"><svg class="ac-icon"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="ac-dialog__body">…</div>
+    <div class="ac-dialog__foot">
+      <button class="ac-btn" data-ac-close>Cancel</button>
+      <button class="ac-btn ac-btn--primary" data-ac-close="save">Create</button>
+    </div>
+  </div>
+</div>
+```
+| Attribute | Applies to | Meaning |
+|---|---|---|
+| `data-size="sm\|md\|lg\|xl\|full"` | modal | width 26 / 32 / 48 / 64 rem / full |
+| `data-size="sm\|lg"`, `data-side="start\|end"` | drawer | 22 / 36 rem; logical side (RTL-aware) |
+| `data-snap="0.5,0.92"`, `data-snap-start="0"` | sheet | snap points as viewport fractions |
+| `data-static` | all | Esc / backdrop do not close; the panel "bumps" instead |
+| `data-initial="#sel"` | all | element focused on open (else `[autofocus]`, else the panel) |
+
+**Phones (<640px):** a modal presents as a bottom sheet automatically (grab handle, drag-to-dismiss, safe-area padding).
+Sheets: drag the handle/head (or anywhere when the inner scroller is at the top) — rubber-band above the top snap,
+velocity flick (`|vy| > 0.5 px/ms`) goes to the next snap or dismisses, a resting release snaps to the nearest point,
+the backdrop fades with the drag below the lowest snap. Drawers dismiss by swiping toward their edge.
+
+API: `AC.modal.open('#id' | el | { title, sub, content, footer, size, static, initial })`, `AC.modal.close([target])`,
+same for `AC.sheet` (`snap`) and `AC.drawer` (`side`). Object form builds an ephemeral layer removed after close.
+`AC.instance(el, 'modal')` → `{ open, close, toggle, bump, snapTo, isOpen }`.
+Events: `ac:<kind>:open {trigger}`, `ac:<kind>:beforeclose {reason}` (cancelable), `ac:<kind>:close {reason}`, `ac:<kind>:closed`, `ac:sheet:snap {index, value}`.
+
+## Confirm & prompt
+```js
+if (await AC.confirm({ tone: 'danger', title: 'Delete project?', text: '…', confirmText: 'Delete' })) …
+const name = await AC.prompt({ title: 'Rename', label: 'New name', value: 'a.pdf', required: true,
+  validate: (v) => v.endsWith('.pdf') || 'Must end with .pdf' });   // string | null
+```
+Tone `danger|warning|success|info|accent` sets the icon and (danger) the red confirm button; danger dialogs focus *Cancel*.
+`role="alertdialog"`; centred on desktop, sheet on phones.
+
+## Menus
+```html
+<button class="ac-btn" data-ac-open="#m">Actions</button>
+<div class="ac-menu" id="m" data-ac="dropdown" data-placement="bottom-end" aria-label="Actions">
+  <div class="ac-menu__label">Edit</div>
+  <button class="ac-menu__item" data-value="dup"><svg class="ac-icon">…</svg><span class="ac-menu__text">Duplicate</span><kbd class="ac-menu__kbd">Ctrl D</kbd></button>
+  <div class="ac-menu__sub"><button class="ac-menu__item"><span class="ac-menu__text">Share</span></button><div class="ac-menu">…</div></div>
+  <div class="ac-menu__sep"></div>
+  <button class="ac-menu__item" role="menuitemcheckbox" aria-checked="true">Show grid</button>
+  <div role="group"><button class="ac-menu__item" role="menuitemradio" aria-checked="true">Newest</button>…</div>
+  <button class="ac-menu__item" data-tone="danger">Delete</button>
+</div>
+<div data-ac-contextmenu="#m" tabindex="0">right-click / long-press here</div>
+```
+Keyboard: ↑ ↓ Home End, type-ahead, Enter/Space, → / ← (mirrored in RTL) for submenus, Esc, Tab closes. Roving tabindex,
+`aria-haspopup` / `aria-expanded` on triggers. Checkbox / radio items keep the menu open (`data-keep` does it for any item).
+Context menus: right click, the ContextMenu key / Shift+F10, or a 480 ms long-press on touch (with haptic).
+**Phones:** every top-level menu becomes an action sheet with a Cancel button; submenus expand inline.
+Imperative: `AC.menu(anchor | {x,y} | event, items, { placement, keyboard })` with
+`items = [{ label, icon, shortcut, tone, disabled, value, checked, radio:'group', keep, onSelect(item), items:[…] }, '-', { heading }]`;
+`AC.menu.open('#m', anchorOrEvent)`, `AC.menu.close()`, `AC.menu.context(el, items)`.
+Event: `ac:menu:select { item, value, checked }`.
+
+## Popover, tooltip, positioning
+```html
+<button data-ac-open="#invite">Invite</button>
+<div class="ac-popover" id="invite" data-ac="popover" data-placement="bottom-start" aria-label="Invite">…</div>
+<button data-ac-tooltip="Copy link" data-ac-tooltip-kbd="Ctrl C" data-ac-tooltip-placement="top" aria-label="Copy">…</button>
+```
+Popovers are non-modal: light dismiss (outside click, Esc, focus leaving), focus returns to the trigger.
+`AC.popover.open|close|toggle(target, anchor)`, `AC.popover.show(anchor, { content, placement })`.
+Tooltips: mouse hover after 450 ms (instant while "warm"), keyboard focus (`:focus-visible`), never on touch; one shared
+`role="tooltip"` linked with `aria-describedby`; Esc hides.
+
+`AC.position(anchor, panel, { placement:'bottom-start', offset, padding, flip, shift })` — placement `<side>-<align>`,
+side `top|bottom|start|end|left|right`, align `start|center|end`; logical values follow `dir`. Flips to the side with room,
+shifts inside the viewport, writes `--ac-x/--ac-y/--ac-origin/--ac-avail-h` and `data-side`. `AC.autoPosition()` keeps it
+in place on scroll / resize and returns `stop()`.
+
+## Toasts
+```js
+AC.toast({ title: 'Saved', text: 'All changes synced', tone: 'success', duration: 4500, position: 'bottom-end',
+           action: { label: 'View', onClick(t) {} } });
+AC.toast.success|error|warning|info(title, text?, opts?)
+AC.toast.undo('3 messages archived', () => restore());
+AC.toast.promise(fetch(…), { loading: 'Saving…', success: 'Saved', error: (e) => e.message });
+AC.toast.dismiss(id?)   // returns of AC.toast(): { id, el, close(), update(patch) }
+```
+Stacked (newest in front, the rest peek behind), expand on hover / focus / tap, timers pause while expanded or the tab is hidden,
+progress bar, swipe sideways to dismiss (velocity aware), max 5. Container: `#ac-toasts` (else created);
+`position` creates per-position containers. On phones toasts sit at the top. Events `ac:toast:open`, `ac:toast:close {reason}`.
+
+## Alerts / banners
+```html
+<div class="ac-alert" data-tone="warning" data-ac="alert" data-persist="storage-80" role="status">
+  <svg class="ac-icon ac-alert__icon"><use href="#i-triangle-alert"/></svg>
+  <div class="ac-alert__body"><div class="ac-alert__title">…</div><div class="ac-alert__text">…</div><div class="ac-alert__actions">…</div></div>
+  <button class="ac-alert__close" data-ac-close aria-label="Dismiss">…</button>
+</div>
+```
+Variants `.ac-alert--solid`, `--outline`, `--banner`. `data-ac="alert"` makes it dismissible (animated collapse);
+`data-persist` remembers the dismissal (`AC.alertReset(key)`). Event `ac:alert:close` (cancelable).
+
+## Notification center
+Shell wiring: put **`data-ac-notifications-open`** on the bell (button or link — a plain click opens the panel, Ctrl/⌘-click
+follows the link) and **`data-ac-notifications-src="pages/notifications.json"`** on it (or call `AC.notifications.set(list)`).
+A `.ac-appbar__count` inside the bell, or any `[data-ac-notifications-count]`, shows the unread count (hidden at 0).
+Desktop: anchored panel (tabs All/Unread, grouped Today/Earlier, mark all read, "view all" link). Phones: full-height sheet.
+Page view: `<div data-ac="notifications" data-mode="page" data-src="…json"></div>` (adds Mentions/System tabs and a per-row menu
+with mark read/unread and remove + undo toast).
+Item: `{ id, title, text, time | ago (minutes), icon, tone, avatar, color, kind, read, href }` — `title`/`text`/`avatar` may be `{ fa, en, ar }`.
+API: `AC.notifications.set|add(item, {toast})|markRead(id, read)|markAllRead()|remove(id)|load(url)|open(anchor)|close()|toggle()`, `.list`, `.unread`.
+Events: `ac:notifications:change { unread }`, `ac:notifications:select { item }`.
+
+## Theme customizer
+Any **`data-ac-customizer-open`** element opens the drawer (end side): theme light / dark / system with previews, accent swatches
+(`AC.theme.accents`), density, radius, language & direction (fa / en / ar), digits (Latin / Persian), reset. It writes through
+`AC.theme.set`, `AC.i18n.set`, `AC.i18n.setDigits`, stays in sync with changes made elsewhere, and registers the palette
+command `customizer:open`. API: `AC.customizer.open|close|toggle()`.
+
+## i18n keys
+`overlay.*` (framework strings: close, cancel, confirm, delete, undo, …), `notif.*`, `custom.*`; the demo page uses `ov.*`.
+
+<!-- ===== docs/prose.md ===== -->
+
+# Prose & Markdown
+
+Module: `src/modules/prose/` (`prose.js`, `markdown.js`, `prose.css`). It ships in the full bundle and as `dist/modules/prose.{js,css}` for `AC.use('prose')`. It depends on `data-display` (code blocks reuse the code component). Demo: `#/article`, `#/docs` (this page), `#/blog`, `#/editor`. Tests: `node tests/prose.mjs` (no browser needed).
+
+## Markdown → safe HTML
+
+```js
+const html = AC.markdown('# Hello **world**');              // string
+const { html, headings, words } = AC.markdown.render(text, { lang: 'fa' });
+```
+
+```php
+<?php
+// Server side: render with your PHP library, then put the result inside the same class.
+echo '<div class="ac-prose">' . $html . '</div>';
+```
+
+Supported: ATX and setext headings, paragraphs, hard breaks, `**strong**`, `*em*`, `~~strike~~`, `` `code` ``, fenced and indented code, block quotes, nested bullet / ordered / task lists, GFM tables with alignment, `---`, inline / reference / auto links, bare `https://` and `www.` links, images (an image alone in a paragraph becomes a `<figure>` with a caption), footnotes `[^1]`, callouts and containers:
+
+```md
+> [!NOTE]            note · tip · important · warning · caution · danger
+> Body text
+
+:::details Click to open
+Hidden text
+:::
+```
+
+Keyboard keys and a few inline tags work as bare tags only: `<kbd>Ctrl</kbd>`, `<sub>`, `<sup>`, `<mark>`, `<ins>`, `<del>`, `<s>`, `<small>`, `<abbr>`, `<br>`.
+
+### Safety
+
+- Every piece of text is escaped. Raw HTML is shown as text; there is no option to allow it. If you need HTML, clean it yourself on the server.
+- Tags with attributes (`<kbd onclick=…>`) are text. Allowed bare tags are always closed and balanced.
+- Links allow `http`, `https`, `mailto`, `tel` and relative URLs. Images allow `http(s)` and relative URLs; `data:image/png|jpeg|gif|webp` only with `allowDataImages: true`. The check runs after removing control characters and whitespace, so `java\tscript:` and `&#106;avascript:` are refused.
+- External links get `target="_blank" rel="noopener noreferrer nofollow"`.
+- Heading ids are generated from the text and never start with `ac-`, so they cannot clash with framework ids.
+
+### Options
+
+| Option | Default | Meaning |
+|---|---|---|
+| `lang` | UI language | Callout titles and footnote labels (`fa`, `en`, `ar`) |
+| `labels` | — | Override any label: `{ note, tip, warning, footnotes, backref, anchor }` |
+| `idPrefix` | `''` | Prefix for heading and footnote ids |
+| `headingIds` / `anchors` | `true` | Ids on headings / the `#` link shown on hover |
+| `link(href)` / `image(src)` | — | Rewrite URLs (for example docs links to router links). The result is still checked. |
+| `codeComponent` | `true` | Emit `<div class="ac-code" data-ac="code">` (copy button + language label) |
+| `linkTarget` | `'_blank'` | Target for external links (`''` to keep them in the tab) |
+
+## Typography — `.ac-prose`
+
+Put any long text inside `<div class="ac-prose">`. It sets the reading measure (about 70 characters), the heading scale, list markers, quotes, callouts, zebra tables that scroll sideways on phones, captions, footnotes and keyboard keys.
+
+- Every paragraph, list item, heading and table cell finds its own direction (`unicode-bidi: plaintext`), so an English sentence in a Persian article lines up on the left. Code is always left-to-right.
+- Persian numbers in ordered lists: `data-numerals="persian"` (or `"arabic"`) on the `.ac-prose` element or on one `<ol>`.
+- A bigger first paragraph: `.ac-prose--lead`, or `.ac-lead` on one paragraph.
+
+## Article chrome
+
+```js
+const prose = AC.prose(el, { markdown: text, anchorUrl: (id) => `#/article?h=${id}` });
+const article = AC.article(rootEl, { content: el, toc: tocListEl });
+prose.minutes;      // reading time (200 words a minute)
+```
+
+- `AC.prose(el, { markdown | html, lightbox: true, anchorUrl })` renders and enhances: heading anchors (a click scrolls and, with `anchorUrl`, copies the link), images open in a lightbox that grows from the picture, in-page links scroll smoothly without touching a hash router. API: `set(md)`, `setHtml(html)`, `scrollTo(id)`, `headings`, `words`, `minutes`, `destroy()`.
+- `AC.article(el, { content, toc, progress: true, levels: [2, 3] })` adds the reading progress bar at the top of the window and builds the table of contents with scroll-spy (the active entry is marked `aria-current` and a small accent bar slides to it). Put the list inside `<details class="ac-toc">`: it stays open on desktop and collapses on phones. API: `refresh()`, `destroy()`.
+- Declarative: `<div data-ac="prose" data-src="post.md"></div>` fetches and renders a file.
+- Events: `ac:prose:render {headings, words, minutes}`, `ac:prose:anchor {id}`, `ac:toc:change {id}`.
+
+Ready-made classes for the rest of an article page: `.ac-article` (main + sticky aside), `.ac-article__card`, `.ac-article__head/__title/__sub/__meta`, `.ac-tags > .ac-tag`, `.ac-share`, `.ac-author`, `.ac-pager > .ac-pager__link[data-dir=prev|next]`, `.ac-posts > .ac-post-card(--feature)`, `.ac-comments`, `.ac-compose`, `.ac-comment-list > .ac-comment`. Docs layout: `.ac-docs` with `.ac-docs__nav` (`details.ac-doctree`), `.ac-docs__main`, `.ac-docs__toc`. Editor: `.ac-mde` with `.ac-mde__bar`, `.ac-mde__tool`, `.ac-mde__panes`, `.ac-mde__src`, `.ac-mde__preview`, `.ac-mde__status` (`data-view="write|preview"` on phones).
+
+## Motion
+
+Reduced motion keeps fades and colour changes: the lightbox fades instead of growing, the table of contents switches without sliding, details panels fade open. Spatial movement uses `--ac-travel`, which is `0` under `data-motion="reduced"`.
+
+## Auth animations (forms module)
+
+The OTP and password inputs got framework-level feedback (see `docs/forms.md`):
+
+- OTP: boxes stagger in, a typed digit pops, the focused box glows, a paste fills the boxes with a wave. `AC.instance(el,'otp').error({ clear })` shakes toward the start edge, tints red and vibrates; `.success()` turns the boxes green one by one and folds them into a check circle that draws itself (returns a promise); `.reset()`. Events `ac:otp:error`, `ac:otp:success`.
+- Password: `data-checklist` shows rules that tick with a drawn check; the strength bars fill with a spring and change colour; the eye blinks when showing or hiding; a Caps Lock warning slides in (`data-caps="false"` turns it off).
+
+Every one of these uses the Web Animations API with a reduced-motion version that keeps opacity and colour, because Windows with "Animation effects" off makes every browser report reduced motion.
+
+<!-- ===== docs/pwa.md ===== -->
+
+# PWA — install, offline, updates
+
+Module `pwa` (`src/modules/pwa/`), service worker template `demo/sw.js`, manifest `demo/manifest.webmanifest`.
+Live: `demo/#/notify-lab`. Tests: `node tests/pwa.mjs` (runs its own server; sub-path `/AraminConsole/`).
+
+## Register
+```js
+AC.pwa.register('sw.js', { updateUI: 'toast' /* | 'banner' | false */, network: true, badge: true, onUpdate(worker) {} });
+```
+* **Update flow:** a new build installs a new worker that **waits**. The page shows an "Update available" toast (or banner);
+  *Reload* posts `SKIP_WAITING` → the worker activates, deletes old caches, claims the page → exactly one reload. The very
+  first install never reloads. `AC.pwa.update()` checks now (also done when the tab becomes visible, at most every 30 min);
+  `AC.pwa.simulateUpdate()` shows the UI for demos.
+* **No stale caches:** the build stamps `const BUILD = '<hash>'` into `demo/sw.js`, so every build is a new worker and a new cache name.
+* `network: true` → offline / back-online toasts, `html[data-offline]`. `badge: true` → app badge = notification-center unread.
+
+## Service worker (demo/sw.js — copy it for your app)
+| Request | Strategy |
+|---|---|
+| app shell (precache list) | installed with the worker, versioned cache |
+| `dist/**`, `*.js`, `*.css`, page fragments, i18n | stale-while-revalidate |
+| fonts, icons, images | cache-first |
+| data (`*.json`, `api/*` GET) | network-first, cache fallback |
+| navigations | network-first → cached shell → offline: redirect to `errors/offline.html?from=<url>` |
+| `POST api/*` while offline | stored in IndexedDB, answered `202` + `X-AC-Queued: 1`, replayed on `sync` ("ac-outbox") or `FLUSH` |
+
+Every URL is relative to the worker, so it works under a sub-path (GitHub Pages). Page side:
+`const { ok, queued } = await AC.pwa.send('api/notes', { body })` · `AC.pwa.flush()` (called automatically on `online`).
+Events: `ac:pwa:queued {count}`, `ac:pwa:synced {count}`, `ac:pwa:update`, `ac:pwa:offline|online`.
+
+## Install invitation — `AC.install`
+```js
+AC.install.show('sheet' | 'banner' | 'card' | 'inline' | 'ios', { target, app: { name, icon }, stats, benefits });
+AC.install.prompt();     // browser prompt (Chrome/Edge/Android) · iOS steps sheet · or "use the browser menu" hint
+AC.install.auto({ minVisits: 2, minSeconds: 25, snoozeDays: 7, variant });   // smart timing
+AC.install.state         // { available, installed, standalone, platform: 'ios'|'android'|'desktop', canPromptIOS, visits, snoozedUntil }
+AC.install.snooze(days) · AC.install.hide() · AC.install.reset()
+<div data-ac="install-card"></div>                     <!-- inline settings card; shows "Installed ✓" once installed -->
+```
+* `beforeinstallprompt` is captured (and its mini-infobar suppressed) as soon as the module loads; `appinstalled` → thanks toast.
+* **Sheet:** app icon + name (localized from `name_localized`), App-Store-like stats row, screenshots carousel from the manifest
+  (narrow on phones, wide on desktop), four benefits, black *Install* pill + *Not now* (snoozes). Phones: bottom sheet.
+* **Banner:** glass pill at the top. **Card:** floating card at the end corner (above the tab bar on phones). **Inline:** settings card.
+* **iOS Safari:** three animated SVG steps (Share → Add to Home Screen → Add); reduced motion stops the loops.
+* Timing: visits are counted once per session; nothing shows before `minVisits`, during a snooze, when installed or standalone.
+
+## Manifest checklist (demo/manifest.webmanifest)
+`id`, `scope`, `start_url`, `lang`/`dir`, `name` + `name_localized` (fa/en/ar), `display_override`
+(`window-controls-overlay`, `standalone`), icons incl. **maskable** 192/512, `shortcuts` (Dashboard, Tickets, Chat, New invoice
+with 96 px icons), `screenshots` (wide 1280×800 + narrow 780×1688), `share_target` (GET → the app shows a card with what was
+shared), `theme_color`/`background_color` + `user_preferences.color_scheme_dark`, `launch_handler`.
+Regenerate icons and screenshots: `node tests/make-pwa-assets.mjs --base=http://localhost:5178`.
+
+## App-like extras
+`AC.pwa.badge(n)` (App Badging API) · `AC.pwa.share({ title, text, url, files })` (Web Share, falls back to copying the link) ·
+`AC.pwa.isStandalone()` · `html[data-standalone]` (no overscroll glow, no text selection in chrome) and `html[data-platform]` ·
+window-controls-overlay keeps the top bar clear of the title-bar buttons · `AC.pwa.splash({ minMs })` (standalone launches only).
+
+<!-- ===== docs/rtl.md ===== -->
+
+# RTL / LTR
+
+AraminConsole is RTL-first (fa, ar) and must be pixel-correct in LTR (en). `i18n.set(lang)` sets `<html lang dir>`; every layout mirrors through CSS logical properties. Check with `node tests/rtl.mjs` (static scan + rendered geometry; `--static` for the scan only).
+
+## Rules
+1. **Logical properties only**: `margin/padding-inline-start|end`, `inset-inline-start|end`, `border-inline-*`, `border-start-start-radius…`, `text-align: start|end`, `inline-size/block-size`. The scanner rejects `margin-left`, `padding-right`, `border-left`, `left:`/`right:`, `text-align:left|right`, `float`, `*-left-radius` and literal `translateX(±n)`.
+2. **Allow-list** a line with `/* rtl-ok: reason */` — only for JS-measured physical geometry (indicators, positioned popovers, ripples, kanban ghost) or glyphs that never mirror (a check mark, a rotated border chevron).
+3. **Direction-aware transforms**: `translateX(calc(24px * var(--ac-dir)))`; `--ac-dir` is `1` in LTR and `-1` in RTL (set on `[dir]`). Keyframes that travel also multiply by `--ac-travel` (motion preference).
+4. **Directional icons** get `.ac-flip-rtl` (arrows, chevrons pointing "next/back", log-out, panel icons). Trend arrows (`.ac-trend`), pagination and date-picker nav flip automatically. Up/down, plus, check, close never flip.
+5. **Measured geometry** (indicators, popovers, tooltips, chart tooltips) is computed in physical px from `getBoundingClientRect()` and placed with `left: 0` + `transform`, so it is correct in both directions without branching. Scroll containers: add `scrollLeft/scrollTop` and subtract `clientLeft/clientTop` (in RTL `clientLeft` includes a left scrollbar). The element that hosts an absolutely positioned indicator must be its containing block.
+6. **Placement is logical**: `position(anchor, panel, { placement: 'bottom-start' })` — `start`/`end` resolve per direction (dropdowns align to the trigger's start edge, submenus open toward the inline end, the language picker uses `bottom-end`).
+7. **Gestures** read direction: swipe-to-dismiss, drawers, split panes and list swipe actions convert `dx` with the direction sign; arrow keys swap in RTL (`ArrowLeft` = next) for tabs, segmented, charts, date picker, kanban.
+8. **Charts** mirror their x-axis in RTL (time runs right → left) through one SVG `matrix(-1 0 0 1 W 0)` on the plot group; text is placed with mirrored x but never mirrored glyphs. The grow-in stagger therefore starts at the start edge in both directions.
+9. **Mixed-direction text**: wrap Latin/number runs that must keep their order inside RTL text in `<bdi>` or `.ac-ltr` (`direction: ltr; unicode-bidi: isolate`) — timestamps like `17/04/2026 · 15:45`, card numbers, IBANs, codes, e-mails, file paths. Inside a list whose rows contain names in other scripts, isolate the name (`<bdi dir="rtl">فارسی</bdi>`) so the row keeps the UI's alignment (see the language picker).
+10. **Switching language** live: the document crossfades with a blur bridge (`AC.motion.transition(…, { kind: 'lang' })`) — nothing slides while the layout mirrors; indicators re-seat instantly on `ac:i18n:change`.
+
+## Language picker
+`<button data-ac="langpicker"></button>` — data from `AC.i18n.languages` (`{ code, name, english, dir, glyph, flag }`; push entries to add languages). Popover on desktop, bottom sheet on phones, search when there are more than 6, keyboard ↑ ↓ Home End + type-ahead, RTL/LTR tag per language, inline-SVG script badge + CSS flag dot (no emoji — they don't render on Windows). Event `ac:langpicker:change { lang, from }`.
+
+## Test coverage (`tests/rtl.mjs`)
+Static scan of `src/**/*.css`; in fa and en: document dir, dock side and inset, top-nav order, page-title edge, dropdown anchor, submenu side, flyout side, language picker anchor and row layout, toast corner, sliding highlight exactly on the hovered row (menu, rail), phone tab-bar order, no horizontal overflow at 390 px, tab bar fully on screen, and a live fa → en switch that moves the dock and re-seats the nav pill.
+
+<!-- ===== docs/starters.md ===== -->
+
+# Starters
+
+Copy-ready projects live in [`starters/`](../starters). Each has its own README. The repository is also a **GitHub template**: click *Use this template*, then keep the starter you need.
+
+| Starter | Stack | What is included |
+|---|---|---|
+| [`starters/html`](../starters/html/README.md) | plain HTML + ES modules | App shell (appbar, rail, tab bar), 25-line hash router, 3 pages: dashboard, users, settings |
+| [`starters/laravel-blade`](../starters/laravel-blade/README.md) | Laravel 10+ | `layouts/app.blade.php`, partials (appbar, rail, tabbar, powered), 2 example pages, routes, CSRF-aware forms |
+| [`starters/nextjs`](../starters/nextjs/README.md) | Next.js App Router | root layout, client `Shell` that loads the framework and re-scans on route change, server-component page |
+
+All starters expect AraminConsole's `dist/` to be copied next to them (`aramin/`, `public/vendor/aramin/`, or `public/aramin/`). They include the small `.ac-powered` credit; remove or replace it if you like (MIT).
+
+## Making your own starter
+1. Copy the shell markup from `demo/index.html` (or a starter) and cut it down to your sections.
+2. Write pages as `<section class="ac-page">` fragments (no `<script>`).
+3. Wire your router/framework to inject the fragment into `#ac-content`; components start automatically, and `AC.scan(root)` re-scans if you render outside the observer's reach.
+4. For custom bundles: `node scripts/build.mjs --modules=shell,overlays,forms --out=public/aramin`.
+
+<!-- ===== docs/support-chat.md ===== -->
+
+# Support chat widget
+
+Optional module: `src/modules/support-chat/{support-chat.js,support-chat.css,module.json}` (dependency: `core`).
+Demo wiring: `demo/support.js` (one `<script type="module">` in `demo/index.html`; delete both to drop the widget).
+Tests: the «support chat» section of `node tests/tickets.mjs`.
+
+```js
+await AC.use('support-chat');
+const chat = AC.supportChat.init({
+  title: 'پشتیبانی آرامین', greeting: 'سلام مریم 👋', subtitle: 'چطور می‌توانیم کمک کنیم؟',
+  agents: [{ name: 'سارا احمدی', initials: 'سا', color: 2, online: true }], responseTime: 5,
+  color: 'accent' /* or any CSS colour */, position: 'end' /* or 'start' */, online: true,
+  welcome: 'سلام! چطور می‌توانم کمک کنم؟', quickReplies: ['پیگیری سفارش', 'بازگشت وجه'], unread: 1,
+  articles: [{ id, title, cat, icon, body }], conversations: [{ id, title, preview, time }],
+  onSend: async (text, { files, chat }) => ({ text: 'پاسخ ربات', quick: ['صحبت با کارشناس'] }), // or a string, or null
+  onOffline: async ({ name, email, message }) => {},
+});
+chat.open('home' | 'chat' | 'offline'); chat.close(); chat.toggle(); chat.receive({ text, quick }); chat.typing(true);
+chat.unread; chat.isOpen; chat.messages; chat.destroy();      // AC.supportChat.open|close|toggle|receive|current
+```
+
+## Behaviour
+- **Launcher**: floating circle at the bottom inline-end corner (left in RTL; `position: 'start'` mirrors it), above the tab bar
+  on phones and tablets; icon cross-fades/rotates to a chevron when open; unread badge bumps (spring) and the launcher wiggles
+  when a message arrives while closed. Hidden under pushed phone screens (`html[data-ac-stacked]`) and foreign modal layers.
+- **Panel**: Intercom-style, scales in from the launcher corner with a spring (interruptible CSS transition; origin follows
+  direction). Esc or outside click minimises; focus returns to the launcher.
+  - Home: gradient hero (greeting, team avatars), «new conversation» card with online dot + response time, recent
+    conversations, help search (ی/ي and ک/ك insensitive) → article view with «was this helpful?».
+  - Conversation: day pill, bubbles (mine = widget colour), typing indicator, read receipts (✓ sent → ✓✓ seen), quick-reply
+    chips, attachments, emoji picker, Enter sends (Shift+Enter = new line; on phones Enter is a new line).
+  - Offline (`online: false`): name / email / message form → confirmation.
+- **Phones (<640px)**: full-screen sheet sliding up (iOS drawer curve), grab handle; drag the header down (or flick) to dismiss;
+  page scroll locked while open; navigation closes it.
+- Reduced motion: opacity only. Events on `document`: `ac:support-chat:open | close | send {text, files} | receive {text}`.
+
+## Theming / i18n
+`--sc-accent` (from `color`, default `--ac-accent`) drives the hero, launcher, my bubbles and chips; everything else is tokens,
+so dark mode is automatic. Built-in fa / en / ar strings; override with app keys `sc.<key>` (e.g. `sc.launcher`).
+
+<!-- ===== docs/theming.md ===== -->
+
+# Theming
+
+Every colour, radius, shadow, spacing, and motion value is a CSS custom property named `--ac-*` (defined in `src/css/tokens.css`). Components read only tokens, so a theme is just a set of token overrides. Dark mode works the same way: it swaps tokens.
+
+## Switches on `<html>`
+
+| Attribute | Values | Default | Saved in `localStorage` |
+|---|---|---|---|
+| `data-theme` | `light` · `dark` (unset = follow the OS) | `light` | `ac:theme` (`light` / `dark` / `auto`) |
+| `data-accent` | `orange` · `violet` · `blue` · `emerald` · `rose` · `amber` · `slate` | `orange` | `ac:accent` |
+| `data-density` | `comfortable` · `compact` | `comfortable` | `ac:density` |
+| `data-radius` | `sharp` · `default` · `round` | `default` | `ac:radius` |
+| `lang` / `dir` | `fa`/`ar` → `rtl`, others → `ltr` | `fa` / `rtl` | `ac:lang` |
+
+`aramin-console-boot.js` applies the saved values before first paint. At runtime:
+
+```js
+AC.theme.set({ theme: 'dark', accent: 'blue', density: 'compact', radius: 'round' });
+AC.theme.toggle();                       // light ⇄ dark
+AC.theme.get();                          // { theme, resolved, accent, density, radius }
+document.addEventListener('ac:theme:change', (e) => console.log(e.detail));
+```
+
+## Brand your panel
+
+Override tokens after the framework CSS:
+
+```css
+/* brand.css — loaded after aramin-console.css */
+:root {
+  --ac-accent: #0e9f6e;            /* your brand colour */
+  --ac-accent-2: #34d399;          /* gradient partner (brand mark, filled KPI, FAB) */
+  --ac-font: "Inter", "Vazirmatn", system-ui, sans-serif;
+  --ac-r-xl: 18px;                 /* card radius */
+}
+:root[data-theme="dark"] { --ac-accent: #31c48d; }
+```
+
+Derived tokens (`--ac-accent-soft`, `--ac-accent-ink`, `--ac-accent-hover`, `--ac-ring`) are computed from `--ac-accent` with `color-mix()`, so you rarely need to set them.
+Add your own preset with `:root[data-accent="brand"] { --ac-accent: …; --ac-accent-2: …; }` and push `'brand'` to `AC.theme.accents`.
+
+## Token reference
+
+### Colour
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `--ac-bg` | `#f2f2f3` | `#0b0b0c` | page canvas |
+| `--ac-bg-subtle` | `#ebebed` | `#111113` | subtle areas |
+| `--ac-surface-1` | `#ffffff` | `#161618` | cards, pills |
+| `--ac-surface-2` | `#f6f6f7` | `#1c1c1f` | inset panels, KPI tiles |
+| `--ac-surface-3` | `#eeeef0` | `#242428` | tracks |
+| `--ac-border` / `--ac-border-strong` | `#ececee` / `#dcdce0` | `#232326` / `#313136` | hairlines |
+| `--ac-text` / `--ac-text-soft` | `#111113` / `#4b4b52` | light | text |
+| `--ac-muted` / `--ac-faint` | `#8b8b93` / `#b6b6bd` | | secondary text |
+| `--ac-ink` / `--ac-ink-contrast` | `#111113` / `#fff` | `#fff` / `#0b0b0c` | primary buttons, active pill |
+| `--ac-accent` / `--ac-accent-2` | `#f0532d` / `#ff7a4d` | `#f2603b` | accent, gradient |
+| `--ac-accent-soft` · `-ink` · `-hover` · `-contrast` | derived | derived | tints, readable accent text, text on accent |
+| `--ac-success` · `warning` · `danger` · `info` | `#16a34a` · `#e08a00` · `#e5484d` · `#2f7cf6` | | status (each has `-soft` and `-ink`) |
+| `--ac-chart-1..8`, `--ac-chart-grid` | ink, accent, … | | chart series |
+| `--ac-glass-bg` · `-strong` · `-border` · `-blur` | | | frosted chrome |
+| `--ac-scrim`, `--ac-hover`, `--ac-active` | | | overlays and states |
+
+### Shape, space, and type
+| Token | Values |
+|---|---|
+| `--ac-r-xs … --ac-r-2xl`, `--ac-r-pill` | 6 · 10 · 12 · 16 · 22 · 28px, 999px |
+| `--ac-s-0 … --ac-s-12` | 0 to 3rem in 0.25rem steps |
+| `--ac-fs-2xs … --ac-fs-4xl` | 0.6875rem to 2.25rem |
+| `--ac-lh-tight / snug / normal` | 1.2 / 1.4 / 1.65 |
+| `--ac-fw-regular … --ac-fw-black` | 400 to 800 |
+| `--ac-shadow-xs … xl`, `--ac-shadow-chrome`, `--ac-shadow-inset` | layered shadows |
+
+### Density-aware metrics
+`--ac-control-h` (2.5rem; compact 2.125rem), `--ac-control-h-sm`, `--ac-control-h-lg`, `--ac-control-px`, `--ac-card-pad`, `--ac-row-h`, `--ac-gap`, `--ac-touch` (44px), `--ac-pill-h`.
+
+### Motion
+`--ac-ease`, `--ac-ease-out`, `--ac-ease-in`, `--ac-ease-spring`, `--ac-spring` (a `linear()` spring), `--ac-dur-0 … --ac-dur-4` (100 to 300ms). `prefers-reduced-motion: reduce` turns motion off everywhere.
+
+### Layout
+`--ac-appbar-h`, `--ac-tabbar-h`, `--ac-rail-w`, `--ac-flyout-w`, `--ac-content-max`, `--ac-content-pad`, `--ac-safe-top / bottom / start / end` (safe-area insets).
+
+## Dark mode rules for your own CSS
+- Use tokens, never raw colours. If you find yourself writing `:root[data-theme="dark"] .my-thing`, a token is probably missing.
+- Text on the accent colour uses `--ac-accent-contrast`; accent-coloured text uses `--ac-accent-ink`.
+- `.ac-only-light` / `.ac-only-dark` show content in one theme only (for example, the sun and moon icons).
+
+<!-- ===== docs/tickets.md ===== -->
+
+# Tickets module (help desk)
+
+Optional module: `src/modules/tickets/{tickets.js,tickets.css,module.json}` (dependencies: `table`, `overlays`, `forms`, `apps`).
+Load it with `await AC.use('tickets')` (lazy bundle `dist/modules/tickets.js`) or ship it in the full / custom build.
+Demo: `#/tickets` (agent inbox), `#/ticket?id=T-1048` (full page), `#/my-tickets` (customer portal), `#/me` (status chips).
+Tests: `node tests/tickets.mjs --base=http://localhost:5178`.
+
+## Data shape
+```js
+{ id: 'T-1048', subject, customer: { name, email, initials, color }, channel: 'email|chat|phone|web',
+  category: 'billing|technical|account|sales|shipping|other', priority: 'urgent|high|normal|low',
+  status: 'new|open|pending|resolved|closed', assignee: agentId | null, tags: [],
+  created, updated, due /* SLA deadline, ISO or null */, slaTotal /* SLA window, minutes */, csat: 1..5 | null,
+  messages: [{ id, from: 'customer|agent|note|system', author, text, time, attachments: [{ name, size, type: 'image|pdf|file' }] }] }
+// agents: [{ id, name, initials, color, role, online, me }]   canned: [{ id, title, text /* {name} = customer first name */ }]
+// macros: [{ id, title, icon, set: { status|priority|assignee }, tag, note, reply /* canned id */ }]
+```
+
+## Inbox — `AC.tickets.inbox(el, cfg)`
+```js
+const inbox = AC.tickets.inbox(el, { tickets, agents, me: 'ar', view: 'all', pageSize: 10 });
+inbox.view('overdue'); inbox.add(ticket); inbox.update(ticket); inbox.set(list); inbox.refresh(); inbox.table; inbox.destroy();
+el.addEventListener('ac:tickets:open', (e) => { e.preventDefault(); openDrawerOrPush(e.detail.ticket); });
+```
+Queue views (segmented, live counts, overdue count in red): all · mine · unassigned · overdue. Built on `AC.table`: search,
+priority / status / assignee filters, sort (default: nearest SLA first), CSV, row actions (assign to me, close),
+bulk actions (assign → agent menu, priority, close). Subject cells link to `#/ticket?id=…`; Ctrl/⌘-click opens the page.
+Events: `ac:tickets:open {id, ticket}` (cancelable), `ac:tickets:change {ticket, change}`, `ac:tickets:bulk {action, ids}`.
+
+## Detail — `AC.tickets.detail(el, cfg)`
+```js
+const d = AC.tickets.detail(el, { ticket, agents, canned, macros, tickets /* for merge */,
+  view: 'agent' | 'customer', screen: false, back: false | true | 'close', full: '#/ticket?id=…', title: true, intro: Element });
+d.update({ status: 'resolved' }); d.receive(message); d.set(otherTicket); d.destroy();
+```
+- Thread: customer bubbles (start), agent bubbles (ink, end), **internal notes in yellow** with a lock, centred system events, attachments.
+- Composer: «پاسخ به مشتری» / «یادداشت داخلی» tabs, auto-growing textarea, attachments, canned-reply picker (button or `/` on an
+  empty composer; popover on desktop, sheet on phones; ↑ ↓ Enter), macros menu, Ctrl+Enter sends, split button «send and set status».
+- Sidebar: live SLA timer (HH:MM:SS + progress, at-risk / breached tones), status / priority / assignee, category, channel, tags
+  (Enter adds), customer card, CSAT (face + rating) or «request rating», activity log. Every change appends a system event.
+- Container-query layout: ≥ 56rem → two columns with a sticky sidebar; narrower (drawer, phone) → the sidebar opens as a sheet («جزئیات»).
+- `screen: true` fills its parent (phone pushed screen, drawer, portal) with the composer pinned at the bottom (safe area aware).
+  Without `screen`, below 1024px the composer is sticky above the tab bar.
+- `view: 'customer'`: notes hidden, perspective flipped, no internal tools, no composer on closed tickets.
+- Merge (agent): menu of the customer's other tickets → confirm → messages move, this ticket closes. Event `ac:tickets:merge`.
+
+## Phone push (list → detail)
+```html
+<div class="ac-split ac-tk-split" data-ac="split">
+  <div class="ac-split__pane">…inbox…</div>
+  <div class="ac-split__pane ac-tk-screen" data-tk-screen></div>   <!-- hidden on wide screens -->
+</div>
+```
+On `ac:tickets:open`, phones: `AC.tickets.detail(screen, { screen: true, back: true })` + `AC.instance(split,'split').push(1)`;
+desktop: `AC.drawer.open({ content, size: 'lg', closeButton: false, className: 'ac-tk-drawer' })` + `detail(…, { back: 'close' })`.
+
+## Other helpers
+- `AC.tickets.create({ agents, customer, nextId })` → Promise<ticket | null>: modal (sheet on phones) with category cards, validation.
+- `AC.tickets.track(el, ticket)`: customer timeline new → in review → answered → resolved (horizontal ≥ 34rem, vertical below).
+- `AC.tickets.sla(due, total)` → `{ text, tone, overdue, ratio }`; `statusChip(s)`, `priorityChip(p)`, `slaChip(ticket)` HTML;
+  `<span data-ac="sla" data-due="ISO" data-total="240"></span>` live countdown chip (shared 20 s ticker, ringing alarm when overdue).
+
+## i18n
+Built-in fa / en / ar strings; override any with app keys `tickets.<key>` (e.g. `tickets.status.pending`). Numbers use `AC.format`.
+
+<!-- ===== starters/html/README.md ===== -->
+
+# Starter: plain HTML
+
+Single-page admin: app shell (appbar, rail, tab bar), a 25-line hash router and three pages (`dashboard`, `users`, `settings`). No build step.
+
+```bash
+cp -r ../../dist ./aramin          # from a clone of AraminConsole (or copy dist/ from a release)
+npx serve .                        # any static server; fetch() needs http://, not file://
+```
+
+- Add a page: create `pages/<name>.html` (a `<section class="ac-page">` fragment, no `<script>`), then link to `#/<name>`.
+- Switch to Persian: set `<html lang="fa" dir="rtl">`.
+- The `.ac-powered` credit links to https://air.co.ir/; keep or remove it (MIT).
+
+<!-- ===== starters/laravel-blade/README.md ===== -->
+
+# Starter: Laravel Blade
+
+A layout, four partials, and two example pages. Drop `resources/views/*` into any Laravel 10+ app.
+
+1. Copy AraminConsole into `public/vendor/aramin/`:
+   ```bash
+   cp -r /path/to/AraminConsole/dist/. public/vendor/aramin/
+   ```
+2. Copy `resources/views/layouts`, `partials`, `dashboard.blade.php`, `users.blade.php` into your `resources/views/`.
+3. Add the two routes from `routes/web.php`.
+4. Persian/Arabic: set `APP_LOCALE=fa`; the layout switches `lang` and `dir` for `fa` and `ar`.
+
+Notes
+- Pages `@extends('layouts.app')` and fill `@section('content')` with a `<section class="ac-page">`.
+- Use `@push('scripts')` for page scripts; the shell does not need a Blade-aware build step.
+- AJAX forms: the layout adds the CSRF header on `ac:form:submit`.
+- The `.ac-powered` credit (https://air.co.ir/) lives in `partials/powered.blade.php` and the rail; remove or replace it freely (MIT).
+
+<!-- ===== starters/nextjs/README.md ===== -->
+
+# Starter: Next.js (App Router)
+
+```bash
+cp -r /path/to/AraminConsole/dist/. public/aramin/
+npm install && npm run dev
+```
+
+How it fits together
+- `app/layout.jsx` loads the boot script and CSS in `<head>` (no flash of wrong theme).
+- `components/Shell.jsx` is a client component: it imports the framework once in `useEffect` and re-scans the page on every route change (`usePathname`). The framework also has a MutationObserver, so the re-scan is a safety net.
+- Pages are plain markup with `data-ac` attributes and can be server components (`components/Stats.jsx`).
+- Keep `suppressHydrationWarning` on `<html>`: the boot script sets `data-theme`, `lang` and `dir` before React hydrates.
+- Persian: set `lang="fa" dir="rtl"` on `<html>`.
+- The `.ac-powered` credit (https://air.co.ir/) is in `Shell.jsx`; remove or replace it freely (MIT).
+
+<!-- ===== skills/aramin-console/reference/components.md ===== -->
+
+# Class and markup reference (condensed from docs/CONVENTIONS.md)
+
+Naming: `.ac-block`, `.ac-block__element`, `.ac-block--modifier`. State uses ARIA/data attributes: `[aria-selected]`, `[aria-expanded]`, `[aria-current="page"]`, `[data-state="open|closed"]`, `[aria-busy]`, `[disabled]`.
+
+## Atoms
+- Buttons `.ac-btn` + `--primary|secondary|outline|accent|soft|ghost|danger|danger-soft|link|gradient` and sizes `--sm|--lg`, `--icon|--square|--block`; groups `.ac-btn-group`; icon button `.ac-iconbtn`.
+- Card `.ac-card(__head|__titles|__title|__sub|__actions|__body|__body--flush|__foot)` variants `--flat|inset|glass|interactive|aurora|accent`.
+- Stats `.ac-stat(__head|__icon|__label|__value|__unit|__foot|__spark)`, `.ac-trend[data-trend=up|down|flat]`, `.ac-kpis > .ac-kpi`.
+- Badges `.ac-badge --accent|success|warning|danger|info|neutral|solid|outline|dot`, `.ac-chip[aria-pressed]`, `.ac-status[data-status]`, `.ac-avatar --xs|sm|lg|xl|gradient [data-color=1..8]`, `.ac-avatar-group`.
+- Feedback `.ac-alert`, `progress.ac-progress --success|warning|danger`, `.ac-skeleton(--text|title|circle|block)`, `.ac-empty(__art|__title|__text|__actions)`.
+- Lists `.ac-list(__item|__thumb|__main|__title|__meta|__end)(--divided|--inset)`, `.ac-feed(__item|__icon|__body)`, `.ac-divider`.
+- Navigation `.ac-tabs(--pills)`, `.ac-segmented(--block|--sm)`, `.ac-breadcrumbs`, `.ac-pagination`, `.ac-stepper(--vertical) > .ac-step[data-state]`.
+
+## Forms
+`.ac-form`, `.ac-label`, `.ac-input`, `.ac-select`, `.ac-textarea`, `.ac-input-group`, `.ac-switch`, `.ac-check`, `.ac-radio`, `.ac-field__hint`, `.ac-field__error`. Validation rules (pipe-separated in `data-ac-rules`): `required`, `email`, `min:n`, `max:n`, `iran-mobile`, `iran-national-id`, `sheba`, `url`, `match:#other`.
+
+## Tables
+`table.ac-table` (+ `--stack` for phone cards with `td data-label`), or `data-ac="table"` for sorting/filtering/paging/selection/bulk actions.
+
+## Overlays
+Modal: `.ac-modal[data-ac=modal] > .ac-dialog > __head(__titles(__title,__sub), __close[data-ac-close]) + __body + __foot`. Sheet/drawer share the pattern. Toasts live in `.ac-toasts`.
+
+## Charts
+`.ac-chart-slot(--sm|--lg|--square)[data-ac=chart]`, `.ac-legend`. Types: line, area, bar, donut, gauge, sparkline, heatmap. `labels` may be an array or a generator like `"days:7"`, `"months:12"`.
+
+## Utilities
+`ac-stack ac-cluster ac-row ac-spread ac-grow ac-grid(-2/-3/-4) ac-gap-0..8 ac-truncate ac-clamp-2 ac-visually-hidden ac-hide-mobile(<1024) ac-hide-desktop ac-hide-phone(<640) ac-num ac-mono ac-ltr ac-text-(xs|sm|lg|soft|muted|accent|success|warning|danger|start|center|end) ac-stagger ac-animate-in ac-pressable ac-only-light ac-only-dark`.
+
+## Credit
+`.ac-powered`: small attribution link, placed at the bottom of the rail (desktop) and the end of content (phones). Optional.
+
+<!-- ===== skills/aramin-console/reference/recipes.md ===== -->
+
+# Recipes (copy, then adapt)
+
+All fragments live inside `main.ac-content` of the shell (see `starters/html`).
+
+## Dashboard
+```html
+<section class="ac-page" data-page="dashboard">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles"><h1 class="ac-page-head__title" data-i18n="nav.dashboard">داشبورد</h1></div>
+    <div class="ac-page-head__actions"><button class="ac-btn ac-btn--primary" type="button">گزارش</button></div>
+  </header>
+  <div class="ac-bento ac-stagger">
+    <div class="ac-card ac-span-xs-6 ac-span-md-4 ac-span-4"><div class="ac-card__body">
+      <div class="ac-stat"><span class="ac-stat__label">فروش</span>
+        <span class="ac-stat__value" data-ac="counter" data-to="48250000" data-compact>0</span></div>
+    </div></div>
+    <div class="ac-card ac-span-md-12 ac-span-4"><div class="ac-card__body">
+      <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"area","labels":"months:12","series":[{"name":"درآمد","data":[5,8,6,9,12,10,14,13,16,15,18,21]}]}'></div>
+    </div></div>
+  </div>
+</section>
+```
+
+## CRUD table page
+```html
+<div class="ac-card"><div class="ac-card__body ac-card__body--flush">
+  <div data-ac="table" data-ac-config='{"pageSize":10}'>
+    <table>
+      <thead><tr><th>نام</th><th data-type="number">موجودی</th><th data-filter="select">وضعیت</th><th data-sortable="false"></th></tr></thead>
+      <tbody>
+        <tr><td>علی</td><td data-value="1200">1,200</td><td>فعال</td>
+            <td><button class="ac-btn ac-btn--ghost ac-btn--sm" data-edit="1">ویرایش</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></div>
+<div class="ac-modal" id="edit" data-ac="modal" data-size="md"><div class="ac-dialog">
+  <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title">ویرایش</h2></div><button class="ac-dialog__close" data-ac-close aria-label="Close"></button></div>
+  <form class="ac-dialog__body ac-form ac-stack" data-ac="form"><input class="ac-input" name="name" data-ac-rules="required"></form>
+  <div class="ac-dialog__foot"><button class="ac-btn ac-btn--primary" type="submit" form="edit-form">ذخیره</button></div>
+</div></div>
+```
+```js
+document.addEventListener('click', (e) => { if (e.target.closest('[data-edit]')) AC.modal.open('#edit'); });
+document.addEventListener('ac:table:action', async (e) => { if (await AC.confirm({ title: 'حذف شود؟', tone: 'danger' })) AC.toast.success('حذف شد'); });
+document.addEventListener('ac:form:submit', (e) => e.detail.waitUntil(fetch('/api/items', { method: 'POST', body: e.detail.formData })));
+```
+
+## Form with Iranian validation
+```html
+<form class="ac-form ac-stack" data-ac="form" novalidate>
+  <label class="ac-label" for="m">موبایل</label>
+  <input class="ac-input ac-ltr" id="m" name="mobile" inputmode="tel" data-ac-rules="required|iran-mobile">
+  <label class="ac-label" for="n">کد ملی</label>
+  <input class="ac-input ac-ltr" id="n" name="national_id" inputmode="numeric" data-ac-rules="required|iran-national-id">
+  <label class="ac-label">تاریخ تولد</label>
+  <div data-ac="datepicker" data-calendar="persian" data-name="birth"></div>
+  <label class="ac-label">شبا</label>
+  <div data-ac="sheba" data-name="sheba"></div>
+  <label class="ac-label">مبلغ</label>
+  <div class="ac-input-group ac-money" data-ac="money" data-name="amount" data-currency="IRT" data-currencies="IRT,IRR"><input class="ac-input"></div>
+  <button class="ac-btn ac-btn--primary" type="submit">ثبت</button>
+</form>
+```
+
+## Official invoice (module `invoice-ir`)
+```html
+<div data-ac="invoice-ir" data-ac-config='{"type":"proforma","data":{"seller":{"name":"…"},"buyer":{"name":"…"},"items":[{"title":"…","qty":1,"price":1000000}]}}'></div>
+```
+Fields and types: `docs/invoice-ir.md`.
+
+## Map and picker (module `maps`)
+```html
+<div data-ac="map" data-center="35.7,51.4" data-zoom="12" data-controls="zoom,locate,search"></div>
+<div data-ac="location-picker" data-name="branch"></div>   <!-- posts branch[lat], branch[lng], branch[address] -->
+```
+
+## File manager (module `files`)
+```html
+<div class="my-files" data-ac="files"></div>  <!-- .my-files { block-size: 70vh } in your CSS; adapters: docs/files.md -->
+```
+
+## Login page (standalone document)
+Copy `demo/auth/login.html` (head with boot script + CSS, body `main.ac-auth`), keep `data-ac="segmented"` email/mobile switch, `data-ac="otp"` for codes, and the `.ac-powered` footer.
+
+<!-- ===== skills/aramin-console/reference/theming-and-modules.md ===== -->
+
+# Theming tokens and modules
+
+## Token groups (`--ac-*`, defined in `src/css/tokens.css`)
+- Surfaces: `bg bg-subtle surface-1 surface-2 surface-3 elevated hover active scrim`; lines `border border-strong`; text `text text-soft muted faint`.
+- Ink (black primary, white in dark): `ink ink-hover ink-contrast`.
+- Accent: `accent accent-2 accent-hover accent-soft accent-ink accent-contrast focus gradient`.
+- Status: `success|warning|danger|info` + `-soft` + `-ink`; charts `chart-1..8`.
+- Radius `r-xs sm md lg xl 2xl pill`; space `s-0..12` (0.25rem steps); type `fs-2xs … fs-4xl`; shadows `shadow-xs … shadow-xl`.
+- Metrics (density-aware): `control-h control-px card-pad row-h gap touch`; motion `ease dur-1..4`.
+- Layout: `appbar-h tabbar-h rail-w content-max safe-top/bottom/start/end`.
+
+Override example (brand colour):
+```css
+:root { --ac-accent: #0a7cff; --ac-accent-2: #5ab0ff; }
+```
+Dark mode is a token swap: never write `[data-theme=dark] .x` rules; fix the token instead.
+
+## Modules (`node scripts/build.mjs --modules=…`)
+`core` (always) · `shell` · `overlays` · `customizer` · `langpicker` · `forms` · `datepicker` · `data-display` · `table` · `chart` · `apps` (kanban, split) · `money` · `chat` · `files` · `invoice-ir` · `mail` · `maps` · `marketing` · `notify` · `prose` · `pwa` · `support-chat` · `terminal` · `tickets` · `uptime` · `user-panel`.
+Dependencies are resolved automatically. Lazy-load at runtime: `await AC.use('maps')`. Config file route: `aramin.config.json` with `modules`, `out`, `modulesBase`. See `docs/modules.md`.

@@ -1,0 +1,47 @@
+# AraminConsole
+
+> AraminConsole — an open-source, zero-dependency admin panel UI/UX framework. RTL-first, responsive, dark mode, app-like on mobile. Version 0.1.0. MIT licensed. Live demo: https://araminco.github.io/AraminConsole/demo/
+
+Use one CSS file and one ES module (copy `dist/`). Components start from `data-ac="name"` attributes and have APIs on `window.AC`. Styling uses `--ac-*` design tokens and CSS logical properties. Powered by AIR (https://air.co.ir/).
+
+## Start here
+- [README](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/README.md): Overview, quick start, module matrix
+- [AGENTS.md — AraminConsole operating guide for AI coding assistants](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/AGENTS.md): Operating guide for AI coding assistants: architecture, conventions, commands
+- [AraminConsole skill](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/SKILL.md): Agent Skill: component cheat-sheet and recipes for building admin panels
+
+## Documentation
+- [AraminConsole — Conventions (Phase 2 builders read this first)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/CONVENTIONS.md): docs/SPEC.md is the contract; this is how the foundation implements it. Follow it exactly.
+- [AraminConsole — Visual Direction (binding, supersedes SPEC §2 visuals)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/DESIGN.md): The owner rejected the first look (dark rail, violet accent). The target is the reference reel "Dashboard V14 — Modern & Minimal UI" (code.xr, product name "Ver
+- [AraminConsole — Build Contract (v0.1)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/SPEC.md): This is the single source of truth every builder follows. If something is not here, choose the option that keeps the framework zero-dependency, RTL-first, acces
+- [Data display — tables, charts, lists, logs](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/data.md): Files: src/js/components/{table,chart,list,accordion,tree,code,logview}.js, src/css/components/{table,chart,data}.css. Demo: #/users, #/analytics, #/dashboard. 
+- [Files — file, document and records manager](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/files.md): A Finder / File Explorer-class manager as a module: src/modules/files/ (files.js, files.css, files-icons.js, files-adapter.js, files-preview.js, module.json). D
+- [Iranian finance kit — money, calendars, banks, bank card](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/finance.md): Files: src/js/components/{money,date,bank,bank-card}.js (+ calendar engine in datepicker.js), src/css/components/finance.css, src/banks/ (metadata, logos, SOURC
+- [Forms & inputs](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/forms.md): Files: src/css/components/form.css, src/css/components/datepicker.css, src/js/components/form-{core,input,select,file,validate}.js, src/js/components/datepicker
+- [Getting started](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/getting-started.md): AraminConsole ships as static files in dist/. Nothing needs to be installed:
+- [Iranian invoices — `invoice-ir` module](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/invoice-ir.md): Files: src/modules/invoice-ir/{invoice-ir.js,invoice-ir.css}. Demo: #/invoice-official, #/invoice-proforma, #/invoice-editor. Test: node tests/invoice-marketing
+- [Maps](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/maps.md): A zero-dependency slippy-map module: raster XYZ tiles in Web Mercator, markers, clustering, popups, vectors, heatmap, GeoJSON, draw/edit/measure, geocoder searc
+- [Marketing dashboards — `marketing` module](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/marketing.md): Files: src/modules/marketing/{marketing.js,marketing.css}. Demo: #/search-console, #/marketing (mock data: gscData, mkData, mkRealtime in demo/data.js). Test: n
+- [Modules — include all, include some, remove one, lazy-load, write your own](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/modules.md): AraminConsole is split into modules. core is always present; everything else is optional and can be bundled up front, left out, or loaded on demand. The source 
+- [Motion system](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/motion.md): Files: src/css/tokens.css (motion tokens), src/css/motion.css (system + micro-interactions, built last so it refines every component), src/js/motion.js (AC.moti
+- [Notifications — `AC.notify`](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/notifications.md): Module notify (src/modules/notify/). Builds on the existing AC.toast and AC.notifications (docs/overlays.md — unchanged). Live playground: demo/#/notify-lab. Te
+- [Overlays & feedback](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/overlays.md): Modal, bottom sheet, drawer, dropdown / context menu / action sheet, popover, tooltip, confirm & prompt, toast, alert / banner, notification center and the them
+- [Prose & Markdown](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/prose.md): Module: src/modules/prose/ (prose.js, markdown.js, prose.css). It ships in the full bundle and as dist/modules/prose.{js,css} for AC.use('prose'). It depends on
+- [PWA — install, offline, updates](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/pwa.md): Module pwa (src/modules/pwa/), service worker template demo/sw.js, manifest demo/manifest.webmanifest. Live: demo/#/notify-lab. Tests: node tests/pwa.mjs (runs 
+- [RTL / LTR](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/rtl.md): AraminConsole is RTL-first (fa, ar) and must be pixel-correct in LTR (en). i18n.set(lang) sets <html lang dir>; every layout mirrors through CSS logical propert
+- [Starters](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/starters.md): Copy-ready projects live in starters/. Each has its own README. The repository is also a GitHub template: click Use this template, then keep the starter you nee
+- [Support chat widget](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/support-chat.md): Optional module: src/modules/support-chat/{support-chat.js,support-chat.css,module.json} (dependency: core). Demo wiring: demo/support.js (one <script type="mod
+- [Theming](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/theming.md): Every colour, radius, shadow, spacing, and motion value is a CSS custom property named --ac- (defined in src/css/tokens.css). Components read only tokens, so a 
+- [Tickets module (help desk)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/docs/tickets.md): Optional module: src/modules/tickets/{tickets.js,tickets.css,module.json} (dependencies: table, overlays, forms, apps). Load it with await AC.use('tickets') (la
+
+## Starters and skill
+- [Starter: plain HTML](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/starters/html/README.md): Starter project: html
+- [Starter: Laravel Blade](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/starters/laravel-blade/README.md): Starter project: laravel-blade
+- [Starter: Next.js (App Router)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/starters/nextjs/README.md): Starter project: nextjs
+- [Class and markup reference (condensed from docs/CONVENTIONS.md)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/reference/components.md): Skill reference
+- [Recipes (copy, then adapt)](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/reference/recipes.md): Skill reference
+- [Theming tokens and modules](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/skills/aramin-console/reference/theming-and-modules.md): Skill reference
+
+## Optional
+- [Contributing to AraminConsole](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/CONTRIBUTING.md): How to contribute
+- [Changelog](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/CHANGELOG.md): Release history
+- [Full documentation in one file](https://raw.githubusercontent.com/ARaminco/AraminConsole/main/llms-full.txt): README, AGENTS.md, skill and all docs concatenated

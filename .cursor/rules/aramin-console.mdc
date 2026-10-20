@@ -1,0 +1,12 @@
+---
+description: AraminConsole conventions (zero-dependency, RTL-first admin UI)
+alwaysApply: true
+---
+
+Read `AGENTS.md` first; it is the single source of truth. Key rules:
+
+- Components: `data-ac="name"` + `register('name', el => …)` in `src/js/components/`; events `ac:<component>:<event>`.
+- CSS: logical properties only, `var(--ac-*)` tokens only, `.ac-block__element--modifier`, no inline styles.
+- i18n: `data-i18n="area.key"`, keys in all three `demo/i18n/{fa,en,ar}.json`.
+- `npm run build` after `src/` changes (commit `dist/`); tests via `node tests/run.mjs shell standalone`.
+- To build an app with the framework use `skills/aramin-console/SKILL.md` and `llms.txt`.

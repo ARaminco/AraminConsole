@@ -1813,5 +1813,6 @@
   "users.total": "All users",
   "users.totalFoot": "Across all teams",
   "users.twoFactor": "Two-factor",
-  "users.twoFactorFoot": "of active accounts"
+  "users.twoFactorFoot": "of active accounts",
+  "credit.powered": "Powered by AIR"
 }

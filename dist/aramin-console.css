@@ -1487,6 +1487,25 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
   .ac-content { padding: 0; max-inline-size: none; }
 }
 
+/* ---------------------------------------------------------------- powered-by credit (.ac-powered)
+   Small attribution link. Keep it in the base template; remove or replace it freely (MIT). */
+.ac-powered {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--ac-s-1);
+  padding-block: var(--ac-s-1); padding-inline: var(--ac-s-3);
+  border-radius: var(--ac-r-pill);
+  font-size: var(--ac-fs-xs); color: var(--ac-faint); text-decoration: none;
+  transition: color var(--ac-dur-2) var(--ac-ease), background-color var(--ac-dur-2) var(--ac-ease);
+}
+.ac-powered:hover { color: var(--ac-text); background: var(--ac-hover); }
+.ac-powered:focus-visible { outline: 2px solid var(--ac-focus); outline-offset: 2px; }
+.ac-rail__foot > .ac-powered { align-self: center; }
+.ac-main > .ac-powered { display: flex; margin-inline: auto; inline-size: max-content; margin-block: var(--ac-s-4) calc(var(--ac-tabbar-h) + var(--ac-safe-bottom) + var(--ac-s-6)); }
+.ac-powered--page { display: flex; margin-inline: auto; inline-size: max-content; margin-block: var(--ac-s-3) calc(var(--ac-s-4) + var(--ac-safe-bottom)); }
+@media (min-width: 1024px) {
+  .ac-main > .ac-powered { display: none; }
+  .ac-powered--float { position: fixed; inset-block-end: var(--ac-s-3); inset-inline-end: var(--ac-s-4); margin: 0; background: var(--ac-glass-bg); z-index: 1; }
+}
+
 
 /* ==== css/components/apps.css ==== */
 /* ==========================================================================
