@@ -89,7 +89,9 @@ async function route() {
     }
   };
 
-  if (document.startViewTransition && document.documentElement.dataset.motion !== 'off' && current !== null) { // reduced motion: same transition, fade only
+  // View Transitions only on desktop pointers: on phones (notably WebKit/iOS) tall page snapshots get stuck mid-slide.
+  const vtOK = document.startViewTransition && matchMedia('(min-width: 1024px) and (pointer: fine)').matches && !/iP(hone|ad|od)|CriOS|FxiOS/.test(navigator.userAgent);
+  if (vtOK && document.documentElement.dataset.motion !== 'off' && current !== null) { // reduced motion: same transition, fade only
     // only the page content transitions (direction follows the nav order); the chrome stays live
     await AC.motion.navigate(swap, { from: current, to: name });
   } else {
@@ -97,6 +99,7 @@ async function route() {
     content.classList.remove('ac-page-enter');
     void content.offsetWidth;
     content.classList.add('ac-page-enter');
+    content.addEventListener('animationend', () => content.classList.remove('ac-page-enter'), { once: true });
   }
   if (document.activeElement && document.activeElement !== document.body && !content.contains(document.activeElement) && !document.activeElement.closest('.ac-rail, .ac-dock, .ac-tabbar, .ac-appbar')) content.focus({ preventScroll: true });
 }

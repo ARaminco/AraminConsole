@@ -12,7 +12,7 @@
    Push: `push` and the demo's SIMULATE_PUSH message share one handler; `notificationclick` focuses / opens the app.
    Every URL is relative to this file, so the demo works under a sub-path (GitHub Pages /AraminConsole/demo/). */
 const VERSION = 'ac-demo-v0.2.0';
-const BUILD = '9f16643027'; // stamped by scripts/build.mjs
+const BUILD = '2822d2606c'; // stamped by scripts/build.mjs
 const CACHE = `${VERSION}-${BUILD}`;
 const OFFLINE = './errors/offline.html';
 const SHELL = [
