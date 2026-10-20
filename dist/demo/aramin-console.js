@@ -1167,6 +1167,7 @@ function anchor() {
 const cssWait = new Map();
 const sheetReady = (link) => new Promise((resolve) => {
   if (link.tagName === 'STYLE' || link.sheet) return resolve();
+  setTimeout(resolve, 3000); // never block a page forever on a stylesheet that already failed or stalls
   link.addEventListener('load', resolve, { once: true });
   link.addEventListener('error', () => { console.warn(`[AC] module css failed: ${link.dataset.acModule}`); resolve(); }, { once: true });
 });
@@ -3899,7 +3900,7 @@ function updateReady(worker, simulated = false) {
 function applyUpdate() {
   sw.accepted = true;
   const w = sw.waiting || sw.reg?.waiting;
-  if (w && w.postMessage) w.postMessage({ type: 'SKIP_WAITING' });
+  if (w && w.postMessage && w.state === 'installed') w.postMessage({ type: 'SKIP_WAITING' }); // still waiting → activate, controllerchange reloads
   else setTimeout(() => location.reload(), 350); // simulated / nothing waiting
 }
 

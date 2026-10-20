@@ -12,7 +12,7 @@
    Push: `push` and the demo's SIMULATE_PUSH message share one handler; `notificationclick` focuses / opens the app.
    Every URL is relative to this file, so the demo works under a sub-path (GitHub Pages /AraminConsole/demo/). */
 const VERSION = 'ac-demo-v0.2.0';
-const BUILD = '2822d2606c'; // stamped by scripts/build.mjs
+const BUILD = 'cc01389d7e'; // stamped by scripts/build.mjs
 const CACHE = `${VERSION}-${BUILD}`;
 const OFFLINE = './errors/offline.html';
 const SHELL = [
@@ -27,8 +27,9 @@ const SHELL = [
 const SCOPE = new URL('./', self.location).href;
 
 self.addEventListener('install', (event) => {
-  // no skipWaiting here: an update waits until the user accepts it (the page posts SKIP_WAITING)
-  event.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(SHELL.map((u) => c.add(new Request(u, { cache: 'reload' }))))));
+  // Activate at once: code is served network-first, so a new worker never mixes old and new bundles.
+  // (The page still shows its "update available" toast so the user can reload into the new shell.)
+  event.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(SHELL.map((u) => c.add(new Request(u, { cache: 'reload' }))))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
@@ -90,7 +91,7 @@ self.addEventListener('fetch', (event) => {
   const p = url.pathname;
   if (/\.(?:woff2?|ttf|otf|svg|png|jpe?g|webp|avif|gif|ico)$/.test(p) && !/\/dist\/icons\.svg$/.test(p)) { event.respondWith(cacheFirst(req).catch(() => caches.match(req))); return; }
   if (/\/api\//.test(p) || (/\.json$/.test(p) && !/\/i18n\//.test(p) && !/\/dist\//.test(p))) { event.respondWith(networkFirst(req)); return; }
-  if (/\/(pages|i18n|dist)\//.test(p) || /\.(?:m?js|css|html|webmanifest)$/.test(p)) { event.respondWith(staleWhileRevalidate(event, req)); return; }
+  if (/\/(pages|i18n|dist)\//.test(p) || /\.(?:m?js|css|html|webmanifest)$/.test(p)) { event.respondWith(networkFirst(req).then((r) => r || caches.match(req))); return; }
   event.respondWith(cacheFirst(req).catch(() => caches.match(req)));
 });
 

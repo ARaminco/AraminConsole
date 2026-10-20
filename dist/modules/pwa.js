@@ -199,7 +199,7 @@ function updateReady(worker, simulated = false) {
 function applyUpdate() {
   sw.accepted = true;
   const w = sw.waiting || sw.reg?.waiting;
-  if (w && w.postMessage) w.postMessage({ type: 'SKIP_WAITING' });
+  if (w && w.postMessage && w.state === 'installed') w.postMessage({ type: 'SKIP_WAITING' }); // still waiting → activate, controllerchange reloads
   else setTimeout(() => location.reload(), 350); // simulated / nothing waiting
 }
 

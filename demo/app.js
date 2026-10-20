@@ -93,7 +93,11 @@ async function route() {
   const vtOK = document.startViewTransition && matchMedia('(min-width: 1024px) and (pointer: fine)').matches && !/iP(hone|ad|od)|CriOS|FxiOS/.test(navigator.userAgent);
   if (vtOK && document.documentElement.dataset.motion !== 'off' && current !== null) { // reduced motion: same transition, fade only
     // only the page content transitions (direction follows the nav order); the chrome stays live
-    await AC.motion.navigate(swap, { from: current, to: name });
+    let swapped = false;
+    const once = async () => { if (!swapped) { swapped = true; await swap(); } };
+    // safety net: if the view transition stalls (skipped/aborted by the browser), render anyway
+    await Promise.race([AC.motion.navigate(once, { from: current, to: name }).catch(() => {}), new Promise((r) => setTimeout(r, 1200))]);
+    await once();
   } else {
     await swap();
     content.classList.remove('ac-page-enter');
