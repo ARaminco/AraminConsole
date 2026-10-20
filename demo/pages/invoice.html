@@ -1,0 +1,83 @@
+<section class="ac-page" data-page="invoice" data-script>
+  <header class="ac-page-head inv-noprint" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="ord.eyebrow">فروش</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.invoice">فاکتور</h1>
+      <p class="ac-page-head__sub" data-i18n="inv.sub">پیش‌نمایش چاپی؛ خروجی چاپ فقط خود فاکتور را نشان می‌دهد.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <a class="ac-btn" href="#/orders"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-left"/></svg><span data-i18n="nav.orders">سفارش‌ها</span></a>
+      <button class="ac-btn ac-hide-phone" type="button" data-inv-copy><svg class="ac-icon" aria-hidden="true"><use href="#i-link"/></svg><span data-i18n="inv.copyLink">کپی پیوند</span></button>
+      <button class="ac-btn ac-btn--primary" type="button" data-inv-print><svg class="ac-icon" aria-hidden="true"><use href="#i-printer"/></svg><span data-i18n="inv.print">چاپ</span></button>
+    </div>
+  </header>
+
+  <div class="ac-stagger inv-wrap">
+    <article class="ac-card ac-card--static inv" data-inv>
+      <div class="inv__top">
+        <div class="inv__brand">
+          <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+          <div><strong><bdi>Aramin Co.</bdi></strong><small data-i18n="inv.seller">شرکت آرامین · تهران، خیابان ولیعصر</small></div>
+        </div>
+        <div class="inv__title">
+          <h2 data-i18n="inv.title">فاکتور فروش</h2>
+          <span class="ac-mono" data-inv-no>INV-2041</span>
+          <span class="ac-badge ac-badge--success ac-badge--dot" data-inv-status data-i18n="status.paid">پرداخت‌شده</span>
+        </div>
+      </div>
+
+      <div class="inv__parties">
+        <div class="inv__party">
+          <span class="ac-label" data-i18n="inv.billTo">خریدار</span>
+          <strong><bdi data-inv-customer>—</bdi></strong>
+          <span class="ac-text-sm"><bdi data-inv-email>—</bdi></span>
+          <span class="ac-text-sm ac-text-soft" data-i18n="inv.addr">تهران، خیابان ولیعصر، پلاک ۱۲، واحد ۴</span>
+        </div>
+        <dl class="inv__meta">
+          <div><dt data-i18n="inv.issued">تاریخ صدور</dt><dd data-inv-date>—</dd></div>
+          <div><dt data-i18n="inv.due">سررسید</dt><dd data-inv-due>—</dd></div>
+          <div><dt data-i18n="inv.ref">شناسهٔ پرداخت</dt><dd class="ac-mono">ZP-7741-0921</dd></div>
+        </dl>
+      </div>
+
+      <div class="ac-table-wrap inv__items">
+        <table class="ac-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th data-i18n="ord.col.product">محصول</th>
+              <th class="ac-text-end" data-i18n="inv.qty">تعداد</th>
+              <th class="ac-text-end" data-i18n="inv.unit">فی</th>
+              <th class="ac-text-end" data-i18n="col.amount">مبلغ</th>
+            </tr>
+          </thead>
+          <tbody data-inv-lines></tbody>
+        </table>
+      </div>
+
+      <div class="inv__bottom">
+        <div class="inv__pay">
+          <div class="inv__qr" data-inv-qr aria-label="QR" role="img"></div>
+          <div class="ac-stack ac-gap-1">
+            <strong class="ac-text-sm" data-i18n="inv.scan">برای پرداخت یا استعلام اسکن کنید</strong>
+            <span class="ac-text-xs ac-text-muted ac-ltr">aramin.dev/i/<span data-inv-no2>INV-2041</span></span>
+            <span class="ac-text-xs ac-text-muted" data-i18n="inv.bank">شبا: IR06 0170 0000 0012 3456 7890 01</span>
+          </div>
+        </div>
+        <dl class="inv__totals">
+          <div><dt data-i18n="inv.subtotal">جمع جزء</dt><dd class="ac-num" data-inv-sub>—</dd></div>
+          <div><dt data-i18n="inv.discount">تخفیف</dt><dd class="ac-num" data-inv-disc>—</dd></div>
+          <div><dt data-i18n="inv.tax">مالیات بر ارزش افزوده ۹٪</dt><dd class="ac-num" data-inv-tax>—</dd></div>
+          <div class="inv__grand"><dt data-i18n="inv.total">مبلغ کل</dt><dd class="ac-num" data-inv-total>—</dd></div>
+          <div class="inv__rial"><dt data-i18n="inv.inToman">معادل به تومان</dt><dd data-inv-toman>—</dd></div>
+        </dl>
+      </div>
+
+      <p class="inv__words" data-inv-words></p>
+      <footer class="inv__foot">
+        <span data-i18n="inv.thanks">از خرید شما سپاسگزاریم.</span>
+        <span class="inv__sign" data-i18n="inv.sign">مهر و امضای فروشنده</span>
+      </footer>
+    </article>
+  </div>
+</section>

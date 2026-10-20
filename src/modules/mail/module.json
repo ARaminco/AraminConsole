@@ -1,0 +1,1 @@
+{ "description": "Email client: folders + coloured labels, threads, bulk actions, search filters, snooze, swipe actions, floating / minimisable compose with rich text, chips + autocomplete, attachments, signature, schedule send, draft autosave, undo send, settings.", "dependencies": ["apps", "overlays", "forms", "data-display"] }

@@ -1,0 +1,62 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>آفلاین · AraminConsole</title>
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+  <link rel="stylesheet" href="../standalone.css">
+  <script type="module" src="../../dist/aramin-console.js"></script>
+  <script type="module" src="../standalone.js"></script>
+</head>
+<body data-page="offline">
+  <main class="ac-fullpage err">
+    <div class="sa-top">
+      <a class="ac-chrome ac-brand" href="../" aria-label="Aramin">
+        <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+        <span class="ac-brand__name">Aramin</span>
+      </a>
+      <div class="ac-chrome sa-tools">
+        <div data-ac="langpicker"></div>
+        <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+      </div>
+    </div>
+
+    <div class="err-box">
+      <svg class="err-art" viewBox="0 0 320 230" role="img" aria-label="Offline">
+        <ellipse class="ill-shadow" cx="160" cy="214" rx="100" ry="9"/>
+        <g class="ill-float">
+          <path class="ill-card" stroke-width="1.5" d="M92 160a42 42 0 0 1-3-84 58 58 0 0 1 110-14 46 46 0 0 1 33 98z"/>
+          <g class="ill-ink-s" stroke-width="10" stroke-linecap="round">
+            <path d="M118 112a62 62 0 0 1 84 0"/>
+            <path d="M134 130a36 36 0 0 1 52 0"/>
+          </g>
+          <circle class="ill-ink" cx="160" cy="146" r="7"/>
+          <path class="ill-acc-s" d="M112 70l92 86" stroke-width="12" stroke-linecap="round"/>
+        </g>
+        <g class="ill-dots"><circle class="ill-acc" cx="146" cy="182" r="4.5"/><circle class="ill-acc" cx="160" cy="182" r="4.5"/><circle class="ill-acc" cx="174" cy="182" r="4.5"/></g>
+        <g class="ill-float ill-float--slow">
+          <rect class="ill-ink" x="40" y="168" width="44" height="26" rx="10"/>
+          <path class="ill-ink-s" d="M48 168v-10M76 168v-10" stroke-width="5" stroke-linecap="round"/>
+          <path class="ill-acc-s" d="M84 181h22" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 8"/>
+          <rect class="ill-acc" x="236" y="168" width="44" height="26" rx="10"/>
+          <path class="ill-acc-s" d="M214 181h22" stroke-width="5" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <span class="err-code" dir="auto" data-net-status role="status" data-i18n="errpage.offlineBadge">Offline</span>
+      <h1 class="err-title" data-i18n="errpage.tOffline">اتصال اینترنت قطع است</h1>
+      <p class="err-text" data-i18n="errpage.pOffline">صفحه‌هایی که قبلاً باز کرده‌اید همچنان در دسترس‌اند. به محض وصل شدن، خودکار برمی‌گردیم.</p>
+      
+      <div class="err-actions">
+        <button class="ac-btn ac-btn--primary" type="button" data-action="retry"><svg class="ac-icon" aria-hidden="true"><use href="#i-refresh-cw"/></svg><span data-i18n="errpage.retry">تلاش دوباره</span></button>
+        <a class="ac-btn ac-btn--outline" href="../#/dashboard"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg><span data-i18n="errpage.home">بازگشت به داشبورد</span></a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

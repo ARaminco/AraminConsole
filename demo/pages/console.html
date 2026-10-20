@@ -1,0 +1,136 @@
+<section class="ac-page" data-page="console" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="ops.eyebrow">میزبانی اشتراکی، درگاه‌های واتس‌اپ و هوش مصنوعی</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.console">کنسول عملیات</h1>
+      <p class="ac-page-head__sub" data-i18n="ops.sub">وضعیت سرویس‌ها، لاگ زنده، صف کارها و حادثه‌ها در یک نگاه.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <span class="ops-live ac-hide-phone"><span class="ac-status ac-status--pulse" data-status="online"></span><span data-i18n="ops.live">زنده</span></span>
+      <button class="ac-btn ac-hide-phone" type="button" data-ops-refresh><svg class="ac-icon" aria-hidden="true"><use href="#i-refresh-cw"/></svg><span data-i18n="ops.refresh">بازخوانی</span></button>
+      <button class="ac-btn ac-btn--primary" type="button" data-ops-focus-term><svg class="ac-icon" aria-hidden="true"><use href="#i-square-terminal"/></svg><span data-i18n="ops.runCommand">اجرای دستور</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- summary KPIs -->
+    <article class="ac-card ac-span-12 ac-card--static">
+      <div class="ac-card__body">
+        <div class="ac-kpis ops-kpis">
+          <div class="ac-kpi ac-kpi--accent">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="ops.sites">سایت‌های آنلاین</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-globe"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="108">0</span><small class="ops-of">/110</small></div>
+            <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">98.2%</span><span data-i18n="ops.onShared">روی سرور اشتراکی</span></div>
+          </div>
+          <div class="ac-kpi">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="ops.services">سرویس‌های سالم</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-activity"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="0" data-ops-count="online">0</span><small class="ops-of" data-ops-count-total>/12</small></div>
+            <div class="ac-kpi__foot"><span class="ac-badge ac-badge--warning ac-badge--dot" data-ops-count-label="degraded">1</span><span class="ac-badge ac-badge--danger ac-badge--dot" data-ops-count-label="down">1</span></div>
+          </div>
+          <div class="ac-kpi">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="ops.queue">صف کارها</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-list-checks"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="0" data-ops-count="jobs">0</span></div>
+            <div class="ac-kpi__foot"><span class="ac-trend" data-trend="down">12%</span><span data-i18n="ops.lastHour">ساعت گذشته</span></div>
+          </div>
+          <div class="ac-kpi">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="ops.openIncidents">حادثه‌های باز</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-triangle-alert"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="0" data-ops-count="incidents">0</span></div>
+            <div class="ac-kpi__foot"><span class="ac-text-xs" data-i18n="ops.mttr">میانگین رفع ۲۴ دقیقه</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- services grid -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-7">
+      <div class="ac-card__head pa-head-wrap">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ops.statusTitle">وضعیت سرویس‌ها</h2>
+          <p class="ac-card__sub" data-i18n="ops.statusSub">بررسی سلامت هر ۳۰ ثانیه</p>
+        </div>
+        <div class="ac-segmented ac-segmented--sm" data-ac="segmented" data-ops-group aria-label="Group" data-i18n-attr="aria-label:ops.group">
+          <button class="ac-segmented__item" type="button" data-value="all" aria-checked="true" data-i18n="ops.all">همه</button>
+          <button class="ac-segmented__item" type="button" data-value="hosting" data-i18n="ops.hosting">میزبانی</button>
+          <button class="ac-segmented__item" type="button" data-value="whatsapp" data-i18n="ops.whatsapp">واتس‌اپ</button>
+          <button class="ac-segmented__item" type="button" data-value="ai" data-i18n="ops.ai">هوش مصنوعی</button>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="ops-services" data-ops-services></div>
+      </div>
+    </article>
+
+    <!-- terminal -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-5 ops-termcard">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ops.terminal">ترمینال</h2>
+          <p class="ac-card__sub" data-i18n="ops.terminalSub">help را بزنید؛ ↑ ↓ تاریخچه</p>
+        </div>
+        <button class="ac-btn ac-btn--ghost ac-btn--sm" type="button" data-ops-term-clear><svg class="ac-icon" aria-hidden="true"><use href="#i-eraser"/></svg><span data-i18n="log.clear">پاک کردن</span></button>
+      </div>
+      <div class="ac-card__body">
+        <div class="ops-term" data-ops-term data-title="ali@srv.cohub.co"></div>
+      </div>
+    </article>
+
+    <!-- uptime bars -->
+    <article class="ac-card ac-card--static ac-span-12">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ops.uptime">دسترس‌پذیری ۹۰ روز اخیر</h2>
+          <p class="ac-card__sub" data-i18n="ops.uptimeSub">هر خانه یک روز است؛ قدیمی‌ترین در ابتدا</p>
+        </div>
+        <div class="ac-legend ac-legend--inline ops-legend">
+          <span class="ac-legend__item"><i class="ops-sw" data-s="up"></i><span data-i18n="ops.up">سالم</span></span>
+          <span class="ac-legend__item"><i class="ops-sw" data-s="partial"></i><span data-i18n="ops.partial">اختلال</span></span>
+          <span class="ac-legend__item"><i class="ops-sw" data-s="down"></i><span data-i18n="ops.down">قطع</span></span>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="ops-uptime" data-ops-uptime></div>
+      </div>
+    </article>
+
+    <!-- live logs -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-8">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ops.logs">لاگ زنده</h2>
+          <p class="ac-card__sub" data-i18n="ops.logsSub">nginx · api · worker · wapi — فیلتر سطح، توقف و دنبال‌کردن</p>
+        </div>
+        <span class="ac-badge ac-badge--success ac-badge--dot" data-i18n="ops.streaming">در حال دریافت</span>
+      </div>
+      <div class="ac-card__body">
+        <div class="ops-log" data-ops-log></div>
+      </div>
+    </article>
+
+    <!-- incidents -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-4">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ops.incidents">حادثه‌ها</h2>
+          <p class="ac-card__sub" data-i18n="ops.incidentsSub">۴۸ ساعت گذشته</p>
+        </div>
+        <a class="ac-btn ac-btn--ghost ac-btn--sm" href="#/timeline" data-i18n="common.viewAll">مشاهدهٔ همه</a>
+      </div>
+      <div class="ac-card__body">
+        <ol class="ac-timeline ops-incidents" data-ops-incidents></ol>
+      </div>
+    </article>
+
+    <!-- jobs -->
+    <article class="ac-card ac-span-12">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="ops.jobs">کارهای پس‌زمینه</h2>
+          <p class="ac-card__sub" data-i18n="ops.jobsSub">پشتیبان‌گیری، تمدید SSL، ارسال انبوه واتس‌اپ، پردازش‌های هوش مصنوعی</p>
+        </div>
+      </div>
+      <div class="ac-card__body ac-card__body--flush">
+        <div data-ops-jobs></div>
+      </div>
+    </article>
+  </div>
+</section>

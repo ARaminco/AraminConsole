@@ -1,0 +1,676 @@
+/*! AraminConsole v0.1.0 — module notify — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+const __R = globalThis.__AC_MODS__ || (globalThis.__AC_MODS__ = {});
+if (!__R["core"]) await import('./core.js');
+if (!__R["overlays"]) await import('./overlays.js');
+
+/* ======== module: notify ======== */
+if (!__R["notify"]) __R["notify"] = (() => {
+const F = {};
+
+/* ---- modules/notify/notify.js ---- */
+const __ac_m1i = F["modules/notify/notify.js"] = (() => {
+/* Notify module — one API for every kind of notification, routed by per-user preferences.
+   Contract (src/modules/README.md): no core imports, install(AC) wires it into window.AC. Builds on AC.toast, AC.notifications,
+   AC.gesture (overlays module) when present.
+
+   AC.notify('Saved') · AC.notify({
+     variant: 'toast'|'card'|'banner'|'inline'|'snackbar'|'progress'|'island'|'system'|'center',
+     event: 'mention',                   // routes through the user's preferences for that event type (channels below)
+     title, text, tone: 'accent|success|warning|danger|info|neutral', icon, avatar: 'ع‌ر' | { src }, image,
+     actions: [{ label, onClick(handle), primary, keep }], position: 'top-start|top-center|top-end|bottom-start|bottom-center|bottom-end',
+     duration (ms, 0 = sticky), priority: 'low|normal|high|urgent', group: 'chat:42', sound, haptic, swipe: 'x'|'y',
+     target (inline), progress (0..1, progress), expand (island), href, id, onClose(reason), onUndo (snackbar) })
+   → handle { id, el, variant, close(reason), update(patch) }   (progress: update({ progress: .4 }) · done(text) · fail(text))
+   Shortcuts: AC.notify.toast|card|banner|inline|snackbar|progress|island|system|center(opts)
+   Preferences: AC.notify.prefs() · AC.notify.setPrefs(patch) · AC.notify.events.define({ id, label, icon, defaults })
+                AC.notify.settings(el) or <div data-ac="notify-prefs"></div>
+   System & push: AC.notify.permission() → 'granted'|'denied'|'default'|'unsupported' (asks when 'default')
+                  AC.notify.push.subscribe({ vapidKey, endpoint }) · unsubscribe() · state() · simulate(payload)
+   AC.notify.clear(variant?) · AC.notify.sound(kind) · AC.notify.haptic(priority)
+   Events (document): ac:notify:show { variant, id } · ac:notify:close { variant, id, reason } · ac:notify:action { id, label }
+                      ac:notify:prefs { prefs } · ac:notify:click (system/push notification clicked) */
+
+const NAME = 'notify';
+const KEY = 'ac:notify';
+const POSITIONS = ['top-start', 'top-center', 'top-end', 'bottom-start', 'bottom-center', 'bottom-end'];
+const TONE_ICON = { success: 'circle-check', danger: 'circle-alert', warning: 'triangle-alert', info: 'info', accent: 'bell', neutral: 'bell' };
+const D = {
+  en: {
+    close: 'Dismiss', undo: 'Undo', more: '+{n} more', showLess: 'Show less', uploading: 'Uploading…', done: 'Done', failed: 'Failed',
+    title: 'Notification preferences', sub: 'Choose how and where each kind of update reaches you.',
+    general: 'General', sound: 'Sound', soundSub: 'A soft chime for new notifications', haptic: 'Haptics', hapticSub: 'Vibrate on phones',
+    quiet: 'Do not disturb', quietSub: 'Only urgent notifications pop up', position: 'Position', positionSub: 'Where pop-ups appear',
+    max: 'Visible at once', system: 'System notifications', systemSub: 'Show notifications outside the browser',
+    push: 'Push notifications', pushSub: 'Receive alerts even when the app is closed',
+    allow: 'Allow', allowed: 'Allowed', blocked: 'Blocked in browser settings', unsupported: 'Not supported here',
+    subscribe: 'Turn on', unsubscribe: 'Turn off', simulated: 'Demo mode (simulated push)', on: 'On', off: 'Off',
+    event: 'Event', inapp: 'In-app', center: 'Inbox', osPush: 'System', chime: 'Sound', test: 'Test',
+    'pos.top-start': 'Top start', 'pos.top-center': 'Top center', 'pos.top-end': 'Top end', 'pos.bottom-start': 'Bottom start', 'pos.bottom-center': 'Bottom center', 'pos.bottom-end': 'Bottom end',
+    'ev.mention': 'Mentions', 'ev.mentionSub': 'Someone mentions you or replies', 'ev.order': 'Orders', 'ev.orderSub': 'New and updated orders',
+    'ev.invoice': 'Invoices & payments', 'ev.invoiceSub': 'Paid, overdue and refunded', 'ev.security': 'Security', 'ev.securitySub': 'Sign-ins and permission changes',
+    'ev.system': 'System status', 'ev.systemSub': 'Incidents and maintenance', 'ev.marketing': 'Product news', 'ev.marketingSub': 'Tips and new features',
+    testTitle: 'Test notification', testText: 'This is how “{e}” notifications look.',
+  },
+  fa: {
+    close: 'بستن', undo: 'بازگردانی', more: '{n} مورد دیگر', showLess: 'نمایش کمتر', uploading: 'در حال بارگذاری…', done: 'انجام شد', failed: 'ناموفق',
+    title: 'تنظیمات اعلان‌ها', sub: 'انتخاب کنید هر نوع خبر چطور و از کجا به شما برسد.',
+    general: 'عمومی', sound: 'صدا', soundSub: 'صدای ملایم برای اعلان تازه', haptic: 'لرزش', hapticSub: 'لرزش کوتاه روی گوشی',
+    quiet: 'مزاحم نشوید', quietSub: 'فقط اعلان‌های فوری نمایش داده شوند', position: 'محل نمایش', positionSub: 'اعلان‌ها کجای صفحه بیایند',
+    max: 'حداکثر هم‌زمان', system: 'اعلان سیستم', systemSub: 'نمایش اعلان بیرون از مرورگر',
+    push: 'اعلان پوش', pushSub: 'دریافت هشدار حتی وقتی اپ بسته است',
+    allow: 'اجازه دادن', allowed: 'مجاز است', blocked: 'در تنظیمات مرورگر مسدود شده', unsupported: 'اینجا پشتیبانی نمی‌شود',
+    subscribe: 'روشن کردن', unsubscribe: 'خاموش کردن', simulated: 'حالت نمایشی (پوش شبیه‌سازی‌شده)', on: 'روشن', off: 'خاموش',
+    event: 'رویداد', inapp: 'داخل اپ', center: 'صندوق', osPush: 'سیستم', chime: 'صدا', test: 'آزمایش',
+    'pos.top-start': 'بالا، ابتدا', 'pos.top-center': 'بالا، وسط', 'pos.top-end': 'بالا، انتها', 'pos.bottom-start': 'پایین، ابتدا', 'pos.bottom-center': 'پایین، وسط', 'pos.bottom-end': 'پایین، انتها',
+    'ev.mention': 'منشن‌ها', 'ev.mentionSub': 'وقتی کسی شما را صدا می‌زند یا پاسخ می‌دهد', 'ev.order': 'سفارش‌ها', 'ev.orderSub': 'سفارش تازه و تغییر وضعیت',
+    'ev.invoice': 'فاکتور و پرداخت', 'ev.invoiceSub': 'پرداخت، سررسید گذشته و بازپرداخت', 'ev.security': 'امنیت', 'ev.securitySub': 'ورودها و تغییر دسترسی‌ها',
+    'ev.system': 'وضعیت سیستم', 'ev.systemSub': 'قطعی و تعمیرات', 'ev.marketing': 'خبرهای محصول', 'ev.marketingSub': 'نکته‌ها و امکانات تازه',
+    testTitle: 'اعلان آزمایشی', testText: 'اعلان‌های «{e}» این شکلی دیده می‌شوند.',
+  },
+  ar: {
+    close: 'إغلاق', undo: 'تراجع', more: '+{n} أخرى', showLess: 'عرض أقل', uploading: 'جارٍ الرفع…', done: 'تم', failed: 'فشل',
+    title: 'تفضيلات الإشعارات', sub: 'اختر كيف وأين يصلك كل نوع من التحديثات.',
+    general: 'عام', sound: 'الصوت', soundSub: 'رنين خفيف للإشعارات الجديدة', haptic: 'الاهتزاز', hapticSub: 'اهتزاز على الهواتف',
+    quiet: 'عدم الإزعاج', quietSub: 'تظهر الإشعارات العاجلة فقط', position: 'الموضع', positionSub: 'أين تظهر الإشعارات',
+    max: 'المعروض معاً', system: 'إشعارات النظام', systemSub: 'إظهار الإشعارات خارج المتصفح',
+    push: 'الإشعارات الفورية', pushSub: 'استلم التنبيهات حتى مع إغلاق التطبيق',
+    allow: 'سماح', allowed: 'مسموح', blocked: 'محظور في إعدادات المتصفح', unsupported: 'غير مدعوم هنا',
+    subscribe: 'تشغيل', unsubscribe: 'إيقاف', simulated: 'وضع تجريبي (إشعار محاكى)', on: 'مفعّل', off: 'متوقف',
+    event: 'الحدث', inapp: 'داخل التطبيق', center: 'الصندوق', osPush: 'النظام', chime: 'الصوت', test: 'تجربة',
+    'pos.top-start': 'أعلى البداية', 'pos.top-center': 'أعلى الوسط', 'pos.top-end': 'أعلى النهاية', 'pos.bottom-start': 'أسفل البداية', 'pos.bottom-center': 'أسفل الوسط', 'pos.bottom-end': 'أسفل النهاية',
+    'ev.mention': 'الإشارات', 'ev.mentionSub': 'عندما يذكرك أحد أو يرد عليك', 'ev.order': 'الطلبات', 'ev.orderSub': 'طلبات جديدة ومحدّثة',
+    'ev.invoice': 'الفواتير والمدفوعات', 'ev.invoiceSub': 'مدفوعة ومتأخرة ومستردة', 'ev.security': 'الأمان', 'ev.securitySub': 'تسجيلات الدخول وتغييرات الصلاحيات',
+    'ev.system': 'حالة النظام', 'ev.systemSub': 'الأعطال والصيانة', 'ev.marketing': 'أخبار المنتج', 'ev.marketingSub': 'نصائح وميزات جديدة',
+    testTitle: 'إشعار تجريبي', testText: 'هكذا تبدو إشعارات «{e}».',
+  },
+};
+
+let A = null;
+const T = (k, vars) => {
+  const lang = A?.i18n?.lang || document.documentElement.lang || 'en';
+  let s = A?.i18n?.dict?.[`notify.${k}`] ?? D[lang]?.[k] ?? D.en[k] ?? k;
+  if (vars) s = s.replace(/\{(\w+)\}/g, (m, x) => vars[x] ?? m);
+  return s;
+};
+const tx = (v) => (v && typeof v === 'object' && !(v instanceof Node) ? v[A?.i18n?.lang] ?? v.en ?? v.fa ?? Object.values(v)[0] : v ?? '');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ico = (n, cls = '') => `<svg class="ac-icon${cls ? ` ${cls}` : ''}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const fire = (name, detail = {}) => document.dispatchEvent(new CustomEvent(`ac:${name}`, { bubbles: true, detail }));
+const reduced = () => A?.reducedMotion?.() ?? matchMedia('(prefers-reduced-motion: reduce)').matches;
+const phone = () => matchMedia('(max-width: 639.98px)').matches;
+let n = 0; const uid = () => `ntf-${(++n).toString(36)}${Math.random().toString(36).slice(2, 5)}`;
+
+/* ------------------------------------------------------------------ event types + preferences */
+const EVENTS = new Map();
+const CHANNELS = ['inapp', 'center', 'system', 'sound'];
+function define(ev) {
+  EVENTS.set(ev.id, { icon: 'bell', ...ev, defaults: { inapp: 'toast', center: true, system: false, sound: false, ...(ev.defaults || {}) } });
+}
+[
+  { id: 'mention', icon: 'at-sign', defaults: { inapp: 'card', system: true, sound: true } },
+  { id: 'order', icon: 'shopping-cart', defaults: { inapp: 'toast' } },
+  { id: 'invoice', icon: 'receipt', defaults: { inapp: 'toast', system: true } },
+  { id: 'security', icon: 'shield-check', defaults: { inapp: 'banner', system: true, sound: true } },
+  { id: 'system', icon: 'server', defaults: { inapp: 'island', center: true } },
+  { id: 'marketing', icon: 'megaphone', defaults: { inapp: 'off', center: true } },
+].forEach(define);
+
+const DEFAULT_PREFS = { position: 'auto', sound: false, haptic: true, quiet: false, max: 3, swipe: 'x', events: {} };
+function prefs() {
+  let p = {};
+  try { p = JSON.parse(localStorage.getItem(KEY)) || {}; } catch { /* ignore */ }
+  const out = { ...DEFAULT_PREFS, ...p, events: {} };
+  for (const [id, ev] of EVENTS) out.events[id] = { ...ev.defaults, ...(p.events?.[id] || {}) };
+  return out;
+}
+function setPrefs(patch = {}) {
+  const cur = prefs();
+  const next = { ...cur, ...patch, events: { ...cur.events } };
+  for (const [id, e] of Object.entries(patch.events || {})) next.events[id] = { ...cur.events[id], ...e };
+  try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* private mode */ }
+  fire('notify:prefs', { prefs: next });
+  return next;
+}
+const posOf = (o, p = prefs()) => {
+  const pos = o.position || (p.position !== 'auto' ? p.position : null);
+  if (POSITIONS.includes(pos)) return pos;
+  return phone() ? 'top-center' : 'bottom-end';
+};
+
+/* ------------------------------------------------------------------ feedback: sound + haptics */
+let audio = null;
+function sound(kind = 'default') {
+  try {
+    audio ||= new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state === 'suspended') audio.resume();
+    const t = audio.currentTime;
+    const notes = kind === 'urgent' ? [[880, 0], [880, 0.16], [880, 0.32]] : kind === 'success' ? [[784, 0], [1175, 0.08]] : kind === 'soft' ? [[1047, 0]] : [[988, 0], [1319, 0.09]];
+    for (const [f, d] of notes) {
+      const o = audio.createOscillator(); const g = audio.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.07, t + d + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.38);
+      o.connect(g).connect(audio.destination); o.start(t + d); o.stop(t + d + 0.42);
+    }
+    return true;
+  } catch { return false; }
+}
+function haptic(priority = 'normal') {
+  const pattern = { low: 4, normal: 8, high: [10, 40, 10], urgent: [18, 60, 18, 60, 18] }[priority] ?? 8;
+  try { return !!navigator.vibrate?.(pattern); } catch { return false; }
+}
+
+/* ------------------------------------------------------------------ helpers shared by the custom variants */
+function leadHTML(o) {
+  if (o.avatar) {
+    const av = tx(o.avatar);
+    return typeof av === 'object' && av?.src
+      ? `<img class="ac-ntf__avatar" src="${esc(av.src)}" alt="">`
+      : `<span class="ac-avatar ac-avatar--sm ac-ntf__avatar" data-color="${esc(o.color || 1)}" aria-hidden="true">${esc(av)}</span>`;
+  }
+  const icon = o.icon || TONE_ICON[o.tone] || 'bell';
+  return `<span class="ac-ntf__icon" data-tone="${esc(o.tone || 'neutral')}">${ico(icon)}</span>`;
+}
+function actionsHTML(o) {
+  if (!o.actions?.length) return '';
+  return `<div class="ac-ntf__actions">${o.actions.map((a, i) => `<button class="ac-btn ac-btn--sm ${a.primary ? 'ac-btn--primary' : ''}" type="button" data-ntf-action="${i}">${a.icon ? ico(a.icon) : ''}<span>${esc(tx(a.label))}</span></button>`).join('')}</div>`;
+}
+function timer(h, ms, el) {
+  let t = 0; let started = 0; let left = ms;
+  const api = {
+    start() { if (!ms || started || h.closed) return; started = performance.now(); t = setTimeout(() => h.close('timeout'), left); el?.style.setProperty('--_play', 'running'); },
+    pause() { if (!ms || !started) return; clearTimeout(t); left -= performance.now() - started; started = 0; el?.style.setProperty('--_play', 'paused'); },
+    stop() { clearTimeout(t); },
+    reset(next = ms) { clearTimeout(t); started = 0; ms = next; left = next; },
+  };
+  return api;
+}
+function wireActions(el, h) {
+  el.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-ntf-action]');
+    if (b) {
+      const a = h.o.actions?.[Number(b.dataset.ntfAction)];
+      fire('notify:action', { id: h.id, label: tx(a?.label) });
+      a?.onClick?.(h);
+      if (!a?.keep) h.close('action');
+      return;
+    }
+    if (e.target.closest('[data-ntf-close]')) h.close('button');
+    else if (h.o.href && !e.target.closest('button, a')) { location.href = h.o.href; h.close('open'); }
+  });
+}
+function swipe(el, h, axis) {
+  if (!A?.gesture) return;
+  A.gesture(el, {
+    axis,
+    filter: (e) => !e.target.closest('button, a, input'),
+    onStart: () => { el.setAttribute('data-dragging', ''); h._t?.pause(); },
+    onMove: (s) => { const d = axis === 'y' ? s.dy : s.dx; el.style.setProperty(axis === 'y' ? '--_sy' : '--_sx', `${d}px`); el.style.setProperty('--_so', String(Math.max(0, 1 - Math.abs(d) / (axis === 'y' ? 120 : el.offsetWidth)))); },
+    onEnd: (s) => {
+      el.removeAttribute('data-dragging');
+      const d = axis === 'y' ? s.dy : s.dx; const v = axis === 'y' ? s.vy : s.vx;
+      const far = axis === 'y' ? Math.abs(d) > 48 : Math.abs(d) > el.offsetWidth * 0.35;
+      if (!s.cancelled && (far || Math.abs(v) > 0.5)) {
+        A.haptic?.();
+        el.style.setProperty(axis === 'y' ? '--_sy' : '--_sx', `${Math.sign(d || v) * (axis === 'y' ? 160 : el.offsetWidth + 40)}px`);
+        el.dataset.state = 'swiped';
+        h.close('swipe');
+      } else { el.style.setProperty('--_sx', '0px'); el.style.setProperty('--_sy', '0px'); el.style.setProperty('--_so', '1'); h._t?.start(); }
+    },
+  });
+}
+
+/* ------------------------------------------------------------------ rich cards (also progress) — stacked per position */
+const stacks = new Map();
+const live = new Map(); // id -> handle
+function stack(pos) {
+  let s = stacks.get(pos);
+  if (s?.isConnected) return s;
+  s = document.createElement('section');
+  s.className = 'ac-ntf-stack'; s.dataset.position = pos;
+  s.setAttribute('aria-live', 'polite'); s.setAttribute('aria-label', A?.t?.('overlay.notifications', 'Notifications') || 'Notifications');
+  s.innerHTML = '<div class="ac-ntf-stack__list"></div><button class="ac-ntf-stack__more" type="button" hidden></button>';
+  s.querySelector('.ac-ntf-stack__more').addEventListener('click', () => { s.toggleAttribute('data-expanded'); layoutStack(s); });
+  s.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') pauseStack(s, true); });
+  s.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') pauseStack(s, false); });
+  s.addEventListener('focusin', () => pauseStack(s, true));
+  s.addEventListener('focusout', (e) => { if (!s.contains(e.relatedTarget)) pauseStack(s, false); });
+  document.body.append(s);
+  stacks.set(pos, s);
+  return s;
+}
+function pauseStack(s, paused) { for (const el of s.querySelectorAll('.ac-ntf')) { const h = live.get(el.dataset.id); if (h) (paused ? h._t?.pause() : h._t?.start()); } }
+function layoutStack(s) {
+  const max = prefs().max || 3;
+  const items = [...s.querySelectorAll('.ac-ntf:not([data-state="exit"]):not([data-state="swiped"])')];
+  const expanded = s.hasAttribute('data-expanded');
+  const top = s.dataset.position.startsWith('top');
+  // newest sits closest to the edge
+  const ordered = top ? items.slice().reverse() : items;
+  ordered.forEach((el, i) => el.toggleAttribute('data-overflow', !expanded && i >= max));
+  const hidden = expanded ? 0 : Math.max(0, items.length - max);
+  const more = s.querySelector('.ac-ntf-stack__more');
+  more.hidden = items.length <= max;
+  more.textContent = expanded ? T('showLess') : T('more', { n: hidden });
+}
+
+function card(o) {
+  const p = prefs();
+  const pos = posOf(o, p);
+  const s = stack(pos);
+  const id = String(o.id ?? uid());
+  if (live.has(id)) return live.get(id).update(o);
+  const el = document.createElement('div');
+  el.className = 'ac-ntf'; el.dataset.id = id; el.dataset.variant = o.variant; el.dataset.state = 'enter';
+  el.setAttribute('role', o.priority === 'urgent' || o.tone === 'danger' ? 'alert' : 'status');
+  const h = { id, el, variant: o.variant, o, closed: false,
+    close(reason = 'api') {
+      if (h.closed) return; h.closed = true; h._t?.stop(); live.delete(id);
+      if (el.dataset.state !== 'swiped') el.dataset.state = 'exit';
+      fire('notify:close', { variant: o.variant, id, reason }); h.o.onClose?.(reason);
+      setTimeout(() => { el.remove(); layoutStack(s); if (!s.querySelector('.ac-ntf')) s.removeAttribute('data-expanded'); }, reduced() ? 0 : 280);
+      layoutStack(s);
+    },
+    update(patch = {}) { Object.assign(h.o, patch); render(); if ('duration' in patch) { h._t.reset(patch.duration); h._t.start(); } return h; },
+  };
+  const render = () => {
+    const x = h.o;
+    const pct = x.progress == null ? null : Math.round(Math.max(0, Math.min(1, x.progress)) * 100);
+    el.dataset.tone = x.tone || '';
+    el.innerHTML = `${x.image ? `<img class="ac-ntf__image" src="${esc(x.image)}" alt="" loading="lazy">` : ''}
+      <div class="ac-ntf__row">${x.variant === 'progress' && x.state !== 'done' && x.state !== 'error' ? `<span class="ac-ntf__icon" data-tone="${esc(x.tone || 'accent')}">${ico(x.icon || 'file-up')}</span>` : leadHTML(x)}
+        <div class="ac-ntf__body">
+          <div class="ac-ntf__head"><strong class="ac-ntf__title">${esc(tx(x.title))}</strong>${x.meta || x.time ? `<span class="ac-ntf__meta">${esc(tx(x.meta || x.time))}</span>` : ''}</div>
+          ${x.text ? `<p class="ac-ntf__text">${esc(tx(x.text))}</p>` : ''}
+          ${pct != null ? `<div class="ac-ntf__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="ac-ntf__bar"></span></div><span class="ac-ntf__pct">${pct}%</span>` : ''}
+          ${actionsHTML(x)}
+        </div>
+        ${x.dismissible === false ? '' : `<button class="ac-ntf__close" type="button" data-ntf-close aria-label="${esc(T('close'))}">${ico('x')}</button>`}
+      </div>
+      ${h.duration ? '<span class="ac-ntf__timer" aria-hidden="true"></span>' : ''}`;
+    if (pct != null) el.style.setProperty('--_p', String(pct / 100));
+    el.style.setProperty('--_dur', `${h.duration}ms`);
+  };
+  h.duration = Number(o.duration ?? (o.variant === 'progress' ? 0 : o.priority === 'urgent' ? 0 : o.actions?.length ? 9000 : 6000)) || 0;
+  render();
+  h._t = timer(h, h.duration, el);
+  if (o.variant === 'progress') {
+    h.done = (text, extra = {}) => { h.update({ state: 'done', progress: 1, tone: 'success', icon: 'circle-check', title: text || T('done'), ...extra }); h._t.reset(3500); h.duration = 3500; h._t.start(); return h; };
+    h.fail = (text, extra = {}) => { h.update({ state: 'error', tone: 'danger', icon: 'circle-alert', title: text || T('failed'), ...extra }); return h; };
+  }
+  wireActions(el, h);
+  swipe(el, h, o.swipe || p.swipe || 'x');
+  live.set(id, h);
+  s.querySelector('.ac-ntf-stack__list')[pos.startsWith('top') ? 'prepend' : 'append'](el);
+  layoutStack(s);
+  requestAnimationFrame(() => requestAnimationFrame(() => { if (el.dataset.state === 'enter') el.removeAttribute('data-state'); }));
+  h._t.start();
+  return h;
+}
+
+/* ------------------------------------------------------------------ banner (top, full width, one at a time) */
+let bannerQ = []; let bannerCur = null;
+function banner(o) {
+  const id = String(o.id ?? uid());
+  if (bannerCur?.id === id) return bannerCur.update(o);
+  const h = { id, variant: 'banner', o, closed: false, el: null,
+    close(reason = 'api') {
+      if (h.closed) return; h.closed = true; h._t?.stop();
+      if (!h.el) { bannerQ = bannerQ.filter((x) => x !== h); return; }
+      h.el.dataset.state = 'exit';
+      document.documentElement.style.removeProperty('--ac-banner-h');
+      fire('notify:close', { variant: 'banner', id, reason }); h.o.onClose?.(reason);
+      setTimeout(() => { h.el.remove(); bannerCur = null; const next = bannerQ.shift(); if (next) showBanner(next); }, reduced() ? 0 : 260);
+    },
+    update(patch) { Object.assign(h.o, patch); if (h.el) renderBanner(h); return h; },
+  };
+  if (bannerCur && !bannerCur.closed) {
+    if (o.priority === 'urgent') { bannerQ.unshift(h); bannerCur.close('replaced'); } else bannerQ.push(h);
+    return h;
+  }
+  showBanner(h);
+  return h;
+}
+function renderBanner(h) {
+  const x = h.o;
+  h.el.dataset.tone = x.tone || 'neutral';
+  h.el.innerHTML = `<div class="ac-ntf-banner__inner">${leadHTML(x)}<div class="ac-ntf-banner__text"><strong>${esc(tx(x.title))}</strong>${x.text ? `<span>${esc(tx(x.text))}</span>` : ''}</div>${actionsHTML(x)}
+    ${x.dismissible === false ? '' : `<button class="ac-ntf__close" type="button" data-ntf-close aria-label="${esc(T('close'))}">${ico('x')}</button>`}</div>`;
+}
+function showBanner(h) {
+  bannerCur = h;
+  const el = document.createElement('div');
+  el.className = 'ac-ntf-banner'; el.dataset.state = 'enter';
+  el.setAttribute('role', h.o.priority === 'urgent' || h.o.tone === 'danger' ? 'alert' : 'status');
+  h.el = el; renderBanner(h); wireActions(el, h);
+  document.body.append(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.removeAttribute('data-state'); document.documentElement.style.setProperty('--ac-banner-h', `${el.offsetHeight}px`); }));
+  h._t = timer(h, Number(h.o.duration ?? 0) || 0, el);
+  el.addEventListener('pointerenter', () => h._t.pause()); el.addEventListener('pointerleave', () => h._t.start());
+  swipe(el, h, 'y');
+  h._t.start();
+}
+
+/* ------------------------------------------------------------------ snackbar with undo (bottom, inverse, one at a time) */
+let snack = null;
+function snackbar(o) {
+  snack?.close('replaced');
+  const id = String(o.id ?? uid());
+  const dur = Number(o.duration ?? 6000) || 0;
+  const el = document.createElement('div');
+  el.className = 'ac-snack'; el.dataset.state = 'enter'; el.setAttribute('role', 'status');
+  el.dataset.position = (o.position || '').startsWith('top') ? 'top' : 'bottom';
+  const undo = o.onUndo || o.actions?.length;
+  el.innerHTML = `${dur ? `<svg class="ac-snack__ring" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle class="ac-snack__left" cx="12" cy="12" r="9" pathLength="100"/></svg>` : ''}
+    <span class="ac-snack__text">${esc(tx(o.title || o.text))}</span>
+    ${undo ? `<button class="ac-snack__action" type="button" data-snack-undo>${o.onUndo ? ico('undo-2') : ''}<span>${esc(tx(o.actions?.[0]?.label) || T('undo'))}</span></button>` : ''}
+    <button class="ac-snack__close" type="button" data-ntf-close aria-label="${esc(T('close'))}">${ico('x')}</button>`;
+  el.style.setProperty('--_dur', `${dur}ms`);
+  const h = { id, el, variant: 'snackbar', o, closed: false,
+    close(reason = 'api') {
+      if (h.closed) return; h.closed = true; h._t.stop();
+      el.dataset.state = 'exit';
+      if (reason !== 'undo') h.o.onCommit?.(reason);
+      fire('notify:close', { variant: 'snackbar', id, reason }); h.o.onClose?.(reason);
+      setTimeout(() => el.remove(), reduced() ? 0 : 240);
+      if (snack === h) snack = null;
+    },
+    update(patch) { Object.assign(h.o, patch); el.querySelector('.ac-snack__text').textContent = tx(h.o.title || h.o.text); return h; },
+  };
+  h._t = timer(h, dur, el);
+  el.addEventListener('click', (e) => {
+    if (e.target.closest('[data-snack-undo]')) { A?.haptic?.(); (h.o.onUndo || h.o.actions?.[0]?.onClick)?.(h); fire('notify:action', { id, label: 'undo' }); h.close('undo'); }
+    else if (e.target.closest('[data-ntf-close]')) h.close('button');
+  });
+  el.addEventListener('pointerenter', () => h._t.pause()); el.addEventListener('pointerleave', () => h._t.start());
+  swipe(el, h, 'y');
+  document.body.append(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.removeAttribute('data-state')));
+  h._t.start();
+  snack = h;
+  return h;
+}
+
+/* ------------------------------------------------------------------ dynamic island (top-center pill that expands) */
+let island = null;
+function islandShow(o) {
+  if (island && !island.closed) { island.update(o); return island; }
+  const id = String(o.id ?? uid());
+  const el = document.createElement('div');
+  el.className = 'ac-island'; el.dataset.state = 'enter'; el.setAttribute('role', 'status'); el.tabIndex = 0;
+  const h = { id, el, variant: 'island', o, closed: false,
+    expand(v = true) { el.toggleAttribute('data-expanded', v); el.setAttribute('aria-expanded', String(v)); if (v) h._t.pause(); else h._t.start(); },
+    close(reason = 'api') {
+      if (h.closed) return; h.closed = true; h._t.stop();
+      el.removeAttribute('data-expanded'); el.dataset.state = 'exit';
+      fire('notify:close', { variant: 'island', id, reason }); h.o.onClose?.(reason);
+      setTimeout(() => el.remove(), reduced() ? 0 : 360);
+      if (island === h) island = null;
+      h._ro?.disconnect(); document.documentElement.style.removeProperty('--ac-island-h');
+    },
+    update(patch) { Object.assign(h.o, patch); render(); if (patch.expand != null) h.expand(patch.expand); return h; },
+  };
+  const render = () => {
+    const x = h.o;
+    el.dataset.tone = x.tone || 'neutral';
+    el.innerHTML = `<div class="ac-island__compact">${x.avatar ? leadHTML(x) : `<span class="ac-island__glyph" data-tone="${esc(x.tone || 'neutral')}">${ico(x.icon || TONE_ICON[x.tone] || 'bell')}</span>`}
+        <span class="ac-island__title">${esc(tx(x.title))}</span>${x.badge != null ? `<span class="ac-island__badge">${esc(x.badge)}</span>` : '<span class="ac-island__live" aria-hidden="true"></span>'}</div>
+      <div class="ac-island__more">${x.text ? `<p class="ac-island__text">${esc(tx(x.text))}</p>` : ''}${x.progress != null ? `<div class="ac-island__progress"><span></span></div>` : ''}${actionsHTML(x)}</div>`;
+    if (x.progress != null) el.style.setProperty('--_p', String(Math.max(0, Math.min(1, x.progress))));
+  };
+  render();
+  h._t = timer(h, Number(o.duration ?? 6000) || 0, el);
+  wireActions(el, h);
+  el.addEventListener('click', (e) => { if (!e.target.closest('button')) h.expand(!el.hasAttribute('data-expanded')); });
+  el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); h.expand(!el.hasAttribute('data-expanded')); } else if (e.key === 'Escape') h.close('escape'); });
+  el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') h.expand(true); });
+  el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !h.o.expand) h.expand(false); });
+  swipe(el, h, 'y');
+  document.body.append(el);
+  // cards stacked at the top make room for the island
+  if (typeof ResizeObserver !== 'undefined') { h._ro = new ResizeObserver(() => { if (!h.closed) document.documentElement.style.setProperty('--ac-island-h', el.offsetHeight + 8 + 'px'); }); h._ro.observe(el); }
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.removeAttribute('data-state'); if (o.expand) setTimeout(() => h.expand(true), reduced() ? 0 : 220); }));
+  h._t.start();
+  island = h;
+  return h;
+}
+
+/* ------------------------------------------------------------------ inline alert (inside a target) */
+function inline(o) {
+  const target = typeof o.target === 'string' ? document.querySelector(o.target) : o.target;
+  if (!target) { console.warn('[AC] notify inline: no target'); return null; }
+  const id = String(o.id ?? uid());
+  const el = document.createElement('div');
+  el.className = `ac-alert ac-ntf-inline${o.solid ? ' ac-alert--solid' : ''}`; el.dataset.tone = o.tone || 'info'; el.dataset.id = id;
+  if (o.dismissible !== false) el.dataset.ac = 'alert';
+  el.setAttribute('role', o.tone === 'danger' ? 'alert' : 'status');
+  el.innerHTML = `${ico(o.icon || TONE_ICON[o.tone || 'info'] || 'info', 'ac-alert__icon')}
+    <div class="ac-alert__body">${o.title ? `<div class="ac-alert__title">${esc(tx(o.title))}</div>` : ''}${o.text ? `<div class="ac-alert__text">${esc(tx(o.text))}</div>` : ''}${o.actions?.length ? `<div class="ac-alert__actions">${o.actions.map((a, i) => `<button class="ac-btn ac-btn--sm ${a.primary ? 'ac-btn--primary' : ''}" type="button" data-ntf-action="${i}">${esc(tx(a.label))}</button>`).join('')}</div>` : ''}</div>
+    ${o.dismissible === false ? '' : `<button class="ac-alert__close" type="button" data-ac-close aria-label="${esc(T('close'))}">${ico('x')}</button>`}`;
+  const h = { id, el, variant: 'inline', o, closed: false,
+    close(reason = 'api') { if (h.closed) return; h.closed = true; const api = A?.instance?.(el, 'alert'); if (api?.close) api.close(); else el.remove(); fire('notify:close', { variant: 'inline', id, reason }); },
+    update(patch) { Object.assign(h.o, patch); const t = el.querySelector('.ac-alert__title'); if (t && patch.title) t.textContent = tx(patch.title); const x = el.querySelector('.ac-alert__text'); if (x && patch.text) x.textContent = tx(patch.text); return h; },
+  };
+  el.addEventListener('click', (e) => { const b = e.target.closest('[data-ntf-action]'); if (b) { const a = o.actions[Number(b.dataset.ntfAction)]; a?.onClick?.(h); if (!a?.keep) h.close('action'); } });
+  el.addEventListener('ac:alert:close', () => { h.closed = true; }, { once: true });
+  if (o.replace) target.replaceChildren(el); else target.prepend(el);
+  return h;
+}
+
+/* ------------------------------------------------------------------ toast (AC.toast) + grouping */
+const groups = new Map(); // group -> { id, count }
+function toastV(o, p) {
+  if (!A?.toast) return card({ ...o, variant: 'card' });
+  const g = o.group ? groups.get(o.group) : null;
+  const count = g && A.toast.get?.(g.id) ? g.count + 1 : 1;
+  const id = g && count > 1 ? g.id : String(o.id ?? uid());
+  if (o.group) groups.set(o.group, { id, count });
+  const title = `${tx(o.title)}${count > 1 ? ` (${count})` : ''}`;
+  const a = o.actions?.[0];
+  const t = A.toast({ id, title, text: tx(o.text), tone: o.tone, icon: o.icon, position: posOf(o, p), duration: o.duration ?? (o.priority === 'urgent' ? 0 : undefined),
+    action: a ? { label: tx(a.label), keep: a.keep, onClick: (r) => a.onClick?.(r) } : undefined, onClose: o.onClose, dismissible: o.dismissible });
+  return { id, el: t.el, variant: 'toast', o, close: (r) => t.close(r), update: (patch) => { t.update({ ...patch, title: patch.title ? tx(patch.title) : undefined, text: patch.text ? tx(patch.text) : undefined }); return t; } };
+}
+
+/* ------------------------------------------------------------------ system notifications + web push */
+const supported = () => typeof Notification !== 'undefined';
+async function permission(ask = true) {
+  if (!supported()) return 'unsupported';
+  if (Notification.permission === 'default' && ask) { try { return await Notification.requestPermission(); } catch { return Notification.permission; } }
+  return Notification.permission;
+}
+async function system(o) {
+  const perm = await permission(o.ask !== false);
+  if (perm !== 'granted') return o.fallback === false ? null : toastV({ ...o, variant: 'toast' }, prefs());
+  const opts = { body: tx(o.text), icon: o.iconUrl || document.querySelector('link[rel="apple-touch-icon"]')?.href, badge: o.badgeUrl, tag: o.group || o.id, renotify: !!o.group,
+    requireInteraction: o.priority === 'urgent', silent: !o.sound, data: { url: o.href || location.href, id: o.id }, actions: (o.actions || []).slice(0, 2).map((a, i) => ({ action: String(i), title: tx(a.label) })), image: o.image };
+  try {
+    const reg = await navigator.serviceWorker?.getRegistration?.();
+    if (reg?.showNotification) { await reg.showNotification(tx(o.title), opts); return { id: o.id, variant: 'system', o, close() {}, update() {} }; }
+    delete opts.actions;
+    const nn = new Notification(tx(o.title), opts);
+    nn.onclick = () => { window.focus(); fire('notify:click', { data: opts.data }); nn.close(); };
+    return { id: o.id, variant: 'system', o, close: () => nn.close(), update() {} };
+  } catch (err) { console.warn('[AC] system notification failed', err); return toastV({ ...o, variant: 'toast' }, prefs()); }
+}
+
+const PUSH_KEY = 'ac:notify:push';
+function b64ToBytes(b64) { const p = '='.repeat((4 - (b64.length % 4)) % 4); const raw = atob((b64 + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(raw, (c) => c.charCodeAt(0)); }
+const push = {
+  get supported() { return 'serviceWorker' in navigator && 'PushManager' in window; },
+  async state() {
+    if (!supported()) return 'unsupported';
+    if (Notification.permission === 'denied') return 'blocked';
+    if (localStorage.getItem(PUSH_KEY) === 'simulated') return 'simulated';
+    try { const reg = await navigator.serviceWorker?.getRegistration?.(); const sub = await reg?.pushManager?.getSubscription(); return sub ? 'subscribed' : 'off'; } catch { return 'off'; }
+  },
+  /** Real push needs your server's VAPID public key (docs/notifications.md). Without one, the demo mode is used. */
+  async subscribe({ vapidKey, endpoint, headers } = {}) {
+    const perm = await permission(true);
+    if (perm !== 'granted') return { state: perm === 'denied' ? 'blocked' : 'off' };
+    if (!vapidKey || !push.supported) { localStorage.setItem(PUSH_KEY, 'simulated'); fire('notify:push-state', { state: 'simulated' }); return { state: 'simulated' }; }
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(vapidKey) });
+    if (endpoint) await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(sub) });
+    localStorage.removeItem(PUSH_KEY);
+    fire('notify:push-state', { state: 'subscribed' });
+    return { state: 'subscribed', subscription: sub };
+  },
+  async unsubscribe({ endpoint, headers } = {}) {
+    localStorage.removeItem(PUSH_KEY);
+    try {
+      const reg = await navigator.serviceWorker?.getRegistration?.(); const sub = await reg?.pushManager?.getSubscription();
+      if (sub) { if (endpoint) await fetch(endpoint, { method: 'DELETE', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify({ endpoint: sub.endpoint }) }); await sub.unsubscribe(); }
+    } catch { /* ignore */ }
+    fire('notify:push-state', { state: 'off' });
+    return { state: 'off' };
+  },
+  /** Demo: run the service worker's real `push` handler with this payload (falls back to an in-page notification). */
+  async simulate(payload = {}) {
+    const data = { title: 'Aramin', body: '', ...payload };
+    const ctrl = navigator.serviceWorker?.controller;
+    if (ctrl && supported() && Notification.permission === 'granted') { ctrl.postMessage({ type: 'SIMULATE_PUSH', payload: data }); return 'sw'; }
+    notify({ variant: phone() ? 'island' : 'card', title: data.title, text: data.body, icon: data.icon || 'bell-ring', tone: data.tone || 'accent', event: data.event, href: data.url });
+    return 'page';
+  },
+};
+
+/* ------------------------------------------------------------------ the unified entry */
+const VARIANTS = { toast: toastV, card, progress: card, banner, inline, snackbar, island: islandShow, system, center: null };
+function notify(input = {}) {
+  const o = typeof input === 'string' ? { title: input } : { ...input };
+  const p = prefs();
+  const ev = o.event ? p.events[o.event] : null;
+  const meta = o.event ? EVENTS.get(o.event) : null;
+  if (meta && !o.icon) o.icon = meta.icon;
+  const urgent = o.priority === 'urgent';
+  // channels: an explicit variant wins; otherwise the user's preference for this event type.
+  // Do-not-disturb only silences routed (event) notifications that are not urgent — never a direct response to the user.
+  const routed = !o.variant && !!ev;
+  const quiet = p.quiet && !urgent && routed;
+  const variant = o.variant || (ev ? ev.inapp : 'toast');
+  if (ev?.center || variant === 'center') center(o);
+  if (ev?.system && document.hidden && variant !== 'system') system({ ...o, ask: false, fallback: false });
+  if (variant === 'center' || variant === 'off' || quiet) {
+    fire('notify:show', { variant: 'center', id: o.id });
+    return null;
+  }
+  o.variant = variant;
+  const fn = VARIANTS[variant] || toastV;
+  const h = fn(o, p);
+  const wantSound = o.sound ?? (ev ? ev.sound && p.sound : p.sound && (o.priority === 'high' || urgent));
+  if (wantSound && !quiet && variant !== 'system') sound(urgent ? 'urgent' : o.tone === 'success' ? 'success' : 'default');
+  if ((o.haptic ?? p.haptic) && variant !== 'inline' && variant !== 'system') haptic(o.priority);
+  fire('notify:show', { variant, id: h?.id });
+  return h;
+}
+function center(o) {
+  if (!A?.notifications) return null;
+  return A.notifications.add({ id: o.id, title: o.title, text: o.text, icon: o.icon, tone: o.tone, avatar: typeof o.avatar === 'string' || (o.avatar && !o.avatar.src) ? o.avatar : undefined, color: o.color, kind: o.kind || (o.event === 'mention' ? 'mention' : o.event === 'system' ? 'system' : undefined), href: o.href });
+}
+function clear(variant) {
+  if (!variant || variant === 'card' || variant === 'progress') [...live.values()].forEach((h) => (!variant || h.variant === variant) && h.close('clear'));
+  if (!variant || variant === 'banner') { bannerQ = []; bannerCur?.close('clear'); }
+  if (!variant || variant === 'snackbar') snack?.close('clear');
+  if (!variant || variant === 'island') island?.close('clear');
+  if (!variant || variant === 'toast') A?.toast?.dismiss?.();
+}
+
+/* ------------------------------------------------------------------ preferences UI (settings card) */
+function settings(el) {
+  A?.use?.('forms').catch(() => {}); // switches & checks come from the forms stylesheet
+  const render = async () => {
+    const p = prefs();
+    const perm = supported() ? Notification.permission : 'unsupported';
+    const pstate = await push.state();
+    const evRows = [...EVENTS.values()].map((e) => {
+      const v = p.events[e.id];
+      return `<tr data-ev="${esc(e.id)}"><th scope="row"><span class="ac-ntf-prefs__ev"><span class="ac-ntf__icon" data-tone="neutral">${ico(e.icon)}</span><span><strong>${esc(tx(e.label) || T(`ev.${e.id}`))}</strong><small>${esc(tx(e.sub) || T(`ev.${e.id}Sub`))}</small></span></span></th>
+        <td><select class="ac-ntf-prefs__select" data-pref="inapp" aria-label="${esc(T('inapp'))}">${['toast', 'card', 'banner', 'island', 'off'].map((x) => `<option value="${x}"${v.inapp === x ? ' selected' : ''}>${esc(x === 'off' ? T('off') : x[0].toUpperCase() + x.slice(1))}</option>`).join('')}</select></td>
+        ${['center', 'system', 'sound'].map((c) => `<td><input class="ac-check" type="checkbox" data-pref="${c}" aria-label="${esc(T(c === 'system' ? 'osPush' : c === 'sound' ? 'chime' : 'center'))}"${v[c] ? ' checked' : ''}></td>`).join('')}
+        <td><button class="ac-btn ac-btn--ghost ac-btn--sm" type="button" data-test="${esc(e.id)}">${esc(T('test'))}</button></td></tr>`;
+    }).join('');
+    const pos = p.position === 'auto' ? posOf({}, { position: 'auto' }) : p.position;
+    const pushLabel = pstate === 'subscribed' ? T('on') : pstate === 'simulated' ? T('simulated') : pstate === 'blocked' ? T('blocked') : pstate === 'unsupported' ? T('unsupported') : T('off');
+    el.innerHTML = `<div class="ac-card ac-ntf-prefs">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title">${esc(T('title'))}</h2><p class="ac-card__sub">${esc(T('sub'))}</p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="ac-ntf-prefs__grid">
+          ${[['sound', 'volume-2'], ['haptic', 'vibrate'], ['quiet', 'bell-off']].map(([k, icon]) => `<label class="ac-toggle-row"><span class="ac-toggle-row__icon">${ico(icon)}</span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title">${esc(T(k))}</span><span class="ac-toggle-row__desc">${esc(T(`${k}Sub`))}</span></span><input class="ac-switch" type="checkbox" role="switch" data-global="${k}"${p[k] ? ' checked' : ''}></label>`).join('')}
+          <div class="ac-toggle-row"><span class="ac-toggle-row__icon">${ico('monitor-smartphone')}</span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title">${esc(T('system'))}</span><span class="ac-toggle-row__desc">${esc(perm === 'granted' ? T('allowed') : perm === 'denied' ? T('blocked') : perm === 'unsupported' ? T('unsupported') : T('systemSub'))}</span></span>
+            ${perm === 'default' ? `<button class="ac-btn ac-btn--sm" type="button" data-perm>${esc(T('allow'))}</button>` : `<span class="ac-badge ${perm === 'granted' ? 'ac-badge--success' : 'ac-badge--neutral'}">${esc(perm === 'granted' ? T('allowed') : T('off'))}</span>`}</div>
+          <div class="ac-toggle-row"><span class="ac-toggle-row__icon">${ico('bell-ring')}</span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title">${esc(T('push'))}</span><span class="ac-toggle-row__desc" data-push-state="${esc(pstate)}">${esc(pushLabel)}</span></span>
+            ${pstate === 'unsupported' || pstate === 'blocked' ? '' : `<button class="ac-btn ac-btn--sm ${pstate === 'off' ? 'ac-btn--primary' : ''}" type="button" data-push="${pstate === 'off' ? 'on' : 'off'}">${esc(pstate === 'off' ? T('subscribe') : T('unsubscribe'))}</button>`}</div>
+          <div class="ac-toggle-row ac-ntf-prefs__pos"><span class="ac-toggle-row__icon">${ico('layout-template')}</span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title">${esc(T('position'))}</span><span class="ac-toggle-row__desc">${esc(T(`pos.${pos}`))}</span></span>
+            ${posPicker(pos)}</div>
+        </div>
+        <div class="ac-ntf-prefs__scroll"><table class="ac-ntf-prefs__table">
+          <thead><tr><th scope="col">${esc(T('event'))}</th><th scope="col">${esc(T('inapp'))}</th><th scope="col">${esc(T('center'))}</th><th scope="col">${esc(T('osPush'))}</th><th scope="col">${esc(T('chime'))}</th><th scope="col"><span class="ac-visually-hidden">${esc(T('test'))}</span></th></tr></thead>
+          <tbody>${evRows}</tbody></table></div>
+      </div></div>`;
+  };
+  const onChange = (e) => {
+    const g = e.target.closest('[data-global]');
+    if (g) { setPrefs({ [g.dataset.global]: g.checked }); if (g.dataset.global === 'sound' && g.checked) sound('soft'); if (g.dataset.global === 'haptic' && g.checked) haptic(); return; }
+    const row = e.target.closest('tr[data-ev]'); const k = e.target.dataset.pref;
+    if (row && k) setPrefs({ events: { [row.dataset.ev]: { [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value } } });
+  };
+  const onClick = async (e) => {
+    const pos = e.target.closest('[data-pos]');
+    if (pos) { setPrefs({ position: pos.dataset.pos }); await render(); el.querySelector(`[data-pos="${pos.dataset.pos}"]`)?.focus(); notify({ title: T(`pos.${pos.dataset.pos}`), icon: 'layout-template', duration: 1800, haptic: false }); return; }
+    if (e.target.closest('[data-perm]')) { await permission(true); render(); return; }
+    const pb = e.target.closest('[data-push]');
+    if (pb) { pb.disabled = true; await (pb.dataset.push === 'on' ? push.subscribe(el.dataset.vapidKey ? { vapidKey: el.dataset.vapidKey, endpoint: el.dataset.endpoint } : {}) : push.unsubscribe()); render(); return; }
+    const t = e.target.closest('[data-test]');
+    if (t) { const id = t.dataset.test; const m = EVENTS.get(id); const name = tx(m?.label) || T(`ev.${id}`); notify({ event: id, title: T('testTitle'), text: T('testText', { e: name }), avatar: id === 'mention' ? 'س‌ک' : undefined, actions: id === 'mention' ? [{ label: { fa: 'پاسخ', en: 'Reply', ar: 'رد' }, primary: true }] : undefined }); }
+  };
+  el.addEventListener('change', onChange);
+  el.addEventListener('click', onClick);
+  const onLang = () => render();
+  document.addEventListener('ac:i18n:change', onLang);
+  render();
+  return () => { el.removeEventListener('change', onChange); el.removeEventListener('click', onClick); document.removeEventListener('ac:i18n:change', onLang); };
+}
+function posPicker(cur) {
+  return `<div class="ac-pospick" role="radiogroup" aria-label="${esc(T('position'))}">${POSITIONS.map((x) => `<button type="button" role="radio" class="ac-pospick__cell" data-pos="${x}" aria-checked="${x === cur}" aria-label="${esc(T(`pos.${x}`))}"><span></span></button>`).join('')}</div>`;
+}
+
+/* ------------------------------------------------------------------ install(AC) */
+function install(AC) {
+  if (!AC || AC.notify) return AC?.notify;
+  A = AC;
+  cssOnce();
+  const api = Object.assign(notify, {
+    prefs, setPrefs, events: { define, list: () => [...EVENTS.values()] }, positions: POSITIONS, permission, push, system: (o) => system({ ...o }),
+    clear, sound, haptic, settings, posPicker,
+    toast: (o) => notify({ ...o, variant: 'toast' }), card: (o) => notify({ ...o, variant: 'card' }), banner: (o) => notify({ ...o, variant: 'banner' }),
+    inline: (o) => notify({ ...o, variant: 'inline' }), snackbar: (o) => notify({ ...o, variant: 'snackbar' }), progress: (o) => notify({ ...o, variant: 'progress', progress: o.progress ?? 0 }),
+    island: (o) => notify({ ...o, variant: 'island' }), center: (o) => center(o),
+  });
+  AC.notify = api;
+  AC.register?.('notify-prefs', (el) => settings(el));
+  // push payloads echoed by the service worker (and clicks on system notifications) surface in-app too
+  navigator.serviceWorker?.addEventListener?.('message', (e) => {
+    const m = e.data || {};
+    if (m.type === 'PUSH' && m.payload && !m.payload.silentInApp) center({ title: m.payload.title, text: m.payload.body, icon: m.payload.icon || 'bell-ring', tone: m.payload.tone, href: m.payload.url });
+    if (m.type === 'NOTIFICATION_CLICK') fire('notify:click', m);
+  });
+  return api;
+}
+
+function cssOnce() {
+  if (typeof document === 'undefined' || document.querySelector(`link[data-ac-module="${NAME}"], style[data-ac-module="${NAME}"]`)) return;
+  try {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = new URL(`./${NAME}.css`, (globalThis.__AC_MODS__?.__base || import.meta.url)).href; link.dataset.acModule = NAME;
+    document.head.append(link);
+  } catch { /* bundled builds ship the CSS themselves */ }
+}
+
+if (typeof window !== 'undefined' && window.AC) install(window.AC);
+return Object.freeze({ notify, install });
+})();
+
+return { f: F, ns: Object.freeze({ "notify": __ac_m1i["notify"], "install": __ac_m1i["install"] }) };
+})();
+export const { notify, install } = __R["notify"].ns;
+export default __R["notify"].ns;

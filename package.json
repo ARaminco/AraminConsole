@@ -1,0 +1,81 @@
+{
+  "name": "aramin-console",
+  "version": "0.1.0",
+  "description": "AraminConsole — an open-source, zero-dependency admin panel UI/UX framework. RTL-first, responsive, dark mode, app-like on mobile.",
+  "license": "MIT",
+  "type": "module",
+  "author": "Ali Asghar Ramin (https://github.com/ARaminco)",
+  "homepage": "https://araminco.github.io/AraminConsole/demo/",
+  "bugs": {
+    "url": "https://github.com/ARaminco/AraminConsole/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ARaminco/AraminConsole.git"
+  },
+  "main": "dist/aramin-console.js",
+  "style": "dist/aramin-console.css",
+  "module": "dist/aramin-console.js",
+  "exports": {
+    ".": {
+      "style": "./dist/aramin-console.css",
+      "import": "./dist/aramin-console.js",
+      "default": "./dist/aramin-console.js"
+    },
+    "./min": "./dist/aramin-console.min.js",
+    "./boot": "./dist/aramin-console-boot.js",
+    "./css": "./dist/aramin-console.css",
+    "./css/min": "./dist/aramin-console.min.css",
+    "./icons.svg": "./dist/icons.svg",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css",
+    "./dist/aramin-console.js",
+    "./dist/aramin-console.min.js",
+    "./dist/aramin-console-boot.js",
+    "./src/js/**"
+  ],
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md",
+    "README.fa.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && node scripts/serve.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node scripts/build.mjs && node tests/run.mjs"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.59.0",
+    "playwright-core": "^1.59.0"
+  },
+  "keywords": [
+    "admin",
+    "admin-panel",
+    "dashboard",
+    "ui-kit",
+    "css-framework",
+    "design-system",
+    "rtl",
+    "persian",
+    "farsi",
+    "arabic",
+    "jalali",
+    "dark-mode",
+    "pwa",
+    "vanilla-js",
+    "zero-dependency",
+    "components",
+    "responsive",
+    "mobile-first"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,347 @@
+/* ==========================================================================
+   AraminConsole — design tokens
+   --------------------------------------------------------------------------
+   Every component reads ONLY these custom properties for colour, radius,
+   shadow, spacing and motion. Dark mode, accents, density and radius are
+   pure token swaps driven by attributes on <html>:
+
+     data-theme   = light | dark          (unset → follows prefers-color-scheme)
+     data-accent  = orange (default) | violet | blue | emerald | rose | amber | slate
+     data-density = comfortable | compact
+     data-radius  = sharp | default | round
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- type ---------------------------------------------------------- */
+  --ac-font: "Vazirmatn", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+  --ac-font-mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --ac-fs-2xs: 0.6875rem;  /* 11 */
+  --ac-fs-xs: 0.75rem;     /* 12 */
+  --ac-fs-sm: 0.8125rem;   /* 13 */
+  --ac-fs-md: 0.875rem;    /* 14 — body */
+  --ac-fs-lg: 1rem;        /* 16 */
+  --ac-fs-xl: 1.125rem;    /* 18 */
+  --ac-fs-2xl: 1.375rem;   /* 22 */
+  --ac-fs-3xl: 1.75rem;    /* 28 */
+  --ac-fs-4xl: 2.25rem;    /* 36 */
+
+  --ac-lh-tight: 1.2;
+  --ac-lh-snug: 1.4;
+  --ac-lh-normal: 1.65;
+
+  --ac-fw-regular: 400;
+  --ac-fw-medium: 500;
+  --ac-fw-semibold: 600;
+  --ac-fw-bold: 700;
+  --ac-fw-black: 800;
+
+  /* ---- space (0.25rem steps) ----------------------------------------- */
+  --ac-s-0: 0;
+  --ac-s-1: 0.25rem;
+  --ac-s-2: 0.5rem;
+  --ac-s-3: 0.75rem;
+  --ac-s-4: 1rem;
+  --ac-s-5: 1.25rem;
+  --ac-s-6: 1.5rem;
+  --ac-s-7: 1.75rem;
+  --ac-s-8: 2rem;
+  --ac-s-9: 2.25rem;
+  --ac-s-10: 2.5rem;
+  --ac-s-11: 2.75rem;
+  --ac-s-12: 3rem;
+
+  /* ---- radius (default variant) -------------------------------------- */
+  --ac-r-xs: 6px;
+  --ac-r-sm: 10px;
+  --ac-r-md: 12px;
+  --ac-r-lg: 16px;
+  --ac-r-xl: 22px;            /* cards */
+  --ac-r-2xl: 28px;           /* flyouts, sheets */
+  --ac-r-pill: 999px;
+
+  /* ---- density-driven metrics ---------------------------------------- */
+  --ac-control-h: 2.5rem;       /* buttons, inputs */
+  --ac-control-h-sm: 2rem;
+  --ac-control-h-lg: 3rem;
+  --ac-control-px: 1rem;
+  --ac-card-pad: 1.25rem;
+  --ac-row-h: 3.25rem;          /* table rows, list rows */
+  --ac-gap: 1rem;               /* grid gutters */
+  --ac-touch: 44px;             /* minimum touch target */
+
+  /* ---- motion (docs/motion.md) ----------------------------------------
+     Enter / exit → ease-out curves. On-screen movement → ease-in-out.
+     Hover colour → --ac-ease-hover. Never ease-in for UI. Springs are real
+     spring curves sampled into linear() (interruptible CSS transitions). */
+  --ac-ease: cubic-bezier(0.23, 1, 0.32, 1);          /* strong ease-out: the default for UI */
+  --ac-ease-out: cubic-bezier(0.19, 1, 0.22, 1);      /* expo-out: reveals, lifts, long settles */
+  --ac-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);  /* things moving while on screen */
+  --ac-ease-move: cubic-bezier(0.25, 1, 0.5, 1);      /* slides, panels */
+  --ac-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* iOS sheet / drawer */
+  --ac-ease-hover: ease;                              /* colour / background changes */
+  --ac-ease-in: cubic-bezier(0.4, 0, 0.6, 1);         /* kept for compatibility — exits use --ac-ease */
+  --ac-ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1); /* small overshoot (bezier approximation) */
+  /* spring k=520 c=34 (2.9 % overshoot, settles 385 ms) — pills, indicators, thumbs */
+  --ac-spring: linear(0, 0.004 0.9%, 0.022 2.4%, 0.067 4.4%, 0.137 6.8%, 0.235 9.5%, 0.35 12.5%, 0.474 15.8%, 0.599 19.2%, 0.715 23%, 0.813 26.9%, 0.893 31%, 0.952 35.4%, 0.992 39.9%, 1.015 44.6%, 1.026 49.4%, 1.029 54.4%, 1.026 59.6%, 1.02 65%, 1.014 70.4%, 1.009 76.1%, 1.005 81.8%, 1.002 87.8%, 1 93.8%, 1);
+  --ac-spring-dur: 400ms;
+  /* spring k=380 c=20 (15 % overshoot, settles 690 ms) — icons, badges, checks: playful, rare */
+  --ac-spring-bounce: linear(0, 0.008 0.9%, 0.05 2.4%, 0.148 4.4%, 0.298 6.8%, 0.496 9.5%, 0.702 12.5%, 0.889 15.8%, 1.035 19.2%, 1.122 23%, 1.152 26.9%, 1.135 31%, 1.093 35.4%, 1.045 39.9%, 1.006 44.6%, 0.984 49.4%, 0.977 54.4%, 0.981 59.6%, 0.99 65%, 0.998 70.4%, 1.002 76.1%, 1.004 81.8%, 1.003 87.8%, 1.001 93.8%, 1);
+  --ac-spring-bounce-dur: 700ms;
+  --ac-dur-0: 100ms;                                  /* press feedback */
+  --ac-dur-1: 140ms;                                  /* hover, tooltip */
+  --ac-dur-2: 180ms;                                  /* dropdown, popover */
+  --ac-dur-3: 240ms;                                  /* tabs, panels */
+  --ac-dur-4: 300ms;                                  /* modal, page */
+  --ac-dur-sheet: 420ms;                              /* sheets / drawers (drawer curve) */
+  --ac-dur-exit: 140ms;                               /* exits are faster than entrances */
+  --ac-stagger: 45ms;                                 /* between siblings entering together */
+  --ac-press: scale(0.97);
+  --ac-press-sm: scale(0.92);                         /* small round icon buttons */
+  --ac-lift: translateY(-4px);                        /* card hover lift */
+  --ac-dir: 1;                                        /* inline direction multiplier: 1 ltr, -1 rtl */
+
+  /* ---- z layers ------------------------------------------------------- */
+  --ac-z-base: 1;
+  --ac-z-sticky: 20;
+  --ac-z-rail: 40;
+  --ac-z-appbar: 50;
+  --ac-z-tabbar: 55;
+  --ac-z-dropdown: 60;
+  --ac-z-drawer: 70;
+  --ac-z-sheet: 80;
+  --ac-z-modal: 90;
+  --ac-z-toast: 100;
+  --ac-z-palette: 110;
+  --ac-z-tooltip: 120;
+
+  /* ---- layout --------------------------------------------------------- */
+  --ac-appbar-h: 4.5rem;              /* floating top pills row */
+  --ac-tabbar-h: 4rem;                /* floating bottom pill */
+  --ac-rail-w: 3.25rem;               /* slim floating icon rail */
+  --ac-rail-w-collapsed: 3.25rem;
+  --ac-flyout-w: 16.5rem;             /* group flyout next to the rail / phone drawer */
+  --ac-pill-h: 2.875rem;              /* height of the top-bar pills */
+  --ac-content-max: 96rem;
+  --ac-content-pad: clamp(1rem, 2vw, 1.75rem);
+  --ac-safe-top: env(safe-area-inset-top, 0px);
+  --ac-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ac-safe-start: env(safe-area-inset-left, 0px);
+  --ac-safe-end: env(safe-area-inset-right, 0px);
+
+  /* ---- accent (orange-red default; overridden by data-accent) -------- */
+  --ac-accent: #f0532d;
+  --ac-accent-2: #ff7a4d;            /* gradient partner */
+  --ac-accent-contrast: #ffffff;     /* text on solid accent */
+
+  /* ---- ink: the black primary (buttons, active nav pill) ------------- */
+  --ac-ink: #111113;
+  --ac-ink-hover: #2a2a2e;
+  --ac-ink-contrast: #ffffff;
+
+  /* ---- colour: light -------------------------------------------------- */
+  --ac-mix-toward: #000;             /* used to derive readable accent text */
+  --ac-bg: #f2f2f3;                  /* warm light-gray canvas */
+  --ac-bg-subtle: #ebebed;
+  --ac-surface-1: #ffffff;           /* cards, pills */
+  --ac-surface-2: #f6f6f7;           /* inset panels, KPI tiles */
+  --ac-surface-3: #eeeef0;           /* tracks */
+  --ac-elevated: #ffffff;
+  --ac-hover: rgba(17, 17, 19, 0.04);
+  --ac-active: rgba(17, 17, 19, 0.075);
+  --ac-border: #ececee;              /* hairline */
+  --ac-border-strong: #dcdce0;
+  --ac-text: #111113;
+  --ac-text-soft: #4b4b52;
+  --ac-muted: #8b8b93;
+  --ac-faint: #b6b6bd;
+  --ac-scrim: rgba(17, 17, 19, 0.32);
+  --ac-chrome-bg: #ffffff;           /* floating pills (top bar, rail, tab bar) */
+  --ac-pill-bg: #f2f2f3;             /* secondary pill buttons, search fields */
+  --ac-pill-bg-hover: #e8e8ea;
+
+  --ac-success: #16a34a;
+  --ac-success-soft: #e8f6ec;
+  --ac-success-ink: #13803c;
+  --ac-warning: #e08a00;
+  --ac-warning-soft: #fff4e0;
+  --ac-warning-ink: #995a00;
+  --ac-danger: #e5484d;
+  --ac-danger-soft: #fdeceb;
+  --ac-danger-ink: #c0282e;
+  --ac-info: #2f7cf6;
+  --ac-info-soft: #e9f1ff;
+  --ac-info-ink: #1b5bc4;
+  --ac-neutral-soft: rgba(17, 17, 19, 0.055);
+  --ac-neutral-ink: #4b4b52;
+
+  --ac-chart-1: var(--ac-ink);       /* black series */
+  --ac-chart-2: var(--ac-accent);    /* orange highlight */
+  --ac-chart-3: #a3a3ab;
+  --ac-chart-4: #ffb59c;
+  --ac-chart-5: #22a06b;
+  --ac-chart-6: #3b82f6;
+  --ac-chart-7: #f5a524;
+  --ac-chart-8: #d4d4d9;
+  --ac-chart-grid: rgba(17, 17, 19, 0.06);
+
+  /* ---- glass chrome --------------------------------------------------- */
+  --ac-glass-bg: rgba(255, 255, 255, 0.78);
+  --ac-glass-bg-strong: rgba(255, 255, 255, 0.92);
+  --ac-glass-border: rgba(17, 17, 19, 0.07);
+  --ac-glass-blur: saturate(180%) blur(20px);
+  --ac-rail-bg: var(--ac-chrome-bg);
+
+  /* ---- shadows (almost none — hairlines do the work) ------------------ */
+  --ac-shadow-xs: 0 1px 2px rgba(17, 17, 19, 0.03);
+  --ac-shadow-sm: 0 1px 2px rgba(17, 17, 19, 0.03), 0 2px 8px -4px rgba(17, 17, 19, 0.05);
+  --ac-shadow-md: 0 2px 4px rgba(17, 17, 19, 0.03), 0 10px 24px -10px rgba(17, 17, 19, 0.12);
+  --ac-shadow-lg: 0 2px 6px rgba(17, 17, 19, 0.04), 0 18px 40px -14px rgba(17, 17, 19, 0.18);
+  --ac-shadow-xl: 0 4px 10px rgba(17, 17, 19, 0.05), 0 30px 64px -18px rgba(17, 17, 19, 0.26);
+  --ac-shadow-glow: 0 10px 24px -8px color-mix(in oklab, var(--ac-accent) 60%, transparent);
+  --ac-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --ac-shadow-chrome: 0 1px 2px rgba(17, 17, 19, 0.03), 0 6px 18px -10px rgba(17, 17, 19, 0.12);
+
+  /* ---- derived (do not override; follow accent + theme) --------------- */
+  --ac-accent-hover: color-mix(in oklab, var(--ac-accent) 88%, var(--ac-mix-toward));
+  --ac-accent-soft: color-mix(in oklab, var(--ac-accent) 11%, transparent);
+  --ac-accent-soft-2: color-mix(in oklab, var(--ac-accent) 18%, transparent);
+  --ac-accent-ink: color-mix(in oklab, var(--ac-accent) 85%, var(--ac-mix-toward));
+  --ac-ring: color-mix(in oklab, var(--ac-accent) 38%, transparent);
+  --ac-focus: 0 0 0 3px var(--ac-ring);
+  --ac-gradient: linear-gradient(150deg, var(--ac-accent-2) 0%, var(--ac-accent) 70%);
+  --ac-aurora:
+    radial-gradient(60% 80% at 15% 0%, color-mix(in oklab, var(--ac-accent) 18%, transparent), transparent 70%),
+    radial-gradient(50% 70% at 85% 10%, color-mix(in oklab, var(--ac-accent-2) 14%, transparent), transparent 70%);
+}
+
+/* Latin UI: Inter-like system stack; Persian / Arabic keep Vazirmatn */
+:root:lang(en) { --ac-font: "Inter", "Segoe UI Variable Text", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Vazirmatn", sans-serif; }
+
+/* ---- dark ------------------------------------------------------------ */
+/* dark:start */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ac-mix-toward: #fff;
+  --ac-accent: #f2603b;
+  --ac-ink: #ffffff;
+  --ac-ink-hover: #e6e6e8;
+  --ac-ink-contrast: #0b0b0c;
+  --ac-bg: #0b0b0c;
+  --ac-bg-subtle: #111113;
+  --ac-surface-1: #161618;
+  --ac-surface-2: #1c1c1f;
+  --ac-surface-3: #242428;
+  --ac-elevated: #1b1b1e;
+  --ac-hover: rgba(255, 255, 255, 0.05);
+  --ac-active: rgba(255, 255, 255, 0.09);
+  --ac-border: #232326;
+  --ac-border-strong: #313136;
+  --ac-text: #f2f2f3;
+  --ac-text-soft: #b9b9c0;
+  --ac-muted: #8a8a93;
+  --ac-faint: #56565e;
+  --ac-scrim: rgba(0, 0, 0, 0.6);
+  --ac-chrome-bg: #161618;
+  --ac-pill-bg: #222225;
+  --ac-pill-bg-hover: #2b2b2f;
+
+  --ac-success: #2ecf7a;
+  --ac-success-soft: rgba(46, 207, 122, 0.12);
+  --ac-success-ink: #5fe09a;
+  --ac-warning: #f5b03d;
+  --ac-warning-soft: rgba(245, 176, 61, 0.13);
+  --ac-warning-ink: #fbc76c;
+  --ac-danger: #f2555a;
+  --ac-danger-soft: rgba(242, 85, 90, 0.13);
+  --ac-danger-ink: #ff8a8e;
+  --ac-info: #4d94ff;
+  --ac-info-soft: rgba(77, 148, 255, 0.13);
+  --ac-info-ink: #8bb8ff;
+  --ac-neutral-soft: rgba(255, 255, 255, 0.07);
+  --ac-neutral-ink: #c4c4ca;
+
+  --ac-chart-3: #6b6b74;
+  --ac-chart-4: #ffad8f;
+  --ac-chart-8: #3a3a40;
+  --ac-chart-grid: rgba(255, 255, 255, 0.07);
+
+  --ac-glass-bg: rgba(22, 22, 24, 0.72);
+  --ac-glass-bg-strong: rgba(22, 22, 24, 0.9);
+  --ac-glass-border: rgba(255, 255, 255, 0.07);
+
+  --ac-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ac-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --ac-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.35), 0 10px 24px -10px rgba(0, 0, 0, 0.6);
+  --ac-shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.4), 0 18px 40px -14px rgba(0, 0, 0, 0.7);
+  --ac-shadow-xl: 0 4px 10px rgba(0, 0, 0, 0.45), 0 30px 64px -18px rgba(0, 0, 0, 0.8);
+  --ac-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --ac-shadow-chrome: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ac-accent-soft: color-mix(in oklab, var(--ac-accent) 17%, transparent);
+  --ac-accent-soft-2: color-mix(in oklab, var(--ac-accent) 26%, transparent);
+  --ac-accent-ink: color-mix(in oklab, var(--ac-accent) 70%, var(--ac-mix-toward));
+  --ac-accent-hover: color-mix(in oklab, var(--ac-accent) 86%, var(--ac-mix-toward));
+}
+/* dark:end */
+/* The build script copies the dark block above into
+   @media (prefers-color-scheme: dark) { :root:not([data-theme]) { … } }
+   so pages without JS still follow the OS. */
+/* auto-dark */
+
+/* ---- accent presets -------------------------------------------------- */
+:root[data-accent="orange"] { --ac-accent: #f0532d; --ac-accent-2: #ff7a4d; }
+:root[data-accent="violet"] { --ac-accent: #6d4aff; --ac-accent-2: #a855f7; }
+:root[data-accent="blue"]   { --ac-accent: #2563eb; --ac-accent-2: #06b6d4; }
+:root[data-accent="emerald"]{ --ac-accent: #059669; --ac-accent-2: #84cc16; }
+:root[data-accent="rose"]   { --ac-accent: #e11d48; --ac-accent-2: #f97316; }
+:root[data-accent="amber"]  { --ac-accent: #d97706; --ac-accent-2: #ef4444; --ac-accent-contrast: #ffffff; }
+:root[data-accent="slate"]  { --ac-accent: #334155; --ac-accent-2: #64748b; }
+:root[data-theme="dark"][data-accent="orange"] { --ac-accent: #f2603b; }
+:root[data-theme="dark"][data-accent="violet"] { --ac-accent: #8467ff; }
+:root[data-theme="dark"][data-accent="blue"]   { --ac-accent: #3b82f6; }
+:root[data-theme="dark"][data-accent="emerald"]{ --ac-accent: #10b981; }
+:root[data-theme="dark"][data-accent="rose"]   { --ac-accent: #f43f5e; }
+:root[data-theme="dark"][data-accent="amber"]  { --ac-accent: #f59e0b; --ac-accent-contrast: #1a1205; }
+:root[data-theme="dark"][data-accent="slate"]  { --ac-accent: #94a3b8; --ac-accent-2: #cbd5e1; --ac-accent-contrast: #0b0f17; }
+
+/* ---- density --------------------------------------------------------- */
+:root[data-density="compact"] {
+  --ac-control-h: 2.125rem;
+  --ac-control-h-sm: 1.75rem;
+  --ac-control-h-lg: 2.5rem;
+  --ac-control-px: 0.7rem;
+  --ac-card-pad: 0.95rem;
+  --ac-row-h: 2.625rem;
+  --ac-gap: 0.75rem;
+  --ac-fs-md: 0.8125rem;
+  --ac-appbar-h: 4rem;
+  --ac-pill-h: 2.5rem;
+}
+
+/* ---- radius variants ------------------------------------------------- */
+:root[data-radius="sharp"] {
+  --ac-r-xs: 2px;
+  --ac-r-sm: 3px;
+  --ac-r-md: 4px;
+  --ac-r-lg: 6px;
+  --ac-r-xl: 8px;
+  --ac-r-2xl: 10px;
+}
+:root[data-radius="round"] {
+  --ac-r-xs: 8px;
+  --ac-r-sm: 11px;
+  --ac-r-md: 14px;
+  --ac-r-lg: 18px;
+  --ac-r-xl: 24px;
+  --ac-r-2xl: 32px;
+}
+
+/* ---- phones: slightly shorter top row ------------------------------ */
+@media (max-width: 639.98px) {
+  :root {
+    --ac-appbar-h: 4rem;
+    --ac-pill-h: 2.75rem;
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "./",
+  "name": "AraminConsole — آرامین",
+  "short_name": "Aramin",
+  "name_localized": { "fa": "کنسول آرامین", "en": "AraminConsole", "ar": "كونسول آرامين" },
+  "short_name_localized": { "fa": "آرامین", "en": "Aramin", "ar": "آرامين" },
+  "description": "Open-source admin panel UI/UX framework — RTL-first, dark mode, app-like on phones.",
+  "description_localized": {
+    "fa": "فریم‌ورک متن‌باز پنل مدیریت — راست‌به‌چپ، حالت تیره، روی گوشی مثل اپ.",
+    "en": "Open-source admin panel UI/UX framework — RTL-first, dark mode, app-like on phones.",
+    "ar": "إطار لوحة إدارة مفتوح المصدر — من اليمين لليسار، وضع داكن، كتطبيق على الهاتف."
+  },
+  "start_url": "./#/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "lang": "fa",
+  "dir": "rtl",
+  "background_color": "#f2f2f3",
+  "theme_color": "#f2f2f3",
+  "user_preferences": {
+    "color_scheme_dark": { "background_color": "#0e0e10", "theme_color": "#0e0e10" }
+  },
+  "categories": ["business", "productivity", "developer"],
+  "prefer_related_applications": false,
+  "launch_handler": { "client_mode": ["focus-existing", "auto"] },
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Dashboard", "short_name": "Dashboard", "description": "Today’s numbers at a glance", "url": "./#/dashboard", "icons": [{ "src": "icons/shortcut-dashboard.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "Tickets", "short_name": "Tickets", "description": "Support inbox", "url": "./#/tickets", "icons": [{ "src": "icons/shortcut-tickets.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "Chat", "short_name": "Chat", "description": "Conversations", "url": "./#/chat", "icons": [{ "src": "icons/shortcut-chat.png", "sizes": "96x96", "type": "image/png" }] },
+    { "name": "New invoice", "short_name": "Invoice", "description": "Create an official invoice", "url": "./#/invoice-editor", "icons": [{ "src": "icons/shortcut-invoice.png", "sizes": "96x96", "type": "image/png" }] }
+  ],
+  "screenshots": [
+    { "src": "screenshots/wide-dashboard.png", "sizes": "1280x800", "type": "image/png", "form_factor": "wide", "label": "Dashboard — KPIs, revenue and orders" },
+    { "src": "screenshots/wide-tickets.png", "sizes": "1280x800", "type": "image/png", "form_factor": "wide", "label": "Support tickets inbox" },
+    { "src": "screenshots/narrow-dashboard.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "Dashboard on a phone" },
+    { "src": "screenshots/narrow-chat.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "Chat on a phone" },
+    { "src": "screenshots/narrow-notify-lab.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "Notifications and install lab" }
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": { "title": "share_title", "text": "share_text", "url": "share_url" }
+  }
+}

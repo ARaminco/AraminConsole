@@ -1,0 +1,58 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>خطای سرور · AraminConsole</title>
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+  <link rel="stylesheet" href="../standalone.css">
+  <script type="module" src="../../dist/aramin-console.js"></script>
+  <script type="module" src="../standalone.js"></script>
+</head>
+<body data-page="500">
+  <main class="ac-fullpage err">
+    <div class="sa-top">
+      <a class="ac-chrome ac-brand" href="../" aria-label="Aramin">
+        <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+        <span class="ac-brand__name">Aramin</span>
+      </a>
+      <div class="ac-chrome sa-tools">
+        <div data-ac="langpicker"></div>
+        <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+      </div>
+    </div>
+
+    <div class="err-box">
+      <svg class="err-art" viewBox="0 0 320 230" role="img" aria-label="500">
+        <ellipse class="ill-shadow" cx="160" cy="214" rx="96" ry="9"/>
+        <g class="ill-float">
+          <rect class="ill-ink" x="80" y="40" width="160" height="46" rx="14"/>
+          <rect class="ill-ink" x="80" y="94" width="160" height="46" rx="14"/>
+          <rect class="ill-ink" x="80" y="148" width="160" height="46" rx="14"/>
+          <g class="ill-paper"><rect x="100" y="58" width="56" height="10" rx="5" opacity=".22"/><rect x="100" y="112" width="56" height="10" rx="5" opacity=".22"/><rect x="100" y="166" width="56" height="10" rx="5" opacity=".22"/></g>
+          <circle class="ill-paper" cx="206" cy="63" r="5" opacity=".5"/><circle class="ill-paper" cx="222" cy="63" r="5" opacity=".5"/>
+          <circle class="ill-acc ill-blink" cx="222" cy="117" r="5"/><circle class="ill-paper" cx="206" cy="117" r="5" opacity=".5"/>
+          <circle class="ill-paper" cx="206" cy="171" r="5" opacity=".5"/><circle class="ill-paper" cx="222" cy="171" r="5" opacity=".5"/>
+        </g>
+        <path class="ill-acc ill-spark" d="M262 30 238 82h18l-14 44 36-60h-20l14-36z"/>
+        <g class="ill-wobble"><circle class="ill-ink-s" cx="46" cy="170" r="22" stroke-width="9" stroke-dasharray="6.9 6.9"/><circle class="ill-ink" cx="46" cy="170" r="18"/><circle class="ill-paper" cx="46" cy="170" r="7"/></g>
+        <g class="ill-wobble ill-bob--2"><circle class="ill-acc-s" cx="276" cy="176" r="13" stroke-width="6" stroke-dasharray="4.1 4.1"/><circle class="ill-acc" cx="276" cy="176" r="10"/><circle class="ill-paper" cx="276" cy="176" r="4"/></g>
+        <g class="ill-acc-s" stroke-width="3" stroke-linecap="round"><path d="M56 70l-12-8"/><path d="M52 92H38"/><path d="M58 112l-11 8"/></g>
+      </svg>
+      <span class="err-code" dir="auto" data-i18n="errpage.c500">Error 500</span>
+      <h1 class="err-title" data-i18n="errpage.t500">مشکلی در سرور پیش آمد</h1>
+      <p class="err-text" data-i18n="errpage.p500">خطا ثبت شد و تیم فنی در جریان است. چند لحظهٔ دیگر دوباره امتحان کنید.</p>
+      
+      <div class="err-actions">
+        <button class="ac-btn ac-btn--primary" type="button" data-action="reload"><svg class="ac-icon" aria-hidden="true"><use href="#i-refresh-cw"/></svg><span data-i18n="errpage.retry">تلاش دوباره</span></button>
+        <a class="ac-btn ac-btn--outline" href="../#/dashboard"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg><span data-i18n="errpage.home">بازگشت به داشبورد</span></a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

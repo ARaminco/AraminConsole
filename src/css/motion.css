@@ -1,0 +1,270 @@
+/* ==========================================================================
+   AraminConsole — motion system & micro-interactions (docs/motion.md)
+   Loaded last by the build, so it refines every component without touching
+   their structure. Rules of the house (Emil Kowalski / Linear / Vercel):
+   - only transform, opacity, filter, clip-path move; colours fade with --ac-ease-hover
+   - enter with ease-out, move with ease-in-out / springs, exit faster than enter
+   - hover motion only for fine pointers; press feedback on :active at once
+   - keyboard-driven changes are instant; RTL mirrors through --ac-dir (1 | -1)
+   ========================================================================== */
+
+[dir="ltr"] { --ac-dir: 1; }
+[dir="rtl"] { --ac-dir: -1; }
+
+/* ---- press feedback: quick in, spring back out ---------------------------- */
+:is(.ac-btn, .ac-iconbtn, .ac-dock__btn, .ac-brand, .ac-userchip, .ac-usercard, .ac-tabbar__item, .ac-tabbar__fab, .ac-fab, .ac-chip, .ac-segmented__item, .ac-tabs__tab, .ac-topnav__link, .ac-pagination__btn, .ac-rail__close, .ac-dialog__close, .ac-lp__trigger) {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+:is(.ac-iconbtn, .ac-dock__btn, .ac-rail__close, .ac-dialog__close, .ac-tabbar__fab, .ac-fab) {
+  transition-property: background-color, color, box-shadow, transform;
+  transition-duration: var(--ac-dur-1), var(--ac-dur-1), var(--ac-dur-2), var(--ac-spring-dur);
+  transition-timing-function: var(--ac-ease-hover), var(--ac-ease-hover), var(--ac-ease), var(--ac-spring);
+}
+:is(.ac-iconbtn, .ac-dock__btn, .ac-rail__close, .ac-dialog__close):active { transform: var(--ac-press-sm); transition-duration: var(--ac-dur-0); transition-timing-function: var(--ac-ease); }
+.ac-btn { transition-property: background-color, border-color, color, box-shadow, transform; transition-duration: var(--ac-dur-1), var(--ac-dur-1), var(--ac-dur-1), var(--ac-dur-2), var(--ac-spring-dur); transition-timing-function: var(--ac-ease-hover), var(--ac-ease-hover), var(--ac-ease-hover), var(--ac-ease), var(--ac-spring); }
+.ac-btn:active:not(:disabled, [aria-disabled="true"]) { transition-duration: var(--ac-dur-0); transition-timing-function: var(--ac-ease); }
+
+/* loading morph: the label blurs away, the spinner scales in (no layout change) */
+.ac-btn > * { transition: opacity var(--ac-dur-2) var(--ac-ease), filter var(--ac-dur-2) var(--ac-ease), transform var(--ac-dur-2) var(--ac-ease); }
+.ac-btn[aria-busy="true"] > * { visibility: visible; opacity: 0; filter: blur(3px); transform: scale(0.9); }
+.ac-btn[aria-busy="true"]::after { animation: ac-spin 0.7s linear infinite, ac-pop-in var(--ac-dur-3) var(--ac-ease) both; }
+@keyframes ac-pop-in { from { opacity: 0; scale: calc(1 - 0.5 * var(--ac-travel, 1)); } }
+
+/* ---- hover motion only where a precise pointer exists --------------------- */
+@media (hover: hover) and (pointer: fine) {
+  .ac-btn--primary:hover { transform: translateY(-1px); }
+  .ac-card--interactive:hover { transform: translateY(-1px); }
+  .ac-avatar-group > .ac-avatar:hover { transform: translateY(-2px); }
+  .ac-tabbar__fab:hover, .ac-fab:hover { transform: scale(1.04); }
+}
+@media (hover: none), (pointer: coarse) {
+  .ac-btn--primary:hover, .ac-card--interactive:hover, .ac-avatar-group > .ac-avatar:hover { transform: none; }
+}
+
+/* ---- cards: framer-style lift (bento) + springy settle -------------------- */
+.ac-card { transition: box-shadow var(--ac-dur-4) var(--ac-ease), transform 520ms var(--ac-spring), border-color var(--ac-dur-2) var(--ac-ease-hover); }
+.ac-kpi { transition: transform 520ms var(--ac-spring), box-shadow var(--ac-dur-4) var(--ac-ease); }
+
+/* ---- entrance stagger (the reel): fade-up, 45 ms apart, capped ------------ */
+.ac-stagger > * { animation: ac-fade-up 620ms var(--ac-ease-out) both; }
+.ac-stagger > :nth-child(1) { animation-delay: 0ms; }
+.ac-stagger > :nth-child(2) { animation-delay: calc(var(--ac-stagger) * 1); }
+.ac-stagger > :nth-child(3) { animation-delay: calc(var(--ac-stagger) * 2); }
+.ac-stagger > :nth-child(4) { animation-delay: calc(var(--ac-stagger) * 3); }
+.ac-stagger > :nth-child(5) { animation-delay: calc(var(--ac-stagger) * 4); }
+.ac-stagger > :nth-child(6) { animation-delay: calc(var(--ac-stagger) * 5); }
+.ac-stagger > :nth-child(7) { animation-delay: calc(var(--ac-stagger) * 6); }
+.ac-stagger > :nth-child(n + 8) { animation-delay: calc(var(--ac-stagger) * 7); }
+@keyframes ac-fade-up { from { opacity: 0; transform: translateY(calc(16px * var(--ac-travel, 1))) scale(calc(1 - 0.015 * var(--ac-travel, 1))); } to { opacity: 1; transform: none; } }
+
+/* ---- spring-driven indicators (motion.js slide writes the geometry) ------- */
+:is(.ac-topnav__ind, .ac-tabs__indicator, .ac-segmented__thumb, .ac-tabbar__indicator, .ac-track, .ac-hl)[data-spring] { transition: opacity var(--ac-dur-2) var(--ac-ease); }
+.ac-tabbar__indicator { block-size: var(--ac-ind-h, var(--ac-ind-w, 2.75rem)); border-radius: var(--ac-r-pill); }
+.ac-topnav__link, .ac-segmented__item, .ac-tabs--pills .ac-tabs__tab, .ac-tabbar__item { transition: color var(--ac-dur-3) var(--ac-ease-hover), transform var(--ac-spring-dur) var(--ac-spring); }
+
+/* ink layer (motion.js inkLayer): white copies of the labels on an ink fill, clipped to the
+   pill geometry — label colour flips exactly under the moving pill (Emil's clip-path tabs) */
+.ac-ink {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  background: var(--ac-ink);
+  clip-path: inset(var(--ac-ind-y, 4px) calc(100% - var(--ac-ind-x, 0px) - var(--ac-ind-w, 0px)) calc(100% - var(--ac-ind-y, 4px) - var(--ac-ind-h, calc(100% - 8px))) var(--ac-ind-x, 0px) round var(--ac-r-pill)); /* rtl-ok: JS-measured physical geometry */
+  opacity: var(--ac-ind-o, 1);
+  pointer-events: none;
+  transition: opacity var(--ac-dur-2) var(--ac-ease);
+}
+.ac-segmented > .ac-ink { --ac-ind-y: 3px; }
+.ac-ink > .ac-ink__item {
+  position: absolute;
+  top: 0; /* rtl-ok: JS-measured physical geometry */
+  left: 0; /* rtl-ok: JS-measured physical geometry */
+  margin: 0;
+  color: var(--ac-ink-contrast) !important;
+  background: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+.ac-ink > .ac-ink__item * { animation: none !important; transition: none !important; }
+.ac-tabbar > .ac-ink { z-index: 2; }
+.ac-tabbar > .ac-ink > .ac-ink__item .ac-icon { stroke-width: 2.1; }
+.ac-tabbar > .ac-ink .ac-tabbar__badge { box-shadow: 0 0 0 2px var(--ac-ink); }
+[data-ink] > :is(.ac-topnav__link, .ac-segmented__item, .ac-tabbar__item)[aria-current="page"],
+[data-ink] > .ac-segmented__item:is([aria-checked="true"], [aria-selected="true"]),
+.ac-tabs--pills [data-ink] > .ac-tabs__tab[aria-selected="true"] { color: var(--ac-text-soft); }
+.ac-tabbar[data-ink] > .ac-tabbar__item[aria-current="page"] { color: var(--ac-muted); }
+
+/* generic tracked indicator (motion.js track): dock nav ink circle */
+.ac-track {
+  position: absolute;
+  top: 0; /* rtl-ok: JS-measured physical geometry */
+  left: 0; /* rtl-ok: JS-measured physical geometry */
+  z-index: 0;
+  inline-size: var(--ac-ind-w, 0);
+  block-size: var(--ac-ind-h, 0);
+  border-radius: var(--ac-r-pill);
+  background: var(--ac-ink);
+  box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.55);
+  transform: translate(var(--ac-ind-x, 0), var(--ac-ind-y, 0));
+  opacity: 0;
+  pointer-events: none;
+}
+.ac-track[data-on] { opacity: 1; }
+.ac-dock__nav { position: relative; isolation: isolate; }
+.ac-dock__nav > .ac-dock__btn { z-index: 1; }
+.ac-dock__nav[data-track] > .ac-dock__btn:is([data-active], [aria-current="page"]) { background: transparent; box-shadow: none; color: var(--ac-text-soft); }
+.ac-dock__nav > .ac-ink { --ac-ind-y: 0px; }
+.ac-dock__nav > .ac-ink > .ac-ink__item .ac-dock__dot { box-shadow: 0 0 0 2px var(--ac-ink); }
+
+/* ---- sliding hover highlight (menus, rail, palette, language picker) ------ */
+.ac-hl {
+  position: absolute;
+  top: 0; /* rtl-ok: JS-measured physical geometry */
+  left: 0; /* rtl-ok: JS-measured physical geometry */
+  z-index: 0;
+  inline-size: var(--ac-ind-w, 0);
+  block-size: var(--ac-ind-h, 0);
+  border-radius: var(--ac-r-md);
+  background: var(--ac-surface-3);
+  transform: translate(var(--ac-ind-x, 0), var(--ac-ind-y, 0));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ac-dur-2) var(--ac-ease);
+}
+.ac-hl[data-on] { opacity: 1; transition-duration: 60ms; }
+.ac-hl[data-tone="danger"] { background: var(--ac-danger-soft); }
+.ac-rail__nav .ac-hl { border-radius: var(--ac-r-pill); background: var(--ac-hover); }
+.ac-rail__nav { position: relative; isolation: isolate; }
+[data-hl] > :not(.ac-hl), [data-hl] :is(.ac-menu__item, .ac-rail__link, .ac-palette__item, .ac-lp__item) { position: relative; z-index: 1; }
+.ac-menu[data-hl] .ac-menu__item:is(:focus, :hover):not([aria-expanded="true"], :active),
+.ac-rail__nav[data-hl] .ac-rail__link:hover:not([aria-current="page"]),
+.ac-lp__list[data-hl] .ac-lp__item:is(:focus, :hover) { background: transparent; }
+/* command palette: one indicator = the active row (hover and arrow keys share it) */
+.ac-palette__list .ac-hl { border-radius: var(--ac-r-md); background: var(--ac-accent-soft); }
+.ac-palette__list[data-hl] .ac-palette__item[aria-selected="true"] { background: transparent; }
+@media (hover: none) { .ac-hl:not(.ac-palette__list > .ac-hl) { display: none; } }
+
+/* ---- menus / popovers / tooltips: origin-aware scale, fast exit ----------- */
+.ac-menu, .ac-popover {
+  transform: scale(0.95);
+  transition: opacity var(--ac-dur-exit) var(--ac-ease), transform var(--ac-dur-exit) var(--ac-ease), visibility 0s linear var(--ac-dur-exit);
+}
+:is(.ac-menu, .ac-popover)[data-state="open"] { transition: opacity var(--ac-dur-2) var(--ac-ease), transform var(--ac-dur-2) var(--ac-ease); }
+.ac-menu[data-side="bottom"]:not([data-state="open"]) { transform: translateY(-4px) scale(0.95); }
+.ac-menu[data-side="top"]:not([data-state="open"]) { transform: translateY(4px) scale(0.95); }
+.ac-tooltip { transform: scale(0.97); transition: opacity 125ms var(--ac-ease), transform 125ms var(--ac-ease), visibility 0s linear 125ms; }
+.ac-tooltip[data-state="open"] { transition-delay: 0s; }
+.ac-tooltip[data-instant] { transition-duration: 0s; }
+.ac-menu__check .ac-icon { transition: scale var(--ac-spring-bounce-dur) var(--ac-spring-bounce), opacity var(--ac-dur-1) var(--ac-ease); }
+[aria-checked="false"] > .ac-menu__check .ac-icon { scale: 0.4; }
+
+/* ---- dialogs: modal scales from center, sheets & drawers ride the drawer curve -- */
+.ac-modal > .ac-dialog { transition: transform var(--ac-dur-4) var(--ac-ease-out), opacity var(--ac-dur-3) var(--ac-ease); }
+.ac-modal:not([data-state="open"]) > .ac-dialog { transition-duration: var(--ac-dur-2), var(--ac-dur-exit); }
+.ac-sheet > .ac-dialog, .ac-drawer > .ac-dialog { transition: transform var(--ac-dur-sheet) var(--ac-ease-drawer), opacity var(--ac-dur-3) var(--ac-ease); }
+@media (max-width: 639.98px) {
+  .ac-modal > .ac-dialog { transition: transform var(--ac-dur-sheet) var(--ac-ease-drawer), opacity var(--ac-dur-3) var(--ac-ease); }
+}
+:is(.ac-modal, .ac-sheet, .ac-drawer)::before { transition: opacity var(--ac-dur-sheet) var(--ac-ease-drawer); }
+:is(.ac-modal, .ac-sheet, .ac-drawer)[data-dragging] > .ac-dialog { transition: none; }
+
+/* ---- form controls -------------------------------------------------------- */
+/* switch: spring thumb with squash while pressed */
+.ac-switch::before { transition: translate var(--ac-spring-dur) var(--ac-spring), inline-size var(--ac-dur-2) var(--ac-ease); }
+.ac-switch { transition: background-color var(--ac-dur-3) var(--ac-ease-hover), box-shadow var(--ac-dur-2) var(--ac-ease), transform var(--ac-spring-dur) var(--ac-spring); }
+/* checkbox: the check mark is drawn (clip reveal along the stroke), radio dot pops */
+.ac-check::before { scale: 1; clip-path: inset(0 100% 0 0); transition: clip-path var(--ac-dur-exit) var(--ac-ease); } /* rtl-ok: a check mark is not mirrored */
+.ac-check:checked::before { clip-path: inset(0 0 0 0); transition: clip-path 260ms var(--ac-ease) 40ms; }
+.ac-check:indeterminate::before { clip-path: inset(0 0 0 0); }
+.ac-radio::before { transition: scale var(--ac-spring-bounce-dur) var(--ac-spring-bounce); }
+:is(.ac-check, .ac-radio, .ac-switch) { transition: background-color var(--ac-dur-2) var(--ac-ease-hover), border-color var(--ac-dur-2) var(--ac-ease-hover), box-shadow var(--ac-dur-2) var(--ac-ease), transform var(--ac-spring-dur) var(--ac-spring); }
+:is(.ac-check, .ac-radio, .ac-switch):active { transition-duration: var(--ac-dur-2), var(--ac-dur-2), var(--ac-dur-2), var(--ac-dur-0); }
+/* inputs: the focus ring grows in from the border */
+:is(.ac-input, .ac-select, .ac-input-group, .ac-number, .ac-searchpill, .ac-confirm__input) { transition: border-color var(--ac-dur-1) var(--ac-ease-hover), box-shadow var(--ac-dur-2) var(--ac-ease), background-color var(--ac-dur-1) var(--ac-ease-hover); }
+.ac-float > label { transition: inset-block-start var(--ac-dur-2) var(--ac-ease), translate var(--ac-dur-2) var(--ac-ease), font-size var(--ac-dur-2) var(--ac-ease), color var(--ac-dur-2) var(--ac-ease-hover); }
+
+/* ---- rail flyout / drawer: items cascade in from the start edge ----------- */
+.ac-rail[data-state="open"] .ac-rail__group:not([data-off]) > :is(.ac-rail__link, .ac-rail__sub, .ac-rail__label) { animation: ac-from-start 340ms var(--ac-ease-out) both; }
+.ac-rail[data-state="open"] .ac-rail__group:not([data-off]) > :nth-child(2) { animation-delay: 25ms; }
+.ac-rail[data-state="open"] .ac-rail__group:not([data-off]) > :nth-child(3) { animation-delay: 50ms; }
+.ac-rail[data-state="open"] .ac-rail__group:not([data-off]) > :nth-child(4) { animation-delay: 75ms; }
+.ac-rail[data-state="open"] .ac-rail__group:not([data-off]) > :nth-child(5) { animation-delay: 100ms; }
+.ac-rail[data-state="open"] .ac-rail__group:not([data-off]) > :nth-child(n + 6) { animation-delay: 120ms; }
+@keyframes ac-from-start { from { opacity: 0; transform: translateX(calc(-10px * var(--ac-dir) * var(--ac-travel, 1))); } }
+.ac-rail__sub[open] > .ac-rail__subnav { animation: ac-fade-down var(--ac-dur-3) var(--ac-ease) both; }
+@keyframes ac-fade-down { from { opacity: 0; transform: translateY(calc(-6px * var(--ac-travel, 1))); } }
+.ac-rail__chev { transition: transform var(--ac-spring-dur) var(--ac-spring) !important; }
+
+/* ---- tab bar: icon pop + FAB ---------------------------------------------- */
+.ac-tabbar__fab .ac-icon { transition: transform var(--ac-spring-bounce-dur) var(--ac-spring-bounce); }
+.ac-tabbar__fab:active { transform: scale(0.9) rotate(calc(-8deg * var(--ac-dir))); transition-duration: var(--ac-dur-0); }
+
+/* ---- badges & counts: bump (motion.bump) + entrance ----------------------- */
+:is(.ac-appbar__count, .ac-tabbar__badge, .ac-rail__badge, .ac-count, .ac-dock__dot) { animation: ac-badge-in var(--ac-spring-bounce-dur) var(--ac-spring-bounce) both; animation-delay: 300ms; }
+@keyframes ac-badge-in { from { transform: scale(calc(1 - 0.6 * var(--ac-travel, 1))); opacity: 0; } }
+
+/* ---- skeleton → content ---------------------------------------------------- */
+.ac-skeleton { transition: opacity var(--ac-dur-3) var(--ac-ease); }
+[data-loaded] > .ac-skeleton, .ac-skeleton[data-done] { opacity: 0; }
+
+/* ---- data table ----------------------------------------------------------- */
+.ac-dt__bulk { animation: ac-bulk-in 380ms var(--ac-spring) both; }
+@keyframes ac-bulk-in { from { opacity: 0; transform: translateY(calc(-8px * var(--ac-travel, 1))); } }
+.ac-dt__table tbody tr { transition: background-color var(--ac-dur-1) var(--ac-ease-hover); }
+.ac-dt__xbtn { transition: transform var(--ac-spring-dur) var(--ac-spring), background var(--ac-dur-1) var(--ac-ease-hover); }
+.ac-dt__detail-in { animation: ac-fade-down var(--ac-dur-3) var(--ac-ease) both; }
+
+/* ---- page transitions (View Transitions; motion.navigate) ----------------- */
+/* Only the page content is captured — the chrome stays live, so the nav pill and the tab
+   bar keep springing while the page swaps. Forward = toward the inline end of the nav. */
+:root[data-vt="page"] { view-transition-name: none; }
+:root[data-vt="page"] .ac-content { view-transition-name: ac-page; }
+::view-transition-group(ac-page) { animation: none; }
+:root[data-vt="page"]::view-transition-old(ac-page) { animation: ac-page-out var(--ac-dur-exit) var(--ac-ease) both; }
+:root[data-vt="page"]::view-transition-new(ac-page) { animation: ac-page-in 380ms var(--ac-ease-out) both; }
+:root[data-vt-dir="forward"]::view-transition-old(ac-page) { --_dx: calc(-18px * var(--ac-dir)); }
+:root[data-vt-dir="forward"]::view-transition-new(ac-page) { --_dx: calc(28px * var(--ac-dir)); }
+:root[data-vt-dir="back"]::view-transition-old(ac-page) { --_dx: calc(18px * var(--ac-dir)); }
+:root[data-vt-dir="back"]::view-transition-new(ac-page) { --_dx: calc(-28px * var(--ac-dir)); }
+@keyframes ac-page-out { to { opacity: 0; transform: translateX(calc(var(--_dx, 0px) * var(--ac-travel, 1))); filter: blur(2px); } }
+@keyframes ac-page-in { from { opacity: 0; transform: translate(calc(var(--_dx, 0px) * var(--ac-travel, 1)), calc(var(--_dy, 0px) * var(--ac-travel, 1))); filter: blur(2px); } }
+:root[data-vt-dir="none"]::view-transition-new(ac-page) { --_dy: 10px; }
+
+/* language / direction switch: whole-document crossfade with a blur bridge (nothing can
+   slide when the layout mirrors, so the two states melt into each other instead) */
+:root[data-vt="lang"]::view-transition-group(root) { animation-duration: 0s; }
+:root[data-vt="lang"]::view-transition-old(root) { animation: ac-lang-out 200ms var(--ac-ease) both; }
+:root[data-vt="lang"]::view-transition-new(root) { animation: ac-lang-in 420ms var(--ac-ease-out) 40ms both; }
+@keyframes ac-lang-out { to { opacity: 0; filter: blur(6px); } }
+@keyframes ac-lang-in { from { opacity: 0; filter: blur(6px); } }
+
+/* theme switch: circular reveal from the control that was pressed (motion.js themeReveal) */
+:root.ac-theme-switching::view-transition-old(root), :root.ac-theme-switching::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+:root.ac-theme-switching::view-transition-new(root) { z-index: 2; }
+
+/* ---- RTL: directional glyphs follow the reading direction ----------------- */
+[dir="rtl"] .ac-trend::before { transform: scaleX(-1); }
+[dir="rtl"] :is(.ac-pagination__btn, .ac-dp__nav, .ac-carousel__nav) > .ac-icon:not(.ac-no-flip) { transform: scaleX(-1); }
+
+/* ---- reduced motion: handled by --ac-travel (base.css) — every keyframe above scales its
+   distance by it, so data-motion="reduced" keeps the fades and drops the travel. */
+
+/* command palette: an opaque surface with one clean drop shadow — a translucent glass panel let the
+   blurred cards behind it bleed through as soft blobs (owner report). The blur stays on the backdrop. */
+.ac-palette__panel { background: var(--ac-elevated); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: var(--ac-shadow-xl); }
+.ac-palette__panel { transform: translateY(calc(-8px * var(--ac-travel, 1))) scale(calc(1 - 0.02 * var(--ac-travel, 1))); transition: opacity var(--ac-dur-2) var(--ac-ease), transform var(--ac-dur-3) var(--ac-ease); }
+.ac-palette[data-state="open"] .ac-palette__panel { transform: none; }
+
+/* Page intro (reel style): cards shimmer briefly, then their content rises in. Toggle `.is-loading` on `.ac-page`. */
+.ac-page .ac-card > * { transition: opacity 420ms var(--ac-ease-out, ease-out), transform 520ms var(--ac-ease-out, ease-out); }
+.ac-page.is-loading .ac-card > * { opacity: 0; transform: translateY(6px); }
+.ac-page.is-loading .ac-card {
+  background-image: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--ac-text) 6%, transparent) 50%, transparent 70%);
+  background-size: 220% 100%;
+  animation: ac-intro-shimmer 900ms linear infinite;
+}
+@keyframes ac-intro-shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+html[data-motion="reduced"] .ac-page .ac-card > * { transform: none; }

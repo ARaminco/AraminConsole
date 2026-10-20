@@ -1,0 +1,21 @@
+/*! AraminConsole v0.1.0 — module uptime CSS — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+
+/* ==== modules/uptime/uptime.css ==== */
+/* Uptime module: one row per service, label + daily bars. Tokens only. */
+.ac-uptime { display: grid; gap: var(--ac-s-3); }
+.ac-uptime__row { display: grid; grid-template-columns: 12rem minmax(0, 1fr); align-items: center; gap: var(--ac-s-4); }
+.ac-uptime__label { display: flex; justify-content: space-between; gap: var(--ac-s-2); font-size: var(--ac-fs-sm); min-width: 0; }
+.ac-uptime__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; unicode-bidi: plaintext; }
+.ac-uptime__pct { font-weight: var(--ac-fw-semibold); font-variant-numeric: tabular-nums; }
+.ac-uptime__bars { display: flex; gap: 2px; block-size: 1.75rem; min-width: 0; }
+.ac-uptime__bars i { flex: 1 1 0; min-width: 0; border-radius: 2px; background: color-mix(in oklab, var(--ac-success) 75%, var(--ac-surface-1)); transform-origin: bottom; transition: transform var(--ac-dur-2) var(--ac-ease-out), filter var(--ac-dur-2); }
+.ac-uptime__bars i:hover { transform: scaleY(1.18); filter: brightness(1.1); }
+.ac-uptime__bars i[data-s="partial"] { background: var(--ac-warning); }
+.ac-uptime__bars i[data-s="down"] { background: var(--ac-danger); }
+.ac-uptime__bars i[data-s="none"] { background: var(--ac-surface-3); }
+@media (max-width: 639.98px) {
+  .ac-uptime__row { grid-template-columns: 1fr; gap: var(--ac-s-1); }
+  .ac-uptime__bars { block-size: 1.25rem; }
+  .ac-uptime__bars i:nth-child(-n+45) { display: none; }
+}
+

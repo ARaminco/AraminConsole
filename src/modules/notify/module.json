@@ -1,0 +1,1 @@
+{ "description": "AC.notify(): toast, rich card, banner, inline, undo snackbar, progress, dynamic island, system & Web Push — routed by per-user preferences (settings card), with sound, haptics, grouping and priority.", "dependencies": ["overlays"] }

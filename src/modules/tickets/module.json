@@ -1,0 +1,1 @@
+{ "description": "Help desk: ticket inbox (queue views, filters, priority / status / live SLA chips, bulk assign), ticket detail (thread, internal notes, attachments, canned replies, macros, merge, SLA timer, properties, tags, CSAT, activity), create-ticket modal, customer status timeline; phones: list → detail push.", "dependencies": ["table", "overlays", "forms", "apps"] }

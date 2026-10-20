@@ -1,0 +1,476 @@
+/* PWA module — service-worker lifecycle with an elegant update flow, install invitation UI, app badge, Web Share,
+   standalone tweaks, splash screen, network status and the background-sync outbox (page side).
+   Contract (src/modules/README.md): no core imports, install(AC) wires it into window.AC.
+
+   AC.pwa.register('sw.js', { scope, updateUI: 'toast'|'banner'|false, network: true, badge: true })  → Promise<registration>
+   AC.pwa.update() (check now) · AC.pwa.applyUpdate() (skipWaiting + one reload) · AC.pwa.simulateUpdate()
+   AC.pwa.badge(n) · AC.pwa.share({ title, text, url, files }) · AC.pwa.isStandalone() · AC.pwa.splash({ minMs })
+   AC.pwa.send(url, { method:'POST', body }) → { ok, queued, response }   · AC.pwa.flush()   (outbox replay)
+   AC.install.show('sheet'|'banner'|'card'|'inline'|'ios', { target, app, stats, benefits }) · .prompt() · .hide()
+   AC.install.auto({ minVisits: 2, minSeconds: 20, snoozeDays: 7, variant: 'sheet' }) · .snooze(days) · .reset() · .state
+   Declarative: <div data-ac="install-card"></div> (inline settings card)
+   Events (document): ac:pwa:update {simulated} · ac:pwa:updated · ac:pwa:offline · ac:pwa:online · ac:pwa:queued {count}
+                      ac:pwa:synced {count} · ac:install:available · ac:install:show {variant} · ac:install:result {outcome}
+                      ac:install:installed */
+
+const NAME = 'pwa';
+const KEY = 'ac:install';
+const D = {
+  en: {
+    install: 'Install', later: 'Not now', installApp: 'Install the app', installed: 'Installed', openApp: 'Open app',
+    installTitle: 'Get the app', installSub: 'Faster, works offline, right on your home screen.',
+    by: 'Web app · Free', rating: 'Rating', price: 'Price', free: 'Free', size: 'Size', offline: 'Offline', works: 'Works',
+    languages: 'Languages', screenshots: 'Screenshots',
+    b1: 'Opens instantly', b1t: 'Launches from your home screen or dock, in its own window.',
+    b2: 'Works offline', b2t: 'Recent pages and data stay available without a connection.',
+    b3: 'Real notifications', b3t: 'Mentions, approvals and alerts — even when the tab is closed.',
+    b4: 'Tiny & private', b4t: 'No app store, no tracking; uninstall any time.',
+    note: 'No app store needed · takes two seconds',
+    thanks: 'Installed — welcome aboard', thanksText: 'Open Aramin from your home screen or dock any time.',
+    dismissed: 'No problem', dismissedText: 'You can install later from Settings.',
+    manual: 'Install from the browser menu', manualText: 'Use “Install app” or “Add to Home screen” in your browser menu.',
+    iosTitle: 'Add to Home Screen', iosSub: 'Three taps in Safari — no App Store needed.',
+    ios1: 'Tap the Share button', ios1t: 'In Safari’s toolbar at the bottom (top on iPad).',
+    ios2: 'Choose “Add to Home Screen”', ios2t: 'Scroll the share sheet if you don’t see it right away.',
+    ios3: 'Tap “Add”', ios3t: 'The app appears on your home screen and opens full-screen.',
+    gotIt: 'Got it',
+    updateTitle: 'Update available', updateText: 'A new version is ready.', reload: 'Reload', updating: 'Updating…',
+    offlineTitle: 'You’re offline', offlineText: 'Changes are saved and sent when you’re back.', onlineTitle: 'Back online',
+    queued: 'Saved offline', queuedText: 'It will be sent automatically when you’re back online.',
+    synced: 'Synced', syncedText: '{n} pending change(s) sent.',
+    shareCopied: 'Link copied', shareCopiedText: 'Sharing isn’t available here, so the link was copied.',
+    card: 'Install Aramin', cardText: 'One tap — opens like a native app, works offline.',
+    bannerText: 'Faster and works offline',
+  },
+  fa: {
+    install: 'نصب', later: 'بعداً', installApp: 'نصب اپلیکیشن', installed: 'نصب شد', openApp: 'باز کردن اپ',
+    installTitle: 'اپ را نصب کنید', installSub: 'سریع‌تر، آفلاین، درست روی صفحهٔ اصلی گوشی.',
+    by: 'وب‌اپ · رایگان', rating: 'امتیاز', price: 'قیمت', free: 'رایگان', size: 'حجم', offline: 'آفلاین', works: 'کار می‌کند',
+    languages: 'زبان‌ها', screenshots: 'تصویرهای اپ',
+    b1: 'باز شدن فوری', b1t: 'از صفحهٔ اصلی یا داک، در پنجرهٔ خودش باز می‌شود.',
+    b2: 'کار بدون اینترنت', b2t: 'صفحه‌ها و داده‌های اخیر بدون اتصال هم در دسترس‌اند.',
+    b3: 'اعلان واقعی', b3t: 'منشن‌ها، تأییدها و هشدارها — حتی وقتی تب بسته است.',
+    b4: 'سبک و امن', b4t: 'بدون اپ‌استور و ردیابی؛ هر وقت خواستید حذفش کنید.',
+    note: 'بدون نیاز به اپ‌استور · کمتر از دو ثانیه',
+    thanks: 'نصب شد — خوش آمدید', thanksText: 'هر وقت خواستید آرامین را از صفحهٔ اصلی یا داک باز کنید.',
+    dismissed: 'مشکلی نیست', dismissedText: 'بعداً از تنظیمات هم می‌توانید نصب کنید.',
+    manual: 'نصب از منوی مرورگر', manualText: 'از منوی مرورگر «نصب برنامه» یا «افزودن به صفحهٔ اصلی» را بزنید.',
+    iosTitle: 'افزودن به صفحهٔ اصلی', iosSub: 'سه لمس در سافاری — بدون اپ‌استور.',
+    ios1: 'دکمهٔ اشتراک‌گذاری را بزنید', ios1t: 'در نوار پایین سافاری (در آیپد بالا).',
+    ios2: '«Add to Home Screen» را انتخاب کنید', ios2t: 'اگر نمی‌بینید، فهرست را کمی پایین بکشید.',
+    ios3: '«Add» را بزنید', ios3t: 'اپ روی صفحهٔ اصلی می‌آید و تمام‌صفحه باز می‌شود.',
+    gotIt: 'متوجه شدم',
+    updateTitle: 'نسخهٔ تازه آماده است', updateText: 'برای دیدن تغییرها صفحه را تازه کنید.', reload: 'تازه‌سازی', updating: 'در حال به‌روزرسانی…',
+    offlineTitle: 'اتصال قطع است', offlineText: 'تغییرها ذخیره و بعد از وصل شدن ارسال می‌شوند.', onlineTitle: 'دوباره آنلاین شدید',
+    queued: 'آفلاین ذخیره شد', queuedText: 'به‌محض وصل شدن اینترنت خودکار ارسال می‌شود.',
+    synced: 'همگام شد', syncedText: '{n} تغییر در انتظار ارسال شد.',
+    shareCopied: 'پیوند کپی شد', shareCopiedText: 'اشتراک‌گذاری اینجا در دسترس نیست؛ پیوند کپی شد.',
+    card: 'آرامین را نصب کنید', cardText: 'با یک لمس — مثل اپ واقعی باز می‌شود و آفلاین کار می‌کند.',
+    bannerText: 'سریع‌تر و آفلاین',
+  },
+  ar: {
+    install: 'تثبيت', later: 'لاحقاً', installApp: 'تثبيت التطبيق', installed: 'تم التثبيت', openApp: 'فتح التطبيق',
+    installTitle: 'ثبّت التطبيق', installSub: 'أسرع، يعمل دون اتصال، على شاشتك الرئيسية.',
+    by: 'تطبيق ويب · مجاني', rating: 'التقييم', price: 'السعر', free: 'مجاني', size: 'الحجم', offline: 'دون اتصال', works: 'يعمل',
+    languages: 'اللغات', screenshots: 'لقطات الشاشة',
+    b1: 'يفتح فوراً', b1t: 'من الشاشة الرئيسية أو شريط المهام، في نافذته الخاصة.',
+    b2: 'يعمل دون اتصال', b2t: 'الصفحات والبيانات الأخيرة متاحة دون إنترنت.',
+    b3: 'إشعارات حقيقية', b3t: 'الإشارات والموافقات والتنبيهات — حتى مع إغلاق التبويب.',
+    b4: 'خفيف وآمن', b4t: 'بلا متجر تطبيقات ولا تتبّع؛ أزله متى شئت.',
+    note: 'لا حاجة لمتجر التطبيقات · ثانيتان فقط',
+    thanks: 'تم التثبيت — أهلاً بك', thanksText: 'افتح آرامين من الشاشة الرئيسية متى شئت.',
+    dismissed: 'لا مشكلة', dismissedText: 'يمكنك التثبيت لاحقاً من الإعدادات.',
+    manual: 'التثبيت من قائمة المتصفح', manualText: 'استخدم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».',
+    iosTitle: 'إضافة إلى الشاشة الرئيسية', iosSub: 'ثلاث لمسات في Safari — دون App Store.',
+    ios1: 'اضغط زر المشاركة', ios1t: 'في شريط Safari السفلي (العلوي على iPad).',
+    ios2: 'اختر «Add to Home Screen»', ios2t: 'مرّر القائمة إن لم تظهر مباشرة.',
+    ios3: 'اضغط «Add»', ios3t: 'يظهر التطبيق على شاشتك ويفتح بملء الشاشة.',
+    gotIt: 'فهمت',
+    updateTitle: 'تحديث متاح', updateText: 'نسخة جديدة جاهزة.', reload: 'إعادة التحميل', updating: 'جارٍ التحديث…',
+    offlineTitle: 'أنت غير متصل', offlineText: 'تُحفظ التغييرات وتُرسل عند عودة الاتصال.', onlineTitle: 'عاد الاتصال',
+    queued: 'حُفظ دون اتصال', queuedText: 'سيُرسل تلقائياً عند عودة الاتصال.',
+    synced: 'تمت المزامنة', syncedText: 'أُرسل {n} تغيير معلّق.',
+    shareCopied: 'نُسخ الرابط', shareCopiedText: 'المشاركة غير متاحة هنا، فنُسخ الرابط.',
+    card: 'ثبّت آرامين', cardText: 'بلمسة واحدة — يفتح كتطبيق أصلي ويعمل دون اتصال.',
+    bannerText: 'أسرع ويعمل دون اتصال',
+  },
+};
+
+let A = null; // the AC instance
+const T = (k, vars) => {
+  const lang = A?.i18n?.lang || document.documentElement.lang || 'en';
+  let s = A?.i18n?.dict?.[`pwa.${k}`] ?? D[lang]?.[k] ?? D.en[k] ?? k;
+  if (vars) s = s.replace(/\{(\w+)\}/g, (m, x) => vars[x] ?? m);
+  return s;
+};
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ico = (n, cls = '') => `<svg class="ac-icon${cls ? ` ${cls}` : ''}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const fire = (name, detail = {}) => document.dispatchEvent(new CustomEvent(`ac:${name}`, { bubbles: true, detail }));
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } },
+  set(patch) { const v = { ...store.get(), ...patch }; try { localStorage.setItem(KEY, JSON.stringify(v)); } catch { /* private mode */ } return v; },
+};
+const toast = (o) => A?.toast?.(o);
+
+/* ------------------------------------------------------------------ platform */
+const ua = () => navigator.userAgent || '';
+export const isIOS = () => /iphone|ipad|ipod/i.test(ua()) || (/Macintosh/.test(ua()) && navigator.maxTouchPoints > 1);
+const isIOSSafari = () => isIOS() && /Safari/i.test(ua()) && !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua());
+export const isStandalone = () => matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: window-controls-overlay)').matches
+  || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+const platform = () => (isIOS() ? 'ios' : /android/i.test(ua()) ? 'android' : 'desktop');
+const phone = () => matchMedia('(max-width: 639.98px)').matches;
+
+/* ------------------------------------------------------------------ app info (from the web manifest) */
+let manifestP = null;
+function appInfo() {
+  if (manifestP) return manifestP;
+  const link = document.querySelector('link[rel="manifest"]');
+  manifestP = (link ? fetch(link.href).then((r) => r.json()).then((m) => ({ ...m, _base: link.href })).catch(() => ({})) : Promise.resolve({}))
+    .then((m) => {
+      const abs = (u) => (u ? new URL(u, m._base || location.href).href : '');
+      const icons = (m.icons || []).filter((i) => !/maskable/.test(i.purpose || ''));
+      const icon = abs((icons.find((i) => /512|any/.test(i.sizes || '')) || icons[0] || {}).src) || document.querySelector('link[rel="apple-touch-icon"]')?.href || document.querySelector('link[rel="icon"]')?.href || '';
+      return {
+        name: m.name || document.title, short: m.short_name || m.name || document.title, description: m.description || '', localized: { name: m.name_localized || {}, short: m.short_name_localized || {}, description: m.description_localized || {} },
+        icon, screenshots: (m.screenshots || []).map((s) => ({ ...s, src: abs(s.src) })),
+      };
+    });
+  return manifestP;
+}
+
+/* ------------------------------------------------------------------ service worker + update flow */
+const sw = { reg: null, waiting: null, accepted: false, cfg: {}, lastCheck: 0 };
+
+async function register(url = 'sw.js', cfg = {}) {
+  sw.cfg = { updateUI: 'toast', network: true, badge: true, ...cfg };
+  if (sw.cfg.network) watchNetwork();
+  if (sw.cfg.badge) autoBadge();
+  if (!('serviceWorker' in navigator) || location.protocol === 'file:') return null;
+  const hadController = !!navigator.serviceWorker.controller;
+  let reg;
+  try { reg = await navigator.serviceWorker.register(url, cfg.scope ? { scope: cfg.scope } : undefined); } catch (err) { console.warn('[AC] SW registration failed', err); return null; }
+  sw.reg = reg;
+  const found = (w) => { if (w && navigator.serviceWorker.controller) updateReady(w); };
+  if (reg.waiting) found(reg.waiting);
+  reg.addEventListener('updatefound', () => {
+    const w = reg.installing;
+    w?.addEventListener('statechange', () => { if (w.state === 'installed') found(w); });
+  });
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    // the very first install claims the page — that is not an update and must not reload
+    if (!hadController && !sw.accepted) return;
+    if (reloading || !sw.accepted) return;
+    reloading = true;
+    fire('pwa:updated');
+    location.reload();
+  });
+  navigator.serviceWorker.addEventListener('message', onMessage);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - sw.lastCheck > 30 * 60e3) update(); });
+  return reg;
+}
+
+function update() { sw.lastCheck = Date.now(); return sw.reg?.update().catch(() => {}); }
+
+function updateReady(worker, simulated = false) {
+  sw.waiting = worker;
+  fire('pwa:update', { simulated });
+  sw.cfg.onUpdate?.(worker);
+  const ui = sw.cfg.updateUI ?? 'toast';
+  if (ui === 'toast') {
+    toast({ id: 'ac-pwa-update', title: T('updateTitle'), text: T('updateText'), icon: 'sparkles', tone: 'accent', duration: 0, position: phone() ? 'top-center' : 'bottom-end', action: { label: T('reload'), keep: true, onClick: (t) => { t.update({ title: T('updating'), loading: true, action: null, dismissible: false }); applyUpdate(); } } });
+  } else if (ui === 'banner' && A?.notify) {
+    A.notify({ variant: 'banner', id: 'ac-pwa-update', icon: 'sparkles', tone: 'accent', title: T('updateTitle'), text: T('updateText'), duration: 0, actions: [{ label: T('reload'), primary: true, onClick: () => applyUpdate() }] });
+  }
+}
+
+function applyUpdate() {
+  sw.accepted = true;
+  const w = sw.waiting || sw.reg?.waiting;
+  if (w && w.postMessage) w.postMessage({ type: 'SKIP_WAITING' });
+  else setTimeout(() => location.reload(), 350); // simulated / nothing waiting
+}
+
+function onMessage(e) {
+  const m = e.data || {};
+  if (m.type === 'QUEUED') { fire('pwa:queued', { count: m.count }); toast({ id: 'ac-pwa-queued', title: T('queued'), text: T('queuedText'), icon: 'cloud-off', tone: 'info' }); }
+  if (m.type === 'SYNCED' && m.count) { fire('pwa:synced', { count: m.count }); toast({ title: T('synced'), text: T('syncedText', { n: m.count }), tone: 'success' }); }
+  if (m.type === 'NOTIFICATION_CLICK') fire('notify:click', m);
+  if (m.type === 'PUSH') fire('notify:push', m.payload || {});
+}
+
+/* ------------------------------------------------------------------ outbox (background sync, page side) */
+async function send(url, init = {}) {
+  const res = await fetch(url, { method: 'POST', ...init });
+  const queued = res.status === 202 && res.headers.get('X-AC-Queued') === '1';
+  return { ok: res.ok, queued, response: res };
+}
+function flush() { navigator.serviceWorker?.controller?.postMessage({ type: 'FLUSH' }); }
+
+/* ------------------------------------------------------------------ network status */
+let netWired = false;
+function watchNetwork() {
+  if (netWired) return; netWired = true;
+  const set = (online) => {
+    document.documentElement.toggleAttribute('data-offline', !online);
+    if (!online) { fire('pwa:offline'); toast({ id: 'ac-pwa-net', title: T('offlineTitle'), text: T('offlineText'), icon: 'wifi-off', duration: 0 }); }
+    else { fire('pwa:online'); A?.toast?.get?.('ac-pwa-net')?.close('online'); toast({ title: T('onlineTitle'), icon: 'wifi', tone: 'success', duration: 2500 }); flush(); }
+  };
+  addEventListener('offline', () => set(false));
+  addEventListener('online', () => set(true));
+  if (!navigator.onLine) document.documentElement.setAttribute('data-offline', '');
+}
+
+/* ------------------------------------------------------------------ badge / share / standalone / splash */
+function badge(n) {
+  try { if (n > 0) navigator.setAppBadge?.(n); else navigator.clearAppBadge?.(); } catch { /* unsupported */ }
+}
+let badgeWired = false;
+function autoBadge() {
+  if (badgeWired) return; badgeWired = true;
+  document.addEventListener('ac:notifications:change', (e) => badge(e.detail?.unread || 0));
+}
+
+async function share(data = {}) {
+  const payload = { title: data.title || document.title, text: data.text, url: data.url || location.href, files: data.files };
+  if (!payload.files?.length) delete payload.files;
+  if (navigator.share && (!navigator.canShare || navigator.canShare(payload))) {
+    try { await navigator.share(payload); return 'shared'; } catch (err) { return err?.name === 'AbortError' ? 'cancelled' : 'failed'; }
+  }
+  try { await navigator.clipboard.writeText(payload.url); } catch { /* ignore */ }
+  toast({ title: T('shareCopied'), text: T('shareCopiedText'), icon: 'check', tone: 'success' });
+  return 'copied';
+}
+
+function standalone() {
+  const apply = () => {
+    const on = isStandalone();
+    document.documentElement.toggleAttribute('data-standalone', on);
+    document.documentElement.dataset.platform = platform();
+  };
+  apply();
+  for (const q of ['(display-mode: standalone)', '(display-mode: window-controls-overlay)']) matchMedia(q).addEventListener?.('change', apply);
+}
+
+function splash({ minMs = 650, force = false, name, icon } = {}) {
+  if (!force && !isStandalone()) return null;
+  const el = document.createElement('div');
+  el.className = 'ac-splash'; el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = `<div class="ac-splash__mark">${icon ? `<img src="${esc(icon)}" alt="">` : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg>'}</div>
+    <div class="ac-splash__name">${esc(name || document.querySelector('meta[name="apple-mobile-web-app-title"]')?.content || 'Aramin')}</div><div class="ac-splash__bar"><span></span></div>`;
+  document.body.append(el);
+  const t0 = performance.now();
+  const hide = () => setTimeout(() => { el.dataset.state = 'out'; setTimeout(() => el.remove(), 420); }, Math.max(0, minMs - (performance.now() - t0)));
+  if (A?.ready) A.ready(hide); else addEventListener('load', hide, { once: true });
+  return el;
+}
+
+/* ------------------------------------------------------------------ install invitation */
+const inst = { deferred: null, installed: false, shown: null, wired: false };
+
+function wireInstall() {
+  if (inst.wired) return; inst.wired = true;
+  addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    inst.deferred = e;
+    fire('install:available', { platform: platform() });
+    refreshInline();
+  });
+  addEventListener('appinstalled', () => {
+    inst.installed = true; inst.deferred = null;
+    store.set({ installed: Date.now() });
+    hideInstall();
+    fire('install:installed');
+    toast({ title: T('thanks'), text: T('thanksText'), icon: 'party-popper', tone: 'success', duration: 6000 });
+    refreshInline();
+  });
+  // count visits once per session for smart timing
+  try { if (!sessionStorage.getItem('ac:install:session')) { sessionStorage.setItem('ac:install:session', '1'); const s = store.get(); store.set({ visits: (s.visits || 0) + 1, first: s.first || Date.now() }); } } catch { /* ignore */ }
+}
+
+const installState = () => {
+  const s = store.get();
+  return { available: !!inst.deferred, installed: inst.installed || isStandalone(), platform: platform(), standalone: isStandalone(), ios: isIOS(), canPromptIOS: isIOSSafari() && !isStandalone(), visits: s.visits || 0, snoozedUntil: s.snooze || 0 };
+};
+
+async function promptInstall() {
+  if (inst.deferred) {
+    const e = inst.deferred; inst.deferred = null;
+    try {
+      await e.prompt();
+      const choice = await e.userChoice;
+      fire('install:result', { outcome: choice?.outcome });
+      if (choice?.outcome === 'accepted') { hideInstall(); if (!inst.installed) { inst.installed = true; store.set({ installed: Date.now() }); } }
+      else { snooze(); toast({ title: T('dismissed'), text: T('dismissedText'), icon: 'info' }); }
+      refreshInline();
+      return choice?.outcome;
+    } catch { return 'error'; }
+  }
+  if (isIOS()) { hideInstall(); showInstall('ios'); return 'ios'; }
+  toast({ title: T('manual'), text: T('manualText'), icon: 'info', duration: 7000 });
+  return 'manual';
+}
+
+function snooze(days = inst.snoozeDays || 7) { store.set({ snooze: Date.now() + days * 864e5 }); }
+
+const benefitsDefault = () => [['zap', 'b1'], ['cloud-off', 'b2'], ['bell-ring', 'b3'], ['shield-check', 'b4']].map(([icon, k]) => ({ icon, title: T(k), text: T(`${k}t`) }));
+const statsDefault = () => [{ value: '4.9', stars: true, label: T('rating') }, { value: T('free'), label: T('price') }, { value: '< 1 MB', label: T('size') }, { value: T('works'), label: T('offline') }];
+
+function heroHTML(app, o) {
+  return `<div class="ac-install__hero">
+      <span class="ac-install__icon">${app.icon ? `<img src="${esc(app.icon)}" alt="" width="72" height="72">` : ico('app-window')}</span>
+      <div class="ac-install__titles"><h2 class="ac-install__name" id="${o.labelId || ''}">${esc(o.name || app.name)}</h2>
+        <p class="ac-install__by">${esc(o.by || T('by'))}</p></div>
+    </div>`;
+}
+function statsHTML(stats) {
+  return `<dl class="ac-install__stats">${stats.map((s) => `<div class="ac-install__stat"><dt><bdi>${esc(s.value)}</bdi>${s.stars ? `<span class="ac-install__stars" aria-hidden="true">${'★'.repeat(5)}</span>` : ''}</dt><dd>${esc(s.label)}</dd></div>`).join('')}</dl>`;
+}
+function shotsHTML(app) {
+  const want = phone() ? 'narrow' : 'wide';
+  const shots = app.screenshots.filter((s) => (s.form_factor || 'narrow') === want);
+  const list = shots.length ? shots : app.screenshots;
+  if (!list.length) return '';
+  return `<div class="ac-install__shots" data-ff="${want}" tabindex="0" role="group" aria-label="${esc(T('screenshots'))}">${list.slice(0, 6).map((s) => `<img src="${esc(s.src)}" alt="${esc(s.label || '')}" loading="lazy" decoding="async">`).join('')}</div>`;
+}
+function benefitsHTML(list) {
+  return `<ul class="ac-install__benefits">${list.map((b) => `<li><span class="ac-install__bicon">${ico(b.icon)}</span><span><strong>${esc(b.title)}</strong><small>${esc(b.text)}</small></span></li>`).join('')}</ul>`;
+}
+const actionsHTML = () => `<div class="ac-install__actions">
+    <button class="ac-btn ac-btn--primary ac-btn--lg ac-install__go" type="button" data-install-go>${ico('download')}<span>${esc(T('install'))}</span></button>
+    <button class="ac-btn ac-btn--ghost ac-btn--lg" type="button" data-install-later>${esc(T('later'))}</button>
+  </div>`;
+
+function iosHTML() {
+  // three animated illustrations: share button pulse → share sheet row → icon lands on the home screen
+  const phoneFrame = (inner) => `<svg class="ac-ios__art" viewBox="0 0 120 120" aria-hidden="true"><rect x="28" y="6" width="64" height="108" rx="12" class="ac-ios__frame"/><rect x="33" y="14" width="54" height="92" rx="6" class="ac-ios__screen"/>${inner}</svg>`;
+  const s1 = phoneFrame(`<rect x="33" y="92" width="54" height="14" rx="0" class="ac-ios__bar"/><g class="ac-ios__share"><circle cx="60" cy="99" r="7" class="ac-ios__pulse"/><path d="M60 95.5v6M57.5 98l2.5-2.5 2.5 2.5M56.5 100v3.5h7V100" class="ac-ios__glyph"/></g>`);
+  const s2 = phoneFrame(`<g class="ac-ios__sheet"><rect x="33" y="52" width="54" height="54" rx="6" class="ac-ios__panel"/><rect x="38" y="60" width="44" height="8" rx="3" class="ac-ios__row"/><rect x="38" y="72" width="44" height="9" rx="3" class="ac-ios__row ac-ios__row--hl"/><path d="M73 76.5h5M75.5 74v5" class="ac-ios__plus"/><rect x="38" y="85" width="44" height="8" rx="3" class="ac-ios__row"/></g>`);
+  const s3 = phoneFrame(`<g class="ac-ios__grid">${[0, 1, 2].map((r) => [0, 1, 2].map((c) => (r === 1 && c === 1 ? '' : `<rect x="${39 + c * 15}" y="${22 + r * 15}" width="10" height="10" rx="3" class="ac-ios__app"/>`)).join('')).join('')}</g><g class="ac-ios__new"><rect x="54" y="37" width="10" height="10" rx="3" class="ac-ios__mine"/><path d="M56.4 45 59 39l2.6 6M57.3 43h3.4" class="ac-ios__glyph ac-ios__glyph--inv"/></g>`);
+  const steps = [[s1, 'ios1'], [s2, 'ios2'], [s3, 'ios3']];
+  return `<ol class="ac-ios">${steps.map(([art, k], i) => `<li class="ac-ios__step">${art}<div class="ac-ios__text"><span class="ac-ios__n">${i + 1}</span><strong>${esc(T(k))}</strong><small>${esc(T(`${k}t`))}</small></div></li>`).join('')}</ol>
+    <div class="ac-install__actions ac-install__actions--one"><button class="ac-btn ac-btn--primary ac-btn--lg" type="button" data-ac-close data-install-later>${esc(T('gotIt'))}</button></div>`;
+}
+
+function wireCard(el, variant) {
+  el.addEventListener('click', (e) => {
+    if (e.target.closest('[data-install-go]')) promptInstall();
+    else if (e.target.closest('[data-install-later]')) { snooze(); if (variant !== 'inline') hideInstall(); }
+    else if (e.target.closest('[data-install-close]')) { snooze(1); hideInstall(); }
+  });
+}
+
+async function showInstall(variant = phone() ? 'sheet' : 'card', o = {}) {
+  hideInstall();
+  const info = await appInfo();
+  const lang = A?.i18n?.lang || document.documentElement.lang;
+  const app = { ...info, name: info.localized?.name?.[lang] || info.name, short: info.localized?.short?.[lang] || info.short, ...(o.app || {}) };
+  const stats = o.stats || statsDefault();
+  const benefits = o.benefits || benefitsDefault();
+  fire('install:show', { variant });
+  if (variant === 'ios') {
+    A.modal.open({ className: 'ac-install-ios', title: T('iosTitle'), sub: T('iosSub'), content: iosHTML(), size: 'md' });
+    inst.shown = { variant, close: () => A.modal.close(document.querySelector('.ac-install-ios')) };
+    return inst.shown;
+  }
+  if (variant === 'sheet') {
+    const body = `<div class="ac-install" data-variant="sheet">${heroHTML(app, o)}${statsHTML(stats)}${shotsHTML(app)}${benefitsHTML(benefits)}${actionsHTML()}<p class="ac-install__note">${ico('shield-check', 'ac-icon--sm')}${esc(T('note'))}</p></div>`;
+    A.modal.open({ className: 'ac-install-sheet', label: T('installApp'), content: body, size: 'md', closeButton: true });
+    const el = document.querySelector('.ac-install-sheet');
+    if (el) wireCard(el, variant);
+    inst.shown = { variant, el, close: () => el && A.modal.close(el) };
+    return inst.shown;
+  }
+  const el = document.createElement(variant === 'inline' ? 'div' : 'aside');
+  el.className = `ac-install-${variant === 'banner' ? 'banner' : 'card'}`;
+  el.dataset.variant = variant;
+  el.setAttribute('role', variant === 'inline' ? 'group' : 'dialog');
+  el.setAttribute('aria-label', T('installApp'));
+  if (variant === 'banner') {
+    el.innerHTML = `<span class="ac-install__icon ac-install__icon--sm">${app.icon ? `<img src="${esc(app.icon)}" alt="">` : ico('app-window')}</span>
+      <div class="ac-install-banner__text"><strong>${esc(o.name || app.short || app.name)}</strong><small><span class="ac-install__stars" aria-hidden="true">★★★★★</span> ${esc(T('bannerText'))}</small></div>
+      <button class="ac-btn ac-btn--primary ac-btn--sm" type="button" data-install-go>${esc(T('install'))}</button>
+      <button class="ac-install-banner__close" type="button" data-install-close aria-label="${esc(T('later'))}">${ico('x')}</button>`;
+  } else {
+    el.innerHTML = `${variant === 'card' ? `<button class="ac-install-card__close" type="button" data-install-close aria-label="${esc(T('later'))}">${ico('x')}</button>` : ''}
+      <div class="ac-install-card__head"><span class="ac-install__icon">${app.icon ? `<img src="${esc(app.icon)}" alt="">` : ico('app-window')}</span>
+        <div><strong class="ac-install-card__title">${esc(o.title || T('card'))}</strong><p class="ac-install-card__text">${esc(o.text || T('cardText'))}</p></div></div>
+      <div class="ac-install-card__chips">${benefits.slice(0, 3).map((b) => `<span class="ac-chip">${ico(b.icon, 'ac-icon--sm')}${esc(b.title)}</span>`).join('')}</div>
+      <div class="ac-install-card__actions" data-install-actions></div>`;
+  }
+  wireCard(el, variant);
+  if (variant === 'inline') {
+    const target = typeof o.target === 'string' ? document.querySelector(o.target) : o.target;
+    if (!target) return null;
+    target.replaceChildren(el);
+    inlineActions(el);
+    return { variant, el, close: () => el.remove() };
+  }
+  if (variant === 'card') inlineActions(el);
+  el.dataset.state = 'enter';
+  document.body.append(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.dataset.state = 'open'; }));
+  inst.shown = { variant, el, close: () => { el.dataset.state = 'exit'; setTimeout(() => el.remove(), 260); } };
+  return inst.shown;
+}
+
+function inlineActions(card) {
+  const box = card.querySelector('[data-install-actions]');
+  if (!box) return;
+  const s = installState();
+  box.innerHTML = s.installed
+    ? `<span class="ac-badge ac-badge--success">${ico('circle-check', 'ac-icon--sm')}${esc(T('installed'))}</span>`
+    : `<button class="ac-btn ac-btn--primary" type="button" data-install-go>${ico('download')}<span>${esc(T('install'))}</span></button>${card.dataset.variant === 'inline' ? '' : `<button class="ac-btn ac-btn--ghost" type="button" data-install-later>${esc(T('later'))}</button>`}`;
+}
+function refreshInline() { document.querySelectorAll('.ac-install-card').forEach(inlineActions); }
+
+function hideInstall() { inst.shown?.close?.(); inst.shown = null; }
+
+function auto(cfg = {}) {
+  const o = { minVisits: 2, minSeconds: 20, snoozeDays: 7, variant: null, ...cfg };
+  inst.snoozeDays = o.snoozeDays;
+  const s = installState();
+  if (s.installed || s.standalone) return false;
+  const st = store.get();
+  if ((st.snooze || 0) > Date.now() || (st.visits || 0) < o.minVisits) return false;
+  let shown = false;
+  const go = () => {
+    if (shown || document.hidden) return;
+    const now = installState();
+    if (!(now.available || now.canPromptIOS)) return;
+    shown = true;
+    showInstall(now.canPromptIOS ? 'ios' : (o.variant || (phone() ? 'sheet' : 'card')));
+  };
+  setTimeout(go, o.minSeconds * 1000);
+  document.addEventListener('ac:install:available', () => setTimeout(go, o.minSeconds * 1000), { once: true });
+  return true;
+}
+
+/* ------------------------------------------------------------------ install(AC) */
+export function install(AC) {
+  if (!AC || AC.pwa) return AC?.pwa;
+  A = AC;
+  cssOnce();
+  wireInstall();
+  standalone();
+  AC.pwa = { register, update, applyUpdate, simulateUpdate: () => updateReady({ postMessage: null }, true), badge, autoBadge, share, isStandalone, isIOS, splash, send, flush, watchNetwork, get registration() { return sw.reg; }, get waiting() { return sw.waiting; } };
+  // defineProperties, not Object.assign: assign would freeze the `state` getter into a one-time snapshot
+  AC.install = Object.defineProperties((variant, o) => showInstall(variant, o), Object.getOwnPropertyDescriptors({
+    show: showInstall, prompt: promptInstall, hide: hideInstall, auto, snooze, reset: () => { try { localStorage.removeItem(KEY); } catch { /* ignore */ } },
+    get state() { return installState(); }, app: appInfo,
+  }));
+  AC.register?.('install-card', (el) => { showInstall('inline', { target: el, ...(AC.options ? AC.options(el, {}) : {}) }); return () => {}; });
+  return AC.pwa;
+}
+
+function cssOnce() {
+  if (typeof document === 'undefined' || document.querySelector(`link[data-ac-module="${NAME}"], style[data-ac-module="${NAME}"]`)) return;
+  try {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = new URL(`./${NAME}.css`, import.meta.url).href; link.dataset.acModule = NAME;
+    document.head.append(link);
+  } catch { /* bundled builds ship the CSS themselves */ }
+}
+
+if (typeof window !== 'undefined' && window.AC) install(window.AC);

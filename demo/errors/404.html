@@ -1,0 +1,60 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>صفحه پیدا نشد · AraminConsole</title>
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+  <link rel="stylesheet" href="../standalone.css">
+  <script type="module" src="../../dist/aramin-console.js"></script>
+  <script type="module" src="../standalone.js"></script>
+</head>
+<body data-page="404">
+  <main class="ac-fullpage err">
+    <div class="sa-top">
+      <a class="ac-chrome ac-brand" href="../" aria-label="Aramin">
+        <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+        <span class="ac-brand__name">Aramin</span>
+      </a>
+      <div class="ac-chrome sa-tools">
+        <div data-ac="langpicker"></div>
+        <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+      </div>
+    </div>
+
+    <div class="err-box">
+      <svg class="err-art" viewBox="0 0 320 230" role="img" aria-label="404">
+        <ellipse class="ill-shadow" cx="160" cy="214" rx="104" ry="9"/>
+        <g class="ill-float">
+          <rect class="ill-card" x="40" y="22" width="240" height="170" rx="22" stroke-width="1.5"/>
+          <circle class="ill-line" cx="62" cy="44" r="4" stroke-width="2"/><circle class="ill-line" cx="76" cy="44" r="4" stroke-width="2"/><circle class="ill-acc" cx="90" cy="44" r="4"/>
+          <rect class="ill-soft" x="104" y="37" width="152" height="14" rx="7"/>
+          <line class="ill-line" x1="40" y1="64" x2="280" y2="64" stroke-width="1.5"/>
+          <g class="ill-bob"><text class="ill-ink" x="100" y="152" text-anchor="middle" font-size="76" font-weight="700" font-family="inherit">4</text></g>
+          <g class="ill-bob ill-bob--2"><text class="ill-ink" x="220" y="152" text-anchor="middle" font-size="76" font-weight="700" font-family="inherit">4</text></g>
+          <g class="ill-bob ill-bob--3"><circle class="ill-acc-s" cx="160" cy="126" r="27" stroke-width="14"/></g>
+          <g class="ill-spin"><circle class="ill-ink-s" cx="160" cy="126" r="44" stroke-width="1.5" stroke-dasharray="3 6"/><circle class="ill-ink" cx="204" cy="126" r="5"/></g>
+        </g>
+        <g class="ill-float ill-float--slow">
+          <circle class="ill-paper" cx="262" cy="176" r="22"/>
+          <circle class="ill-ink-s" cx="258" cy="172" r="13" stroke-width="5"/>
+          <line class="ill-ink-s" x1="268" y1="182" x2="282" y2="196" stroke-width="7" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <span class="err-code" dir="auto" data-i18n="errpage.c404">Error 404</span>
+      <h1 class="err-title" data-i18n="errpage.t404">این صفحه گم شده است</h1>
+      <p class="err-text" data-i18n="errpage.p404">نشانی را بررسی کنید یا از داشبورد ادامه دهید. شاید این صفحه جابه‌جا یا حذف شده باشد.</p>
+      
+      <div class="err-actions">
+        <a class="ac-btn ac-btn--primary" href="../#/dashboard"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg><span data-i18n="errpage.home">بازگشت به داشبورد</span></a>
+        <a class="ac-btn ac-btn--outline" href="../#/dashboard" data-action="back"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-undo-2"/></svg><span data-i18n="errpage.back">صفحهٔ قبل</span></a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

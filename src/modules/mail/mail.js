@@ -1,0 +1,605 @@
+/* Mail module — a complete email client UI:
+   folders (inbox, starred, important, snoozed, sent, drafts, scheduled, archive, spam, trash) + coloured labels,
+   thread list with selection + bulk actions (archive, spam, delete, read/unread, label, snooze, move), search with
+   filters (unread, attachments, starred, from, period), star / important, hover actions, swipe archive/delete on
+   phones, threaded conversation view (collapsed earlier messages, to/cc details, attachments), reply / reply all /
+   forward, compose window (floating + minimisable + maximisable on desktop, full-screen sheet on phones) with
+   rich-text toolbar, To / Cc / Bcc chips with autocomplete, attachments, signature, schedule send, draft autosave
+   indicator, undo send, snooze, empty spam/trash, settings view (persisted).
+
+   const mail = AC.mail(el, {
+     me: { name, email, initials, color }, contacts: [{ name, email, initials, color }],
+     labels: [{ id, name, tone }], threads: [{ id, folder, subject, labels, starred, important, unread, snoozeUntil,
+       scheduledAt, messages: [{ id, from: {name,email}, to: [..], cc: [..], at, html, attachments: [{ name, size, kind }] }] }],
+     onSend: (thread, message) => {},
+   });
+   mail.folder('inbox') · mail.open(threadId) · mail.compose({ to, subject, html }) · mail.render() · mail.destroy()
+   Events: ac:mail:open {thread} · ac:mail:send {thread, message} · ac:mail:move {ids, folder} · ac:mail:change
+   Message HTML is sanitised (scripts, inline handlers and javascript: URLs are removed).
+   Dependency-free: install(AC) wires AC.mail + data-ac="mail" (no core import). */
+
+const I18N = {
+  fa: { compose: 'نامهٔ جدید', inbox: 'صندوق ورودی', starred: 'ستاره‌دار', important: 'مهم', snoozed: 'تعویق‌شده', sent: 'ارسال‌شده', drafts: 'پیش‌نویس‌ها', scheduled: 'زمان‌بندی‌شده', archive: 'بایگانی', spam: 'هرزنامه', trash: 'سطل زباله', labels: 'برچسب‌ها', newLabel: 'برچسب جدید', settings: 'تنظیمات', storage: 'فضای صندوق', search: 'جستجو در نامه‌ها', filters: 'فیلترها', unreadOnly: 'فقط خوانده‌نشده', hasAttach: 'دارای پیوست', starredOnly: 'فقط ستاره‌دار', from: 'از', to: 'به', cc: 'رونوشت', bcc: 'رونوشت پنهان', subject: 'موضوع', period: 'بازه', any: 'همه', week: 'هفتهٔ اخیر', month: 'ماه اخیر', apply: 'اعمال', clear: 'پاک کردن', selectAll: 'انتخاب همه', selected: '{n} انتخاب‌شده', refresh: 'تازه‌سازی', markRead: 'خوانده‌شده', markUnread: 'خوانده‌نشده', delete: 'حذف', deleteForever: 'حذف همیشگی', notSpam: 'هرزنامه نیست', moveTo: 'انتقال به', label: 'برچسب', snooze: 'تعویق', laterToday: 'امروز عصر', tomorrow: 'فردا صبح', weekend: 'آخر هفته', nextWeek: 'هفتهٔ بعد', star: 'ستاره', markImportant: 'مهم', empty: 'نامه‌ای اینجا نیست', emptyHint: 'همه‌چیز مرتب است ✨', pick: 'یک نامه را انتخاب کنید', pickHint: 'نامه‌ها در گفتگوها گروه‌بندی می‌شوند', back: 'بازگشت', reply: 'پاسخ', replyAll: 'پاسخ به همه', forward: 'هدایت', print: 'چاپ', more: 'بیشتر', me: 'من', toMe: 'به من', details: 'جزئیات', hideDetails: 'پنهان کردن', attachments: '{n} پیوست', download: 'دانلود', newMessage: 'پیام جدید', minimize: 'کوچک کردن', maximize: 'بزرگ کردن', close: 'بستن', send: 'ارسال', scheduleSend: 'ارسال زمان‌بندی‌شده', tomorrowAt: 'فردا ساعت ۸:۰۰', mondayAt: 'دوشنبه ساعت ۹:۰۰', inHour: 'یک ساعت دیگر', attach: 'پیوست فایل', signature: 'امضا', discard: 'دور انداختن', saving: 'در حال ذخیره…', savedAt: 'پیش‌نویس ذخیره شد · {t}', bold: 'پررنگ', italic: 'کج', underline: 'زیرخط', strike: 'خط‌خورده', bullets: 'فهرست نقطه‌ای', numbers: 'فهرست شماره‌دار', quote: 'نقل‌قول', link: 'پیوند', clearFormat: 'حذف قالب‌بندی', linkUrl: 'نشانی پیوند', sentToast: 'نامه ارسال شد', scheduledToast: 'برای {t} زمان‌بندی شد', undo: 'برگرداندن', movedToast: '{n} گفتگو به «{f}» منتقل شد', deletedToast: '{n} گفتگو حذف شد', snoozedToast: 'تا {t} به تعویق افتاد', emptyFolder: 'خالی کردن {f}', emptyConfirm: 'همهٔ نامه‌های «{f}» برای همیشه حذف شوند؟', needTo: 'حداقل یک گیرنده وارد کنید', discardQ: 'پیش‌نویس دور انداخته شود؟', drafted: 'پیش‌نویس', scheduledFor: 'ارسال در {t}', snoozedUntil: 'تا {t}', of: 'از', settingsTitle: 'تنظیمات ایمیل', conversation: 'نمای گفتگو', conversationHint: 'پاسخ‌های یک موضوع کنار هم نمایش داده شوند', snippets: 'نمایش خلاصه', snippetsHint: 'یک خط از متن نامه در فهرست', density: 'تراکم فهرست', comfortable: 'راحت', compact: 'فشرده', undoSend: 'مهلت برگرداندن ارسال', seconds: '{n} ثانیه', signatureHint: 'به انتهای نامه‌های جدید اضافه می‌شود', autoAdvance: 'پس از بایگانی', nextMsg: 'نامهٔ بعدی', backToList: 'بازگشت به فهرست', saved: 'ذخیره شد', labelName: 'نام برچسب', noSubject: '(بدون موضوع)', unread: 'خوانده‌نشده' },
+  en: { compose: 'Compose', inbox: 'Inbox', starred: 'Starred', important: 'Important', snoozed: 'Snoozed', sent: 'Sent', drafts: 'Drafts', scheduled: 'Scheduled', archive: 'Archive', spam: 'Spam', trash: 'Trash', labels: 'Labels', newLabel: 'New label', settings: 'Settings', storage: 'Storage', search: 'Search mail', filters: 'Filters', unreadOnly: 'Unread only', hasAttach: 'Has attachment', starredOnly: 'Starred only', from: 'From', to: 'To', cc: 'Cc', bcc: 'Bcc', subject: 'Subject', period: 'Period', any: 'Any time', week: 'Past week', month: 'Past month', apply: 'Apply', clear: 'Clear', selectAll: 'Select all', selected: '{n} selected', refresh: 'Refresh', markRead: 'Mark read', markUnread: 'Mark unread', delete: 'Delete', deleteForever: 'Delete forever', notSpam: 'Not spam', moveTo: 'Move to', label: 'Label', snooze: 'Snooze', laterToday: 'Later today', tomorrow: 'Tomorrow', weekend: 'This weekend', nextWeek: 'Next week', star: 'Star', markImportant: 'Important', empty: 'Nothing here', emptyHint: 'You’re all caught up ✨', pick: 'Select a message', pickHint: 'Replies are grouped into conversations', back: 'Back', reply: 'Reply', replyAll: 'Reply all', forward: 'Forward', print: 'Print', more: 'More', me: 'me', toMe: 'to me', details: 'Details', hideDetails: 'Hide', attachments: '{n} attachments', download: 'Download', newMessage: 'New message', minimize: 'Minimise', maximize: 'Maximise', close: 'Close', send: 'Send', scheduleSend: 'Schedule send', tomorrowAt: 'Tomorrow at 8:00', mondayAt: 'Monday at 9:00', inHour: 'In one hour', attach: 'Attach files', signature: 'Signature', discard: 'Discard', saving: 'Saving…', savedAt: 'Draft saved · {t}', bold: 'Bold', italic: 'Italic', underline: 'Underline', strike: 'Strikethrough', bullets: 'Bulleted list', numbers: 'Numbered list', quote: 'Quote', link: 'Link', clearFormat: 'Clear formatting', linkUrl: 'Link URL', sentToast: 'Message sent', scheduledToast: 'Scheduled for {t}', undo: 'Undo', movedToast: '{n} conversations moved to “{f}”', deletedToast: '{n} conversations deleted', snoozedToast: 'Snoozed until {t}', emptyFolder: 'Empty {f}', emptyConfirm: 'Delete every message in “{f}” forever?', needTo: 'Add at least one recipient', discardQ: 'Discard this draft?', drafted: 'Draft', scheduledFor: 'Sends {t}', snoozedUntil: 'until {t}', of: 'of', settingsTitle: 'Mail settings', conversation: 'Conversation view', conversationHint: 'Group replies to the same subject', snippets: 'Show snippets', snippetsHint: 'One line of the message in the list', density: 'List density', comfortable: 'Comfortable', compact: 'Compact', undoSend: 'Undo send window', seconds: '{n} seconds', signatureHint: 'Added to the end of new messages', autoAdvance: 'After archiving', nextMsg: 'Open the next message', backToList: 'Go back to the list', saved: 'Saved', labelName: 'Label name', noSubject: '(no subject)', unread: 'Unread' },
+  ar: { compose: 'رسالة جديدة', inbox: 'الوارد', starred: 'المميزة بنجمة', important: 'مهم', snoozed: 'المؤجلة', sent: 'المرسلة', drafts: 'المسودات', scheduled: 'المجدولة', archive: 'الأرشيف', spam: 'غير مرغوب', trash: 'المهملات', labels: 'التصنيفات', newLabel: 'تصنيف جديد', settings: 'الإعدادات', storage: 'المساحة', search: 'ابحث في البريد', filters: 'عوامل التصفية', unreadOnly: 'غير المقروءة فقط', hasAttach: 'بها مرفقات', starredOnly: 'المميزة فقط', from: 'من', to: 'إلى', cc: 'نسخة', bcc: 'نسخة مخفية', subject: 'الموضوع', period: 'الفترة', any: 'أي وقت', week: 'الأسبوع الماضي', month: 'الشهر الماضي', apply: 'تطبيق', clear: 'مسح', selectAll: 'تحديد الكل', selected: 'تم تحديد {n}', refresh: 'تحديث', markRead: 'مقروءة', markUnread: 'غير مقروءة', delete: 'حذف', deleteForever: 'حذف نهائي', notSpam: 'ليست غير مرغوبة', moveTo: 'نقل إلى', label: 'تصنيف', snooze: 'تأجيل', laterToday: 'لاحقاً اليوم', tomorrow: 'غداً', weekend: 'نهاية الأسبوع', nextWeek: 'الأسبوع القادم', star: 'نجمة', markImportant: 'مهم', empty: 'لا رسائل هنا', emptyHint: 'كل شيء مرتب ✨', pick: 'اختر رسالة', pickHint: 'الردود مجمعة في محادثات', back: 'رجوع', reply: 'رد', replyAll: 'رد على الكل', forward: 'إعادة توجيه', print: 'طباعة', more: 'المزيد', me: 'أنا', toMe: 'إليّ', details: 'التفاصيل', hideDetails: 'إخفاء', attachments: '{n} مرفقات', download: 'تنزيل', newMessage: 'رسالة جديدة', minimize: 'تصغير', maximize: 'تكبير', close: 'إغلاق', send: 'إرسال', scheduleSend: 'جدولة الإرسال', tomorrowAt: 'غداً 8:00', mondayAt: 'الاثنين 9:00', inHour: 'بعد ساعة', attach: 'إرفاق ملفات', signature: 'التوقيع', discard: 'تجاهل', saving: 'جارٍ الحفظ…', savedAt: 'حُفظت المسودة · {t}', bold: 'غامق', italic: 'مائل', underline: 'تسطير', strike: 'يتوسطه خط', bullets: 'قائمة نقطية', numbers: 'قائمة مرقمة', quote: 'اقتباس', link: 'رابط', clearFormat: 'إزالة التنسيق', linkUrl: 'عنوان الرابط', sentToast: 'تم إرسال الرسالة', scheduledToast: 'جُدولت إلى {t}', undo: 'تراجع', movedToast: 'نُقلت {n} محادثات إلى «{f}»', deletedToast: 'حُذفت {n} محادثات', snoozedToast: 'أُجّلت حتى {t}', emptyFolder: 'إفراغ {f}', emptyConfirm: 'حذف كل رسائل «{f}» نهائياً؟', needTo: 'أضف مستلماً واحداً على الأقل', discardQ: 'تجاهل هذه المسودة؟', drafted: 'مسودة', scheduledFor: 'تُرسل {t}', snoozedUntil: 'حتى {t}', of: 'من', settingsTitle: 'إعدادات البريد', conversation: 'عرض المحادثة', conversationHint: 'تجميع الردود على نفس الموضوع', snippets: 'إظهار المقتطفات', snippetsHint: 'سطر من نص الرسالة في القائمة', density: 'كثافة القائمة', comfortable: 'مريحة', compact: 'مضغوطة', undoSend: 'مهلة التراجع عن الإرسال', seconds: '{n} ثوانٍ', signatureHint: 'يضاف إلى نهاية الرسائل الجديدة', autoAdvance: 'بعد الأرشفة', nextMsg: 'فتح الرسالة التالية', backToList: 'العودة إلى القائمة', saved: 'تم الحفظ', labelName: 'اسم التصنيف', noSubject: '(بلا موضوع)', unread: 'غير مقروءة' },
+};
+const FOLDERS = [['inbox', 'inbox'], ['starred', 'star'], ['important', 'flag'], ['snoozed', 'alarm-clock'], ['sent', 'send'], ['drafts', 'file-text'], ['scheduled', 'calendar-clock'], ['archive', 'archive'], ['spam', 'shield-alert'], ['trash', 'trash-2']];
+const VIRTUAL = new Set(['starred', 'important']);
+
+function cssOnce() {
+  if (typeof document === 'undefined' || document.querySelector('[data-ac-module="mail"]')) return;
+  try {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = new URL('./mail.css', import.meta.url).href; link.dataset.acModule = 'mail';
+    document.head.append(link);
+  } catch { /* bundled builds ship the CSS themselves */ }
+}
+
+/** Keep safe markup only: drops script/style/iframe/object, on* handlers and javascript: URLs. */
+export function sanitize(html) {
+  const doc = new DOMParser().parseFromString(`<div>${html || ''}</div>`, 'text/html');
+  doc.querySelectorAll('script, style, iframe, object, embed, link, meta, form').forEach((n) => n.remove());
+  doc.querySelectorAll('*').forEach((n) => {
+    for (const a of [...n.attributes]) {
+      if (/^on/i.test(a.name) || (/^(href|src|xlink:href)$/i.test(a.name) && /^\s*javascript:/i.test(a.value)) || a.name === 'style') n.removeAttribute(a.name);
+    }
+    if (n.tagName === 'A') { n.setAttribute('target', '_blank'); n.setAttribute('rel', 'noopener noreferrer'); }
+  });
+  return doc.body.firstElementChild.innerHTML;
+}
+
+export function createMail(AC, el, cfg = {}) {
+  const esc = AC.escapeHtml; const icon = AC.icon; const fmt = AC.format;
+  const sep = () => (['fa', 'ar', 'ur', 'ckb'].includes(AC.i18n?.lang) ? '، ' : ', ');
+  const tr = (k, vars = {}) => {
+    const lang = AC.i18n?.lang || 'en';
+    const fb = (I18N[lang] || I18N.en)[k] ?? I18N.en[k] ?? k;
+    let s = AC.t ? AC.t(`mail.${k}`, fb, vars) : fb;
+    if (s === `mail.${k}`) s = fb;
+    return String(s).replace(/\{(\w+)\}/g, (m, v) => (v in vars ? vars[v] : m));
+  };
+  const o = { me: { name: 'Me', email: 'me@example.com', initials: 'ME', color: 1 }, contacts: [], labels: [], threads: [], ...cfg };
+  const me = o.me; const threads = o.threads; const labels = o.labels;
+  let seq = 0; const uid = (p) => `${p}${Date.now().toString(36)}${(seq++).toString(36)}`;
+  threads.forEach((t) => { t.labels ||= []; t.messages.forEach((m) => { m.id ||= uid('m'); }); });
+  const settingsKey = 'ac:mail:settings';
+  const settings = { conversation: true, snippets: true, density: 'comfortable', undo: 5, signature: `${me.name}\n${me.email}`, advance: 'next', ...(AC.store?.get(settingsKey) || {}) };
+  const phone = matchMedia('(max-width: 639.98px)');
+  const st = { folder: 'inbox', label: null, open: null, selected: new Set(), q: '', filters: { unread: false, attach: false, starred: false, from: '', period: 'any' }, expanded: new Set(), lastChecked: null };
+  const isMe = (p) => p?.email === me.email;
+  const thread = (id) => threads.find((t) => t.id === id);
+  const lastMsg = (t) => t.messages.at(-1);
+  const when = (ts) => { const d = new Date(ts); const now = new Date(); return d.toDateString() === now.toDateString() ? fmt.date(ts, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) : d.getFullYear() === now.getFullYear() ? fmt.date(ts, { day: 'numeric', month: 'short' }) : fmt.date(ts, { dateStyle: 'short' }); };
+  const fullWhen = (ts) => fmt.date(ts, { dateStyle: 'medium', timeStyle: 'short' });
+  const textOf = (html) => { const d = document.createElement('div'); d.innerHTML = html || ''; return d.textContent.replace(/\s+/g, ' ').trim(); };
+  const avatar = (p, size = 'sm') => `<span class="ac-avatar ac-avatar--${size}" data-color="${p?.color || 8}">${esc(p?.initials || (p?.name || p?.email || '?').slice(0, 2))}</span>`;
+  const labelOf = (id) => labels.find((l) => l.id === id);
+  const inFolder = (t, f) => (f === 'starred' ? t.starred && !['trash', 'spam'].includes(t.folder) : f === 'important' ? t.important && !['trash', 'spam'].includes(t.folder) : t.folder === f);
+  const contactFor = (email) => o.contacts.find((c) => c.email === email) || (email === me.email ? me : { name: email, email, initials: email.slice(0, 2).toUpperCase(), color: 8 });
+  const save = () => { AC.store?.set(settingsKey, settings); };
+  const changed = () => AC.emit?.(el, 'mail:change', { threads });
+  const snoozeOptions = () => {
+    const d = new Date(); const at = (days, h) => { const x = new Date(d); x.setDate(x.getDate() + days); x.setHours(h, 0, 0, 0); return x.getTime(); };
+    const sat = (6 - d.getDay() + 7) % 7 || 7;
+    return [['laterToday', d.getHours() < 17 ? at(0, 18) : at(0, d.getHours() + 3)], ['tomorrow', at(1, 8)], ['weekend', at(sat, 9)], ['nextWeek', at(7, 8)]];
+  };
+
+  /* ---------------------------------------------------------------- skeleton */
+  el.classList.add('ac-mail');
+  el.setAttribute('data-ac', [...new Set([...(el.getAttribute('data-ac') || '').split(/\s+/).filter(Boolean), 'split'])].join(' '));
+  el.innerHTML = `
+    <nav class="ac-split__pane ac-split__pane--wide ac-mail__rail" data-x="rail">
+      <button class="ac-mail__compose" type="button" data-act="compose">${icon('square-pen')}<span data-x="compose-label"></span></button>
+      <div class="ac-mail__folders" data-x="folders"></div>
+      <div class="ac-mail__railhead"><span data-x="labels-title"></span><button class="ac-mail__ib ac-mail__ib--sm" type="button" data-act="new-label" data-x="new-label">${icon('plus')}</button></div>
+      <div class="ac-mail__labels" data-x="labels"></div>
+      <div class="ac-mail__railfoot">
+        <button class="ac-mail__folder" type="button" data-folder="settings">${icon('settings')}<span data-x="settings-label"></span></button>
+        <div class="ac-mail__storage"><div class="ac-mail__storagehead"><span data-x="storage-label"></span><bdi>6.2 / 15 GB</bdi></div><span class="ac-mail__meter"><i></i></span></div>
+      </div>
+    </nav>
+    <section class="ac-split__pane ac-mail__listpane" data-x="listpane">
+      <header class="ac-mail__lhead">
+        <div class="ac-mail__ltitle"><h2 data-x="ftitle"></h2><span class="ac-mail__lcount" data-x="fcount"></span></div>
+        <div class="ac-mail__searchrow">
+          <label class="ac-mail__search">${icon('search')}<input type="search" data-x="search" autocomplete="off"></label>
+          <button class="ac-mail__ib" type="button" data-act="filters" data-x="filters-btn">${icon('sliders-horizontal')}<span class="ac-mail__dot" data-x="filters-dot" hidden></span></button>
+        </div>
+        <div class="ac-mail__chips" data-x="chips"></div>
+        <div class="ac-mail__toolbar" data-x="toolbar"></div>
+      </header>
+      <div class="ac-mail__banner" data-x="banner" hidden></div>
+      <div class="ac-mail__list" data-x="list" role="list"></div>
+      <div class="ac-mail__settings" data-x="settings" hidden></div>
+    </section>
+    <article class="ac-split__pane ac-mail__reader" data-x="reader"></article>
+    <div class="ac-mail__composer" data-x="composer" hidden></div>`;
+  const x = (n) => el.querySelector(`[data-x="${n}"]`);
+  const list = x('list'); const reader = x('reader');
+  const composerEl = x('composer');
+  document.body.append(composerEl);   // fixed window: keep it out of transformed / clipped ancestors
+  AC.scan?.(el);
+  const split = () => AC.instance(el, 'split');
+
+  function labelsText() {
+    x('compose-label').textContent = tr('compose');
+    x('labels-title').textContent = tr('labels'); x('new-label').setAttribute('aria-label', tr('newLabel'));
+    x('settings-label').textContent = tr('settings'); x('storage-label').textContent = tr('storage');
+    x('search').placeholder = tr('search'); x('search').setAttribute('aria-label', tr('search'));
+    x('filters-btn').setAttribute('aria-label', tr('filters')); x('filters-btn').setAttribute('data-ac-tooltip', tr('filters'));
+  }
+
+  /* ---------------------------------------------------------------- rail */
+  function renderRail() {
+    const count = (f) => threads.filter((t) => inFolder(t, f) && (f === 'drafts' || f === 'scheduled' || f === 'snoozed' ? true : t.unread)).length;
+    x('folders').innerHTML = FOLDERS.map(([id, ic]) => { const n = count(id); return `<button class="ac-mail__folder" type="button" data-folder="${id}"${st.folder === id && !st.label ? ' aria-current="true"' : ''} data-ac-tooltip="${esc(tr(id))}" data-ac-tooltip-placement="end">${icon(ic)}<span>${esc(tr(id))}</span>${n ? `<bdi class="ac-mail__fcount${['inbox'].includes(id) ? ' is-strong' : ''}">${n}</bdi>` : ''}</button>`; }).join('');
+    x('labels').innerHTML = labels.map((l) => `<button class="ac-mail__folder ac-mail__label" type="button" data-label="${l.id}" data-tone="${l.tone}"${st.label === l.id ? ' aria-current="true"' : ''} data-ac-tooltip="${esc(l.name)}" data-ac-tooltip-placement="end"><i></i><span>${esc(l.name)}</span><bdi class="ac-mail__fcount">${threads.filter((t) => t.labels.includes(l.id) && !['trash', 'spam'].includes(t.folder)).length || ''}</bdi></button>`).join('');
+    el.querySelector('[data-folder="settings"]').toggleAttribute('aria-current', st.folder === 'settings');
+    x('chips').innerHTML = [...FOLDERS.map(([id]) => [id, tr(id)]), ['settings', tr('settings')]].map(([id, name]) => `<button class="ac-chip" type="button" data-folder="${id}" aria-pressed="${st.folder === id && !st.label}">${esc(name)}${id === 'inbox' && count('inbox') ? ` <bdi>${count('inbox')}</bdi>` : ''}</button>`).join('');
+  }
+
+  /* ---------------------------------------------------------------- list */
+  function visible() {
+    const q = st.q.trim().toLowerCase(); const f = st.filters;
+    const since = f.period === 'week' ? Date.now() - 7 * 864e5 : f.period === 'month' ? Date.now() - 30 * 864e5 : 0;
+    return threads.filter((t) => (st.label ? t.labels.includes(st.label) && !['trash', 'spam'].includes(t.folder) : inFolder(t, st.folder))
+      && (!q || t.subject.toLowerCase().includes(q) || t.messages.some((m) => textOf(m.html).toLowerCase().includes(q) || m.from.name.toLowerCase().includes(q) || m.from.email.includes(q)))
+      && (!f.unread || t.unread) && (!f.starred || t.starred) && (!f.attach || t.messages.some((m) => m.attachments?.length))
+      && (!f.from || t.messages.some((m) => `${m.from.name} ${m.from.email}`.toLowerCase().includes(f.from.toLowerCase())))
+      && (!since || lastMsg(t).at >= since))
+      .sort((a, b) => lastMsg(b).at - lastMsg(a).at);
+  }
+  function senders(t) {
+    const names = [...new Map(t.messages.map((m) => [m.from.email, isMe(m.from) ? tr('me') : m.from.name.split(' ')[0]])).values()];
+    if (['sent', 'drafts', 'scheduled'].includes(t.folder)) return `${tr('to')}: ${lastMsg(t).to.map((p) => p.name.split(' ')[0]).join(sep())}`;
+    return names.slice(-3).join(sep());
+  }
+  function rowHTML(t) {
+    const m = lastMsg(t); const sel = st.selected.has(t.id); const attach = t.messages.some((y) => y.attachments?.length);
+    const sub = t.folder === 'snoozed' && t.snoozeUntil ? `<span class="ac-mail__when-tag">${icon('alarm-clock')}${esc(tr('snoozedUntil', { t: when(t.snoozeUntil) }))}</span>` : t.folder === 'scheduled' && t.scheduledAt ? `<span class="ac-mail__when-tag">${icon('calendar-clock')}${esc(tr('scheduledFor', { t: fullWhen(t.scheduledAt) }))}</span>` : '';
+    return `<div class="ac-mail__row ac-swipe" role="listitem" data-thread="${t.id}"${t.unread ? ' data-unread' : ''}${sel ? ' data-selected' : ''}${st.open === t.id ? ' aria-current="true"' : ''}>
+      <div class="ac-swipe__actions">
+        <button class="ac-swipe__btn" type="button" data-action="archive" data-tone="info">${icon('archive')}<span>${esc(tr('archive'))}</span></button>
+        <button class="ac-swipe__btn" type="button" data-action="trash" data-tone="danger">${icon('trash-2')}<span>${esc(tr('delete'))}</span></button>
+      </div>
+      <div class="ac-swipe__content ac-mail__rowin">
+        <label class="ac-mail__check"><input class="ac-check" type="checkbox" data-select="${t.id}"${sel ? ' checked' : ''} aria-label="${esc(t.subject)}"></label>
+        <button class="ac-mail__star" type="button" data-star="${t.id}" aria-pressed="${!!t.starred}" aria-label="${esc(tr('star'))}">${icon('star')}</button>
+        <button class="ac-mail__open" type="button" data-open="${t.id}">
+          ${avatar(t.folder === 'sent' ? contactFor(m.to[0]?.email) : m.from, 'sm')}
+          <span class="ac-mail__rowmain">
+            <span class="ac-mail__rowtop"><strong class="ac-mail__from"><bdi>${esc(senders(t))}</bdi></strong>${t.messages.length > 1 ? `<bdi class="ac-mail__n">${t.messages.length}</bdi>` : ''}${t.folder === 'drafts' ? `<span class="ac-mail__draft">${esc(tr('drafted'))}</span>` : ''}${t.important ? icon('flag', 'ac-mail__imp') : ''}${attach ? icon('paperclip', 'ac-mail__clip') : ''}<time><bdi>${esc(when(m.at))}</bdi></time></span>
+            <span class="ac-mail__subj"><bdi>${esc(t.subject || tr('noSubject'))}</bdi></span>
+            ${settings.snippets ? `<span class="ac-mail__snip" dir="auto">${esc(textOf(m.html).slice(0, 140))}</span>` : ''}
+            ${t.labels.length || sub ? `<span class="ac-mail__tags">${sub}${t.labels.map((id) => { const l = labelOf(id); return l ? `<span class="ac-mail__tag" data-tone="${l.tone}">${esc(l.name)}</span>` : ''; }).join('')}</span>` : ''}
+          </span>
+        </button>
+        <span class="ac-mail__hover">
+          <button type="button" data-row-act="archive" aria-label="${esc(tr('archive'))}" data-ac-tooltip="${esc(tr('archive'))}">${icon('archive')}</button>
+          <button type="button" data-row-act="trash" aria-label="${esc(tr('delete'))}" data-ac-tooltip="${esc(tr('delete'))}">${icon('trash-2')}</button>
+          <button type="button" data-row-act="read" aria-label="${esc(tr(t.unread ? 'markRead' : 'markUnread'))}" data-ac-tooltip="${esc(tr(t.unread ? 'markRead' : 'markUnread'))}">${icon(t.unread ? 'mail-open' : 'mail')}</button>
+          <button type="button" data-row-act="snooze" aria-label="${esc(tr('snooze'))}" data-ac-tooltip="${esc(tr('snooze'))}">${icon('alarm-clock')}</button>
+        </span>
+      </div>
+    </div>`;
+  }
+  let swipes = [];
+  function renderList(anim = false) {
+    const rows = visible();
+    swipes.forEach((d) => d()); swipes = [];
+    el.toggleAttribute('data-settings', st.folder === 'settings');
+    x('settings').hidden = st.folder !== 'settings'; list.hidden = st.folder === 'settings';
+    x('ftitle').textContent = st.label ? labelOf(st.label)?.name : tr(st.folder);
+    if (st.folder === 'settings') { renderSettings(); x('fcount').textContent = ''; x('toolbar').innerHTML = ''; x('banner').hidden = true; return; }
+    for (const id of [...st.selected]) if (!rows.some((t) => t.id === id)) st.selected.delete(id);
+    x('fcount').innerHTML = rows.length ? `<bdi>${fmt.number(rows.length)}</bdi>` : '';
+    list.innerHTML = rows.length ? rows.map(rowHTML).join('') : `<div class="ac-mail__empty">${icon(st.folder === 'inbox' ? 'inbox' : 'mail-open', 'ac-icon--xl')}<strong>${esc(tr('empty'))}</strong><span>${esc(tr('emptyHint'))}</span></div>`;
+    list.dataset.density = settings.density;
+    if (anim) { list.classList.remove('is-in'); void list.offsetWidth; list.classList.add('is-in'); }
+    if (AC.swipeable) list.querySelectorAll('.ac-mail__row').forEach((r) => swipes.push(AC.swipeable(r)));
+    renderToolbar();
+    const banner = x('banner');
+    if (['trash', 'spam'].includes(st.folder) && rows.length && !st.label) { banner.hidden = false; banner.innerHTML = `<span>${icon('circle-alert')}${esc(st.folder === 'trash' ? '30' : '')}</span><button class="ac-mail__link" type="button" data-act="empty-folder">${esc(tr('emptyFolder', { f: tr(st.folder) }))}</button>`; banner.querySelector('span').lastChild.textContent = ''; }
+    else banner.hidden = true;
+  }
+  function renderToolbar() {
+    const rows = visible(); const n = st.selected.size;
+    const all = n && n === rows.length; const some = n && !all;
+    const inSpam = st.folder === 'spam'; const inTrash = st.folder === 'trash';
+    x('toolbar').innerHTML = `<label class="ac-mail__check ac-mail__check--all" data-ac-tooltip="${esc(tr('selectAll'))}"><input class="ac-check" type="checkbox" data-select-all${all ? ' checked' : ''} aria-label="${esc(tr('selectAll'))}"></label>
+      ${n ? `<span class="ac-mail__selcount"><bdi>${esc(tr('selected', { n: fmt.number(n) }))}</bdi></span>
+        <div class="ac-mail__bulk">
+          ${inTrash ? '' : `<button class="ac-mail__ib" type="button" data-bulk="archive" aria-label="${esc(tr('archive'))}" data-ac-tooltip="${esc(tr('archive'))}">${icon('archive')}</button>`}
+          <button class="ac-mail__ib" type="button" data-bulk="${inSpam ? 'notspam' : 'spam'}" aria-label="${esc(tr(inSpam ? 'notSpam' : 'spam'))}" data-ac-tooltip="${esc(tr(inSpam ? 'notSpam' : 'spam'))}">${icon(inSpam ? 'inbox' : 'shield-alert')}</button>
+          <button class="ac-mail__ib" type="button" data-bulk="trash" aria-label="${esc(tr(inTrash ? 'deleteForever' : 'delete'))}" data-ac-tooltip="${esc(tr(inTrash ? 'deleteForever' : 'delete'))}">${icon('trash-2')}</button>
+          <span class="ac-mail__sep"></span>
+          <button class="ac-mail__ib" type="button" data-bulk="read" aria-label="${esc(tr('markRead'))}" data-ac-tooltip="${esc(tr('markRead'))}">${icon('mail-open')}</button>
+          <button class="ac-mail__ib" type="button" data-bulk="unread" aria-label="${esc(tr('markUnread'))}" data-ac-tooltip="${esc(tr('markUnread'))}">${icon('mail')}</button>
+          <button class="ac-mail__ib" type="button" data-bulk="snooze" aria-label="${esc(tr('snooze'))}" data-ac-tooltip="${esc(tr('snooze'))}">${icon('alarm-clock')}</button>
+          <button class="ac-mail__ib" type="button" data-bulk="label" aria-label="${esc(tr('label'))}" data-ac-tooltip="${esc(tr('label'))}">${icon('tag')}</button>
+          <button class="ac-mail__ib" type="button" data-bulk="move" aria-label="${esc(tr('moveTo'))}" data-ac-tooltip="${esc(tr('moveTo'))}">${icon('folder-input')}</button>
+        </div>`
+      : `<button class="ac-mail__ib" type="button" data-act="refresh" aria-label="${esc(tr('refresh'))}" data-ac-tooltip="${esc(tr('refresh'))}">${icon('refresh-cw')}</button>
+        <span class="ac-mail__pager"><bdi>${rows.length ? `1–${rows.length}` : '0'}</bdi> ${esc(tr('of'))} <bdi>${rows.length}</bdi></span>`}`;
+    const box = x('toolbar').querySelector('[data-select-all]'); if (box) box.indeterminate = !!some;
+    el.toggleAttribute('data-selecting', n > 0);
+  }
+
+  /* ---------------------------------------------------------------- reader */
+  function msgHTML(t, m, expanded, last) {
+    const to = [...(m.to || []), ...(m.cc || [])];
+    if (!expanded) return `<button class="ac-mail__msg is-collapsed" type="button" data-expand="${m.id}">${avatar(m.from)}<span class="ac-mail__mhead"><strong><bdi>${esc(isMe(m.from) ? tr('me') : m.from.name)}</bdi></strong><span class="ac-mail__msnip" dir="auto">${esc(textOf(m.html).slice(0, 120))}</span></span><time><bdi>${esc(when(m.at))}</bdi></time></button>`;
+    return `<section class="ac-mail__msg" data-msg="${m.id}">
+      <header class="ac-mail__mtop">${avatar(m.from, '')}
+        <div class="ac-mail__mhead"><strong><bdi>${esc(m.from.name)}</bdi> <small><bdi>&lt;${esc(m.from.email)}&gt;</bdi></small></strong>
+          <button class="ac-mail__tolink" type="button" data-details="${m.id}"><span><bdi>${esc(to.some(isMe) && to.length === 1 ? tr('toMe') : `${tr('to')}: ${to.map((p) => (isMe(p) ? tr('me') : p.name)).join(sep())}`)}</bdi></span>${icon('chevron-down')}</button></div>
+        <time class="ac-mail__mtime"><bdi>${esc(fullWhen(m.at))}</bdi></time>
+        <div class="ac-mail__mtools"><button class="ac-mail__ib" type="button" data-reply="${m.id}" aria-label="${esc(tr('reply'))}" data-ac-tooltip="${esc(tr('reply'))}">${icon('reply', 'ac-flip-rtl')}</button><button class="ac-mail__ib" type="button" data-msg-more="${m.id}" aria-label="${esc(tr('more'))}">${icon('ellipsis-vertical')}</button></div>
+      </header>
+      <dl class="ac-mail__details" data-details-box="${m.id}" hidden>
+        <div><dt>${esc(tr('from'))}</dt><dd><bdi>${esc(m.from.name)} &lt;${esc(m.from.email)}&gt;</bdi></dd></div>
+        <div><dt>${esc(tr('to'))}</dt><dd><bdi>${(m.to || []).map((p) => esc(`${p.name} <${p.email}>`)).join(sep())}</bdi></dd></div>
+        ${m.cc?.length ? `<div><dt>${esc(tr('cc'))}</dt><dd><bdi>${m.cc.map((p) => esc(`${p.name} <${p.email}>`)).join(sep())}</bdi></dd></div>` : ''}
+        <div><dt>${esc(tr('subject'))}</dt><dd dir="auto">${esc(t.subject)}</dd></div>
+      </dl>
+      <div class="ac-mail__body" dir="auto">${sanitize(m.html)}</div>
+      ${m.attachments?.length ? `<div class="ac-mail__atts"><div class="ac-mail__atthead">${icon('paperclip')}<span>${esc(tr('attachments', { n: m.attachments.length }))}</span></div><div class="ac-mail__attgrid">${m.attachments.map((a) => `<a class="ac-mail__att" href="#" data-att="${esc(a.name)}" data-kind="${a.kind || 'file'}"><span class="ac-mail__attart">${icon(a.kind === 'image' ? 'image' : a.kind === 'pdf' ? 'file-text' : 'file')}</span><span class="ac-mail__attmeta"><strong><bdi>${esc(a.name)}</bdi></strong><small><bdi>${esc(a.size || '')}</bdi></small></span><span class="ac-mail__attdl">${icon('download')}</span></a>`).join('')}</div></div>` : ''}
+      ${last ? `<div class="ac-mail__actions"><button class="ac-btn ac-btn--outline" type="button" data-respond="reply">${icon('reply', 'ac-flip-rtl')}<span>${esc(tr('reply'))}</span></button>${to.length + 1 > 2 || m.cc?.length ? `<button class="ac-btn ac-btn--outline" type="button" data-respond="replyAll">${icon('reply-all', 'ac-flip-rtl')}<span>${esc(tr('replyAll'))}</span></button>` : ''}<button class="ac-btn ac-btn--outline" type="button" data-respond="forward">${icon('forward', 'ac-flip-rtl')}<span>${esc(tr('forward'))}</span></button></div>` : ''}
+    </section>`;
+  }
+  function renderReader() {
+    const t = thread(st.open);
+    if (!t) { reader.innerHTML = `<div class="ac-mail__pick">${icon('mail', 'ac-icon--xl')}<strong>${esc(tr('pick'))}</strong><span>${esc(tr('pickHint'))}</span></div>`; el.removeAttribute('data-reading'); return; }
+    el.setAttribute('data-reading', '');
+    const msgs = settings.conversation ? t.messages : [lastMsg(t)];
+    const inSpam = t.folder === 'spam'; const inTrash = t.folder === 'trash';
+    reader.innerHTML = `<header class="ac-mail__rbar">
+        <button class="ac-mail__ib ac-mail__back" type="button" data-split-back aria-label="${esc(tr('back'))}">${icon('chevron-left', 'ac-flip-rtl')}</button>
+        ${inTrash ? '' : `<button class="ac-mail__ib" type="button" data-ract="archive" aria-label="${esc(tr('archive'))}" data-ac-tooltip="${esc(tr('archive'))}">${icon('archive')}</button>`}
+        <button class="ac-mail__ib" type="button" data-ract="${inSpam ? 'notspam' : 'spam'}" aria-label="${esc(tr(inSpam ? 'notSpam' : 'spam'))}" data-ac-tooltip="${esc(tr(inSpam ? 'notSpam' : 'spam'))}">${icon(inSpam ? 'inbox' : 'shield-alert')}</button>
+        <button class="ac-mail__ib" type="button" data-ract="trash" aria-label="${esc(tr('delete'))}" data-ac-tooltip="${esc(tr('delete'))}">${icon('trash-2')}</button>
+        <span class="ac-mail__sep"></span>
+        <button class="ac-mail__ib" type="button" data-ract="unread" aria-label="${esc(tr('markUnread'))}" data-ac-tooltip="${esc(tr('markUnread'))}">${icon('mail')}</button>
+        <button class="ac-mail__ib" type="button" data-ract="snooze" aria-label="${esc(tr('snooze'))}" data-ac-tooltip="${esc(tr('snooze'))}">${icon('alarm-clock')}</button>
+        <button class="ac-mail__ib" type="button" data-ract="label" aria-label="${esc(tr('label'))}" data-ac-tooltip="${esc(tr('label'))}">${icon('tag')}</button>
+        <button class="ac-mail__ib ac-mail__hide-sm" type="button" data-ract="move" aria-label="${esc(tr('moveTo'))}" data-ac-tooltip="${esc(tr('moveTo'))}">${icon('folder-input')}</button>
+        <button class="ac-mail__ib ac-mail__end" type="button" data-ract="print" aria-label="${esc(tr('print'))}" data-ac-tooltip="${esc(tr('print'))}">${icon('printer')}</button>
+      </header>
+      <div class="ac-mail__rbody" data-x="rbody">
+        <div class="ac-mail__subject"><h2 dir="auto">${esc(t.subject || tr('noSubject'))}</h2>
+          <button class="ac-mail__ib" type="button" data-ract="important" aria-pressed="${!!t.important}" aria-label="${esc(tr('markImportant'))}" data-ac-tooltip="${esc(tr('markImportant'))}">${icon('flag')}</button>
+          <button class="ac-mail__star" type="button" data-ract="star" aria-pressed="${!!t.starred}" aria-label="${esc(tr('star'))}">${icon('star')}</button></div>
+        ${t.labels.length ? `<div class="ac-mail__tags">${t.labels.map((id) => { const l = labelOf(id); return l ? `<span class="ac-mail__tag" data-tone="${l.tone}">${esc(l.name)}<button type="button" data-unlabel="${id}" aria-label="${esc(tr('delete'))} ${esc(l.name)}">${icon('x')}</button></span>` : ''; }).join('')}</div>` : ''}
+        <div class="ac-mail__thread">${msgs.map((m, i) => msgHTML(t, m, i === msgs.length - 1 || st.expanded.has(m.id) || msgs.length < 3, i === msgs.length - 1)).join('')}</div>
+      </div>`;
+  }
+
+  /* ---------------------------------------------------------------- settings */
+  function renderSettings() {
+    const row = (title, hint, control) => `<div class="ac-mail__setrow"><div><strong>${esc(title)}</strong>${hint ? `<small>${esc(hint)}</small>` : ''}</div>${control}</div>`;
+    const sel = (key, opts) => `<select class="ac-select ac-mail__select" data-setting="${key}">${opts.map(([v, l]) => `<option value="${v}"${String(settings[key]) === String(v) ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+    const sw = (key) => `<input class="ac-switch" type="checkbox" role="switch" data-setting="${key}"${settings[key] ? ' checked' : ''}>`;
+    x('settings').innerHTML = `<div class="ac-mail__setgroup">
+      ${row(tr('conversation'), tr('conversationHint'), sw('conversation'))}
+      ${row(tr('snippets'), tr('snippetsHint'), sw('snippets'))}
+      ${row(tr('density'), '', sel('density', [['comfortable', tr('comfortable')], ['compact', tr('compact')]]))}
+      ${row(tr('undoSend'), '', sel('undo', [5, 10, 20, 30].map((n) => [n, tr('seconds', { n })])))}
+      ${row(tr('autoAdvance'), '', sel('advance', [['next', tr('nextMsg')], ['list', tr('backToList')]]))}
+      </div>
+      <div class="ac-mail__setgroup"><label class="ac-mail__setlabel" for="${el.id || 'mail'}-sig"><strong>${esc(tr('signature'))}</strong><small>${esc(tr('signatureHint'))}</small></label>
+        <textarea class="ac-input ac-mail__sig" id="${el.id || 'mail'}-sig" rows="4" data-setting="signature" dir="auto">${esc(settings.signature)}</textarea></div>`;
+  }
+
+  /* ---------------------------------------------------------------- moving + menus */
+  function move(ids, folder, { toast = true } = {}) {
+    const prev = ids.map((id) => [id, thread(id)?.folder, thread(id)?.snoozeUntil]);
+    const gone = folder === 'forever';
+    ids.forEach((id) => { const t = thread(id); if (!t) return; if (gone) threads.splice(threads.indexOf(t), 1); else { t.folder = folder; if (folder !== 'snoozed') delete t.snoozeUntil; } });
+    const advance = st.open && ids.includes(st.open);
+    if (advance) {
+      const rows = visible();
+      if (settings.advance === 'next' && rows.length && !phone.matches) open(rows[0].id, { push: false });
+      else { st.open = null; if (phone.matches) split()?.pop(); renderReader(); }
+    }
+    ids.forEach((id) => st.selected.delete(id));
+    renderRail(); renderList();
+    AC.emit?.(el, 'mail:move', { ids, folder }); changed();
+    if (toast && AC.toast) {
+      const title = gone || folder === 'trash' ? tr('deletedToast', { n: ids.length }) : tr('movedToast', { n: ids.length, f: tr(folder) });
+      if (gone) AC.toast({ title, tone: 'danger' });
+      else AC.toast.undo ? AC.toast.undo(title, () => { prev.forEach(([id, f, s]) => { const t = thread(id); if (t) { t.folder = f; if (s) t.snoozeUntil = s; } }); renderRail(); renderList(); renderReader(); }) : AC.toast({ title });
+    }
+  }
+  function animateOut(ids) {
+    const rows = ids.map((id) => list.querySelector(`[data-thread="${id}"]`)).filter(Boolean);
+    if (AC.reducedMotion?.() || !rows.length) return Promise.resolve();
+    return Promise.all(rows.map((r) => r.animate([{ blockSize: `${r.offsetHeight}px`, opacity: 1 }, { blockSize: '0px', opacity: 0, paddingBlock: '0px' }], { duration: 240, easing: 'cubic-bezier(.2,.8,.2,1)' }).finished));
+  }
+  async function act(action, ids, anchor) {
+    if (!ids.length) return;
+    const ts = ids.map(thread).filter(Boolean);
+    if (action === 'archive') { await animateOut(ids); move(ids, 'archive'); }
+    else if (action === 'spam') { await animateOut(ids); move(ids, 'spam'); }
+    else if (action === 'notspam') { await animateOut(ids); move(ids, 'inbox'); }
+    else if (action === 'trash') { if (st.folder === 'trash') { if (AC.confirm && !(await AC.confirm({ tone: 'danger', title: tr('deleteForever'), confirmText: tr('deleteForever') }))) return; await animateOut(ids); move(ids, 'forever'); } else { await animateOut(ids); move(ids, 'trash'); } }
+    else if (action === 'read' || action === 'unread') { ts.forEach((t) => { t.unread = action === 'unread'; }); if (action === 'unread' && ids.includes(st.open)) { st.open = null; renderReader(); if (phone.matches) split()?.pop(); } renderRail(); renderList(); changed(); }
+    else if (action === 'snooze') AC.menu?.(anchor, snoozeOptions().map(([k, at]) => ({ label: `${tr(k)} · ${fmt.date(at, { weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })}`, icon: 'alarm-clock', onSelect: async () => { ts.forEach((t) => { t.snoozeUntil = at; }); await animateOut(ids); move(ids, 'snoozed', { toast: false }); AC.toast?.({ title: tr('snoozedToast', { t: fullWhen(at) }), tone: 'info' }); } })), { placement: 'bottom-end' });
+    else if (action === 'label') AC.menu?.(anchor, labels.map((l) => ({ label: l.name, checked: ts.every((t) => t.labels.includes(l.id)), keep: true, onSelect: (it, d) => { const on = !ts.every((t) => t.labels.includes(l.id)); ts.forEach((t) => { t.labels = on ? [...new Set([...t.labels, l.id])] : t.labels.filter((y) => y !== l.id); }); renderRail(); renderList(); renderReader(); changed(); } })), { placement: 'bottom-end' });
+    else if (action === 'move') AC.menu?.(anchor, FOLDERS.filter(([f]) => !VIRTUAL.has(f) && !['drafts', 'scheduled', 'snoozed', 'sent'].includes(f)).map(([f, ic]) => ({ label: tr(f), icon: ic, disabled: ts.every((t) => t.folder === f), onSelect: async () => { await animateOut(ids); move(ids, f); } })), { placement: 'bottom-end' });
+    else if (action === 'star' || action === 'important') { const key = action === 'star' ? 'starred' : 'important'; const on = !ts.every((t) => t[key]); ts.forEach((t) => { t[key] = on; }); renderRail(); renderList(); renderReader(); changed(); AC.haptic?.(6); }
+    else if (action === 'print') window.print();
+  }
+  function open(id, { push = true } = {}) {
+    const t = thread(id); if (!t) return;
+    if (t.folder === 'drafts') { const m = lastMsg(t); compose({ to: m.to, subject: t.subject, html: m.html, draftOf: t.id }); return; }
+    st.open = id; t.unread = false; st.expanded = new Set();
+    list.querySelectorAll('.ac-mail__row[aria-current]').forEach((r) => r.removeAttribute('aria-current'));
+    const row = list.querySelector(`[data-thread="${id}"]`); row?.setAttribute('aria-current', 'true'); row?.removeAttribute('data-unread');
+    renderReader(); renderRail();
+    reader.querySelector('[data-x="rbody"]')?.classList.add('is-in');
+    if (push) split()?.push(1);
+    AC.emit?.(el, 'mail:open', { thread: t });
+  }
+
+  /* ---------------------------------------------------------------- compose */
+  let comp = null;
+  function compose(init = {}) {
+    if (comp && !comp.closed) { comp.close(true); }
+    const box = composerEl;
+    const chips = { to: [...(init.to || [])], cc: [...(init.cc || [])], bcc: [] };
+    const files = [];
+    const sig = settings.signature ? `<div class="ac-mail__sigblock" contenteditable="false">-- <br>${esc(settings.signature).replace(/\n/g, '<br>')}</div>` : '';
+    box.hidden = false; box.removeAttribute('data-min'); box.removeAttribute('data-max');
+    box.innerHTML = `<div class="ac-mail__cwin" role="dialog" aria-label="${esc(tr('newMessage'))}">
+      <header class="ac-mail__chead"><strong data-c="title">${esc(init.subject || tr('newMessage'))}</strong>
+        <button class="ac-mail__ib ac-mail__ib--sm ac-mail__hide-phone" type="button" data-c-act="min" aria-label="${esc(tr('minimize'))}">${icon('minus')}</button>
+        <button class="ac-mail__ib ac-mail__ib--sm ac-mail__hide-phone" type="button" data-c-act="max" aria-label="${esc(tr('maximize'))}">${icon('maximize-2')}</button>
+        <button class="ac-mail__ib ac-mail__ib--sm" type="button" data-c-act="close" aria-label="${esc(tr('close'))}">${icon('x')}</button></header>
+      <div class="ac-mail__cbody">
+        ${['to', 'cc', 'bcc'].map((k) => `<div class="ac-mail__crow" data-row="${k}"${k !== 'to' && !chips[k].length ? ' hidden' : ''}><label for="${k}-${seq}">${esc(tr(k))}</label><div class="ac-mail__chips-in" data-chips="${k}"><input id="${k}-${seq}" type="email" autocomplete="off" data-chip-input="${k}" dir="ltr"></div>${k === 'to' ? `<button class="ac-mail__ccbtn" type="button" data-c-act="cc">${esc(tr('cc'))}</button><button class="ac-mail__ccbtn" type="button" data-c-act="bcc">${esc(tr('bcc'))}</button>` : ''}</div>`).join('')}
+        <div class="ac-mail__suggest" data-suggest hidden role="listbox"></div>
+        <div class="ac-mail__crow"><input class="ac-mail__csubj" data-c="subject" placeholder="${esc(tr('subject'))}" aria-label="${esc(tr('subject'))}" value="${esc(init.subject || '')}" dir="auto"></div>
+        <div class="ac-mail__rte" role="toolbar" aria-label="Format">
+          ${[['bold', 'bold'], ['italic', 'italic'], ['underline', 'underline'], ['strikeThrough', 'strikethrough', 'strike'], '|', ['insertUnorderedList', 'list', 'bullets'], ['insertOrderedList', 'list-ordered', 'numbers'], ['formatBlock', 'quote', 'quote'], ['createLink', 'link', 'link'], '|', ['removeFormat', 'eraser', 'clearFormat']].map((b) => (b === '|' ? '<span class="ac-mail__sep"></span>' : `<button type="button" data-cmd="${b[0]}" aria-label="${esc(tr(b[2] || b[0]))}" data-ac-tooltip="${esc(tr(b[2] || b[0]))}">${icon(b[1])}</button>`)).join('')}
+        </div>
+        <div class="ac-mail__editor" contenteditable="true" role="textbox" aria-multiline="true" dir="auto" data-c="editor">${init.html ? sanitize(init.html) : '<p><br></p>'}${init.quote ? `<blockquote>${sanitize(init.quote)}</blockquote>` : ''}${init.draftOf ? '' : sig}</div>
+        <div class="ac-mail__cfiles" data-c="files"></div>
+      </div>
+      <footer class="ac-mail__cfoot">
+        <div class="ac-mail__sendgroup"><button class="ac-btn ac-btn--primary" type="button" data-c-act="send">${icon('send', 'ac-flip-rtl')}<span>${esc(tr('send'))}</span></button><button class="ac-btn ac-btn--primary ac-mail__sendmore" type="button" data-c-act="schedule" aria-label="${esc(tr('scheduleSend'))}">${icon('chevron-down')}</button></div>
+        <button class="ac-mail__ib" type="button" data-c-act="attach" aria-label="${esc(tr('attach'))}" data-ac-tooltip="${esc(tr('attach'))}">${icon('paperclip')}</button>
+        <button class="ac-mail__ib" type="button" data-c-act="sig" aria-label="${esc(tr('signature'))}" data-ac-tooltip="${esc(tr('signature'))}">${icon('pencil')}</button>
+        <span class="ac-mail__saved" data-c="saved" aria-live="polite"></span>
+        <button class="ac-mail__ib ac-mail__end" type="button" data-c-act="discard" aria-label="${esc(tr('discard'))}" data-ac-tooltip="${esc(tr('discard'))}">${icon('trash-2')}</button>
+        <input type="file" multiple hidden data-c="file">
+      </footer></div>`;
+    const q = (s) => box.querySelector(s);
+    const editor = q('[data-c="editor"]'); const subj = q('[data-c="subject"]');
+    let draftId = init.draftOf || null; let saveT = 0;
+    const chipHTML = (p) => `<span class="ac-mail__chip" data-email="${esc(p.email)}">${avatar(p, 'xs')}<bdi>${esc(p.name && p.name !== p.email ? p.name : p.email)}</bdi><button type="button" data-unchip="${esc(p.email)}" aria-label="${esc(tr('delete'))}">${icon('x')}</button></span>`;
+    const drawChips = (k) => { const wrap = q(`[data-chips="${k}"]`); wrap.querySelectorAll('.ac-mail__chip').forEach((c) => c.remove()); wrap.querySelector('input').insertAdjacentHTML('beforebegin', chips[k].map(chipHTML).join('')); };
+    ['to', 'cc', 'bcc'].forEach(drawChips);
+    const addChip = (k, raw) => {
+      const v = raw.trim().replace(/[,;]$/, ''); if (!v) return false;
+      const c = o.contacts.find((y) => y.email === v || y.name === v) || (/^\S+@\S+\.\S+$/.test(v) ? contactFor(v) : null);
+      if (!c) { q(`[data-chips="${k}"]`).setAttribute('data-invalid', ''); return false; }
+      q(`[data-chips="${k}"]`).removeAttribute('data-invalid');
+      if (!chips[k].some((y) => y.email === c.email)) chips[k].push(c);
+      drawChips(k); scheduleSave(); return true;
+    };
+    let sugK = null; let sugI = 0;
+    const suggest = (k, val) => {
+      const s = q('[data-suggest]'); const v = val.trim().toLowerCase(); sugK = k;
+      const hits = v ? o.contacts.filter((c) => (c.name.toLowerCase().includes(v) || c.email.includes(v)) && !chips[k].some((y) => y.email === c.email)).slice(0, 6) : [];
+      s.hidden = !hits.length; sugI = 0;
+      s.innerHTML = hits.map((c, i) => `<button type="button" role="option" data-sug="${esc(c.email)}" aria-selected="${i === 0}">${avatar(c, 'xs')}<span><strong><bdi>${esc(c.name)}</bdi></strong><small><bdi>${esc(c.email)}</bdi></small></span></button>`).join('');
+      const row = q(`[data-row="${k}"]`); s.style.setProperty('--_top', `${row.offsetTop + row.offsetHeight}px`);
+    };
+    const savedLabel = (txt) => { q('[data-c="saved"]').textContent = txt; };
+    const snapshot = () => ({ to: chips.to, cc: chips.cc, bcc: chips.bcc, subject: subj.value.trim(), html: editor.innerHTML });
+    function saveDraft() {
+      const s = snapshot();
+      if (!s.subject && !textOf(s.html).replace(/^--.*$/, '').trim() && !s.to.length) return;
+      let t = draftId && thread(draftId);
+      if (!t) { t = { id: uid('t'), folder: 'drafts', subject: s.subject, labels: [], messages: [{ id: uid('m'), from: me, to: s.to, cc: s.cc, at: Date.now(), html: s.html }] }; threads.push(t); draftId = t.id; }
+      else { t.subject = s.subject; Object.assign(t.messages.at(-1), { to: s.to, cc: s.cc, html: s.html, at: Date.now() }); }
+      savedLabel(tr('savedAt', { t: fmt.date(Date.now(), { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }) }));
+      renderRail(); if (st.folder === 'drafts') renderList();
+    }
+    function scheduleSave() { clearTimeout(saveT); savedLabel(tr('saving')); saveT = setTimeout(saveDraft, 1200); }
+    function close(silent) { clearTimeout(saveT); if (!silent) saveDraft(); comp.closed = true; offs2.forEach((f) => f()); if (AC.reducedMotion?.()) { box.hidden = true; box.innerHTML = ''; } else { box.setAttribute('data-closing', ''); setTimeout(() => { box.hidden = true; box.removeAttribute('data-closing'); if (comp?.closed) box.innerHTML = ''; }, 220); } el.removeAttribute('data-composing'); }
+    function send(at) {
+      ['to', 'cc', 'bcc'].forEach((k) => { const i = q(`[data-chip-input="${k}"]`); if (i.value) addChip(k, i.value); i.value = ''; });
+      if (!chips.to.length) { q('[data-chips="to"]').setAttribute('data-invalid', ''); q('[data-chip-input="to"]').focus(); AC.toast?.({ title: tr('needTo'), tone: 'warning', duration: 2200 }); return; }
+      const s = snapshot();
+      if (draftId) { const d = thread(draftId); if (d) threads.splice(threads.indexOf(d), 1); }
+      const msg = { id: uid('m'), from: me, to: s.to, cc: s.cc, bcc: s.bcc, at: Date.now(), html: s.html, attachments: files.map((f) => ({ name: f.name, size: f.size, kind: f.kind })) };
+      let t = init.replyTo && thread(init.replyTo);
+      if (t && !at) { t.messages.push(msg); }
+      else { t = { id: uid('t'), folder: at ? 'scheduled' : 'sent', subject: s.subject, labels: [], scheduledAt: at, messages: [msg] }; threads.push(t); }
+      const snap = { init: { ...init, to: s.to, cc: s.cc, subject: s.subject, html: s.html } };
+      close(true);
+      renderRail(); renderList(); if (st.open === t.id) renderReader();
+      AC.emit?.(el, 'mail:send', { thread: t, message: msg }); o.onSend?.(t, msg); changed();
+      const title = at ? tr('scheduledToast', { t: fullWhen(at) }) : tr('sentToast');
+      if (AC.toast?.undo) AC.toast.undo(title, () => { if (t.messages.length > 1) t.messages.pop(); else threads.splice(threads.indexOf(t), 1); renderRail(); renderList(); renderReader(); compose(snap.init); }, { duration: settings.undo * 1000 });
+      else AC.toast?.({ title, tone: 'success' });
+    }
+    const offs2 = [
+      AC.on(box, 'click', '[data-c-act]', async (e, b) => {
+        const a = b.dataset.cAct;
+        if (a === 'close') close(false);
+        if (a === 'min') { box.toggleAttribute('data-min'); box.removeAttribute('data-max'); }
+        if (a === 'max') { box.toggleAttribute('data-max'); box.removeAttribute('data-min'); }
+        if (a === 'cc' || a === 'bcc') { const r = q(`[data-row="${a}"]`); r.hidden = false; r.querySelector('input').focus(); b.hidden = true; }
+        if (a === 'send') send();
+        if (a === 'schedule') {
+          const d = new Date(); const at = (days, h) => { const y = new Date(d); y.setDate(y.getDate() + days); y.setHours(h, 0, 0, 0); return y.getTime(); };
+          const mon = (8 - d.getDay()) % 7 || 7;
+          AC.menu?.(b, [{ heading: tr('scheduleSend') }, { label: tr('inHour'), icon: 'clock', onSelect: () => send(Date.now() + 3600000) }, { label: tr('tomorrowAt'), icon: 'calendar-clock', onSelect: () => send(at(1, 8)) }, { label: tr('mondayAt'), icon: 'calendar-clock', onSelect: () => send(at(mon, 9)) }], { placement: 'top-end' });
+        }
+        if (a === 'attach') q('[data-c="file"]').click();
+        if (a === 'sig') { const s = editor.querySelector('.ac-mail__sigblock'); if (s) s.remove(); else editor.insertAdjacentHTML('beforeend', `<div class="ac-mail__sigblock" contenteditable="false">-- <br>${esc(settings.signature).replace(/\n/g, '<br>')}</div>`); scheduleSave(); }
+        if (a === 'discard') { if (textOf(editor.innerHTML).length > 40 && AC.confirm && !(await AC.confirm({ title: tr('discardQ'), tone: 'danger', confirmText: tr('discard') }))) return; if (draftId) { const d = thread(draftId); if (d) threads.splice(threads.indexOf(d), 1); renderRail(); if (st.folder === 'drafts') renderList(); } close(true); }
+      }),
+      AC.on(box, 'click', '.ac-mail__chead', (e) => { if (box.hasAttribute('data-min') && !e.target.closest('[data-c-act]')) box.removeAttribute('data-min'); }),
+      AC.on(box, 'mousedown', '[data-cmd]', (e) => e.preventDefault()),
+      AC.on(box, 'click', '[data-cmd]', async (e, b) => {
+        const cmd = b.dataset.cmd; editor.focus();
+        if (cmd === 'createLink') { const url = AC.prompt ? await AC.prompt({ title: tr('link'), label: tr('linkUrl'), value: 'https://' }) : window.prompt(tr('linkUrl'), 'https://'); if (url && /^https?:\/\//.test(url)) document.execCommand('createLink', false, url); }
+        else if (cmd === 'formatBlock') document.execCommand('formatBlock', false, 'blockquote');
+        else document.execCommand(cmd, false, null);
+        syncRte(); scheduleSave();
+      }),
+      AC.on(box, 'click', '[data-unchip]', (e, b) => { const wrap = b.closest('[data-chips]'); const k = wrap.dataset.chips; chips[k] = chips[k].filter((y) => y.email !== b.dataset.unchip); drawChips(k); scheduleSave(); }),
+      AC.on(box, 'click', '[data-chips]', (e, w) => { if (e.target === w) w.querySelector('input').focus(); }),
+      AC.on(box, 'input', '[data-chip-input]', (e, i) => { if (/[,;]$/.test(i.value)) { if (addChip(i.dataset.chipInput, i.value)) i.value = ''; suggest(i.dataset.chipInput, ''); } else suggest(i.dataset.chipInput, i.value); }),
+      AC.on(box, 'keydown', '[data-chip-input]', (e, i) => {
+        const k = i.dataset.chipInput; const s = q('[data-suggest]'); const opts = [...s.querySelectorAll('[data-sug]')];
+        if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !s.hidden) { e.preventDefault(); sugI = (sugI + (e.key === 'ArrowDown' ? 1 : -1) + opts.length) % opts.length; opts.forEach((y, j) => y.setAttribute('aria-selected', String(j === sugI))); }
+        else if (e.key === 'Enter' || e.key === 'Tab') { if (!s.hidden && opts[sugI]) { e.preventDefault(); addChip(k, opts[sugI].dataset.sug); i.value = ''; suggest(k, ''); } else if (i.value) { e.preventDefault(); if (addChip(k, i.value)) i.value = ''; } }
+        else if (e.key === 'Backspace' && !i.value && chips[k].length) { chips[k].pop(); drawChips(k); }
+        else if (e.key === 'Escape') { s.hidden = true; }
+      }),
+      AC.on(box, 'focusout', '[data-chip-input]', (e, i) => { setTimeout(() => { if (!box.contains(document.activeElement) || !document.activeElement.closest('[data-suggest]')) { if (i.value && addChip(i.dataset.chipInput, i.value)) i.value = ''; q('[data-suggest]') && (q('[data-suggest]').hidden = true); } }, 120); }),
+      AC.on(box, 'mousedown', '[data-sug]', (e) => e.preventDefault()),
+      AC.on(box, 'click', '[data-sug]', (e, b) => { addChip(sugK, b.dataset.sug); const i = q(`[data-chip-input="${sugK}"]`); i.value = ''; i.focus(); suggest(sugK, ''); }),
+      AC.on(subj, 'input', () => { q('[data-c="title"]').textContent = subj.value || tr('newMessage'); scheduleSave(); }),
+      AC.on(editor, 'input', scheduleSave),
+      AC.on(editor, 'keyup', () => syncRte()), AC.on(editor, 'mouseup', () => syncRte()),
+      AC.on(box, 'keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); send(); } if (e.key === 'Escape' && !e.target.closest('[data-chip-input]')) { e.stopPropagation(); close(false); } }),
+      AC.on(q('[data-c="file"]'), 'change', (e) => {
+        for (const f of e.target.files) {
+          const item = { name: f.name, size: f.size > 1048576 ? `${(f.size / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(f.size / 1024))} KB`, kind: f.type.startsWith('image/') ? 'image' : f.type === 'application/pdf' ? 'pdf' : 'file' };
+          files.push(item);
+          const chip = document.createElement('span'); chip.className = 'ac-mail__cfile'; chip.setAttribute('data-uploading', '');
+          chip.innerHTML = `${icon(item.kind === 'image' ? 'image' : 'file-text')}<span><bdi>${esc(item.name)}</bdi><small><bdi>${esc(item.size)}</bdi></small></span><i class="ac-mail__prog"></i><button type="button" aria-label="${esc(tr('delete'))}">${icon('x')}</button>`;
+          chip.querySelector('button').addEventListener('click', () => { files.splice(files.indexOf(item), 1); chip.remove(); });
+          q('[data-c="files"]').append(chip);
+          setTimeout(() => chip.removeAttribute('data-uploading'), 900 + Math.random() * 900);
+        }
+        e.target.value = ''; scheduleSave();
+      }),
+    ];
+    function syncRte() {
+      box.querySelectorAll('[data-cmd]').forEach((b) => { const c = b.dataset.cmd; if (['bold', 'italic', 'underline', 'strikeThrough', 'insertUnorderedList', 'insertOrderedList'].includes(c)) { try { b.setAttribute('aria-pressed', String(document.queryCommandState(c))); } catch { /* ignore */ } } });
+    }
+    el.setAttribute('data-composing', '');
+    comp = { close, closed: false };
+    requestAnimationFrame(() => { (chips.to.length ? (init.subject ? editor : subj) : q('[data-chip-input="to"]')).focus(); if (chips.to.length && init.subject) { const r = document.createRange(); r.setStart(editor, 0); r.collapse(true); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } });
+    return comp;
+  }
+  function respond(kind) {
+    const t = thread(st.open); if (!t) return;
+    const m = lastMsg(t);
+    const quote = `<p>${esc(fullWhen(m.at))} — ${esc(m.from.name)}:</p>${m.html}`;
+    const others = (arr) => arr.filter((p) => !isMe(p));
+    if (kind === 'forward') compose({ subject: `Fwd: ${t.subject.replace(/^(fwd|re):\s*/i, '')}`, quote });
+    else compose({ to: isMe(m.from) ? m.to : [m.from, ...(kind === 'replyAll' ? others(m.to) : [])], cc: kind === 'replyAll' ? others(m.cc || []) : [], subject: `Re: ${t.subject.replace(/^re:\s*/i, '')}`, quote, replyTo: t.id });
+  }
+
+  /* ---------------------------------------------------------------- filters popover */
+  function filtersPanel(anchor) {
+    const f = st.filters;
+    const box = document.createElement('form');
+    box.className = 'ac-mail__filters';
+    box.innerHTML = `<strong>${esc(tr('filters'))}</strong>
+      <label class="ac-choice"><input class="ac-check" type="checkbox" name="unread"${f.unread ? ' checked' : ''}><span>${esc(tr('unreadOnly'))}</span></label>
+      <label class="ac-choice"><input class="ac-check" type="checkbox" name="attach"${f.attach ? ' checked' : ''}><span>${esc(tr('hasAttach'))}</span></label>
+      <label class="ac-choice"><input class="ac-check" type="checkbox" name="starred"${f.starred ? ' checked' : ''}><span>${esc(tr('starredOnly'))}</span></label>
+      <label class="ac-mail__flabel">${esc(tr('from'))}<input class="ac-input" name="from" value="${esc(f.from)}" autocomplete="off"></label>
+      <label class="ac-mail__flabel">${esc(tr('period'))}<select class="ac-select" name="period">${['any', 'week', 'month'].map((p) => `<option value="${p}"${f.period === p ? ' selected' : ''}>${esc(tr(p))}</option>`).join('')}</select></label>
+      <div class="ac-mail__ffoot"><button class="ac-btn ac-btn--ghost ac-btn--sm" type="button" data-clear>${esc(tr('clear'))}</button><button class="ac-btn ac-btn--primary ac-btn--sm" type="submit">${esc(tr('apply'))}</button></div>`;
+    const pop = AC.popover?.show(anchor, { content: box, placement: 'bottom-end', label: tr('filters') });
+    const apply = (vals) => { Object.assign(st.filters, vals); x('filters-dot').hidden = !(st.filters.unread || st.filters.attach || st.filters.starred || st.filters.from || st.filters.period !== 'any'); renderList(true); pop?.close?.(); };
+    box.addEventListener('submit', (e) => { e.preventDefault(); const d = new FormData(box); apply({ unread: d.has('unread'), attach: d.has('attach'), starred: d.has('starred'), from: String(d.get('from') || ''), period: String(d.get('period')) }); });
+    box.querySelector('[data-clear]').addEventListener('click', () => apply({ unread: false, attach: false, starred: false, from: '', period: 'any' }));
+  }
+
+  /* ---------------------------------------------------------------- events */
+  let lpT = 0;
+  const offs = [
+    AC.on(el, 'click', '[data-folder]', (e, b) => { st.folder = b.dataset.folder; st.label = null; st.selected.clear(); renderRail(); renderList(true); b.closest('[data-x="chips"]') && b.scrollIntoView({ inline: 'nearest', block: 'nearest' }); }),
+    AC.on(el, 'click', '[data-label]', (e, b) => { st.label = b.dataset.label; st.folder = 'inbox'; st.selected.clear(); renderRail(); renderList(true); }),
+    AC.on(el, 'click', '[data-act]', async (e, b) => {
+      const a = b.dataset.act;
+      if (a === 'compose') compose();
+      if (a === 'filters') filtersPanel(b);
+      if (a === 'refresh') { b.setAttribute('data-spin', ''); setTimeout(() => b.removeAttribute('data-spin'), 700); renderList(true); }
+      if (a === 'new-label') { const name = AC.prompt ? await AC.prompt({ title: tr('newLabel'), label: tr('labelName'), required: true }) : window.prompt(tr('labelName')); if (name) { const tones = ['accent', 'info', 'success', 'warning', 'danger', 'neutral']; labels.push({ id: uid('l'), name, tone: tones[labels.length % tones.length] }); renderRail(); changed(); } }
+      if (a === 'empty-folder') { const f = st.folder; if (AC.confirm && !(await AC.confirm({ tone: 'danger', title: tr('emptyConfirm', { f: tr(f) }), confirmText: tr('deleteForever') }))) return; const ids = threads.filter((t) => t.folder === f).map((t) => t.id); move(ids, 'forever'); }
+    }),
+    AC.on(list, 'click', '[data-open]', (e, b) => { if (el.hasAttribute('data-selecting') && phone.matches) { toggleSel(b.dataset.open); return; } open(b.dataset.open); }),
+    AC.on(list, 'click', '[data-star]', (e, b) => { act('star', [b.dataset.star]); }),
+    AC.on(list, 'click', '[data-row-act]', (e, b) => { e.stopPropagation(); const id = b.closest('[data-thread]').dataset.thread; act(b.dataset.rowAct, [id], b); }),
+    AC.on(list, 'click', '[data-select]', (e, i) => {
+      const id = i.dataset.select; const rows = visible().map((t) => t.id);
+      if (e.shiftKey && st.lastChecked) { const [a, b] = [rows.indexOf(st.lastChecked), rows.indexOf(id)].sort((p, q2) => p - q2); rows.slice(a, b + 1).forEach((r) => (i.checked ? st.selected.add(r) : st.selected.delete(r))); }
+      else if (i.checked) st.selected.add(id); else st.selected.delete(id);
+      st.lastChecked = id; syncSel();
+    }),
+    AC.on(list, 'ac:swipe:action', (e) => { const id = e.detail.item.dataset.thread; act(e.detail.action, [id]); }),
+    AC.on(list, 'pointerdown', '.ac-mail__open', (e, b) => { if (e.pointerType === 'mouse') return; clearTimeout(lpT); const sx = e.clientX; const sy = e.clientY; const mv = (ev) => { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) clearTimeout(lpT); }; document.addEventListener('pointermove', mv, { passive: true }); lpT = setTimeout(() => { document.removeEventListener('pointermove', mv); AC.haptic?.(12); const until = Date.now() + 700; const eat = (ev) => { if (Date.now() < until) { ev.preventDefault(); ev.stopPropagation(); } document.removeEventListener('click', eat, true); }; document.addEventListener('click', eat, true); toggleSel(b.dataset.open); }, 480); document.addEventListener('pointerup', () => { clearTimeout(lpT); document.removeEventListener('pointermove', mv); }, { once: true }); }),
+    AC.on(x('toolbar'), 'click', '[data-select-all]', (e, i) => { const rows = visible(); if (i.checked) rows.forEach((t) => st.selected.add(t.id)); else st.selected.clear(); syncSel(); }),
+    AC.on(x('toolbar'), 'click', '[data-bulk]', (e, b) => act(b.dataset.bulk, [...st.selected], b)),
+    AC.on(reader, 'click', '[data-ract]', (e, b) => act(b.dataset.ract, [st.open], b)),
+    AC.on(reader, 'click', '[data-unlabel]', (e, b) => { const t = thread(st.open); t.labels = t.labels.filter((y) => y !== b.dataset.unlabel); renderRail(); renderList(); renderReader(); }),
+    AC.on(reader, 'click', '[data-expand]', (e, b) => { st.expanded.add(b.dataset.expand); renderReader(); }),
+    AC.on(reader, 'click', '[data-details]', (e, b) => { const d = reader.querySelector(`[data-details-box="${b.dataset.details}"]`); d.hidden = !d.hidden; b.setAttribute('aria-expanded', String(!d.hidden)); }),
+    AC.on(reader, 'click', '[data-reply]', () => respond('reply')),
+    AC.on(reader, 'click', '[data-respond]', (e, b) => respond(b.dataset.respond)),
+    AC.on(reader, 'click', '[data-msg-more]', (e, b) => AC.menu?.(b, [{ label: tr('replyAll'), icon: 'reply-all', onSelect: () => respond('replyAll') }, { label: tr('forward'), icon: 'forward', onSelect: () => respond('forward') }, '-', { label: tr('print'), icon: 'printer', onSelect: () => window.print() }], { placement: 'bottom-end' })),
+    AC.on(reader, 'click', '[data-att]', (e) => { e.preventDefault(); AC.toast?.({ title: tr('download'), tone: 'info', duration: 1400 }); }),
+    AC.on(x('search'), 'input', (e) => { st.q = e.target.value; renderList(); }),
+    AC.on(x('settings'), 'change', '[data-setting]', (e, i) => { const k = i.dataset.setting; settings[k] = i.type === 'checkbox' ? i.checked : k === 'undo' ? Number(i.value) : i.value; save(); AC.toast?.({ title: tr('saved'), tone: 'success', duration: 1200 }); renderReader(); }),
+    AC.on(x('settings'), 'input', '[data-setting="signature"]', (e, i) => { settings.signature = i.value; save(); }),
+    AC.on(document, 'keydown', (e) => {
+      if (e.target.closest('input, textarea, select, [contenteditable="true"]') || !el.isConnected || el.offsetParent === null || document.querySelector('.ac-modal[data-state="open"]')) return;
+      const rows = visible(); const i = rows.findIndex((t) => t.id === st.open);
+      if (e.key === 'j' || e.key === 'k') { const n = rows[i + (e.key === 'j' ? 1 : -1)] || rows[0]; if (n) open(n.id, { push: false }); }
+      else if (e.key === 'c') { e.preventDefault(); compose(); }
+      else if (e.key === 'e' && st.open) act('archive', [st.open]);
+      else if (e.key === '#' && st.open) act('trash', [st.open]);
+      else if (e.key === 's' && st.open) act('star', [st.open]);
+      else if (e.key === 'r' && st.open) respond('reply');
+      else if (e.key === '/') { e.preventDefault(); x('search').focus(); }
+    }),
+    AC.on(el, 'ac:split:change', (e) => { if (e.target !== el) return; if (e.detail.depth === 0 && e.detail.stacked) { list.querySelectorAll('[aria-current]').forEach((r) => r.removeAttribute('aria-current')); } }),
+    AC.on(document, 'ac:i18n:change', () => { labelsText(); renderRail(); renderList(); renderReader(); }),
+  ];
+  function toggleSel(id) { if (st.selected.has(id)) st.selected.delete(id); else st.selected.add(id); syncSel(); }
+  function syncSel() {
+    list.querySelectorAll('[data-thread]').forEach((r) => { const on = st.selected.has(r.dataset.thread); r.toggleAttribute('data-selected', on); const c = r.querySelector('[data-select]'); if (c) c.checked = on; });
+    renderToolbar();
+  }
+  const onMQ = () => { renderList(); if (!phone.matches && !st.open) { const f = visible()[0]; if (f) open(f.id, { push: false }); } };
+  phone.addEventListener('change', onMQ);
+
+  labelsText(); renderRail(); renderList(); renderReader();
+  if (!phone.matches) { const first = visible()[0]; if (first) open(first.id, { push: false }); }
+
+  return {
+    el, open, compose,
+    folder(f) { st.folder = f; st.label = null; renderRail(); renderList(true); },
+    render() { renderRail(); renderList(); renderReader(); },
+    get threads() { return threads; }, get settings() { return { ...settings }; },
+    destroy() { offs.forEach((f) => f()); swipes.forEach((d) => d()); comp?.closed === false && comp.close(true); composerEl.remove(); phone.removeEventListener('change', onMQ); clearTimeout(lpT); },
+  };
+}
+
+/** Wire the module into an AC instance: AC.mail(el, cfg) + declarative data-ac="mail" (data-ac-config JSON). */
+export function install(AC) {
+  if (!AC || AC.mail) return AC?.mail;
+  cssOnce();
+  AC.mail = (target, cfg) => {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    AC.instance(el, 'mail')?.destroy?.();
+    const api = createMail(AC, el, cfg);
+    AC.instance(el, 'mail', api);
+    return api;
+  };
+  AC.register?.('mail', (el) => { const api = createMail(AC, el, AC.options ? AC.options(el, {}) : {}); AC.instance(el, 'mail', api); return () => api.destroy(); });
+  return AC.mail;
+}
+
+if (typeof window !== 'undefined' && window.AC) install(window.AC);

@@ -1,0 +1,166 @@
+/*! AraminConsole v0.1.0 — module langpicker — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+const __R = globalThis.__AC_MODS__ || (globalThis.__AC_MODS__ = {});
+if (!__R["core"]) await import('./core.js');
+if (!__R["overlays"]) await import('./overlays.js');
+
+/* ======== module: langpicker ======== */
+if (!__R["langpicker"]) __R["langpicker"] = (() => {
+const F = {};
+const __ac_m1 = __R["core"].f["js/core.js"];
+const __ac_mc = __R["overlays"].f["js/components/position.js"];
+const __ac_md = __R["overlays"].f["js/components/sheet.js"];
+const __ac_m2 = __R["core"].f["js/motion.js"];
+/* ---- js/components/langpicker.js ---- */
+const __ac_mn = F["js/components/langpicker.js"] = (() => {
+const { AC, on, emit, h, icon, escapeHtml, uid, register, i18n, reducedMotion, instance } = __ac_m1;
+const { autoPosition, portal, layers } = __ac_mc;
+const { phoneMQ } = __ac_md;
+const { spring, springs } = __ac_m2;
+/* Language picker — data-driven from AC.i18n.languages.
+   <button class="ac-lp__trigger" type="button" data-ac="langpicker" [data-languages="fa,en,ar"] [data-compact]></button>
+   The trigger renders itself: a pill with the current language's badge + code + chevron.
+   Desktop: an origin-aware popover (native name, English name, circular script badge with a region flag,
+   RTL/LTR tag, spring check). Phone (<640px): the same list in a bottom sheet. Search appears with > 6
+   languages. Keyboard: ↑ ↓ Home End, type-ahead, Enter / Space selects, Esc closes.
+   Selecting crossfades the whole document into the new direction (i18n.set → motion.transition).
+   Events: ac:langpicker:change { lang, from }.   API: AC.langpicker.open(trigger) · close() */
+
+
+
+
+
+const esc = escapeHtml;
+const list = (codes) => {
+  const all = i18n.languages || [];
+  if (!codes) return all;
+  const want = String(codes).split(/[\s,]+/).filter(Boolean);
+  return want.map((c) => all.find((l) => l.code === c) || i18n.language(c));
+};
+
+/** Circular script badge (inline SVG — emoji flags don't render on Windows) + optional region flag dot. */
+function langBadge(l, size = 'md') {
+  const g = esc(l.glyph || l.code.slice(0, 2));
+  const rtl = l.dir === 'rtl';
+  return `<span class="ac-lp__badge ac-lp__badge--${size}" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" class="ac-lp__badge-bg"/><text x="16" y="${rtl ? 20.5 : 20.5}" text-anchor="middle" class="ac-lp__badge-glyph"${rtl ? ' direction="rtl"' : ''}>${g}</text></svg>${l.flag ? `<span class="ac-flag" data-flag="${esc(l.flag)}"></span>` : ''}</span>`;
+}
+
+function renderTrigger(btn) {
+  const l = i18n.language();
+  btn.innerHTML = `${langBadge(l, 'sm')}<span class="ac-lp__code">${esc(l.code.toUpperCase())}</span><svg class="ac-icon ac-lp__chev" aria-hidden="true"><use href="#i-chevron-down"/></svg>`;
+  btn.setAttribute('aria-label', `${i18n.t('app.language', 'Language')}: ${l.name}`);
+}
+
+let st = null; // { trigger, el, stop, entry, sheet }
+
+function panelHTML(langs, id) {
+  const cur = i18n.lang;
+  const search = langs.length > 6 ? `<label class="ac-lp__search"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg><input type="search" autocomplete="off" spellcheck="false" placeholder="${esc(i18n.t('app.search', 'Search…'))}" aria-controls="${id}"></label>` : '';
+  const items = langs.map((l) => {
+    const on = l.code === cur;
+    return `<button type="button" class="ac-lp__item" role="option" id="${id}-${esc(l.code)}" data-lang="${esc(l.code)}" aria-selected="${on}" tabindex="${on ? 0 : -1}">
+      ${langBadge(l)}
+      <span class="ac-lp__names"><span class="ac-lp__native"><bdi lang="${esc(l.code)}" dir="${esc(l.dir)}">${esc(l.name)}</bdi></span><span class="ac-lp__en"><bdi lang="en" dir="ltr">${esc(l.english || l.code)}</bdi></span></span>
+      <span class="ac-lp__dir" data-dir="${esc(l.dir)}" lang="en" dir="ltr">${l.dir === 'rtl' ? 'RTL' : 'LTR'}</span>
+      <span class="ac-lp__check">${icon('check')}</span>
+    </button>`;
+  }).join('');
+  return `${search}<div class="ac-lp__list" id="${id}" role="listbox" aria-label="${esc(i18n.t('app.language', 'Language'))}">${items}</div>`;
+}
+
+function wire(root, langs, done) {
+  const listEl = root.querySelector('.ac-lp__list');
+  const items = () => Array.from(listEl.querySelectorAll('.ac-lp__item:not([hidden])'));
+  const focus = (it) => { if (!it) return; items().forEach((n) => { n.tabIndex = n === it ? 0 : -1; }); it.focus({ preventScroll: false }); };
+  let typed = ''; let typedT = 0;
+  const offs = [
+    on(listEl, 'click', '.ac-lp__item', (e, it) => choose(it)),
+    on(root, 'keydown', (e) => {
+      const all = items(); const i = all.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); focus(all[(i + 1) % all.length]); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); focus(all[(i - 1 + all.length) % all.length]); }
+      else if (e.key === 'Home') { e.preventDefault(); focus(all[0]); }
+      else if (e.key === 'End') { e.preventDefault(); focus(all[all.length - 1]); }
+      else if (e.key.length === 1 && !e.target.matches('input') && !e.ctrlKey && !e.metaKey) {
+        clearTimeout(typedT); typed += e.key.toLowerCase(); typedT = setTimeout(() => { typed = ''; }, 600);
+        const hit = all.find((n) => { const l = langs.find((x) => x.code === n.dataset.lang); return [l.name, l.english, l.code].some((s) => String(s).toLowerCase().startsWith(typed)); });
+        if (hit) focus(hit);
+      }
+    }),
+  ];
+  const input = root.querySelector('.ac-lp__search input');
+  if (input) offs.push(on(input, 'input', () => {
+    const q = input.value.trim().toLowerCase();
+    for (const n of listEl.querySelectorAll('.ac-lp__item')) { const l = langs.find((x) => x.code === n.dataset.lang); n.hidden = !!q && ![l.name, l.english, l.code].some((s) => String(s).toLowerCase().includes(q)); }
+  }), on(input, 'keydown', (e) => { if (e.key === 'ArrowDown') { e.preventDefault(); focus(items()[0]); } }));
+
+  function choose(it) {
+    const code = it.dataset.lang;
+    if (code === i18n.lang) { done(); return; }
+    const from = i18n.lang;
+    listEl.querySelectorAll('.ac-lp__item').forEach((n) => n.setAttribute('aria-selected', String(n === it)));
+    spring(it.querySelector('.ac-lp__check .ac-icon'), { scale: [0.4, 1] }, springs.bouncy);
+    // let the check land, then crossfade the document into the new language / direction
+    setTimeout(() => { done(); i18n.set(code).then(() => emit(document, 'langpicker:change', { lang: code, from })); }, reducedMotion() ? 0 : 160);
+  }
+  requestAnimationFrame(() => focus(listEl.querySelector('[aria-selected="true"]') || items()[0]));
+  return () => offs.forEach((f) => f());
+}
+
+function open(trigger) {
+  if (st) { const same = st.trigger === trigger; close(); if (same) return; }
+  const langs = list(trigger?.dataset.languages);
+  const id = uid('lp');
+  if (phoneMQ.matches && AC.sheet) {
+    const body = h('div', { class: 'ac-lp ac-lp--sheet' }); body.innerHTML = panelHTML(langs, id);
+    const sh = AC.sheet.open({ title: i18n.t('app.language', 'Language'), content: body, className: 'ac-lp-sheet' }, trigger);
+    const unwire = wire(body, langs, () => sh?.close?.('select'));
+    st = { trigger, sheet: sh, unwire };
+    sh?.el?.addEventListener('ac:sheet:closed', () => { if (st?.sheet === sh) { st.unwire(); st = null; trigger?.setAttribute('aria-expanded', 'false'); } }, { once: true });
+  } else {
+    const el = h('div', { class: 'ac-lp ac-lp--pop', role: 'dialog', 'aria-label': i18n.t('app.language', 'Language'), 'data-state': 'closed' });
+    el.innerHTML = `<div class="ac-lp__head"><span class="ac-lp__title">${esc(i18n.t('app.language', 'Language'))}</span><span class="ac-lp__hint">${esc(i18n.t('lp.hint', 'Layout direction follows the language'))}</span></div>${panelHTML(langs, id)}`;
+    document.body.append(el);
+    const restore = portal(el);
+    const stop = autoPosition(trigger, el, { placement: 'bottom-end', offset: 8 });
+    void el.offsetWidth; el.dataset.state = 'open';
+    const unwire = wire(el, langs, () => close());
+    const entry = layers.push({ el, close: () => close(), light: true, anchor: trigger, kind: 'langpicker' });
+    st = { trigger, el, stop, entry, unwire, restore };
+  }
+  trigger?.setAttribute('aria-expanded', 'true');
+  trigger?.setAttribute('aria-haspopup', 'listbox');
+}
+
+function close() {
+  if (!st) return;
+  const s = st; st = null;
+  s.trigger?.setAttribute('aria-expanded', 'false');
+  if (s.sheet) { s.sheet.close?.('api'); return; }
+  s.unwire(); s.stop(); layers.remove(s.entry);
+  if (s.el.contains(document.activeElement)) s.trigger?.focus({ preventScroll: true });
+  s.el.dataset.state = 'closing';
+  setTimeout(() => { s.el.remove(); }, reducedMotion() ? 0 : 200);
+}
+
+register('langpicker', (btn) => {
+  btn.classList.add('ac-lp__trigger');
+  if (!btn.hasAttribute('type') && btn.tagName === 'BUTTON') btn.type = 'button';
+  btn.setAttribute('aria-expanded', 'false');
+  renderTrigger(btn);
+  const offs = [
+    on(btn, 'click', (e) => { e.preventDefault(); open(btn); }),
+    on(document, 'ac:i18n:change', () => renderTrigger(btn)),
+  ];
+  instance(btn, 'langpicker', { open: () => open(btn), close });
+  return () => { offs.forEach((f) => f()); if (st?.trigger === btn) close(); };
+});
+
+const langpicker = { open, close, badge: langBadge };
+AC.langpicker = langpicker;
+return Object.freeze({ langBadge, langpicker });
+})();
+
+return { f: F, ns: Object.freeze({ "langpicker": __ac_mn["langpicker"] }) };
+})();
+export const { langpicker } = __R["langpicker"].ns;
+export default __R["langpicker"].ns;

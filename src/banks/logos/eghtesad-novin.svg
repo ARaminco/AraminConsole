@@ -1,0 +1,29 @@
+<!-- source: @iran-utils/iranian-banks-icons-core@1.0.4 (MIT, (c) 2026 Houtan Rocky), export EghtesadNovinColorIcon; vendored verbatim -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="url(#a)" d="M7.21479 15.3686c3.98461 0 7.21481-3.2165 7.21481-7.18428C14.4296 4.21653 11.1994 1 7.21479 1 3.23017 1 0 4.21653 0 8.18432c0 3.96778 3.23017 7.18428 7.21479 7.18428Z"/>
+  <path fill="url(#b)" d="M40.782 47c3.9847 0 7.2148-3.2165 7.2148-7.1843 0-3.9678-3.2301-7.1844-7.2148-7.1844-3.9846 0-7.2147 3.2166-7.2147 7.1844S36.7974 47 40.782 47Z"/>
+  <path fill="url(#c)" fill-rule="evenodd" d="M20.9728 5.25549 12.7463 46.9996H0L20.9728 5.25549Z" clip-rule="evenodd"/>
+  <path fill="url(#d)" fill-rule="evenodd" d="m35.0586 1-8.4327 42.5211c-1.1898 2.1402-3.4568 3.4788-5.9279 3.4788h-7.9543l8.2265-41.74415.2648-.52714C22.3831 2.4434 24.729 1 27.2951 1h7.7635Z" clip-rule="evenodd"/>
+  <path fill="url(#e)" fill-rule="evenodd" d="M48 1S32.1336 32.5672 26.6302 43.5211C26.5793 43.6224 35.0629 1 35.0629 1H48Z" clip-rule="evenodd"/>
+  <defs>
+    <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="matrix(-16.1236 0 0 -16.0555 14.4294 8.18433)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6850A1"/>
+      <stop offset="1" stop-color="#AFAAD4"/>
+    </radialGradient>
+    <radialGradient id="b" cx="0" cy="0" r="1" gradientTransform="matrix(-14.4294 0 0 -14.3685 47.9967 39.8157)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6850A1"/>
+      <stop offset="1" stop-color="#AFAAD4"/>
+    </radialGradient>
+    <radialGradient id="c" cx="0" cy="0" r="1" gradientTransform="matrix(-41.9211 -8.19192 8.15988 -41.7571 20.9728 5.25548)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6850A1"/>
+      <stop offset=".47" stop-color="#7B69AF"/>
+      <stop offset="1" stop-color="#AFAAD4"/>
+    </radialGradient>
+    <radialGradient id="d" cx="0" cy="0" r="1" gradientTransform="matrix(-48.55084 -9.58427 9.54683 -48.3612 35.0586 1)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6850A1"/>
+      <stop offset="1" stop-color="#AFAAD4"/>
+    </radialGradient>
+    <radialGradient id="e" cx="0" cy="0" r="1" gradientTransform="matrix(-19.66315 -9.7994 9.77451 -19.6132 48 .999999)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6850A1"/>
+      <stop offset="1" stop-color="#AFAAD4"/>
+    </radialGradient>
+  </defs></svg>

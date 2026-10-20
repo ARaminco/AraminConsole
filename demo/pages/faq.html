@@ -1,0 +1,67 @@
+<section class="ac-page" data-page="faq" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.pages">صفحه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.faq">پرسش‌های متداول</h1>
+      <p class="ac-page-head__sub" data-i18n="faq.sub">پاسخ سریع به رایج‌ترین پرسش‌ها؛ اگر جواب را پیدا نکردید با ما در تماس باشید.</p>
+    </div>
+  </header>
+
+  <div class="ac-faq-hero ac-animate-in">
+    <div class="ac-input-group ac-faq-search" data-ac="input">
+      <span class="ac-input-group__affix"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg></span>
+      <input class="ac-input" type="search" placeholder="پرسش خود را جستجو کنید…" aria-label="Search" data-i18n-attr="placeholder:faq.search; aria-label:faq.search" data-faq-search>
+      <span class="ac-input-group__affix ac-hide-phone"><kbd class="ac-kbd">/</kbd></span>
+    </div>
+    <div class="ac-faq-cats" role="group" aria-label="Topics" data-i18n-attr="aria-label:faq.topics" data-faq-cats>
+      <button class="ac-chip" type="button" data-cat="all" aria-pressed="true" data-i18n="kanban.all">همه</button>
+      <button class="ac-chip" type="button" data-cat="start" aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-rocket"/></svg><span data-i18n="faq.c.start">شروع کار</span></button>
+      <button class="ac-chip" type="button" data-cat="billing" aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-credit-card"/></svg><span data-i18n="faq.c.billing">پرداخت</span></button>
+      <button class="ac-chip" type="button" data-cat="account" aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-user"/></svg><span data-i18n="faq.c.account">حساب کاربری</span></button>
+      <button class="ac-chip" type="button" data-cat="tech" aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-terminal"/></svg><span data-i18n="faq.c.tech">فنی</span></button>
+    </div>
+  </div>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-card--static ac-span-12 ac-span-xl-8">
+      <div class="ac-card__body ac-card__body--flush">
+        <div class="ac-accordion ac-faq" data-ac="accordion" data-single data-faq-list>
+          <details class="ac-accordion__item" data-cat="start" open><summary class="ac-accordion__head">AraminConsole چیست و برای چه کسانی ساخته شده؟</summary><div class="ac-accordion__body"><p>یک چارچوب رابط کاربری متن‌باز و بدون وابستگی برای ساخت پنل‌های مدیریتی است؛ راست‌به‌چپ از پایه، با حالت تیره و رفتاری شبیه اپلیکیشن روی گوشی. برای تیم‌هایی که می‌خواهند سریع یک پنل حرفه‌ای فارسی بسازند.</p></div></details>
+          <details class="ac-accordion__item" data-cat="start"><summary class="ac-accordion__head">چطور آن را به پروژه‌ام اضافه کنم؟</summary><div class="ac-accordion__body"><p>فقط یک فایل CSS و یک ماژول JS را اضافه کنید. همهٔ کامپوننت‌ها با ویژگی <code>data-ac</code> خودکار فعال می‌شوند و نیازی به npm یا ابزار ساخت ندارید.</p></div></details>
+          <details class="ac-accordion__item" data-cat="tech"><summary class="ac-accordion__head">آیا تقویم شمسی و اعداد فارسی پشتیبانی می‌شود؟</summary><div class="ac-accordion__body"><p>بله. انتخابگر تاریخ و صفحهٔ تقویم هر دو تقویم شمسی و میلادی را دارند و اعداد به‌طور پیش‌فرض لاتین‌اند؛ با یک تنظیم می‌توانید اعداد فارسی را روشن کنید.</p></div></details>
+          <details class="ac-accordion__item" data-cat="billing"><summary class="ac-accordion__head">آیا امکان پرداخت ریالی وجود دارد؟</summary><div class="ac-accordion__body"><p>بله، پرداخت از درگاه‌های داخلی و صدور فاکتور رسمی برای همهٔ پلن‌های پولی ممکن است.</p></div></details>
+          <details class="ac-accordion__item" data-cat="billing"><summary class="ac-accordion__head">اگر پلن را لغو کنم چه می‌شود؟</summary><div class="ac-accordion__body"><p>تا پایان دورهٔ پرداخت‌شده به همهٔ امکانات دسترسی دارید و سپس حساب به پلن رایگان برمی‌گردد. داده‌های شما حذف نمی‌شوند.</p></div></details>
+          <details class="ac-accordion__item" data-cat="account"><summary class="ac-accordion__head">چطور ورود دومرحله‌ای را فعال کنم؟</summary><div class="ac-accordion__body"><p>از تنظیمات › امنیت، ورود دومرحله‌ای را روشن کنید و کد QR را با اپ احراز هویت اسکن کنید.</p></div></details>
+          <details class="ac-accordion__item" data-cat="account"><summary class="ac-accordion__head">می‌توانم چند فضای کاری داشته باشم؟</summary><div class="ac-accordion__body"><p>بله، در پلن حرفه‌ای و سازمانی تعداد فضای کاری محدودیتی ندارد و با یک حساب بین آن‌ها جابه‌جا می‌شوید.</p></div></details>
+          <details class="ac-accordion__item" data-cat="tech"><summary class="ac-accordion__head">آیا روی گوشی مثل یک اپلیکیشن کار می‌کند؟</summary><div class="ac-accordion__body"><p>بله؛ نوار زبانه‌ای پایین، برگه‌های کشویی، کشیدن برای تازه‌سازی، حرکات لمسی و نصب به‌عنوان PWA همه آماده‌اند.</p></div></details>
+        </div>
+        <div class="ac-empty ac-faq-empty" data-faq-empty hidden>
+          <div class="ac-empty__art"><svg class="ac-icon" aria-hidden="true"><use href="#i-file-question"/></svg></div>
+          <h3 class="ac-empty__title" data-i18n="faq.noResult">نتیجه‌ای پیدا نشد</h3>
+          <p class="ac-empty__text" data-i18n="faq.noResultText">عبارت دیگری را امتحان کنید یا از تیم پشتیبانی بپرسید.</p>
+        </div>
+      </div>
+    </article>
+
+    <aside class="ac-span-12 ac-span-xl-4 ac-stack ac-gap-4 ac-faq-side">
+      <article class="ac-card ac-card--static ac-card--accent">
+        <div class="ac-card__body ac-stack ac-gap-3">
+          <span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-message-circle"/></svg></span>
+          <h2 class="ac-card__title" data-i18n="faq.stillTitle">هنوز سؤال دارید؟</h2>
+          <p class="ac-text-sm" data-i18n="faq.stillText">تیم پشتیبانی معمولاً در کمتر از ۱۰ دقیقه پاسخ می‌دهد.</p>
+          <a class="ac-btn ac-faq-cta" href="#/chat"><span data-i18n="pricing.talk">گفتگو با ما</span><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </article>
+      <article class="ac-card ac-card--static">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="faq.more">راه‌های دیگر</h2></div>
+        <div class="ac-card__body">
+          <ul class="ac-list ac-list--divided" role="list">
+            <li><a class="ac-list__item ac-faq-link" href="#/components"><span class="ac-list__thumb" data-tone="info"><svg class="ac-icon" aria-hidden="true"><use href="#i-book-open"/></svg></span><span class="ac-list__main"><span class="ac-list__title" data-i18n="faq.docs">مستندات</span><span class="ac-list__meta" data-i18n="faq.docsSub">راهنمای کامل کامپوننت‌ها</span></span><svg class="ac-icon ac-flip-rtl ac-text-muted" aria-hidden="true"><use href="#i-chevron-right"/></svg></a></li>
+            <li><a class="ac-list__item ac-faq-link" href="#/mail"><span class="ac-list__thumb" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-mail"/></svg></span><span class="ac-list__main"><span class="ac-list__title" data-i18n="faq.email">ایمیل</span><span class="ac-list__meta"><bdi>support@aramin.dev</bdi></span></span><svg class="ac-icon ac-flip-rtl ac-text-muted" aria-hidden="true"><use href="#i-chevron-right"/></svg></a></li>
+            <li><a class="ac-list__item ac-faq-link" href="#/timeline"><span class="ac-list__thumb" data-tone="warning"><svg class="ac-icon" aria-hidden="true"><use href="#i-history"/></svg></span><span class="ac-list__main"><span class="ac-list__title" data-i18n="faq.changelog">تغییرات نسخه‌ها</span><span class="ac-list__meta" data-i18n="faq.changelogSub">چه چیزهایی تازه آمده</span></span><svg class="ac-icon ac-flip-rtl ac-text-muted" aria-hidden="true"><use href="#i-chevron-right"/></svg></a></li>
+          </ul>
+        </div>
+      </article>
+    </aside>
+  </div>
+</section>

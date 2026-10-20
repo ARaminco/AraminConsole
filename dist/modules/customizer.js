@@ -1,0 +1,141 @@
+/*! AraminConsole v0.1.0 — module customizer — MIT © 2026 Ali Asghar Ramin — https://github.com/ARaminco/AraminConsole — icons: Lucide (ISC), font: Vazirmatn (OFL-1.1); see dist/LICENSE*.txt */
+const __R = globalThis.__AC_MODS__ || (globalThis.__AC_MODS__ = {});
+if (!__R["core"]) await import('./core.js');
+if (!__R["overlays"]) await import('./overlays.js');
+if (!__R["shell"]) await import('./shell.js');
+
+/* ======== module: customizer ======== */
+if (!__R["customizer"]) __R["customizer"] = (() => {
+const F = {};
+const __ac_m1 = __R["core"].f["js/core.js"];
+const __ac_md = __R["overlays"].f["js/components/sheet.js"];
+const __ac_m4 = __R["shell"].f["js/components/palette.js"];
+/* ---- js/components/customizer.js ---- */
+const __ac_mm = F["js/components/customizer.js"] = (() => {
+const { AC, $, on, icon, escapeHtml, theme, i18n, scan, instance, ready, motionPref } = __ac_m1;
+const { buildLayer } = __ac_md;
+const { palette } = __ac_m4;
+/* Theme customizer drawer: theme (light / dark / system), accent, density, radius, motion (system / full / reduced),
+   language & direction, digits.
+   Any [data-ac-customizer-open] opens it; also a command-palette entry ("customizer:open").
+   API: AC.customizer.open() · close() · toggle(). Writes through AC.theme.set / AC.i18n.set / AC.i18n.setDigits. */
+
+
+
+
+const SWATCH = { orange: '#f0532d', violet: '#6d4aff', blue: '#2563eb', emerald: '#059669', rose: '#e11d48', amber: '#d97706', slate: '#475569' };
+const LANGS = () => (i18n.languages || []).map((l) => [l.code, l.name, l.dir === 'rtl' ? 'RTL' : 'LTR']);
+let api = null;
+const t = (k, f) => escapeHtml(i18n.t(k, f));
+
+function seg(name, value, opts) {
+  return `<div class="ac-segmented ac-segmented--block" data-ac="segmented" role="radiogroup" data-cz="${name}" aria-label="${t(`custom.${name}`, name)}">${opts.map(([v, label, ic]) =>
+    `<button class="ac-segmented__item" type="button" role="radio" data-value="${v}" aria-checked="${v === value}">${ic ? icon(ic) : ''}<span>${escapeHtml(label)}</span></button>`).join('')}</div>`;
+}
+
+function content() {
+  const s = theme.get();
+  const modes = [['light', t('custom.light', 'Light'), 'sun'], ['dark', t('custom.dark', 'Dark'), 'moon'], ['auto', t('custom.system', 'System'), 'monitor']];
+  return `
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.theme', 'Theme')}</h3>
+    <div class="ac-cz__modes" role="radiogroup" data-cz="theme" aria-label="${t('custom.theme', 'Theme')}">${modes.map(([v, l, ic]) =>
+      `<button class="ac-cz__mode" type="button" role="radio" data-value="${v}" aria-checked="${s.theme === v}" tabindex="${s.theme === v ? 0 : -1}">
+        <span class="ac-cz__preview" data-preview="${v}" aria-hidden="true"><i></i><b></b><b></b></span><span class="ac-cz__mode-label">${icon(ic, 'ac-icon--sm')}${l}</span></button>`).join('')}</div></section>
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.accent', 'Accent colour')}</h3>
+    <div class="ac-cz__swatches" role="radiogroup" data-cz="accent" aria-label="${t('custom.accent', 'Accent colour')}">${theme.accents.map((a) =>
+      `<button class="ac-cz__swatch" type="button" role="radio" data-value="${a}" data-swatch="${a}" aria-checked="${s.accent === a}" tabindex="${s.accent === a ? 0 : -1}" aria-label="${escapeHtml(a)}" data-ac-tooltip="${escapeHtml(a)}">${icon('check')}</button>`).join('')}</div></section>
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.density', 'Density')}</h3>
+    ${seg('density', s.density, [['comfortable', i18n.t('custom.comfortable', 'Comfortable'), 'rows-3'], ['compact', i18n.t('custom.compact', 'Compact'), 'align-justify']])}</section>
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.radius', 'Corner radius')}</h3>
+    ${seg('radius', s.radius, [['sharp', i18n.t('custom.sharp', 'Sharp'), 'square'], ['default', i18n.t('custom.default', 'Default'), 'square-dashed'], ['round', i18n.t('custom.round', 'Round'), 'circle']])}</section>
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.motion', 'Motion & animation')}</h3>
+    ${seg('motion', motionPref.get(), [['system', i18n.t('custom.motionSystem', 'System'), 'monitor'], ['full', i18n.t('custom.motionFull', 'Full'), 'sparkles'], ['reduced', i18n.t('custom.motionReduced', 'Reduced'), 'pause']])}
+    <p class="ac-cz__note">${t('custom.motionNote', 'System follows your OS setting. Full keeps every animation even when the OS asks for less.')}</p></section>
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.language', 'Language & direction')}</h3>
+    <div class="ac-cz__langs" role="radiogroup" data-cz="lang" aria-label="${t('custom.language', 'Language & direction')}">${LANGS().map(([v, l, d]) =>
+      `<button class="ac-cz__lang" type="button" role="radio" data-value="${v}" aria-checked="${i18n.lang === v}" tabindex="${i18n.lang === v ? 0 : -1}" lang="${v}"><strong>${l}</strong><small>${d}</small></button>`).join('')}</div></section>
+  <section class="ac-cz__sec"><h3 class="ac-cz__label">${t('custom.digits', 'Digits')}</h3>
+    ${seg('digits', i18n.digits === 'native' ? 'native' : 'latn', [['latn', '123'], ['native', '۱۲۳']])}</section>`;
+}
+
+const foot = () => `<button class="ac-btn ac-btn--ghost ac-btn--pill" type="button" data-cz-reset>${icon('rotate-ccw')}<span>${t('custom.reset', 'Reset')}</span></button>
+  <button class="ac-btn ac-btn--primary ac-btn--pill" type="button" data-ac-close>${t('custom.done', 'Done')}</button>`;
+
+function apply(name, v) {
+  if (name === 'lang') i18n.set(v);
+  else if (name === 'motion') motionPref.set(v);
+  else if (name === 'digits') i18n.setDigits(v);
+  else theme.set({ [name]: v });
+}
+
+function sync() {
+  if (!api) return;
+  const s = theme.get();
+  const cur = { theme: s.theme, accent: s.accent, lang: i18n.lang };
+  for (const g of $$('.ac-cz__modes, .ac-cz__swatches, .ac-cz__langs', api.el)) {
+    for (const b of g.children) { const on1 = b.dataset.value === cur[g.dataset.cz]; b.setAttribute('aria-checked', String(on1)); b.tabIndex = on1 ? 0 : -1; }
+  }
+  const segs = { density: s.density, radius: s.radius, motion: motionPref.get(), digits: i18n.digits === 'native' ? 'native' : 'latn' };
+  for (const [k, v] of Object.entries(segs)) {
+    const el = api.el.querySelector(`[data-cz="${k}"]`);
+    const items = el ? [...el.querySelectorAll('.ac-segmented__item')] : [];
+    const i = items.findIndex((b) => b.dataset.value === v);
+    if (i > -1 && items[i].getAttribute('aria-checked') !== 'true') instance(el, 'segmented')?.select(i, { silent: true });
+  }
+}
+
+function render() {
+  const body = api.el.querySelector('.ac-dialog__body');
+  body.innerHTML = content();
+  api.el.querySelector('.ac-dialog__foot').innerHTML = foot();
+  api.el.querySelector('.ac-dialog__title').textContent = i18n.t('custom.title', 'Customize');
+  api.el.querySelector('.ac-dialog__sub').textContent = i18n.t('custom.sub', 'Make the console yours. Saved on this device.');
+  scan(body);
+  for (const b of $$('[data-swatch]', body)) b.style.setProperty('--_sw', SWATCH[b.dataset.swatch] || 'var(--ac-accent)');
+}
+
+const customizer = {
+  open(trigger) {
+    if (api?.isOpen) return api;
+    api = buildLayer('drawer', { side: 'end', size: 'sm', className: 'ac-cz', title: ' ', sub: ' ', content: '<div></div>', footer: ' ' });
+    render();
+    const el = api.el;
+    on(el, 'click', '.ac-cz__mode, .ac-cz__swatch, .ac-cz__lang', (e, b) => apply(b.parentElement.dataset.cz, b.dataset.value));
+    on(el, 'keydown', '[role="radio"]:not(.ac-segmented__item)', (e, b) => {
+      const keys = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+      if (!(e.key in keys)) return;
+      e.preventDefault();
+      const rtl = getComputedStyle(b).direction === 'rtl';
+      const d = (e.key === 'ArrowRight' || e.key === 'ArrowLeft') && rtl ? -keys[e.key] : keys[e.key];
+      const list = [...b.parentElement.children]; const n = list[(list.indexOf(b) + d + list.length) % list.length];
+      n.focus(); n.click();
+    });
+    on(el, 'ac:segmented:change', (e) => { const g = e.target.closest('[data-cz]'); if (g) apply(g.dataset.cz, e.detail.value); });
+    on(el, 'click', '[data-cz-reset]', () => { theme.set({ theme: 'light', accent: 'orange', density: 'comfortable', radius: 'default' }); i18n.setDigits('latn'); motionPref.set('system'); if (i18n.lang !== 'fa') i18n.set('fa'); });
+    el.addEventListener('ac:drawer:closed', () => { api = null; }, { once: true });
+    return api.open(trigger);
+  },
+  close() { api?.close(); },
+  toggle(trigger) { return api?.isOpen ? customizer.close() : customizer.open(trigger); },
+};
+
+on(document, 'click', '[data-ac-customizer-open]', (e, b) => { e.preventDefault(); customizer.toggle(b); });
+on(document, 'ac:theme:change', () => sync());
+on(document, 'ac:motion:change', () => sync());
+on(document, 'ac:i18n:change', () => {
+  if (api?.isOpen) { const f = document.activeElement?.dataset?.value; render(); if (f) api.el.querySelector(`[data-cz="lang"] [data-value="${f}"]`)?.focus(); }
+  setTimeout(addCommand, 0);
+});
+function addCommand() {
+  palette.add({ id: 'customizer:open', title: i18n.t('custom.title', 'Customize'), hint: i18n.t('custom.hint', 'Theme, accent, density, language'), icon: 'paintbrush', group: i18n.t('palette.actions', 'Actions'), keywords: ['theme', 'customize', 'appearance', 'accent', 'settings'], run: () => customizer.open() });
+}
+ready(() => setTimeout(addCommand, 0));
+
+AC.customizer = customizer;
+return Object.freeze({ customizer });
+})();
+
+return { f: F, ns: Object.freeze({ "customizer": __ac_mm["customizer"] }) };
+})();
+export const { customizer } = __R["customizer"].ns;
+export default __R["customizer"].ns;

@@ -1,0 +1,1 @@
+{ "description": "Service-worker lifecycle with update toast, install invitation (sheet / banner / card / inline / iOS steps), app badge, Web Share, standalone tweaks, splash, network status, background-sync outbox.", "dependencies": ["overlays"] }

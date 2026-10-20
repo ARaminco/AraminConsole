@@ -1,0 +1,89 @@
+/* Terminal module — a terminal-style command box (always dark, always LTR): output log, prompt, history (↑ ↓),
+   Ctrl+L clear, quick-command chips, async commands with a busy state.
+   <div data-ac="terminal" data-title="ali@srv" data-placeholder="status · help"></div>
+   const term = AC.terminal(el, { title, placeholder, greeting, chips: ['status','help'], commands: {
+     status: (ctx) => ctx.print('ok'),                       // ctx = { args, argv, line, print(html, tone?), clear(), term }
+     restart: async (ctx) => { if (await AC.confirm({...})) ctx.print('done', 'ok'); },
+   }, unknown: (ctx) => ctx.print(`command not found: ${ctx.argv[0]}`, 'err') });
+   term.run('status') · term.print(html, 'ok'|'warn'|'err'|'muted') · term.clear() · term.focus() · term.destroy()
+   Events: ac:terminal:run { line } · Dependency-free: install(AC) wires it into window.AC (no core import). */
+
+const TONES = new Set(['ok', 'warn', 'err', 'muted', 'echo']);
+
+function cssOnce() {
+  if (typeof document === 'undefined' || document.querySelector('link[data-ac-module="terminal"]') || document.querySelector('style[data-ac-module="terminal"]')) return;
+  try {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = new URL('./terminal.css', import.meta.url).href; link.dataset.acModule = 'terminal';
+    document.head.append(link);
+  } catch { /* bundled builds ship the CSS themselves */ }
+}
+
+export function createTerminal(AC, el, cfg = {}) {
+  const esc = AC.escapeHtml;
+  const o = { title: el.dataset.title || '', placeholder: el.dataset.placeholder || '', greeting: '', chips: [], commands: {}, ...cfg };
+  const id = AC.uid ? AC.uid('term') : `term-${Math.random().toString(36).slice(2)}`;
+  el.classList.add('ac-term');
+  el.innerHTML = `<div class="ac-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(o.title)}</span></div>
+    <div class="ac-term__out" role="log" aria-live="polite" tabindex="0" aria-label="${esc(AC.t('term.output', 'Terminal output'))}"></div>
+    <form class="ac-term__form"><label class="ac-term__prompt" for="${id}">$</label>
+      <input class="ac-term__input" id="${id}" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="${esc(o.placeholder)}">
+      <button class="ac-term__run" type="submit" aria-label="${esc(AC.t('term.run', 'Run'))}">${AC.icon('corner-down-left')}</button></form>
+    ${o.chips.length ? `<div class="ac-term__chips">${o.chips.map((c) => `<button class="ac-term__chip" type="button" data-cmd="${esc(c)}">${esc(c)}</button>`).join('')}</div>` : ''}`;
+  const out = el.querySelector('.ac-term__out');
+  const input = el.querySelector('.ac-term__input');
+  const history = []; let hIndex = 0; let busy = false;
+
+  const print = (html, tone = '') => {
+    const div = document.createElement('div');
+    div.className = `ac-term__line${TONES.has(tone) ? ` ac-term__line--${tone}` : ''}`;
+    div.innerHTML = html;
+    out.append(div); out.scrollTop = out.scrollHeight;
+    return div;
+  };
+  const clear = () => { out.innerHTML = ''; };
+  if (o.greeting) print(o.greeting, 'muted');
+
+  async function run(raw) {
+    const line = String(raw ?? '').trim();
+    if (!line || busy) return;
+    history.push(line); hIndex = history.length;
+    print(`<span class="ac-term__prompt">$</span> ${esc(line)}`, 'echo');
+    AC.emit?.(el, 'terminal:run', { line });
+    const argv = line.split(/\s+/);
+    const name = argv[0].toLowerCase();
+    const fn = name === 'clear' && !o.commands.clear ? clear : o.commands[name] || o.unknown;
+    const ctx = { line, argv, args: argv.slice(1).join(' '), print, clear, term: api };
+    if (!fn) { print(`command not found: ${esc(argv[0])}`, 'err'); return; }
+    busy = true; input.disabled = true; el.setAttribute('aria-busy', 'true');
+    try { await fn(ctx); } catch (err) { print(esc(err?.message || String(err)), 'err'); }
+    finally { busy = false; input.disabled = false; el.removeAttribute('aria-busy'); input.focus({ preventScroll: true }); }
+  }
+
+  const offs = [
+    AC.on(el.querySelector('.ac-term__form'), 'submit', (e) => { e.preventDefault(); const v = input.value; input.value = ''; run(v); }),
+    AC.on(input, 'keydown', (e) => {
+      if (e.key === 'ArrowUp' && history.length) { e.preventDefault(); hIndex = Math.max(0, hIndex - 1); input.value = history[hIndex]; }
+      else if (e.key === 'ArrowDown' && history.length) { e.preventDefault(); hIndex = Math.min(history.length, hIndex + 1); input.value = history[hIndex] ?? ''; }
+      else if (e.key === 'l' && e.ctrlKey) { e.preventDefault(); clear(); }
+    }),
+    AC.on(el, 'click', '[data-cmd]', (e, b) => run(b.dataset.cmd)),
+  ];
+  const api = { el, run, print, clear, focus: () => input.focus({ preventScroll: true }), get history() { return history.slice(); }, get busy() { return busy; }, destroy() { offs.forEach((f) => f()); } };
+  return api;
+}
+
+/** Wire the module into an AC instance: AC.terminal(el, cfg) + declarative data-ac="terminal". */
+export function install(AC) {
+  if (!AC || AC.terminal) return AC?.terminal;
+  cssOnce();
+  AC.terminal = (target, cfg) => {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    AC.instance(el, 'terminal')?.destroy?.();
+    return AC.instance(el, 'terminal', createTerminal(AC, el, cfg));
+  };
+  AC.register?.('terminal', (el) => { const api = createTerminal(AC, el, AC.options ? AC.options(el, {}) : {}); AC.instance(el, 'terminal', api); return () => api.destroy(); });
+  return AC.terminal;
+}
+
+if (typeof window !== 'undefined' && window.AC) install(window.AC);

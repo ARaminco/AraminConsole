@@ -1,0 +1,66 @@
+<section class="ac-page" data-page="tickets" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="tk.eyebrow">پشتیبانی مشتریان</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.tickets">تیکت‌ها</h1>
+      <p class="ac-page-head__sub" data-i18n="tk.sub">صف درخواست‌ها، مهلت‌های SLA و بار کاری تیم را یک‌جا ببینید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <a class="ac-btn ac-hide-phone" href="#/my-tickets"><svg class="ac-icon" aria-hidden="true"><use href="#i-eye"/></svg><span data-i18n="tk.customerView">نمای مشتری</span></a>
+      <button class="ac-btn ac-btn--primary" type="button" data-tk-new><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="tk.new">تیکت جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-split ac-tk-split" data-ac="split">
+    <div class="ac-split__pane">
+      <div class="ac-bento ac-stagger">
+        <article class="ac-card ac-card--accent ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+          <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="tk.open">تیکت‌های باز</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-inbox"/></svg></span></div>
+          <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-tk-kpi="open">0</span></div>
+          <div class="ac-stat__foot"><span class="ac-trend" data-trend="down">12%</span><span data-i18n="tk.vsLastWeek">نسبت به هفتهٔ قبل</span></div>
+        </article>
+        <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+          <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="tk.overdue">عقب‌افتاده از SLA</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-alarm-clock"/></svg></span></div>
+          <div class="ac-stat__value"><span data-ac="counter" data-to="0" data-tk-kpi="overdue">0</span></div>
+          <div class="ac-stat__foot"><span class="ac-badge ac-badge--danger ac-badge--dot" data-i18n="tk.needsAction">نیاز به اقدام</span></div>
+        </article>
+        <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+          <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="tk.firstResponse">میانگین اولین پاسخ</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-timer"/></svg></span></div>
+          <div class="ac-stat__value"><span data-ac="counter" data-to="14">0</span><span class="ac-stat__unit" data-i18n="tk.minutes">دقیقه</span></div>
+          <div class="ac-stat__foot"><span class="ac-trend" data-trend="up">8%</span><span data-i18n="tk.faster">سریع‌تر</span></div>
+        </article>
+        <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+          <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="tk.csat">رضایت مشتری</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-smile"/></svg></span></div>
+          <div class="ac-stat__value"><span data-ac="counter" data-to="94" data-suffix="%">0</span></div>
+          <div class="ac-stat__foot"><span class="ac-trend" data-trend="up">2%</span><span data-i18n="tk.ratings">از ۲۱۸ امتیاز</span></div>
+        </article>
+
+        <article class="ac-card ac-span-12 ac-card--static">
+          <div class="ac-card__head">
+            <div class="ac-card__titles">
+              <h2 class="ac-card__title" data-i18n="tk.queue">صف تیکت‌ها</h2>
+              <p class="ac-card__sub" data-i18n="tk.queueSub">مرتب بر اساس نزدیک‌ترین مهلت؛ چند تیکت را انتخاب کنید تا یک‌جا واگذار شوند.</p>
+            </div>
+          </div>
+          <div class="ac-card__body ac-card__body--flush"><div data-tk-inbox></div></div>
+        </article>
+
+        <article class="ac-card ac-span-md-12 ac-span-8">
+          <div class="ac-card__head">
+            <div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="tk.volume">حجم تیکت‌ها</h2><p class="ac-card__sub" data-i18n="tk.volumeSub">ثبت‌شده در برابر حل‌شده، ۷ روز اخیر</p></div>
+          </div>
+          <div class="ac-card__body">
+            <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","labels":"days:7","gap":0.4,"radius":7,"series":[{"name":"tk.created","data":[42,38,51,47,63,29,24]},{"name":"tk.solved","data":[39,41,44,50,58,31,22]}]}'></div>
+          </div>
+        </article>
+        <article class="ac-card ac-span-md-12 ac-span-4">
+          <div class="ac-card__head">
+            <div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="tk.team">بار کاری تیم</h2><p class="ac-card__sub" data-i18n="tk.teamSub">تیکت‌های باز هر کارشناس</p></div>
+          </div>
+          <div class="ac-card__body"><ul class="ac-list ac-list--divided" role="list" data-tk-team></ul></div>
+        </article>
+      </div>
+    </div>
+    <div class="ac-split__pane ac-tk-screen" data-tk-screen></div>
+  </div>
+</section>

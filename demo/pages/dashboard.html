@@ -1,0 +1,208 @@
+<section class="ac-page" data-page="dashboard">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <h1 class="ac-page-head__title" data-i18n="dash.greeting">صبح بخیر، علی</h1>
+      <p class="ac-page-head__sub" data-i18n="dash.sub">کارها را زیر نظر بگیرید، پیشرفت را دنبال کنید و وضعیت را ببینید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--outline ac-hide-phone" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="common.export">خروجی</span></button>
+      <a class="ac-btn ac-btn--primary" href="#/manage"><svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-i18n="dash.newCard">کارت جدید</span></a>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- total balance + wallets -->
+    <article class="ac-card dash-balance ac-span-md-6 ac-span-4">
+      <div class="ac-card__body ac-stack ac-gap-3">
+        <div class="ac-spread">
+          <span class="ac-label" data-i18n="dash.balance">موجودی کل</span>
+          <button class="ac-btn ac-btn--outline ac-btn--sm" type="button" aria-haspopup="listbox"><span class="ac-flag" data-flag="us" aria-hidden="true"></span><span>USD</span><svg class="ac-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+        </div>
+        <div class="ac-figure"><span data-ac="counter" data-to="498601.92" data-decimals="2" data-prefix="$">0</span></div>
+        <div class="ac-cluster ac-gap-2"><span class="ac-trend" data-trend="up">5%</span><span class="ac-text-xs ac-text-muted" data-i18n="dash.vsLast">نسبت به ماه قبل</span></div>
+        <div class="dash-actions">
+          <button class="ac-btn ac-btn--primary" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-left-right"/></svg><span data-i18n="dash.transfer">انتقال</span></button>
+          <button class="ac-btn" type="button"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-down-left"/></svg><span data-i18n="dash.request">درخواست</span></button>
+        </div>
+        <div class="ac-inset dash-wallets">
+          <div class="ac-inset__head"><span><span data-i18n="dash.wallets">کیف‌پول‌ها</span> <small>| <span data-i18n="dash.walletsCount">مجموع ۶ کیف‌پول</span></small></span></div>
+          <div class="dash-wallets__row">
+            <div class="dash-wallet">
+              <div class="ac-spread"><span class="ac-row ac-gap-2"><span class="ac-flag" data-flag="us" aria-hidden="true"></span><b>USD</b></span><svg class="ac-icon ac-icon--sm ac-text-muted" aria-hidden="true"><use href="#i-ellipsis-vertical"/></svg></div>
+              <strong class="ac-num">$10,224.80</strong>
+              <small class="ac-text-success" data-i18n="dash.active">فعال</small>
+            </div>
+            <div class="dash-wallet">
+              <div class="ac-spread"><span class="ac-row ac-gap-2"><span class="ac-flag" data-flag="eu" aria-hidden="true"></span><b>EUR</b></span><svg class="ac-icon ac-icon--sm ac-text-muted" aria-hidden="true"><use href="#i-ellipsis-vertical"/></svg></div>
+              <strong class="ac-num">€4,768.95</strong>
+              <small class="ac-text-success" data-i18n="dash.active">فعال</small>
+            </div>
+            <div class="dash-wallet">
+              <div class="ac-spread"><span class="ac-row ac-gap-2"><span class="ac-flag" data-flag="ae" aria-hidden="true"></span><b>AED</b></span><svg class="ac-icon ac-icon--sm ac-text-muted" aria-hidden="true"><use href="#i-ellipsis-vertical"/></svg></div>
+              <strong class="ac-num">12,340.00</strong>
+              <small class="ac-text-success" data-i18n="dash.active">فعال</small>
+            </div>
+            <div class="dash-wallet">
+              <div class="ac-spread"><span class="ac-row ac-gap-2"><span class="ac-flag" data-flag="ir" aria-hidden="true"></span><b>IRR</b></span><svg class="ac-icon ac-icon--sm ac-text-muted" aria-hidden="true"><use href="#i-ellipsis-vertical"/></svg></div>
+              <strong class="ac-num">1.2B</strong>
+              <small class="ac-text-danger" data-i18n="dash.inactive">غیرفعال</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2×2 KPI cluster, one filled orange -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__body">
+        <div class="ac-kpis">
+          <div class="ac-kpi ac-kpi--accent">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="dash.earnings">درآمد کل</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-wallet"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="610" data-prefix="$">0</span></div>
+            <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">7%</span><span data-i18n="dash.thisMonth">این ماه</span></div>
+          </div>
+          <div class="ac-kpi">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="dash.spending">هزینهٔ کل</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-bag"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="355" data-prefix="$">0</span></div>
+            <div class="ac-kpi__foot"><span class="ac-trend" data-trend="down">5%</span><span data-i18n="dash.thisMonth">این ماه</span></div>
+          </div>
+          <div class="ac-kpi">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="dash.income">دریافتی کل</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-hand-coins"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="355" data-prefix="$">0</span></div>
+            <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">8%</span><span data-i18n="dash.thisMonth">این ماه</span></div>
+          </div>
+          <div class="ac-kpi">
+            <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="dash.revenue">سود خالص</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-piggy-bank"/></svg></span></div>
+            <div class="ac-kpi__value"><span data-ac="counter" data-to="109" data-prefix="$">0</span></div>
+            <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">4%</span><span data-i18n="dash.thisMonth">این ماه</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- income: profit & loss bars -->
+    <article class="ac-card ac-span-md-12 ac-span-4">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="dash.incomeChart">درآمد کل</h2>
+          <p class="ac-card__sub" data-i18n="dash.incomeChartSub">درآمد شما در یک بازهٔ زمانی مشخص</p>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="ac-inset dash-chart">
+          <div class="ac-inset__head">
+            <span data-i18n="dash.pnl">سود و زیان</span>
+            <div class="ac-legend ac-legend--inline">
+              <span class="ac-legend__item"><i class="ac-legend__swatch dash-sw-2"></i><span data-i18n="dash.profit">سود</span></span>
+              <span class="ac-legend__item"><i class="ac-legend__swatch dash-sw-1"></i><span data-i18n="dash.loss">زیان</span></span>
+            </div>
+          </div>
+          <div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","stacked":true,"legend":false,"labels":"months:8","gap":0.36,"radius":7,"series":[{"name":"dash.loss","data":[18000,13000,9000,12000,8000,9000,2000,600]},{"name":"dash.profit","data":[12000,15000,8000,1500,0,0,0,0]}]}'></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- monthly spending limit -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="dash.limit">سقف هزینهٔ ماهانه</h2></div>
+      <div class="ac-card__body">
+        <div class="ac-limit">
+          <div class="ac-limit__head"><span class="ac-limit__label" data-i18n="dash.limitLabel">سقف این ماه</span><span class="ac-limit__value ac-num">$5,500.00</span></div>
+          <progress class="ac-progress" value="14.5" max="100" aria-label="Spent" data-i18n-attr="aria-label:dash.spent"></progress>
+          <div class="ac-limit__used"><strong class="ac-num">$799.47</strong><span data-i18n="dash.spentOf">خرج‌شده · ۱۵٪</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- recent activities -->
+    <article class="ac-card ac-span-md-12 ac-span-8 ac-row-2 ac-card--static">
+      <div class="ac-card__head dash-tablehead">
+        <h2 class="ac-card__title" data-i18n="dash.activities">فعالیت‌های اخیر</h2>
+        <div class="ac-card__actions">
+          <label class="ac-searchpill">
+            <svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <input type="search" placeholder="جستجو" aria-label="Search" data-i18n-attr="placeholder:dash.search; aria-label:dash.search">
+          </label>
+          <button class="ac-btn ac-btn--outline ac-btn--sm" type="button"><span data-i18n="dash.filter">فیلتر</span><svg class="ac-icon" aria-hidden="true"><use href="#i-list-filter"/></svg></button>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="ac-table-wrap dash-table">
+          <table class="ac-table ac-table--stack">
+            <thead>
+              <tr>
+                <th data-i18n="col.order">سفارش</th>
+                <th data-i18n="col.activity">فعالیت</th>
+                <th data-i18n="col.amount">مبلغ</th>
+                <th data-i18n="col.status">وضعیت</th>
+                <th data-i18n="col.date">تاریخ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="ac-mono ac-text-sm" data-label="سفارش" data-i18n-attr="data-label:col.order">INV_000076</td>
+                <td data-label="فعالیت" data-i18n-attr="data-label:col.activity"><span class="ac-row ac-gap-2"><span class="dash-act" data-tone="info"><svg class="ac-icon" aria-hidden="true"><use href="#i-smartphone"/></svg></span><span data-i18n="dash.act1">خرید اپلیکیشن موبایل</span></span></td>
+                <td class="ac-num" data-label="مبلغ" data-i18n-attr="data-label:col.amount">$25,500</td>
+                <td data-label="وضعیت" data-i18n-attr="data-label:col.status"><span class="dash-status" data-tone="success" data-i18n="status.completed">تکمیل‌شده</span></td>
+                <td class="ac-text-muted ac-text-sm" data-label="تاریخ" data-i18n-attr="data-label:col.date">17/04/2026 · 15:45</td>
+              </tr>
+              <tr>
+                <td class="ac-mono ac-text-sm" data-label="سفارش" data-i18n-attr="data-label:col.order">INV_000075</td>
+                <td data-label="فعالیت" data-i18n-attr="data-label:col.activity"><span class="ac-row ac-gap-2"><span class="dash-act" data-tone="accent"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-left-right"/></svg></span><span data-i18n="dash.act2">انتقال به کیف‌پول یورو</span></span></td>
+                <td class="ac-num" data-label="مبلغ" data-i18n-attr="data-label:col.amount">$4,750</td>
+                <td data-label="وضعیت" data-i18n-attr="data-label:col.status"><span class="dash-status" data-tone="warning" data-i18n="status.pending">در انتظار</span></td>
+                <td class="ac-text-muted ac-text-sm" data-label="تاریخ" data-i18n-attr="data-label:col.date">16/04/2026 · 11:20</td>
+              </tr>
+              <tr>
+                <td class="ac-mono ac-text-sm" data-label="سفارش" data-i18n-attr="data-label:col.order">INV_000074</td>
+                <td data-label="فعالیت" data-i18n-attr="data-label:col.activity"><span class="ac-row ac-gap-2"><span class="dash-act" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-cloud-upload"/></svg></span><span data-i18n="dash.act3">اشتراک سرویس ابری</span></span></td>
+                <td class="ac-num" data-label="مبلغ" data-i18n-attr="data-label:col.amount">$1,280</td>
+                <td data-label="وضعیت" data-i18n-attr="data-label:col.status"><span class="dash-status" data-tone="success" data-i18n="status.completed">تکمیل‌شده</span></td>
+                <td class="ac-text-muted ac-text-sm" data-label="تاریخ" data-i18n-attr="data-label:col.date">15/04/2026 · 09:05</td>
+              </tr>
+              <tr>
+                <td class="ac-mono ac-text-sm" data-label="سفارش" data-i18n-attr="data-label:col.order">INV_000073</td>
+                <td data-label="فعالیت" data-i18n-attr="data-label:col.activity"><span class="ac-row ac-gap-2"><span class="dash-act" data-tone="danger"><svg class="ac-icon" aria-hidden="true"><use href="#i-plane"/></svg></span><span data-i18n="dash.act4">بلیت پرواز دبی</span></span></td>
+                <td class="ac-num" data-label="مبلغ" data-i18n-attr="data-label:col.amount">$640</td>
+                <td data-label="وضعیت" data-i18n-attr="data-label:col.status"><span class="dash-status" data-tone="danger" data-i18n="status.failed">ناموفق</span></td>
+                <td class="ac-text-muted ac-text-sm" data-label="تاریخ" data-i18n-attr="data-label:col.date">14/04/2026 · 18:30</td>
+              </tr>
+              <tr>
+                <td class="ac-mono ac-text-sm" data-label="سفارش" data-i18n-attr="data-label:col.order">INV_000072</td>
+                <td data-label="فعالیت" data-i18n-attr="data-label:col.activity"><span class="ac-row ac-gap-2"><span class="dash-act" data-tone="neutral"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-bag"/></svg></span><span data-i18n="dash.act5">خرید تجهیزات دفتر</span></span></td>
+                <td class="ac-num" data-label="مبلغ" data-i18n-attr="data-label:col.amount">$3,120</td>
+                <td data-label="وضعیت" data-i18n-attr="data-label:col.status"><span class="dash-status" data-tone="success" data-i18n="status.completed">تکمیل‌شده</span></td>
+                <td class="ac-text-muted ac-text-sm" data-label="تاریخ" data-i18n-attr="data-label:col.date">13/04/2026 · 10:10</td>
+              </tr>
+              <tr>
+                <td class="ac-mono ac-text-sm" data-label="سفارش" data-i18n-attr="data-label:col.order">INV_000071</td>
+                <td data-label="فعالیت" data-i18n-attr="data-label:col.activity"><span class="ac-row ac-gap-2"><span class="dash-act" data-tone="success"><svg class="ac-icon" aria-hidden="true"><use href="#i-hand-coins"/></svg></span><span data-i18n="dash.act6">دریافت از مشتری</span></span></td>
+                <td class="ac-num" data-label="مبلغ" data-i18n-attr="data-label:col.amount">$9,400</td>
+                <td data-label="وضعیت" data-i18n-attr="data-label:col.status"><span class="dash-status" data-tone="success" data-i18n="status.completed">تکمیل‌شده</span></td>
+                <td class="ac-text-muted ac-text-sm" data-label="تاریخ" data-i18n-attr="data-label:col.date">12/04/2026 · 14:00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+
+    <!-- upcoming payments -->
+    <article class="ac-card ac-span-md-6 ac-span-4">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="dash.upcoming">پرداخت‌های پیش‌رو</h2>
+          <p class="ac-card__sub" data-i18n="dash.upcomingSub">۷ روز آینده</p>
+        </div>
+        <a class="ac-btn ac-btn--ghost ac-btn--sm" href="#/orders" data-i18n="common.viewAll">مشاهدهٔ همه</a>
+      </div>
+      <div class="ac-card__body">
+        <ul class="ac-list ac-list--divided" role="list">
+          <li class="ac-list__item"><span class="ac-list__thumb" data-tone="neutral"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg></span><span class="ac-list__main"><span class="ac-list__title" data-i18n="dash.pay1">اجارهٔ دفتر</span><span class="ac-list__meta">22/04/2026</span></span><span class="ac-list__end ac-fw-semibold">$2,400</span></li>
+          <li class="ac-list__item"><span class="ac-list__thumb" data-tone="neutral"><svg class="ac-icon" aria-hidden="true"><use href="#i-server"/></svg></span><span class="ac-list__main"><span class="ac-list__title" data-i18n="dash.pay2">سرور ابری</span><span class="ac-list__meta">24/04/2026</span></span><span class="ac-list__end ac-fw-semibold">$320</span></li>
+          <li class="ac-list__item"><span class="ac-list__thumb" data-tone="neutral"><svg class="ac-icon" aria-hidden="true"><use href="#i-users"/></svg></span><span class="ac-list__main"><span class="ac-list__title" data-i18n="dash.pay3">حقوق تیم</span><span class="ac-list__meta">26/04/2026</span></span><span class="ac-list__end ac-fw-semibold">$18,900</span></li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>

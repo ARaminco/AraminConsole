@@ -1,0 +1,151 @@
+<section class="ac-page" data-page="finance" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="finance.eyebrow">کیت مالی ایرانی</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.finance">مالی و بانکی</h1>
+      <p class="ac-page-head__sub" data-i18n="finance.sub">ریال و تومان، عدد به حروف، تقویم شمسی و قمری با تعطیلات رسمی، تشخیص بانک از شمارهٔ کارت و شبا، و کارت بانکی زنده.</p>
+    </div>
+    <div class="ac-page-head__actions fin-head-actions">
+      <div data-ac="money-unit"></div>
+      <div class="ac-segmented ac-segmented--sm" data-ac="segmented" role="radiogroup" id="fin-digits" aria-label="Digits" data-i18n-attr="aria-label:finance.digits">
+        <button class="ac-segmented__item" type="button" role="radio" data-value="latn" aria-checked="true"><span>123</span></button>
+        <button class="ac-segmented__item" type="button" role="radio" data-value="native" aria-checked="false"><span>۱۲۳</span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- KPIs: live amounts follow the Rial/Toman toggle -->
+    <div class="ac-span-12">
+      <div class="ac-kpis">
+        <div class="ac-kpi ac-kpi--accent">
+          <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="finance.balance">موجودی کل</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-wallet"/></svg></span></div>
+          <div class="ac-kpi__value"><span data-ac-money="48250000000" data-currency="IRR" data-compact data-words></span></div>
+          <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">12%</span><span data-i18n="dash.thisMonth">این ماه</span></div>
+        </div>
+        <div class="ac-kpi">
+          <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="finance.deposits">واریزی امروز</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-down-left"/></svg></span></div>
+          <div class="ac-kpi__value"><span data-ac-money="1284500000" data-currency="IRR"></span></div>
+          <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">4%</span><span data-i18n="finance.vsYesterday">نسبت به دیروز</span></div>
+        </div>
+        <div class="ac-kpi">
+          <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="finance.withdrawals">برداشت امروز</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span></div>
+          <div class="ac-kpi__value"><span data-ac-money="356700000" data-currency="IRR"></span></div>
+          <div class="ac-kpi__foot"><span class="ac-trend" data-trend="down">2%</span><span data-i18n="finance.vsYesterday">نسبت به دیروز</span></div>
+        </div>
+        <div class="ac-kpi">
+          <div class="ac-kpi__head"><span class="ac-kpi__label" data-i18n="finance.turnover">گردش سالانه</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-chart-line"/></svg></span></div>
+          <div class="ac-kpi__value"><span data-ac-money="31400000000000" data-currency="IRR" data-compact></span></div>
+          <div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">18%</span><span data-i18n="finance.thisYear">امسال</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- card gallery -->
+    <article class="ac-card ac-card--static ac-span-12">
+      <div class="ac-card__head">
+        <div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.gallery">کارت‌های بانکی</h2><p class="ac-card__sub" data-i18n="finance.gallerySub">ابعاد استاندارد ISO، رنگ و لوگو از روی شمارهٔ کارت؛ برای چرخاندن بزنید.</p></div>
+        <div class="ac-card__actions">
+          <button class="ac-btn ac-btn--secondary ac-btn--sm" type="button" data-fin="mask" aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-eye-off"/></svg><span data-i18n="finance.mask">پنهان کردن شماره</span></button>
+          <button class="ac-btn ac-btn--secondary ac-btn--sm" type="button" data-fin="flip"><svg class="ac-icon" aria-hidden="true"><use href="#i-rotate-ccw"/></svg><span data-i18n="manage.flipShort">چرخاندن</span></button>
+        </div>
+      </div>
+      <div class="ac-card__body"><div class="fin-gallery" id="fin-gallery"></div></div>
+    </article>
+
+    <!-- live card form -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-7">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.liveForm">افزودن کارت</h2><p class="ac-card__sub" data-i18n="finance.liveFormSub">با تایپ شش رقم اول، بانک تشخیص داده می‌شود و کارت رنگ عوض می‌کند.</p></div></div>
+      <div class="ac-card__body">
+        <form class="fin-cardform" data-ac="card-form form" id="fin-card-form" autocomplete="off">
+          <div class="fin-cardform__stage"><div data-ac="bank-card" data-size="fluid" id="fin-live-card"></div></div>
+          <div class="ac-form-grid">
+            <div class="ac-field ac-span-full">
+              <label class="ac-label" for="fc-number" data-i18n="finance.number">شمارهٔ کارت</label>
+              <div class="ac-input-group" data-ac="input"><input class="ac-input" id="fc-number" name="card" data-card="number" placeholder="6037 9900 0000 0000" data-ac-rules="required|card"></div>
+            </div>
+            <div class="ac-field ac-span-full">
+              <label class="ac-label" for="fc-holder" data-i18n="finance.holderName">نام دارنده</label>
+              <input class="ac-input" id="fc-holder" name="holder" data-card="holder" placeholder="علی رامین" data-i18n-attr="placeholder:finance.holderPh" autocomplete="cc-name">
+            </div>
+            <div class="ac-field">
+              <label class="ac-label" for="fc-exp" data-i18n="finance.expiry">تاریخ انقضا</label>
+              <input class="ac-input" id="fc-exp" name="expiry" data-card="expiry" placeholder="05/08">
+            </div>
+            <div class="ac-field">
+              <label class="ac-label" for="fc-cvv">CVV2</label>
+              <input class="ac-input" id="fc-cvv" name="cvv" data-card="cvv" placeholder="•••" maxlength="4">
+            </div>
+          </div>
+          <div class="ac-cluster fin-samples" aria-label="Samples" data-i18n-attr="aria-label:finance.samples"></div>
+        </form>
+      </div>
+    </article>
+
+    <!-- Sheba -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-5">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.sheba">بررسی شبا</h2><p class="ac-card__sub" data-i18n="finance.shebaSub">کنترل mod-97 و تشخیص بانک از کد سه‌رقمی شبا.</p></div></div>
+      <div class="ac-card__body ac-stack ac-gap-4">
+        <div class="ac-field">
+          <label class="ac-label" for="fs-iban" data-i18n="finance.shebaNumber">شمارهٔ شبا</label>
+          <div class="ac-input-group ac-sheba" data-ac="sheba" data-name="iban" id="fin-sheba"><input class="ac-input" id="fs-iban" placeholder="82 0540 1026 8002 0817 9090 02"></div>
+        </div>
+        <div class="ac-cluster" id="fin-sheba-samples"></div>
+        <dl class="fin-iban-parts" id="fin-sheba-parts"></dl>
+        <div class="ac-divider"></div>
+        <div class="ac-field">
+          <label class="ac-label" for="fs-intl" data-i18n="finance.ibanIntl">IBAN بین‌المللی</label>
+          <input class="ac-input ac-num" id="fs-intl" dir="ltr" placeholder="DE89 3704 0044 0532 0130 00" value="DE89 3704 0044 0532 0130 00">
+          <p class="ac-help" id="fs-intl-out"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- money playground -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-7">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.playground">مبلغ و واحد پول</h2><p class="ac-card__sub" data-i18n="finance.playgroundSub">جداکنندهٔ هزارگان هنگام تایپ، ارقام فارسی، مبلغ به حروف و تبدیل ریال و تومان.</p></div></div>
+      <div class="ac-card__body ac-stack ac-gap-4">
+        <div class="ac-field">
+          <label class="ac-label" for="fm-amount" data-i18n="finance.amount">مبلغ</label>
+          <div class="ac-input-group ac-money" data-ac="money" data-name="amount" data-currency="IRT" data-currencies="IRT,IRR,USD,EUR,AED,GBP,TRY,CNY,GOLD,COIN" id="fin-money"><input class="ac-input" id="fm-amount" value="1200000"></div>
+        </div>
+        <dl class="ac-dl ac-dl--cols-2 fin-out" id="fin-money-out"></dl>
+        <p class="ac-text-xs ac-text-muted" data-i18n="finance.ratesNote">نرخ‌های ارز در این نمونه نمایشی‌اند؛ نرخ واقعی را با AC.money.setRates بدهید.</p>
+      </div>
+    </article>
+
+    <!-- table money cells -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-5">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.tx">تراکنش‌های اخیر</h2><p class="ac-card__sub" data-i18n="finance.txSub">ستون مبلغ با کلید ریال / تومان به‌روز می‌شود.</p></div></div>
+      <div class="ac-card__body ac-card__body--flush"><div id="fin-table"></div></div>
+    </article>
+
+    <!-- calendars -->
+    <article class="ac-card ac-card--static ac-span-12">
+      <div class="ac-card__head">
+        <div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.calendars">سه تقویم کنار هم</h2><p class="ac-card__sub" data-i18n="finance.calendarsSub">شمسی، میلادی و قمری؛ جمعه‌ها و تعطیلات رسمی قرمزند و تاریخ معادل زیر هر روز آمده.</p></div>
+        <div class="ac-card__actions"><button class="ac-btn ac-btn--secondary ac-btn--sm ac-btn--icon" type="button" data-fin="prev" aria-label="Previous" data-i18n-attr="aria-label:form.prev"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-left"/></svg></button><button class="ac-btn ac-btn--secondary ac-btn--sm" type="button" data-fin="today" data-i18n="form.today">امروز</button><button class="ac-btn ac-btn--secondary ac-btn--sm ac-btn--icon" type="button" data-fin="next" aria-label="Next" data-i18n-attr="aria-label:form.next"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></button></div>
+      </div>
+      <div class="ac-card__body ac-stack ac-gap-5">
+        <div class="fin-cals" id="fin-cals"></div>
+        <div class="fin-datebox">
+          <div class="ac-field">
+            <label class="ac-label" for="fd-date" data-i18n="finance.pickDate">انتخاب تاریخ (با تقویم معادل)</label>
+            <div class="ac-input-group ac-date" data-ac="datepicker" data-name="due" data-secondary="auto" data-holidays="true" id="fin-dp"><input class="ac-input" id="fd-date"></div>
+          </div>
+          <dl class="ac-dl fin-out" id="fin-date-out"></dl>
+          <div><h3 class="fin-subtitle" data-i18n="finance.upcoming">تعطیلات پیش رو</h3><ul class="fin-holidays" id="fin-holidays"></ul></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- bank grid -->
+    <article class="ac-card ac-card--static ac-span-12">
+      <div class="ac-card__head">
+        <div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="finance.banks">بانک‌ها و شبکه‌های کارت</h2><p class="ac-card__sub" data-i18n="finance.banksSub">پیش‌شمارهٔ کارت، کد شبا و رنگ هر بانک. لوگوها علائم تجاری صاحبانشان‌اند و فقط برای شناسایی آمده‌اند.</p></div>
+        <label class="ac-searchpill"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg><input type="search" id="fin-bank-q" placeholder="جستجوی بانک یا پیش‌شماره" data-i18n-attr="placeholder:finance.bankSearch"></label>
+      </div>
+      <div class="ac-card__body"><div class="fin-banks" id="fin-banks"></div><div class="fin-banks fin-banks--net" id="fin-nets"></div></div>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+<section class="ac-page" data-page="docs" data-script data-modules="prose data-display">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.pages">صفحه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.docs">مستندات</h1>
+      <p class="ac-page-head__sub" data-i18n="docs.sub">راهنمای AraminConsole؛ همان فایل‌های Markdown مخزن که همین‌جا با ماژول prose نمایش داده می‌شوند.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <a class="ac-btn" href="https://github.com/ARaminco/AraminConsole" target="_blank" rel="noopener"><svg class="ac-icon" aria-hidden="true"><use href="#i-book-open"/></svg><span>GitHub</span></a>
+    </div>
+  </header>
+
+  <div class="ac-docs">
+    <nav class="ac-docs__nav" aria-label="مستندات" data-i18n-attr="aria-label:nav.docs">
+      <details class="ac-doctree" data-docs-tree open>
+        <summary><span data-docs-current>…</span><svg class="ac-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <div class="ac-doctree__body" data-docs-list></div>
+      </details>
+    </nav>
+    <aside class="ac-docs__toc">
+      <details class="ac-toc" data-docs-toc open>
+        <summary><span data-i18n="prose.onThisPage">در این صفحه</span><svg class="ac-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <nav class="ac-toc__scroll" data-toc-list aria-label="در این صفحه" data-i18n-attr="aria-label:prose.onThisPage"></nav>
+      </details>
+    </aside>
+    <main class="ac-docs__main ac-article__card" data-docs-main>
+      <div class="ac-docs__crumbs"><a href="#/docs" data-i18n="nav.docs">مستندات</a><svg class="ac-icon ac-icon--sm ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg><span data-docs-crumb></span><span class="ac-badge ac-badge--neutral" data-docs-read></span></div>
+      <div class="ac-prose" dir="auto" data-docs-body></div>
+      <div class="ac-docs__edit">
+        <a class="ac-btn ac-btn--sm ac-btn--ghost" data-docs-source target="_blank" rel="noopener"><svg class="ac-icon" aria-hidden="true"><use href="#i-file-text"/></svg><span data-i18n="docs.source">مشاهدهٔ فایل Markdown</span></a>
+        <span class="ac-cluster"><a class="ac-btn ac-btn--sm" data-docs-prev hidden></a><a class="ac-btn ac-btn--sm ac-btn--primary" data-docs-next hidden></a></span>
+      </div>
+    </main>
+  </div>
+</section>

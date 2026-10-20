@@ -1,0 +1,722 @@
+/* Chat module — a complete messenger panel: conversation list (search, filters, pinned, unread, muted),
+   direct chats, groups and channels, thread with date separators, unread divider, infinite scroll up,
+   reactions, reply/quote, edit, delete, forward, copy, swipe-to-reply, voice notes with waveform,
+   image lightbox, file cards, link previews, read receipts, presence, typing indicator, scroll-to-bottom,
+   composer (emoji, attach, voice record, reply/edit bar), contact-info sidebar with Media / Files / Links tabs,
+   new chat / new group modal. Phones: list → thread → info as a push/pop navigation stack (data-ac="split").
+
+   const chat = AC.chat(el, {
+     me: { id, name, initials, color },
+     users: [{ id, name, initials, color, online, lastSeen, about, phone, email }],
+     conversations: [{ id, type: 'direct'|'group'|'channel', name, initials, color, with (user id for direct),
+       members: [ids], admins: [ids], pinned, muted, unread, typing, subscribers,
+       messages: [{ id, from, at, text, image: { name, src?, hue? }, file: { name, size }, voice: { dur },
+                    link: { url, title, desc }, replyTo, forwarded, reactions: { '👍': [userIds] }, edited, deleted,
+                    status: 'sending'|'sent'|'delivered'|'read', views }] }],
+     loadOlder: async (conv) => [messages],   // infinite scroll up; return [] when the start is reached
+     onSend: (conv, msg, chat) => {},         // the host transports the message (demo: fake replies)
+   });
+   chat.open(id) · chat.send(id, body) · chat.receive(id, msg) · chat.typing(id, on) · chat.setStatus(id, msgId, status)
+   chat.render() · chat.destroy()
+   Events (bubble from el): ac:chat:open {conv} · ac:chat:send {conv, msg} · ac:chat:react {conv, msg, emoji}
+   · ac:chat:edit · ac:chat:delete · ac:chat:forward {msg, to}
+   Dependency-free: install(AC) wires AC.chat + data-ac="chat" (no core import). */
+
+const I18N = {
+  fa: { chats: 'گفتگوها', search: 'جستجو در گفتگوها', all: 'همه', unread: 'خوانده‌نشده', groups: 'گروه‌ها', channels: 'کانال‌ها', pinned: 'سنجاق‌شده', recent: 'همهٔ گفتگوها', none: 'گفتگویی پیدا نشد', newChat: 'گفتگوی جدید', newGroup: 'گروه جدید', back: 'بازگشت', call: 'تماس صوتی', video: 'تماس تصویری', info: 'اطلاعات', searchIn: 'جستجو در این گفتگو', online: 'آنلاین', lastSeen: 'آخرین بازدید {t}', lastSeenRecently: 'آخرین بازدید به‌تازگی', members: '{n} عضو، {o} آنلاین', subscribers: '{n} مشترک', typing: 'در حال نوشتن…', typingWho: '{name} در حال نوشتن…', placeholder: 'پیام بنویسید…', send: 'ارسال', emoji: 'شکلک', attach: 'پیوست', photo: 'عکس', document: 'سند', location: 'مکان', recording: 'در حال ضبط…', cancel: 'انصراف', voice: 'پیام صوتی', reply: 'پاسخ', edit: 'ویرایش', copy: 'کپی', forward: 'هدایت', delete: 'حذف', pin: 'سنجاق', unpin: 'برداشتن سنجاق', mute: 'بی‌صدا', unmute: 'باصدا', markRead: 'علامت خوانده‌شده', markUnread: 'علامت خوانده‌نشده', deleteChat: 'حذف گفتگو', edited: 'ویرایش‌شده', deleted: 'این پیام حذف شد', forwarded: 'هدایت‌شده', editing: 'ویرایش پیام', replyingTo: 'پاسخ به {name}', you: 'شما', today: 'امروز', yesterday: 'دیروز', unreadDivider: 'پیام‌های خوانده‌نشده', start: 'آغاز گفتگو', loading: 'در حال بارگذاری…', copied: 'کپی شد', deleteMsg: 'این پیام برای همه حذف شود؟', deleteChatQ: 'گفتگو با {name} حذف شود؟', forwardTo: 'هدایت به…', forwardedTo: 'به {n} گفتگو هدایت شد', media: 'رسانه', files: 'فایل‌ها', links: 'پیوندها', empty: 'چیزی اینجا نیست', channelOnly: 'فقط مدیران می‌توانند در این کانال بنویسند', views: 'بازدید', admin: 'مدیر', about: 'دربارهٔ', phone: 'تلفن', email: 'ایمیل', create: 'ساختن', groupName: 'نام گروه', pickPeople: 'افراد را انتخاب کنید', contacts: 'مخاطبان', close: 'بستن', prev: 'قبلی', next: 'بعدی', download: 'دانلود', play: 'پخش', pause: 'توقف', newMessages: 'پیام جدید', react: 'واکنش', pickChat: 'یک گفتگو را انتخاب کنید', pickChatSub: 'یا گفتگوی تازه‌ای شروع کنید', youReacted: 'شما', sent: 'ارسال شد', delivered: 'رسید', read: 'خوانده شد' },
+  en: { chats: 'Chats', search: 'Search chats', all: 'All', unread: 'Unread', groups: 'Groups', channels: 'Channels', pinned: 'Pinned', recent: 'All chats', none: 'No conversations found', newChat: 'New chat', newGroup: 'New group', back: 'Back', call: 'Voice call', video: 'Video call', info: 'Info', searchIn: 'Search in conversation', online: 'online', lastSeen: 'last seen {t}', lastSeenRecently: 'last seen recently', members: '{n} members, {o} online', subscribers: '{n} subscribers', typing: 'typing…', typingWho: '{name} is typing…', placeholder: 'Write a message…', send: 'Send', emoji: 'Emoji', attach: 'Attach', photo: 'Photo', document: 'Document', location: 'Location', recording: 'Recording…', cancel: 'Cancel', voice: 'Voice message', reply: 'Reply', edit: 'Edit', copy: 'Copy', forward: 'Forward', delete: 'Delete', pin: 'Pin', unpin: 'Unpin', mute: 'Mute', unmute: 'Unmute', markRead: 'Mark as read', markUnread: 'Mark as unread', deleteChat: 'Delete chat', edited: 'edited', deleted: 'This message was deleted', forwarded: 'Forwarded', editing: 'Edit message', replyingTo: 'Reply to {name}', you: 'You', today: 'Today', yesterday: 'Yesterday', unreadDivider: 'Unread messages', start: 'Start of the conversation', loading: 'Loading…', copied: 'Copied', deleteMsg: 'Delete this message for everyone?', deleteChatQ: 'Delete the chat with {name}?', forwardTo: 'Forward to…', forwardedTo: 'Forwarded to {n} chats', media: 'Media', files: 'Files', links: 'Links', empty: 'Nothing here yet', channelOnly: 'Only admins can post in this channel', views: 'views', admin: 'admin', about: 'About', phone: 'Phone', email: 'Email', create: 'Create', groupName: 'Group name', pickPeople: 'Pick people', contacts: 'Contacts', close: 'Close', prev: 'Previous', next: 'Next', download: 'Download', play: 'Play', pause: 'Pause', newMessages: 'new messages', react: 'React', pickChat: 'Select a conversation', pickChatSub: 'or start a new one', youReacted: 'You', sent: 'Sent', delivered: 'Delivered', read: 'Read' },
+  ar: { chats: 'المحادثات', search: 'ابحث في المحادثات', all: 'الكل', unread: 'غير مقروءة', groups: 'المجموعات', channels: 'القنوات', pinned: 'مثبتة', recent: 'كل المحادثات', none: 'لا توجد محادثات', newChat: 'محادثة جديدة', newGroup: 'مجموعة جديدة', back: 'رجوع', call: 'مكالمة صوتية', video: 'مكالمة فيديو', info: 'معلومات', searchIn: 'ابحث في المحادثة', online: 'متصل', lastSeen: 'آخر ظهور {t}', lastSeenRecently: 'آخر ظهور مؤخراً', members: '{n} أعضاء، {o} متصل', subscribers: '{n} مشترك', typing: 'يكتب…', typingWho: '{name} يكتب…', placeholder: 'اكتب رسالة…', send: 'إرسال', emoji: 'رموز', attach: 'إرفاق', photo: 'صورة', document: 'مستند', location: 'موقع', recording: 'جارٍ التسجيل…', cancel: 'إلغاء', voice: 'رسالة صوتية', reply: 'رد', edit: 'تعديل', copy: 'نسخ', forward: 'إعادة توجيه', delete: 'حذف', pin: 'تثبيت', unpin: 'إلغاء التثبيت', mute: 'كتم', unmute: 'إلغاء الكتم', markRead: 'تعليم كمقروءة', markUnread: 'تعليم كغير مقروءة', deleteChat: 'حذف المحادثة', edited: 'معدلة', deleted: 'تم حذف هذه الرسالة', forwarded: 'معاد توجيهها', editing: 'تعديل الرسالة', replyingTo: 'الرد على {name}', you: 'أنت', today: 'اليوم', yesterday: 'أمس', unreadDivider: 'رسائل غير مقروءة', start: 'بداية المحادثة', loading: 'جارٍ التحميل…', copied: 'تم النسخ', deleteMsg: 'حذف هذه الرسالة للجميع؟', deleteChatQ: 'حذف المحادثة مع {name}؟', forwardTo: 'إعادة توجيه إلى…', forwardedTo: 'أعيد توجيهها إلى {n} محادثات', media: 'الوسائط', files: 'الملفات', links: 'الروابط', empty: 'لا شيء هنا بعد', channelOnly: 'يمكن للمشرفين فقط النشر في هذه القناة', views: 'مشاهدة', admin: 'مشرف', about: 'نبذة', phone: 'الهاتف', email: 'البريد', create: 'إنشاء', groupName: 'اسم المجموعة', pickPeople: 'اختر الأشخاص', contacts: 'جهات الاتصال', close: 'إغلاق', prev: 'السابق', next: 'التالي', download: 'تنزيل', play: 'تشغيل', pause: 'إيقاف', newMessages: 'رسائل جديدة', react: 'تفاعل', pickChat: 'اختر محادثة', pickChatSub: 'أو ابدأ محادثة جديدة', youReacted: 'أنت', sent: 'أُرسلت', delivered: 'وصلت', read: 'قُرئت' },
+};
+const QUICK = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+const EMOJI = '😀 😁 😂 🤣 😊 😍 🥰 😘 😎 🤩 🤔 🤨 😐 😅 😴 😭 😡 🤯 🥳 😇 👍 👎 👏 🙌 🙏 💪 👌 ✌️ 🤝 👋 ❤️ 🧡 💛 💚 💙 💜 🔥 ✨ 🎉 💯 ✅ ❌ ⭐ 🚀 💡 📎 📌 ☕ 🌹'.split(' ');
+const URL_RE = /(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g;
+
+function cssOnce() {
+  if (typeof document === 'undefined' || document.querySelector('[data-ac-module="chat"]')) return;
+  try {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = new URL('./chat.css', import.meta.url).href; link.dataset.acModule = 'chat';
+    document.head.append(link);
+  } catch { /* bundled builds ship the CSS themselves */ }
+}
+
+export function createChat(AC, el, cfg = {}) {
+  const esc = AC.escapeHtml; const icon = AC.icon; const fmt = AC.format;
+  const sep = () => (['fa', 'ar', 'ur', 'ckb'].includes(AC.i18n?.lang) ? '، ' : ', ');
+  const tr = (k, vars = {}) => {
+    const lang = AC.i18n?.lang || 'en';
+    const fb = (I18N[lang] || I18N.en)[k] ?? I18N.en[k] ?? k;
+    let s = AC.t ? AC.t(`chat.${k}`, fb, vars) : fb;
+    if (s === `chat.${k}`) s = fb;
+    return String(s).replace(/\{(\w+)\}/g, (m, v) => (v in vars ? vars[v] : m));
+  };
+  const o = { me: { id: 'me', name: 'Me', initials: 'ME', color: 1 }, users: [], conversations: [], ...cfg };
+  const me = o.me;
+  const users = new Map(o.users.map((u) => [u.id, u]));
+  users.set(me.id, me);
+  const convs = o.conversations;
+  const phone = matchMedia('(max-width: 639.98px)');
+  const st = { current: null, filter: 'all', query: '', reply: null, editing: null, rec: null, timers: [], loading: false, info: false, search: '' };
+  let seq = 0;
+  const uidMsg = () => `m${Date.now().toString(36)}${(seq++).toString(36)}`;
+  const conv = (id) => convs.find((c) => c.id === id);
+  const cur = () => conv(st.current);
+  const userOf = (id) => users.get(id) || { id, name: '—', initials: '?', color: 8 };
+  const peer = (c) => (c.type === 'direct' ? userOf(c.with) : null);
+  const titleOf = (c) => (c.type === 'direct' ? peer(c).name : c.name);
+  const isMine = (m) => m.from === me.id;
+  const canPost = (c) => c.type !== 'channel' || (c.admins || []).includes(me.id);
+  const time = (ts) => fmt.date(ts, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const dayKey = (ts) => new Date(ts).toDateString();
+  const dayLabel = (ts) => { const d = Math.round((new Date(new Date().toDateString()) - new Date(dayKey(ts))) / 864e5); return d === 0 ? tr('today') : d === 1 ? tr('yesterday') : fmt.date(ts, { weekday: 'long', day: 'numeric', month: 'long' }); };
+  const listTime = (ts) => { const min = (Date.now() - ts) / 6e4; return min < 1440 && dayKey(ts) === dayKey(Date.now()) ? time(ts) : min < 10080 ? fmt.date(ts, { weekday: 'short' }) : fmt.date(ts, { day: 'numeric', month: 'short' }); };
+  const num = (n) => fmt.number(n, { compact: n >= 10000 });
+  const avatar = (who, size = '', status = true) => {
+    const groupIcon = who.type === 'group' ? icon('users') : who.type === 'channel' ? icon('megaphone') : '';
+    const img = who.avatar ? `<img src="${esc(who.avatar)}" alt="">` : groupIcon || esc(who.initials || '?');
+    return `<span class="ac-avatar${size ? ` ac-avatar--${size}` : ''}" data-color="${who.color || 1}">${img}${status && who.online ? '<span class="ac-status" data-status="online"></span>' : ''}</span>`;
+  };
+  const convAvatar = (c, size) => (c.type === 'direct' ? avatar(peer(c), size) : avatar({ ...c, type: c.type }, size, false));
+  const preview = (m) => {
+    if (!m) return '';
+    if (m.deleted) return tr('deleted');
+    if (m.voice) return `🎤 ${tr('voice')}`;
+    if (m.image) return `🖼 ${m.text || tr('photo')}`;
+    if (m.file) return `📎 ${m.file.name}`;
+    return m.text || '';
+  };
+  const ticks = (m) => {
+    if (!isMine(m) || m.deleted) return '';
+    const s = m.status || 'sent';
+    return `<span class="ac-chat-tick" data-status="${s}" title="${esc(tr(s === 'sending' ? 'sent' : s))}">${icon(s === 'sent' || s === 'sending' ? 'check' : 'check-check')}</span>`;
+  };
+  const linkify = (text) => esc(text).replace(URL_RE, (u) => `<a href="${u}" target="_blank" rel="noopener noreferrer">${u.replace(/^https?:\/\//, '')}</a>`);
+
+  /* ---------------------------------------------------------------- skeleton */
+  el.classList.add('ac-chat');
+  el.setAttribute('data-ac', [...new Set([...(el.getAttribute('data-ac') || '').split(/\s+/).filter(Boolean), 'split'])].join(' '));
+  el.innerHTML = `
+    <div class="ac-split__pane ac-chat__side">
+      <div class="ac-chat__sidehead">
+        <div class="ac-chat__sidetitle"><h2 data-x="side-title"></h2>
+          <button class="ac-chat__iconbtn" type="button" data-act="new" data-x="new-btn">${icon('square-pen')}</button></div>
+        <label class="ac-chat__search">${icon('search')}<input type="search" data-x="search" autocomplete="off"></label>
+        <div class="ac-chat__filters" role="tablist" data-x="filters"></div>
+      </div>
+      <div class="ac-chat__convs" data-x="list" role="list"></div>
+    </div>
+    <section class="ac-split__pane ac-chat__thread" data-x="thread">
+      <header class="ac-chat__head">
+        <button class="ac-chat__iconbtn ac-chat__back" type="button" data-split-back data-x="back">${icon('chevron-left', 'ac-flip-rtl')}</button>
+        <button class="ac-chat__who" type="button" data-act="info" data-x="who"></button>
+        <div class="ac-chat__tools">
+          <button class="ac-chat__iconbtn" type="button" data-act="find" data-x="find-btn">${icon('search')}</button>
+          <button class="ac-chat__iconbtn" type="button" data-act="call" data-x="call-btn">${icon('phone')}</button>
+          <button class="ac-chat__iconbtn ac-chat__hide-sm" type="button" data-act="video" data-x="video-btn">${icon('video')}</button>
+          <button class="ac-chat__iconbtn" type="button" data-act="info" data-x="info-btn">${icon('panel-right')}</button>
+        </div>
+      </header>
+      <div class="ac-chat__findbar" data-x="findbar" hidden>${icon('search')}<input type="search" data-x="find"><span class="ac-chat__findcount" data-x="findcount"></span><button class="ac-chat__iconbtn" type="button" data-act="find-close">${icon('x')}</button></div>
+      <div class="ac-chat__scroller" data-x="scroller">
+        <div class="ac-chat__top" data-x="top"></div>
+        <div class="ac-chat__msgs" data-x="msgs" role="log" aria-live="polite"></div>
+      </div>
+      <button class="ac-chat__tobottom" type="button" data-act="bottom" data-x="tobottom" hidden>${icon('chevron-down')}<span data-x="tobottom-n"></span></button>
+      <div class="ac-chat__bar" data-x="bar" hidden></div>
+      <form class="ac-chat__composer" data-x="form">
+        <button class="ac-chat__cbtn" type="button" data-act="emoji" data-x="emoji-btn">${icon('smile')}</button>
+        <button class="ac-chat__cbtn" type="button" data-act="attach" data-x="attach-btn">${icon('paperclip')}</button>
+        <div class="ac-chat__field">
+          <textarea rows="1" data-x="input" enterkeyhint="send"></textarea>
+          <div class="ac-chat__rec" data-x="rec" hidden><span class="ac-chat__recdot"></span><bdi data-x="rectime">0:00</bdi><span class="ac-chat__recwave" aria-hidden="true">${'<i></i>'.repeat(18)}</span><button class="ac-chat__reccancel" type="button" data-act="rec-cancel" data-x="rec-cancel">${icon('trash-2')}</button></div>
+        </div>
+        <button class="ac-chat__send" type="submit" data-x="send" data-mode="mic">${icon('mic', 'ac-chat__send-mic')}${icon('send-horizontal', 'ac-chat__send-go ac-flip-rtl')}</button>
+      </form>
+      <div class="ac-chat__readonly" data-x="readonly" hidden></div>
+      <input type="file" data-x="file" hidden multiple>
+    </section>
+    <aside class="ac-split__pane ac-chat__info" data-x="info"></aside>`;
+  const x = (n) => el.querySelector(`[data-x="${n}"]`);
+  const list = x('list'); const msgsEl = x('msgs'); const scroller = x('scroller'); const input = x('input'); const form = x('form'); const sendBtn = x('send');
+  AC.scan?.(el);
+  const split = () => AC.instance(el, 'split');
+
+  function labels() {
+    x('side-title').textContent = tr('chats');
+    x('new-btn').setAttribute('aria-label', tr('newChat'));
+    x('search').placeholder = tr('search'); x('search').setAttribute('aria-label', tr('search'));
+    x('back').setAttribute('aria-label', tr('back'));
+    x('find-btn').setAttribute('aria-label', tr('searchIn')); x('find').placeholder = tr('searchIn');
+    x('call-btn').setAttribute('aria-label', tr('call')); x('video-btn').setAttribute('aria-label', tr('video')); x('info-btn').setAttribute('aria-label', tr('info'));
+    x('emoji-btn').setAttribute('aria-label', tr('emoji')); x('attach-btn').setAttribute('aria-label', tr('attach'));
+    input.placeholder = tr('placeholder'); input.setAttribute('aria-label', tr('placeholder'));
+    sendBtn.setAttribute('aria-label', tr('send')); x('rec-cancel').setAttribute('aria-label', tr('cancel'));
+    x('filters').innerHTML = ['all', 'unread', 'groups', 'channels'].map((f) => `<button class="ac-chat__filter" type="button" role="tab" data-filter="${f}" aria-selected="${st.filter === f}">${esc(tr(f))}${f === 'unread' ? `<span class="ac-chat__fcount" data-x="unread-total"></span>` : ''}</button>`).join('');
+  }
+
+  /* ---------------------------------------------------------------- conversation list */
+  function statusLine(c) {
+    if (c.typing) return tr('typing');
+    if (c.type === 'direct') { const p = peer(c); return p.online ? tr('online') : p.lastSeen ? tr('lastSeen', { t: fmt.relative(p.lastSeen) }) : tr('lastSeenRecently'); }
+    if (c.type === 'group') return tr('members', { n: num((c.members || []).length + 1), o: num((c.members || []).filter((id) => userOf(id).online).length + 1) });
+    return tr('subscribers', { n: num(c.subscribers || 0) });
+  }
+  function rowHTML(c) {
+    const last = c.messages.filter((m) => !m.system).at(-1);
+    const sender = last && c.type === 'group' && !last.deleted ? `${isMine(last) ? tr('you') : userOf(last.from).name.split(' ')[0]}: ` : '';
+    return `<div class="ac-chat__conv" role="listitem" data-conv="${c.id}"${st.current === c.id ? ' aria-current="true"' : ''}${c.muted ? ' data-muted' : ''}>
+      <button class="ac-chat__conv-btn" type="button" data-open="${c.id}">
+        ${convAvatar(c)}
+        <span class="ac-chat__conv-main">
+          <span class="ac-chat__conv-top"><strong class="ac-chat__conv-name"><bdi>${esc(titleOf(c))}</bdi></strong>${c.muted ? icon('bell-off', 'ac-chat__mini') : ''}${last ? `<span class="ac-chat__conv-time">${ticks(last)}<bdi>${esc(listTime(last.at))}</bdi></span>` : ''}</span>
+          <span class="ac-chat__conv-bottom">${c.typing ? `<span class="ac-chat__typing-text">${esc(tr('typing'))}</span>` : `<span class="ac-chat__conv-last"><bdi>${esc(sender)}${esc(preview(last))}</bdi></span>`}${c.unread ? `<span class="ac-chat__badge"><bdi>${num(c.unread)}</bdi></span>` : c.pinned ? icon('pin', 'ac-chat__mini') : ''}</span>
+        </span>
+      </button>
+    </div>`;
+  }
+  function renderList() {
+    const q = st.query.trim().toLowerCase();
+    const match = (c) => (st.filter === 'all' || (st.filter === 'unread' && c.unread) || (st.filter === 'groups' && c.type === 'group') || (st.filter === 'channels' && c.type === 'channel'))
+      && (!q || titleOf(c).toLowerCase().includes(q) || c.messages.some((m) => (m.text || '').toLowerCase().includes(q)));
+    const lastAt = (c) => c.messages.at(-1)?.at || 0;
+    const rows = convs.filter(match).sort((a, b) => lastAt(b) - lastAt(a));
+    const pinned = rows.filter((c) => c.pinned); const rest = rows.filter((c) => !c.pinned);
+    const sec = (title, arr) => (arr.length ? `<div class="ac-chat__sec">${esc(title)}</div>${arr.map(rowHTML).join('')}` : '');
+    list.innerHTML = rows.length ? (pinned.length && !q ? sec(tr('pinned'), pinned) + sec(tr('recent'), rest) : rows.map(rowHTML).join(''))
+      : `<div class="ac-chat__none">${icon('message-square', 'ac-icon--xl')}<span>${esc(tr('none'))}</span></div>`;
+    const total = convs.reduce((s, c) => s + (c.unread && !c.muted ? 1 : 0), 0);
+    const tot = x('unread-total'); if (tot) tot.textContent = total ? num(total) : '';
+  }
+
+  /* ---------------------------------------------------------------- thread */
+  function headerHTML(c) {
+    return `${convAvatar(c)}<span class="ac-chat__who-text"><strong><bdi>${esc(titleOf(c))}</bdi>${c.verified ? icon('badge-check', 'ac-chat__verified') : ''}</strong><small${c.typing ? ' data-typing' : ''} data-x="status">${esc(statusLine(c))}</small></span>`;
+  }
+  function quoteHTML(c, id) {
+    const m = c.messages.find((y) => y.id === id); if (!m) return '';
+    const u = userOf(m.from);
+    return `<button class="ac-chat__quote" type="button" data-jump="${m.id}" data-color="${u.color}"><strong><bdi>${esc(isMine(m) ? tr('you') : u.name)}</bdi></strong><span><bdi>${esc(preview(m))}</bdi></span></button>`;
+  }
+  function msgHTML(c, m, prev, next) {
+    if (m.system) return `<div class="ac-chat__system"><span><bdi>${esc(m.text)}</bdi></span></div>`;
+    const mine = isMine(m); const u = userOf(m.from);
+    const firstOfRun = !prev || prev.from !== m.from || prev.system || m.at - prev.at > 5 * 6e4 || dayKey(prev.at) !== dayKey(m.at);
+    const lastOfRun = !next || next.from !== m.from || next.system || next.at - m.at > 5 * 6e4 || dayKey(next.at) !== dayKey(m.at);
+    const showName = c.type === 'group' && !mine && firstOfRun;
+    const showAvatar = c.type === 'group' && !mine;
+    let body = '';
+    if (m.deleted) body = `<p class="ac-chat__deleted">${icon('ban')}<span>${esc(tr('deleted'))}</span></p>`;
+    else {
+      if (m.forwarded) body += `<span class="ac-chat__fwd">${icon('forward', 'ac-flip-rtl')}${esc(tr('forwarded'))}</span>`;
+      if (m.replyTo) body += quoteHTML(c, m.replyTo);
+      if (m.image) body += `<button class="ac-chat__img" type="button" data-lightbox="${m.id}" aria-label="${esc(m.image.name || tr('photo'))}"${m.image.src ? '' : ` data-hue="${m.image.hue ?? 20}"`}>${m.image.src ? `<img src="${esc(m.image.src)}" alt="" loading="lazy">` : `<span class="ac-chat__art" aria-hidden="true">${icon('image', 'ac-icon--xl')}</span>`}</button>`;
+      if (m.file) body += `<div class="ac-chat__file"><span class="ac-chat__file-ic">${icon('file-text')}</span><span class="ac-chat__file-main"><strong><bdi>${esc(m.file.name)}</bdi></strong><small><bdi>${esc(m.file.size || '')}</bdi></small></span><button class="ac-chat__iconbtn" type="button" data-act="download" aria-label="${esc(tr('download'))}">${icon('download')}</button></div>`;
+      if (m.voice) body += `<div class="ac-voice" data-playing="false"><button class="ac-voice__play" type="button" data-voice aria-label="${esc(tr('play'))}">${icon('play')}</button><span class="ac-voice__wave" aria-hidden="true">${'<i></i>'.repeat(30)}</span><bdi class="ac-voice__time">${esc(m.voice.dur)}</bdi></div>`;
+      if (m.text) body += `<p class="ac-chat__text" dir="auto">${linkify(m.text)}</p>`;
+      if (m.link) body += `<a class="ac-chat__link" href="${esc(m.link.url)}" target="_blank" rel="noopener noreferrer"><span class="ac-chat__link-site"><bdi>${esc(new URL(m.link.url).hostname)}</bdi></span><strong dir="auto">${esc(m.link.title)}</strong>${m.link.desc ? `<span dir="auto">${esc(m.link.desc)}</span>` : ''}</a>`;
+    }
+    const reacts = Object.entries(m.reactions || {}).filter(([, who]) => who.length);
+    const meta = `<span class="ac-chat__meta">${m.edited && !m.deleted ? `<span>${esc(tr('edited'))}</span>` : ''}${c.type === 'channel' && m.views ? `<span>${icon('eye')}<bdi>${num(m.views)}</bdi></span>` : ''}<bdi>${esc(time(m.at))}</bdi>${ticks(m)}</span>`;
+    return `<div class="ac-chat__row${mine ? ' is-mine' : ''}${firstOfRun ? ' is-first' : ''}${lastOfRun ? ' is-last' : ''}" data-msg="${m.id}">
+      ${showAvatar ? `<span class="ac-chat__ravatar">${lastOfRun ? avatar(u, 'sm', false) : ''}</span>` : ''}
+      <span class="ac-chat__replyhint" aria-hidden="true">${icon('reply', 'ac-flip-rtl')}</span>
+      <div class="ac-chat__bwrap">
+        <div class="ac-chat__bubble${m.image && !m.text ? ' is-media' : ''}${m.deleted ? ' is-deleted' : ''}" tabindex="0">
+          ${showName ? `<span class="ac-chat__name" data-color="${u.color}"><bdi>${esc(u.name)}</bdi>${(c.admins || []).includes(u.id) ? `<small>${esc(tr('admin'))}</small>` : ''}</span>` : ''}
+          ${body}${meta}
+        </div>
+        ${reacts.length ? `<div class="ac-chat__reacts">${reacts.map(([e, who]) => `<button class="ac-chat__react" type="button" data-react="${e}" aria-pressed="${who.includes(me.id)}" title="${esc(who.map((id) => (id === me.id ? tr('youReacted') : userOf(id).name)).join(sep()))}"><span>${e}</span><bdi>${who.length}</bdi></button>`).join('')}</div>` : ''}
+        ${m.deleted ? '' : `<div class="ac-chat__hover" aria-hidden="true"><button type="button" data-act="quick-react" tabindex="-1">${icon('smile')}</button><button type="button" data-act="reply" tabindex="-1">${icon('reply', 'ac-flip-rtl')}</button><button type="button" data-act="msg-menu" tabindex="-1">${icon('ellipsis')}</button></div>`}
+      </div>
+    </div>`;
+  }
+  function renderMsgs({ keepScroll = false, stick = false } = {}) {
+    const c = cur(); if (!c) return;
+    const before = scroller.scrollHeight - scroller.scrollTop;
+    let html = ''; let day = '';
+    const unreadFrom = st.unreadFrom;
+    c.messages.forEach((m, i) => {
+      if (dayKey(m.at) !== day) { day = dayKey(m.at); html += `<div class="ac-chat__day"><span>${esc(dayLabel(m.at))}</span></div>`; }
+      if (unreadFrom && m.id === unreadFrom) html += `<div class="ac-chat__unreadline" data-x="unreadline"><span>${esc(tr('unreadDivider'))}</span></div>`;
+      html += msgHTML(c, m, c.messages[i - 1], c.messages[i + 1]);
+    });
+    if (c.typing) html += typingHTML(c);
+    msgsEl.innerHTML = html;
+    msgsEl.querySelectorAll('[data-hue]').forEach((n) => n.style.setProperty('--_hue', n.dataset.hue));
+    if (keepScroll) scroller.scrollTop = scroller.scrollHeight - before;
+    else if (stick) scroller.scrollTop = scroller.scrollHeight;
+    applyFind();
+  }
+  const typingHTML = (c) => `<div class="ac-chat__row is-typing" data-typing>${c.type === 'group' ? `<span class="ac-chat__ravatar">${avatar(userOf(c.typingWho || c.members?.[0]), 'sm', false)}</span>` : ''}<div class="ac-chat__bubble ac-chat__dots" aria-label="${esc(tr('typing'))}"><i></i><i></i><i></i></div></div>`;
+  function renderTop() {
+    const c = cur(); if (!c) return;
+    x('top').innerHTML = st.loading ? `<span class="ac-chat__spinner"></span><span>${esc(tr('loading'))}</span>` : c.noMore || !o.loadOlder ? `<span class="ac-chat__start">${icon('lock')}<span>${esc(tr('start'))}</span></span>` : '';
+  }
+  function renderComposer() {
+    const c = cur(); if (!c) return;
+    const can = canPost(c);
+    form.hidden = !can;
+    x('readonly').hidden = can;
+    if (!can) x('readonly').innerHTML = `<span>${icon('megaphone')}${esc(tr('channelOnly'))}</span><button class="ac-chat__pill" type="button" data-act="mute-toggle">${icon(c.muted ? 'bell' : 'bell-off')}<span>${esc(tr(c.muted ? 'unmute' : 'mute'))}</span></button>`;
+    const bar = x('bar');
+    if (st.reply || st.editing) {
+      const m = c.messages.find((y) => y.id === (st.reply || st.editing));
+      const u = m ? userOf(m.from) : me;
+      bar.hidden = false;
+      bar.innerHTML = `${icon(st.editing ? 'pencil' : 'reply', 'ac-flip-rtl ac-chat__bar-ic')}<span class="ac-chat__bar-main"><strong>${esc(st.editing ? tr('editing') : tr('replyingTo', { name: isMine(m) ? tr('you') : u.name }))}</strong><span><bdi>${esc(preview(m))}</bdi></span></span><button class="ac-chat__iconbtn" type="button" data-act="bar-close" aria-label="${esc(tr('cancel'))}">${icon('x')}</button>`;
+    } else { bar.hidden = true; bar.innerHTML = ''; }
+  }
+  function renderInfo() {
+    const c = cur(); const box = x('info'); if (!c) { box.innerHTML = ''; return; }
+    const p = peer(c);
+    const all = c.messages.filter((m) => !m.deleted);
+    const media = all.filter((m) => m.image); const files = all.filter((m) => m.file); const links = all.filter((m) => m.link || URL_RE.test(m.text || ''));
+    URL_RE.lastIndex = 0;
+    const tabs = [['media', media.length], ['files', files.length], ['links', links.length]];
+    box.innerHTML = `<header class="ac-chat__infohead"><button class="ac-chat__iconbtn" type="button" data-act="info-close" aria-label="${esc(tr('close'))}">${icon(phone.matches ? 'chevron-left' : 'x', phone.matches ? 'ac-flip-rtl' : '')}</button><strong>${esc(tr('info'))}</strong></header>
+      <div class="ac-chat__infobody">
+        <div class="ac-chat__profile">${convAvatar(c, 'xl')}<strong><bdi>${esc(titleOf(c))}</bdi></strong><small>${esc(statusLine(c))}</small>
+          <div class="ac-chat__qa">
+            <button type="button" data-act="call">${icon('phone')}<span>${esc(tr('call'))}</span></button>
+            <button type="button" data-act="video">${icon('video')}<span>${esc(tr('video'))}</span></button>
+            <button type="button" data-act="mute-toggle" aria-pressed="${!!c.muted}">${icon(c.muted ? 'bell-off' : 'bell')}<span>${esc(tr(c.muted ? 'unmute' : 'mute'))}</span></button>
+            <button type="button" data-act="find">${icon('search')}<span>${esc(tr('searchIn'))}</span></button>
+          </div></div>
+        ${p ? `<dl class="ac-chat__facts">${p.about ? `<div><dt>${esc(tr('about'))}</dt><dd dir="auto">${esc(p.about)}</dd></div>` : ''}${p.phone ? `<div><dt>${esc(tr('phone'))}</dt><dd><bdi>${esc(p.phone)}</bdi></dd></div>` : ''}${p.email ? `<div><dt>${esc(tr('email'))}</dt><dd><bdi>${esc(p.email)}</bdi></dd></div>` : ''}</dl>` : ''}
+        ${c.type === 'group' ? `<div class="ac-chat__members"><div class="ac-chat__sec">${esc(tr('members', { n: num((c.members || []).length + 1), o: num((c.members || []).filter((id) => userOf(id).online).length + 1) }))}</div>${[me.id, ...(c.members || [])].map((id) => { const u = userOf(id); return `<div class="ac-chat__member">${avatar(u, 'sm')}<span><bdi>${esc(id === me.id ? `${u.name} (${tr('you')})` : u.name)}</bdi><small>${esc(u.online ? tr('online') : tr('lastSeenRecently'))}</small></span>${(c.admins || []).includes(id) ? `<span class="ac-badge ac-badge--accent">${esc(tr('admin'))}</span>` : ''}</div>`; }).join('')}</div>` : ''}
+        <div class="ac-chat__tabs" role="tablist">${tabs.map(([k, n], i) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${i === 0}">${esc(tr(k))} <bdi>${n}</bdi></button>`).join('')}</div>
+        <div class="ac-chat__tabpanel" data-panel="media">${media.length ? `<div class="ac-chat__gallery">${media.map((m) => `<button type="button" data-lightbox="${m.id}"${m.image.src ? '' : ` data-hue="${m.image.hue ?? 20}"`} aria-label="${esc(m.image.name || tr('photo'))}">${m.image.src ? `<img src="${esc(m.image.src)}" alt="" loading="lazy">` : icon('image')}</button>`).join('')}</div>` : `<p class="ac-chat__emptytab">${esc(tr('empty'))}</p>`}</div>
+        <div class="ac-chat__tabpanel" data-panel="files" hidden>${files.length ? files.map((m) => `<div class="ac-chat__file">${`<span class="ac-chat__file-ic">${icon('file-text')}</span>`}<span class="ac-chat__file-main"><strong><bdi>${esc(m.file.name)}</bdi></strong><small><bdi>${esc(m.file.size || '')}</bdi> · <bdi>${esc(fmt.date(m.at, { day: 'numeric', month: 'short' }))}</bdi></small></span></div>`).join('') : `<p class="ac-chat__emptytab">${esc(tr('empty'))}</p>`}</div>
+        <div class="ac-chat__tabpanel" data-panel="links" hidden>${links.length ? links.map((m) => { const url = m.link?.url || (m.text.match(URL_RE) || [''])[0]; return `<a class="ac-chat__linkrow" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${icon('link')}<span><strong dir="auto">${esc(m.link?.title || url.replace(/^https?:\/\//, ''))}</strong><small><bdi>${esc(url)}</bdi></small></span></a>`; }).join('') : `<p class="ac-chat__emptytab">${esc(tr('empty'))}</p>`}</div>
+      </div>`;
+    box.querySelectorAll('[data-hue]').forEach((n) => n.style.setProperty('--_hue', n.dataset.hue));
+  }
+  function renderThread() {
+    const c = cur();
+    el.toggleAttribute('data-empty', !c);
+    if (!c) { x('who').innerHTML = ''; msgsEl.innerHTML = `<div class="ac-chat__pick">${icon('message-square', 'ac-icon--xl')}<strong>${esc(tr('pickChat'))}</strong><span>${esc(tr('pickChatSub'))}</span></div>`; return; }
+    x('who').innerHTML = headerHTML(c);
+    renderTop(); renderMsgs({ stick: true }); renderComposer(); renderInfo();
+    const line = x('unreadline'); if (line) scroller.scrollTop = line.offsetTop - 60;
+  }
+
+  /* ---------------------------------------------------------------- actions */
+  function open(id, { push = true } = {}) {
+    const c = conv(id); if (!c) return;
+    stopRecord(false);
+    st.current = id; st.reply = null; st.editing = null; st.search = ''; x('findbar').hidden = true;
+    const fits = st.filter === 'all' || (st.filter === 'unread' && c.unread) || (st.filter === 'groups' && c.type === 'group') || (st.filter === 'channels' && c.type === 'channel');
+    if (!fits) { st.filter = 'all'; labels(); }
+    const firstUnread = c.unread ? c.messages[c.messages.length - c.unread] : null;
+    st.unreadFrom = firstUnread?.id || null;
+    c.unread = 0;
+    input.value = c.draft || ''; syncSend();
+    renderList(); renderThread();
+    if (push) split()?.push(1);
+    if (!phone.matches && canPost(c)) input.focus({ preventScroll: true });
+    AC.emit?.(el, 'chat:open', { conv: c });
+  }
+  function bodyOf(b) { return typeof b === 'string' ? { text: b } : { ...b }; }
+  function send(id, body) {
+    const c = conv(id); if (!c) return null;
+    const m = { id: uidMsg(), from: me.id, at: Date.now(), status: 'sending', reactions: {}, ...bodyOf(body) };
+    if (st.reply && id === st.current) m.replyTo = st.reply;
+    c.messages.push(m); st.reply = null; st.unreadFrom = null;
+    if (id === st.current) { renderMsgs({ stick: true }); renderComposer(); animateLast(); scroller.scrollTo({ top: scroller.scrollHeight, behavior: AC.reducedMotion?.() ? 'auto' : 'smooth' }); }
+    renderList();
+    st.timers.push(setTimeout(() => setStatus(id, m.id, 'sent'), 350));
+    AC.emit?.(el, 'chat:send', { conv: c, msg: m });
+    o.onSend?.(c, m, api);
+    return m;
+  }
+  function animateLast() { const row = msgsEl.querySelector('.ac-chat__row:not([data-typing]):last-of-type') || [...msgsEl.querySelectorAll('.ac-chat__row:not([data-typing])')].at(-1); row?.setAttribute('data-new', ''); }
+  function receive(id, msg) {
+    const c = conv(id); if (!c) return null;
+    c.typing = false;
+    const m = { id: uidMsg(), at: Date.now(), reactions: {}, ...msg };
+    c.messages.push(m);
+    const nearBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 120;
+    if (id === st.current) {
+      c.messages.forEach((y) => { if (isMine(y) && y.status !== 'read') y.status = 'read'; });
+      renderMsgs({ stick: nearBottom }); animateLast();
+      x('who').innerHTML = headerHTML(c);
+      if (!nearBottom) { st.newBelow = (st.newBelow || 0) + 1; updateToBottom(); }
+    } else { c.unread = (c.unread || 0) + 1; AC.haptic?.(6); }
+    renderList();
+    return m;
+  }
+  function typing(id, on, who) {
+    const c = conv(id); if (!c) return;
+    c.typing = !!on; c.typingWho = who;
+    if (id === st.current) { const near = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 120; renderMsgs({ stick: near }); x('who').innerHTML = headerHTML(c); }
+    renderList();
+  }
+  function setStatus(id, msgId, status) {
+    const c = conv(id); const m = c?.messages.find((y) => y.id === msgId); if (!m) return;
+    m.status = status;
+    if (id === st.current) { const t = msgsEl.querySelector(`[data-msg="${msgId}"] .ac-chat-tick`); if (t) t.outerHTML = ticks(m); }
+    renderList();
+  }
+  function react(c, m, emoji) {
+    m.reactions ||= {};
+    const had = (m.reactions[emoji] || []).includes(me.id);
+    for (const k of Object.keys(m.reactions)) m.reactions[k] = m.reactions[k].filter((u) => u !== me.id);
+    if (!had) (m.reactions[emoji] ||= []).push(me.id);
+    renderMsgs({ keepScroll: true });
+    const btn = msgsEl.querySelector(`[data-msg="${m.id}"] [data-react="${emoji}"]`); btn?.setAttribute('data-pop', '');
+    AC.haptic?.(8);
+    AC.emit?.(el, 'chat:react', { conv: c, msg: m, emoji });
+  }
+  async function del(c, m) {
+    const ok = AC.confirm ? await AC.confirm({ tone: 'danger', title: tr('deleteMsg'), confirmText: tr('delete') }) : true;
+    if (!ok) return;
+    const row = msgsEl.querySelector(`[data-msg="${m.id}"]`);
+    if (row && !AC.reducedMotion?.()) await row.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.92)' }], { duration: 200, easing: 'ease-in' }).finished;
+    m.deleted = true; m.text = ''; m.image = m.file = m.voice = m.link = null; m.reactions = {};
+    renderMsgs({ keepScroll: true }); renderList(); renderInfo();
+    AC.emit?.(el, 'chat:delete', { conv: c, msg: m });
+  }
+  function forward(m) {
+    const box = document.createElement('div');
+    box.className = 'ac-chat__pickerlist';
+    box.innerHTML = convs.filter((c) => canPost(c)).map((c) => `<label class="ac-chat__pickrow">${convAvatar(c, 'sm')}<span><bdi>${esc(titleOf(c))}</bdi></span><input class="ac-check" type="checkbox" value="${c.id}"></label>`).join('');
+    const foot = document.createElement('div');
+    foot.className = 'ac-chat__modalfoot';
+    foot.innerHTML = `<button class="ac-btn" type="button" data-ac-close>${esc(tr('cancel'))}</button><button class="ac-btn ac-btn--primary" type="button" data-go>${icon('forward', 'ac-flip-rtl')}<span>${esc(tr('forward'))}</span></button>`;
+    foot.querySelector('[data-go]').addEventListener('click', () => {
+      const ids = [...box.querySelectorAll('input:checked')].map((i) => i.value);
+      if (!ids.length) return;
+      const { id, from, at, status, reactions, replyTo, edited, ...rest } = m;
+      ids.forEach((cid) => send(cid, { ...rest, forwarded: true }));
+      AC.modal?.close();
+      AC.toast?.({ title: tr('forwardedTo', { n: ids.length }), tone: 'success', duration: 2000 });
+      AC.emit?.(el, 'chat:forward', { msg: m, to: ids });
+    });
+    AC.modal?.open({ title: tr('forwardTo'), content: box, footer: foot, size: 'sm' });
+  }
+  function startEdit(m) { st.editing = m.id; st.reply = null; input.value = m.text || ''; syncSend(); renderComposer(); input.focus(); }
+  function msgMenu(anchor, c, m) {
+    const mine = isMine(m);
+    const items = [
+      { label: tr('reply'), icon: 'reply', onSelect: () => { st.reply = m.id; st.editing = null; renderComposer(); input.focus(); } },
+      m.text ? { label: tr('copy'), icon: 'copy', onSelect: () => { (AC.copyText ? AC.copyText(m.text) : navigator.clipboard?.writeText(m.text)); AC.toast?.({ title: tr('copied'), tone: 'success', duration: 1400 }); } } : null,
+      { label: tr('forward'), icon: 'forward', onSelect: () => forward(m) },
+      mine && m.text && !m.forwarded ? { label: tr('edit'), icon: 'pencil', onSelect: () => startEdit(m) } : null,
+      '-',
+      mine || (c.admins || []).includes(me.id) ? { label: tr('delete'), icon: 'trash-2', tone: 'danger', onSelect: () => del(c, m) } : null,
+    ].filter(Boolean);
+    if (items.at(-1) === '-') items.pop();
+    const pop = document.createElement('div');
+    pop.className = 'ac-chat__reactbar';
+    pop.innerHTML = QUICK.map((e) => `<button type="button" data-quick="${e}" aria-pressed="${(m.reactions?.[e] || []).includes(me.id)}" aria-label="${esc(tr('react'))} ${e}">${e}</button>`).join('');
+    const menuApi = AC.menu?.(anchor, [{ heading: '' }, ...items], { placement: 'bottom-start' });
+    const menuEl = menuApi?.el;
+    const head = menuEl?.querySelector('.ac-menu__label');
+    if (head) { head.replaceWith(pop); } else menuEl?.prepend(pop);
+    pop.addEventListener('click', (e) => { const b = e.target.closest('[data-quick]'); if (!b) return; react(c, m, b.dataset.quick); menuApi?.close?.(); AC.menu?.close?.(); });
+  }
+  function rowMenu(anchor, c) {
+    AC.menu?.(anchor, [
+      { label: tr(c.pinned ? 'unpin' : 'pin'), icon: 'pin', onSelect: () => { c.pinned = !c.pinned; renderList(); } },
+      { label: tr(c.muted ? 'unmute' : 'mute'), icon: c.muted ? 'bell' : 'bell-off', onSelect: () => { c.muted = !c.muted; renderList(); if (c.id === st.current) { renderInfo(); renderComposer(); } } },
+      { label: tr(c.unread ? 'markRead' : 'markUnread'), icon: c.unread ? 'check-check' : 'mail', onSelect: () => { c.unread = c.unread ? 0 : 1; renderList(); } },
+      '-',
+      { label: tr('deleteChat'), icon: 'trash-2', tone: 'danger', onSelect: async () => { if (AC.confirm && !(await AC.confirm({ tone: 'danger', title: tr('deleteChatQ', { name: titleOf(c) }), confirmText: tr('delete') }))) return; convs.splice(convs.indexOf(c), 1); if (st.current === c.id) { st.current = null; split()?.pop(); renderThread(); } renderList(); } },
+    ], { placement: 'bottom-end' });
+  }
+  function newChat() {
+    const others = [...users.values()].filter((u) => u.id !== me.id);
+    const box = document.createElement('div');
+    box.className = 'ac-chat__newchat';
+    box.innerHTML = `<div class="ac-chat__newmode" role="tablist"><button type="button" role="tab" data-mode="direct" aria-selected="true">${icon('user')}<span>${esc(tr('newChat'))}</span></button><button type="button" role="tab" data-mode="group" aria-selected="false">${icon('users')}<span>${esc(tr('newGroup'))}</span></button></div>
+      <input class="ac-input" data-gname placeholder="${esc(tr('groupName'))}" aria-label="${esc(tr('groupName'))}" hidden>
+      <label class="ac-chat__search">${icon('search')}<input type="search" data-q placeholder="${esc(tr('contacts'))}" aria-label="${esc(tr('contacts'))}"></label>
+      <div class="ac-chat__pickerlist" data-people>${others.map((u) => `<label class="ac-chat__pickrow" data-name="${esc(u.name.toLowerCase())}">${avatar(u, 'sm')}<span><bdi>${esc(u.name)}</bdi><small>${esc(u.online ? tr('online') : tr('lastSeenRecently'))}</small></span><input class="ac-check" type="checkbox" value="${u.id}" hidden></label>`).join('')}</div>`;
+    const foot = document.createElement('div');
+    foot.className = 'ac-chat__modalfoot';
+    foot.innerHTML = `<button class="ac-btn" type="button" data-ac-close>${esc(tr('cancel'))}</button><button class="ac-btn ac-btn--primary" type="button" data-go hidden>${esc(tr('create'))}</button>`;
+    let mode = 'direct';
+    box.addEventListener('click', (e) => {
+      const tab = e.target.closest('[data-mode]');
+      if (tab) {
+        mode = tab.dataset.mode;
+        box.querySelectorAll('[data-mode]').forEach((b) => b.setAttribute('aria-selected', String(b === tab)));
+        box.querySelector('[data-gname]').hidden = mode !== 'group'; foot.querySelector('[data-go]').hidden = mode !== 'group';
+        box.querySelectorAll('[data-people] input').forEach((i) => { i.hidden = mode !== 'group'; i.checked = false; });
+        return;
+      }
+      const row = e.target.closest('.ac-chat__pickrow');
+      if (row && mode === 'direct') {
+        e.preventDefault();
+        const uid = row.querySelector('input').value;
+        let c = convs.find((y) => y.type === 'direct' && y.with === uid);
+        if (!c) { c = { id: `c${uidMsg()}`, type: 'direct', with: uid, messages: [], unread: 0 }; convs.unshift(c); }
+        AC.modal?.close(); open(c.id);
+      }
+    });
+    box.querySelector('[data-q]').addEventListener('input', (e) => { const q = e.target.value.trim().toLowerCase(); box.querySelectorAll('.ac-chat__pickrow').forEach((r) => { r.hidden = q && !r.dataset.name.includes(q); }); });
+    foot.querySelector('[data-go]').addEventListener('click', () => {
+      const ids = [...box.querySelectorAll('[data-people] input:checked')].map((i) => i.value);
+      const name = box.querySelector('[data-gname]').value.trim();
+      if (!ids.length || !name) { box.querySelector(name ? '[data-q]' : '[data-gname]').focus(); return; }
+      const c = { id: `g${uidMsg()}`, type: 'group', name, initials: name.slice(0, 2), color: 5, members: ids, admins: [me.id], messages: [{ id: uidMsg(), system: true, from: me.id, at: Date.now(), text: `${me.name} → ${name}` }], unread: 0 };
+      convs.unshift(c); AC.modal?.close(); open(c.id);
+    });
+    AC.modal?.open({ title: tr('newChat'), content: box, footer: foot, size: 'sm' });
+  }
+
+  /* ---------------------------------------------------------------- lightbox */
+  function lightbox(msgId) {
+    const c = cur(); if (!c) return;
+    const imgs = c.messages.filter((m) => m.image && !m.deleted);
+    let i = Math.max(0, imgs.findIndex((m) => m.id === msgId));
+    const box = document.createElement('div');
+    box.className = 'ac-lightbox';
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', tr('media'));
+    box.innerHTML = `<div class="ac-lightbox__top"><span class="ac-lightbox__who" data-who></span><span class="ac-lightbox__count" data-count></span><button class="ac-lightbox__btn" type="button" data-lb="close" aria-label="${esc(tr('close'))}">${icon('x')}</button></div>
+      <button class="ac-lightbox__nav" type="button" data-lb="prev" aria-label="${esc(tr('prev'))}">${icon('chevron-left', 'ac-flip-rtl')}</button>
+      <figure class="ac-lightbox__stage" data-stage></figure>
+      <button class="ac-lightbox__nav ac-lightbox__nav--next" type="button" data-lb="next" aria-label="${esc(tr('next'))}">${icon('chevron-right', 'ac-flip-rtl')}</button>`;
+    document.body.append(box);
+    const stage = box.querySelector('[data-stage]');
+    const show = (dir = 0) => {
+      const m = imgs[i]; const u = userOf(m.from);
+      stage.innerHTML = `<div class="ac-lightbox__img"${m.image.src ? '' : ` data-hue="${m.image.hue ?? 20}"`}>${m.image.src ? `<img src="${esc(m.image.src)}" alt="${esc(m.image.name || '')}">` : icon('image', 'ac-icon--xl')}</div>${m.text ? `<figcaption dir="auto">${esc(m.text)}</figcaption>` : ''}`;
+      stage.querySelectorAll('[data-hue]').forEach((n) => n.style.setProperty('--_hue', n.dataset.hue));
+      stage.dataset.dir = String(dir);
+      stage.classList.remove('is-in'); void stage.offsetWidth; stage.classList.add('is-in');
+      box.querySelector('[data-who]').innerHTML = `${avatar(u, 'sm', false)}<span><strong><bdi>${esc(isMine(m) ? tr('you') : u.name)}</bdi></strong><small><bdi>${esc(fmt.date(m.at, { dateStyle: 'medium', timeStyle: 'short' }))}</bdi></small></span>`;
+      box.querySelector('[data-count]').innerHTML = `<bdi>${i + 1} / ${imgs.length}</bdi>`;
+      box.querySelector('[data-lb="prev"]').disabled = i === 0; box.querySelector('[data-lb="next"]').disabled = i === imgs.length - 1;
+    };
+    const go = (d) => { const n = i + d; if (n < 0 || n >= imgs.length) return; i = n; show(d); };
+    const close = () => { release?.(); AC.scrollLock?.unlock(); box.setAttribute('data-closing', ''); offs.forEach((f) => f()); setTimeout(() => box.remove(), AC.reducedMotion?.() ? 0 : 200); };
+    AC.scrollLock?.lock();
+    show();
+    const release = AC.trapFocus?.(box, { initial: box.querySelector('[data-lb="close"]') });
+    const rtl = () => getComputedStyle(box).direction === 'rtl';
+    const offs = [
+      AC.on(box, 'click', (e) => { const b = e.target.closest('[data-lb]'); if (b) { if (b.dataset.lb === 'close') close(); else go(b.dataset.lb === 'next' ? 1 : -1); } else if (e.target === box || e.target === stage) close(); }),
+      AC.on(document, 'keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); close(); } if (e.key === 'ArrowRight') go(rtl() ? -1 : 1); if (e.key === 'ArrowLeft') go(rtl() ? 1 : -1); }, true),
+      AC.gesture ? AC.gesture(stage, { axis: 'x', onMove(s) { stage.style.setProperty('--ac-drag', `${s.dx}px`); stage.setAttribute('data-dragging', ''); }, onEnd(s) { stage.removeAttribute('data-dragging'); stage.style.removeProperty('--ac-drag'); const fwd = (rtl() ? 1 : -1) * Math.sign(s.dx); if (Math.abs(s.dx) > 60 || Math.abs(s.vx) > 0.5) go(fwd); } }) : () => {},
+      AC.gesture ? AC.gesture(box, { axis: 'y', onMove(s) { if (s.dy > 0) { box.style.setProperty('--ac-pull', `${s.dy}px`); box.setAttribute('data-dragging', ''); } }, onEnd(s) { box.removeAttribute('data-dragging'); if (s.dy > 120 || s.vy > 0.6) close(); else box.style.removeProperty('--ac-pull'); } }) : () => {},
+    ];
+  }
+
+  /* ---------------------------------------------------------------- composer */
+  const syncSend = () => {
+    sendBtn.dataset.mode = input.value.trim() || st.rec || st.editing ? 'send' : 'mic';
+    input.style.setProperty('block-size', 'auto');
+    input.style.setProperty('block-size', `${Math.min(input.scrollHeight, 140)}px`);
+    const c = cur(); if (c) c.draft = input.value;
+  };
+  function startRecord() {
+    if (st.rec) return;
+    st.rec = { t0: Date.now(), timer: setInterval(() => { const s = Math.floor((Date.now() - st.rec.t0) / 1000); x('rectime').textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; }, 250) };
+    x('rec').hidden = false; input.hidden = true; form.setAttribute('data-recording', ''); syncSend(); AC.haptic?.(12);
+  }
+  function stopRecord(sendIt) {
+    if (!st.rec) return;
+    clearInterval(st.rec.timer); const s = Math.max(1, Math.round((Date.now() - st.rec.t0) / 1000)); st.rec = null;
+    x('rec').hidden = true; input.hidden = false; form.removeAttribute('data-recording'); x('rectime').textContent = '0:00';
+    if (sendIt && st.current) send(st.current, { voice: { dur: `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` } });
+    syncSend();
+  }
+  function submit() {
+    const c = cur(); if (!c) return;
+    if (st.rec) { stopRecord(true); return; }
+    const text = input.value.trim();
+    if (st.editing) {
+      const m = c.messages.find((y) => y.id === st.editing);
+      if (m && text && text !== m.text) { m.text = text; m.edited = true; AC.emit?.(el, 'chat:edit', { conv: c, msg: m }); }
+      st.editing = null; input.value = ''; c.draft = ''; syncSend(); renderComposer(); renderMsgs({ keepScroll: true }); renderList();
+      return;
+    }
+    if (!text) { startRecord(); return; }
+    input.value = ''; c.draft = ''; syncSend();
+    send(c.id, text);
+    input.focus();
+  }
+  function emojiPicker(anchor) {
+    const box = document.createElement('div');
+    box.className = 'ac-chat__emoji';
+    box.innerHTML = EMOJI.map((e) => `<button type="button" data-emo="${e}">${e}</button>`).join('');
+    const pop = AC.popover?.show(anchor, { content: box, placement: 'top-start', label: tr('emoji') });
+    box.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-emo]'); if (!b) return;
+      const s = input.selectionStart ?? input.value.length;
+      input.value = input.value.slice(0, s) + b.dataset.emo + input.value.slice(input.selectionEnd ?? s);
+      syncSend(); input.focus(); input.setSelectionRange(s + b.dataset.emo.length, s + b.dataset.emo.length);
+      AC.haptic?.(4);
+    });
+    return pop;
+  }
+  function attachMenu(anchor) {
+    const fileInput = x('file');
+    AC.menu?.(anchor, [
+      { label: tr('photo'), icon: 'image', onSelect: () => { fileInput.accept = 'image/*'; fileInput.click(); } },
+      { label: tr('document'), icon: 'file-text', onSelect: () => { fileInput.accept = ''; fileInput.click(); } },
+      { label: tr('location'), icon: 'map-pin', onSelect: () => send(st.current, { text: '📍 https://maps.google.com/?q=35.7219,51.3347', link: { url: 'https://maps.google.com/?q=35.7219,51.3347', title: 'Tehran', desc: '35.7219, 51.3347' } }) },
+    ], { placement: 'top-start' });
+  }
+  const sizeOf = (b) => (b > 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`);
+
+  /* ---------------------------------------------------------------- find in conversation */
+  function applyFind() {
+    const q = st.search.trim().toLowerCase();
+    let n = 0;
+    msgsEl.querySelectorAll('.ac-chat__row[data-msg]').forEach((row) => {
+      const hit = q && row.querySelector('.ac-chat__text')?.textContent.toLowerCase().includes(q);
+      row.toggleAttribute('data-hit', !!hit); if (hit) n++;
+    });
+    x('findcount').innerHTML = q ? `<bdi>${n}</bdi>` : '';
+    if (q && n) msgsEl.querySelector('[data-hit]')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  /* ---------------------------------------------------------------- infinite scroll + to-bottom */
+  async function loadOlder() {
+    const c = cur(); if (!c || st.loading || c.noMore || !o.loadOlder) return;
+    st.loading = true; renderTop();
+    const older = await o.loadOlder(c);
+    st.loading = false;
+    if (!older?.length) c.noMore = true;
+    else c.messages.unshift(...older);
+    if (cur() !== c) return;
+    renderTop(); renderMsgs({ keepScroll: true });
+  }
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver((en) => { if (en.some((e) => e.isIntersecting)) loadOlder(); }, { root: scroller, rootMargin: '200px 0px 0px 0px' }) : null;
+  io?.observe(x('top'));
+  function updateToBottom() {
+    const away = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight > 240;
+    if (!away) st.newBelow = 0;
+    x('tobottom').hidden = !away;
+    x('tobottom-n').textContent = st.newBelow ? num(st.newBelow) : '';
+    x('tobottom').setAttribute('aria-label', st.newBelow ? `${st.newBelow} ${tr('newMessages')}` : tr('newMessages'));
+  }
+
+  /* ---------------------------------------------------------------- long press / swipe-to-reply on bubbles */
+  let lp = null;
+  const swipeOff = AC.gesture ? AC.gesture(msgsEl, {
+    axis: 'x', threshold: 10,
+    filter: (e) => e.pointerType !== 'mouse' && !!e.target.closest('.ac-chat__row[data-msg] .ac-chat__bubble') && !e.target.closest('.ac-chat__row').querySelector('.is-deleted'),
+    onStart(s) { clearTimeout(lp?.t); lp = null; s.row = s.target.closest('.ac-chat__row'); s.row.setAttribute('data-swiping', ''); },
+    onMove(s) {
+      const rtl = getComputedStyle(el).direction === 'rtl';
+      const toward = rtl ? Math.max(0, s.dx) : Math.min(0, s.dx);   // toward the inline start
+      const d = Math.min(80, Math.abs(toward));
+      s.row.style.setProperty('--_swipe', `${(rtl ? 1 : -1) * d}px`);
+      s.row.toggleAttribute('data-armed', d > 56);
+    },
+    onEnd(s) {
+      const armed = s.row.hasAttribute('data-armed');
+      s.row.removeAttribute('data-swiping'); s.row.removeAttribute('data-armed'); s.row.style.removeProperty('--_swipe');
+      if (armed) { st.reply = s.row.dataset.msg; st.editing = null; renderComposer(); input.focus(); AC.haptic?.(10); }
+    },
+  }) : () => {};
+
+  /* ---------------------------------------------------------------- events */
+  const offs = [
+    swipeOff,
+    AC.on(list, 'click', '[data-open]', (e, b) => open(b.dataset.open)),
+    AC.on(list, 'contextmenu', '[data-conv]', (e, r) => { e.preventDefault(); rowMenu(e, conv(r.dataset.conv)); }),
+    AC.on(x('filters'), 'click', '[data-filter]', (e, b) => { st.filter = b.dataset.filter; x('filters').querySelectorAll('[data-filter]').forEach((y) => y.setAttribute('aria-selected', String(y === b))); renderList(); list.classList.remove('is-in'); void list.offsetWidth; list.classList.add('is-in'); }),
+    AC.on(x('search'), 'input', (e) => { st.query = e.target.value; renderList(); }),
+    AC.on(el, 'click', '[data-act]', (e, b) => {
+      const act = b.dataset.act; const c = cur();
+      if (act === 'new') newChat();
+      else if (act === 'info') { if (phone.matches) { renderInfo(); split()?.push(2); } else { st.info = !st.info; el.toggleAttribute('data-info', st.info); x('info-btn').setAttribute('aria-pressed', String(st.info)); } }
+      else if (act === 'info-close') { if (phone.matches) split()?.pop(); else { st.info = false; el.removeAttribute('data-info'); x('info-btn').setAttribute('aria-pressed', 'false'); } }
+      else if (act === 'find') { if (phone.matches && split()?.depth === 2) split()?.pop(); x('findbar').hidden = false; x('find').focus(); }
+      else if (act === 'find-close') { x('findbar').hidden = true; st.search = ''; x('find').value = ''; applyFind(); }
+      else if (act === 'call' || act === 'video') AC.toast?.({ title: `${tr(act)} · ${c ? titleOf(c) : ''}`, tone: 'info', duration: 2000 });
+      else if (act === 'mute-toggle' && c) { c.muted = !c.muted; renderList(); renderInfo(); renderComposer(); }
+      else if (act === 'bottom') { st.newBelow = 0; scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' }); }
+      else if (act === 'bar-close') { if (st.editing) { input.value = ''; syncSend(); } st.reply = null; st.editing = null; renderComposer(); }
+      else if (act === 'emoji') emojiPicker(b);
+      else if (act === 'attach') attachMenu(b);
+      else if (act === 'rec-cancel') stopRecord(false);
+      else if (act === 'download') AC.toast?.({ title: tr('download'), tone: 'info', duration: 1400 });
+      else if (c && b.closest('.ac-chat__hover')) {
+        const m = c.messages.find((y) => y.id === b.closest('[data-msg]').dataset.msg);
+        if (act === 'reply') { st.reply = m.id; st.editing = null; renderComposer(); input.focus(); }
+        if (act === 'quick-react' || act === 'msg-menu') msgMenu(b, c, m);
+      }
+    }),
+    AC.on(el, 'click', '[data-tab]', (e, b) => { const box = x('info'); box.querySelectorAll('[data-tab]').forEach((y) => y.setAttribute('aria-selected', String(y === b))); box.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== b.dataset.tab; }); }),
+    AC.on(el, 'click', '[data-lightbox]', (e, b) => lightbox(b.dataset.lightbox)),
+    AC.on(msgsEl, 'click', '[data-react]', (e, b) => { const c = cur(); const m = c.messages.find((y) => y.id === b.closest('[data-msg]').dataset.msg); react(c, m, b.dataset.react); }),
+    AC.on(msgsEl, 'click', '[data-jump]', (e, b) => { const row = msgsEl.querySelector(`[data-msg="${b.dataset.jump}"]`); if (!row) return; row.scrollIntoView({ block: 'center', behavior: 'smooth' }); row.removeAttribute('data-flash'); void row.offsetWidth; row.setAttribute('data-flash', ''); }),
+    AC.on(msgsEl, 'click', '[data-voice]', (e, b) => {
+      const v = b.closest('.ac-voice'); const on = v.dataset.playing !== 'true';
+      msgsEl.querySelectorAll('.ac-voice[data-playing="true"]').forEach((y) => { y.dataset.playing = 'false'; y.querySelector('[data-voice]').innerHTML = icon('play'); });
+      v.dataset.playing = String(on); b.innerHTML = icon(on ? 'pause' : 'play'); b.setAttribute('aria-label', tr(on ? 'pause' : 'play'));
+    }),
+    AC.on(msgsEl, 'dblclick', '.ac-chat__bubble', (e, bub) => { const c = cur(); const m = c?.messages.find((y) => y.id === bub.closest('[data-msg]')?.dataset.msg); if (m && !m.deleted) react(c, m, '❤️'); }),
+    AC.on(msgsEl, 'contextmenu', '.ac-chat__row[data-msg]', (e, row) => { const c = cur(); const m = c.messages.find((y) => y.id === row.dataset.msg); if (!m || m.deleted) return; e.preventDefault(); msgMenu(e, c, m); }),
+    AC.on(msgsEl, 'keydown', '.ac-chat__bubble', (e, bub) => { if (e.key === 'Enter' || e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) { const c = cur(); const m = c.messages.find((y) => y.id === bub.closest('[data-msg]').dataset.msg); if (m && !m.deleted) { e.preventDefault(); msgMenu(bub, c, m); } } }),
+    AC.on(msgsEl, 'pointerdown', '.ac-chat__bubble', (e, bub) => {
+      if (e.pointerType === 'mouse') return;
+      const sx = e.clientX; const sy = e.clientY;
+      clearTimeout(lp?.t);
+      lp = { sx, sy, t: setTimeout(() => {
+        const c = cur(); const m = c?.messages.find((y) => y.id === bub.closest('[data-msg]')?.dataset.msg); lp = null;
+        if (!m || m.deleted) return;
+        AC.haptic?.(12); bub.setAttribute('data-pressed', ''); setTimeout(() => bub.removeAttribute('data-pressed'), 220);
+        const until = Date.now() + 700; const eat = (ev) => { if (Date.now() < until) { ev.preventDefault(); ev.stopPropagation(); } document.removeEventListener('click', eat, true); };
+        document.addEventListener('click', eat, true); setTimeout(() => document.removeEventListener('click', eat, true), 700);
+        msgMenu(bub, c, m);
+      }, 450) };
+    }),
+    AC.on(document, 'pointermove', (e) => { if (lp && Math.hypot(e.clientX - lp.sx, e.clientY - lp.sy) > 8) { clearTimeout(lp.t); lp = null; } }, { passive: true }),
+    AC.on(document, 'pointerup', () => { if (lp) { clearTimeout(lp.t); lp = null; } }, { passive: true }),
+    AC.on(list, 'pointerdown', '[data-conv]', (e, r) => {
+      if (e.pointerType === 'mouse') return;
+      const sx = e.clientX; const sy = e.clientY; clearTimeout(lp?.t);
+      lp = { sx, sy, t: setTimeout(() => { lp = null; AC.haptic?.(12); const until = Date.now() + 700; const eat = (ev) => { if (Date.now() < until) { ev.preventDefault(); ev.stopPropagation(); } document.removeEventListener('click', eat, true); }; document.addEventListener('click', eat, true); rowMenu(r, conv(r.dataset.conv)); }, 480) };
+    }),
+    AC.on(scroller, 'scroll', () => { updateToBottom(); if (scroller.scrollTop < 40) loadOlder(); }, { passive: true }),
+    AC.on(input, 'input', syncSend),
+    AC.on(input, 'keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); submit(); }
+      if (e.key === 'Escape' && (st.reply || st.editing)) { e.stopPropagation(); if (st.editing) { input.value = ''; syncSend(); } st.reply = null; st.editing = null; renderComposer(); }
+      if (e.key === 'ArrowUp' && !input.value) { const c = cur(); const m = c && [...c.messages].reverse().find((y) => isMine(y) && y.text && !y.deleted && !y.forwarded); if (m) { e.preventDefault(); startEdit(m); } }
+    }),
+    AC.on(form, 'submit', (e) => { e.preventDefault(); submit(); }),
+    AC.on(x('find'), 'input', (e) => { st.search = e.target.value; applyFind(); }),
+    AC.on(x('file'), 'change', (e) => {
+      for (const f of e.target.files) send(st.current, f.type.startsWith('image/') ? { image: { name: f.name, src: URL.createObjectURL(f) } } : { file: { name: f.name, size: sizeOf(f.size) } });
+      e.target.value = '';
+    }),
+    AC.on(el, 'ac:split:change', (e) => { if (e.target !== el) return; if (e.detail.depth === 0 && e.detail.stacked) { stopRecord(false); renderList(); } }),
+    AC.on(document, 'ac:i18n:change', () => { labels(); renderList(); renderThread(); }),
+  ];
+  const onMQ = () => { renderInfo(); if (!phone.matches && !st.current && convs[0]) open(convs[0].id, { push: false }); };
+  phone.addEventListener('change', onMQ);
+
+  labels(); renderList(); renderThread();
+  if (!phone.matches && (o.open || convs[0])) open(o.open || convs[0].id, { push: false });
+
+  const api = {
+    el, open, send, receive, typing, setStatus, render: () => { renderList(); renderThread(); },
+    get current() { return cur(); }, get conversations() { return convs; },
+    destroy() { offs.forEach((f) => f()); io?.disconnect(); phone.removeEventListener('change', onMQ); st.timers.forEach(clearTimeout); if (st.rec) clearInterval(st.rec.timer); },
+  };
+  return api;
+}
+
+/** Wire the module into an AC instance: AC.chat(el, cfg) + declarative data-ac="chat" (data-ac-config JSON). */
+export function install(AC) {
+  if (!AC || AC.chat) return AC?.chat;
+  cssOnce();
+  AC.chat = (target, cfg) => {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    AC.instance(el, 'chat')?.destroy?.();
+    const api = createChat(AC, el, cfg);
+    AC.instance(el, 'chat', api);
+    return api;
+  };
+  AC.register?.('chat', (el) => { const api = createChat(AC, el, AC.options ? AC.options(el, {}) : {}); AC.instance(el, 'chat', api); return () => api.destroy(); });
+  return AC.chat;
+}
+
+if (typeof window !== 'undefined' && window.AC) install(window.AC);

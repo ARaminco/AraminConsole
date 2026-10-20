@@ -1,0 +1,119 @@
+<section class="ac-page" data-page="monitoring" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="mon.eyebrow">زیرساخت · ۷ سرور در ۳ منطقه</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.monitoring">پایش سرورها</h1>
+      <p class="ac-page-head__sub" data-i18n="mon.sub">مصرف پردازنده، حافظه، دیسک و شبکه — هر ۲ ثانیه به‌روز می‌شود.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <label class="mon-pick">
+        <svg class="ac-icon" aria-hidden="true"><use href="#i-server"/></svg>
+        <span class="ac-visually-hidden" data-i18n="mon.server">سرور</span>
+        <select class="ac-select" data-mon-server aria-label="Server" data-i18n-attr="aria-label:mon.server"></select>
+      </label>
+      <button class="ac-btn ac-btn--primary" type="button" data-mon-pause aria-pressed="false"><svg class="ac-icon" aria-hidden="true"><use href="#i-pause"/></svg><span data-i18n="log.pause">توقف</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <!-- gauges -->
+    <article class="ac-card mon-gauge ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-card__body">
+        <div class="ac-spread"><span class="ac-label" data-i18n="mon.cpu">پردازنده</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-cpu"/></svg></span></div>
+        <div class="ac-chart-slot mon-gauge__chart" data-mon-gauge="cpu"></div>
+        <div class="mon-gauge__foot"><span data-i18n="mon.cores">۸ هسته</span><span class="ac-ltr" data-mon-load>load 1.24</span></div>
+      </div>
+    </article>
+    <article class="ac-card mon-gauge ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-card__body">
+        <div class="ac-spread"><span class="ac-label" data-i18n="mon.ram">حافظه</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-memory-stick"/></svg></span></div>
+        <div class="ac-chart-slot mon-gauge__chart" data-mon-gauge="ram"></div>
+        <div class="mon-gauge__foot"><span class="ac-ltr" data-mon-ramtext>19.6 / 32 GB</span><span data-i18n="mon.used">مصرف‌شده</span></div>
+      </div>
+    </article>
+    <article class="ac-card mon-gauge ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-card__body">
+        <div class="ac-spread"><span class="ac-label" data-i18n="mon.disk">دیسک</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-hard-drive"/></svg></span></div>
+        <div class="ac-chart-slot mon-gauge__chart" data-mon-gauge="disk"></div>
+        <div class="mon-gauge__foot"><span class="ac-ltr" data-mon-disktext>211 / 480 GB</span><span>NVMe</span></div>
+      </div>
+    </article>
+    <article class="ac-card ac-card--accent mon-net ac-span-xs-6 ac-span-md-3 ac-span-3">
+      <div class="ac-card__body">
+        <div class="ac-spread"><span class="ac-label" data-i18n="mon.network">شبکه</span><span class="ac-stat__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-arrow-down-up"/></svg></span></div>
+        <div class="mon-net__rows">
+          <div><small data-i18n="mon.in">ورودی</small><strong class="ac-num ac-ltr" data-mon-in>0 Mb/s</strong></div>
+          <div><small data-i18n="mon.out">خروجی</small><strong class="ac-num ac-ltr" data-mon-out>0 Mb/s</strong></div>
+        </div>
+        <div class="ac-stat__spark mon-net__spark" data-mon-netspark></div>
+      </div>
+    </article>
+
+    <!-- realtime cpu/ram -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-8">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="mon.realtime">مصرف لحظه‌ای</h2>
+          <p class="ac-card__sub" data-i18n="mon.realtimeSub">۶۰ نمونهٔ آخر · هر ۲ ثانیه</p>
+        </div>
+        <span class="ac-badge ac-badge--success ac-badge--dot" data-mon-state data-i18n="ops.live">زنده</span>
+      </div>
+      <div class="ac-card__body">
+        <div class="ac-inset mon-chart">
+          <div class="ac-chart-slot ac-chart-slot--lg" data-mon-usage></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- alerts -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-4">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="mon.alerts">هشدارها</h2>
+          <p class="ac-card__sub" data-i18n="mon.alertsSub">قانون‌های فعال: CPU، حافظه، دیسک، دسترسی</p>
+        </div>
+        <span class="ac-count" data-mon-alert-count>5</span>
+      </div>
+      <div class="ac-card__body">
+        <ul class="ac-list ac-list--divided mon-alerts" role="list" data-mon-alerts></ul>
+      </div>
+    </article>
+
+    <!-- network area -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-8">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="mon.traffic">ترافیک شبکه</h2>
+          <p class="ac-card__sub" data-i18n="mon.trafficSub">مگابیت بر ثانیه، ورودی و خروجی</p>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <div class="ac-inset mon-chart">
+          <div class="ac-chart-slot" data-mon-traffic></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- top processes -->
+    <article class="ac-card ac-card--static ac-span-md-12 ac-span-4">
+      <div class="ac-card__head">
+        <div class="ac-card__titles">
+          <h2 class="ac-card__title" data-i18n="mon.procs">پرمصرف‌ترین پردازه‌ها</h2>
+          <p class="ac-card__sub" data-i18n="mon.procsSub">سهم از پردازندهٔ سرور انتخاب‌شده</p>
+        </div>
+      </div>
+      <div class="ac-card__body">
+        <ul class="mon-procs" role="list" data-mon-procs></ul>
+      </div>
+    </article>
+
+    <!-- per-server -->
+    <div class="ac-span-12 ac-section mon-section">
+      <div class="ac-section__head">
+        <h2 class="ac-section__title" data-i18n="mon.servers">سرورها</h2>
+        <p class="ac-section__sub" data-i18n="mon.serversSub">روی هر کارت بزنید تا نمودارهای بالا آن سرور را نشان دهند.</p>
+      </div>
+    </div>
+    <div class="ac-span-12 mon-servers" data-mon-servers></div>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Check dist output and size budget
+        run: |
+          for f in aramin-console.css aramin-console.min.css aramin-console.js aramin-console.min.js aramin-console-boot.js icons.svg fonts/vazirmatn-variable.woff2 fonts/OFL.txt LICENSE.txt LICENSE-lucide.txt; do
+            test -s "dist/$f" || { echo "::error::missing dist/$f"; exit 1; }
+          done
+          ls -l dist
+      - name: Syntax check (ES modules)
+        run: |
+          node --check dist/aramin-console.js
+          for f in demo/*.js demo/pages/*.js scripts/*.mjs tests/*.mjs; do node --check "$f"; done

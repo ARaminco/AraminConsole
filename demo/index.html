@@ -1,0 +1,266 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AraminConsole</title>
+  <meta name="description" content="AraminConsole — open-source admin panel UI/UX framework. RTL-first, dark mode, app-like on phones.">
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Aramin">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preload" href="../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../dist/demo/aramin-console.min.css" data-ac-css>
+  <link rel="stylesheet" href="demo.css">
+  <link rel="stylesheet" href="pages-a.css">
+  <script type="module" src="../dist/demo/aramin-console.min.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="support.js"></script>
+</head>
+<body>
+  <a class="ac-skip-link" href="#ac-content" data-i18n="app.skip">پرش به محتوا</a>
+
+  <div class="ac-shell">
+    <!-- ================================================================ top bar: floating pills -->
+    <header class="ac-appbar" data-ac="appbar" data-collapsed="true">
+      <div class="ac-appbar__inner">
+        <div class="ac-appbar__start">
+          <a class="ac-chrome ac-brand" href="#/dashboard" aria-label="Aramin">
+            <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+            <span class="ac-brand__name">Aramin</span>
+          </a>
+        </div>
+        <div class="ac-appbar__center">
+          <div class="ac-appbar__title" id="ac-appbar-title" aria-hidden="true"></div>
+          <nav class="ac-chrome ac-topnav" data-ac="navpill" aria-label="Sections" data-i18n-attr="aria-label:app.sections">
+            <a class="ac-topnav__link" href="#/dashboard" data-i18n="nav.overview">نمای کلی</a>
+            <a class="ac-topnav__link" href="#/manage" data-i18n="nav.manage">مدیریت</a>
+            <a class="ac-topnav__link" href="#/analytics" data-i18n="nav.analytics">تحلیل‌ها</a>
+            <a class="ac-topnav__link" href="#/users" data-i18n="nav.users">کاربران</a>
+            <a class="ac-topnav__link" href="#/orders" data-i18n="nav.orders">سفارش‌ها</a>
+            <a class="ac-topnav__link" href="#/console" data-i18n="tab.console">کنسول</a>
+            <button class="ac-topnav__link" type="button" data-ac-rail-toggle aria-controls="ac-rail" aria-expanded="false"><span data-i18n="tab.more">بیشتر</span><svg class="ac-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          </nav>
+        </div>
+        <div class="ac-appbar__end">
+          <div class="ac-chrome ac-utilbar">
+            <button class="ac-iconbtn" type="button" data-ac-palette-open aria-label="Search" data-i18n-attr="aria-label:app.search">
+              <svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg>
+            </button>
+            <button class="ac-iconbtn" type="button" data-ac-notifications-open data-ac-notifications-src="pages/notifications.json" aria-label="Notifications" data-i18n-attr="aria-label:nav.notifications">
+              <svg class="ac-icon" aria-hidden="true"><use href="#i-bell"/></svg>
+              <span class="ac-appbar__count">3</span>
+            </button>
+            <a class="ac-iconbtn" href="#/timeline" data-hide-phone aria-label="History" data-i18n-attr="aria-label:nav.timeline">
+              <svg class="ac-icon" aria-hidden="true"><use href="#i-history"/></svg>
+            </a>
+            <button class="ac-iconbtn" type="button" data-ac-customizer-open data-hide-phone aria-label="Customize" data-i18n-attr="aria-label:custom.title">
+              <svg class="ac-icon" aria-hidden="true"><use href="#i-paintbrush"/></svg>
+            </button>
+            <button type="button" data-ac="langpicker" data-hide-phone aria-label="Language"></button>
+            <button class="ac-iconbtn" type="button" data-action="theme" data-mobile-only aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme">
+              <svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg>
+              <svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg>
+            </button>
+          </div>
+          <a class="ac-chrome ac-userchip" href="#/user-profile" aria-label="Profile" data-i18n-attr="aria-label:nav.profile">
+            <span class="ac-avatar ac-avatar--gradient">ع‌ر</span>
+            <span class="ac-userchip__text"><strong data-i18n="app.userName">علی‌اصغر رامین</strong><small>ali@aramin.dev</small></span>
+            <svg class="ac-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================================================================ dock: slim floating icon rail (desktop) -->
+    <aside class="ac-dock" data-ac="dock" aria-label="Main navigation" data-i18n-attr="aria-label:app.mainNav">
+      <div class="ac-dock__pill" role="group" aria-label="Theme" data-i18n-attr="aria-label:app.theme">
+        <button class="ac-dock__btn" type="button" data-theme-set="light" aria-pressed="true" aria-label="Light" data-i18n-attr="aria-label:app.light"><svg class="ac-icon" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        <button class="ac-dock__btn" type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark" data-i18n-attr="aria-label:app.dark"><svg class="ac-icon" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      </div>
+      <nav class="ac-dock__pill ac-dock__nav">
+        <button class="ac-dock__btn" type="button" data-ac-rail-group="overview" aria-controls="ac-rail" aria-expanded="false" aria-label="Overview" data-i18n-attr="aria-label:group.overview"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-grid"/></svg></button>
+        <button class="ac-dock__btn" type="button" data-ac-rail-group="commerce" aria-controls="ac-rail" aria-expanded="false" aria-label="Commerce" data-i18n-attr="aria-label:group.commerce"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-bag"/></svg></button>
+        <button class="ac-dock__btn" type="button" data-ac-rail-group="apps" aria-controls="ac-rail" aria-expanded="false" aria-label="Apps" data-i18n-attr="aria-label:group.apps"><svg class="ac-icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="ac-dock__dot"></span></button>
+        <button class="ac-dock__btn" type="button" data-ac-rail-group="ops" aria-controls="ac-rail" aria-expanded="false" aria-label="Operations" data-i18n-attr="aria-label:group.ops"><svg class="ac-icon" aria-hidden="true"><use href="#i-terminal"/></svg></button>
+        <button class="ac-dock__btn" type="button" data-ac-rail-group="ui" aria-controls="ac-rail" aria-expanded="false" aria-label="UI kit" data-i18n-attr="aria-label:group.ui"><svg class="ac-icon" aria-hidden="true"><use href="#i-component"/></svg></button>
+        <button class="ac-dock__btn" type="button" data-ac-rail-group="pages" aria-controls="ac-rail" aria-expanded="false" aria-label="Pages" data-i18n-attr="aria-label:group.pages"><svg class="ac-icon" aria-hidden="true"><use href="#i-file-text"/></svg></button>
+        <a class="ac-dock__btn" href="#/settings" aria-label="Settings" data-i18n-attr="aria-label:nav.settings"><svg class="ac-icon" aria-hidden="true"><use href="#i-settings"/></svg></a>
+      </nav>
+      <div class="ac-dock__pill ac-dock__foot">
+        <a class="ac-dock__btn" href="#/faq" aria-label="Help" data-i18n-attr="aria-label:app.help"><svg class="ac-icon" aria-hidden="true"><use href="#i-circle-help"/></svg></a>
+        <a class="ac-dock__btn" href="auth/login.html" aria-label="Sign out" data-i18n-attr="aria-label:app.logout"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-log-out"/></svg></a>
+      </div>
+    </aside>
+
+    <!-- ================================================================ rail: group flyout (desktop) / drawer (mobile) -->
+    <aside class="ac-rail" id="ac-rail" data-ac="rail" aria-label="All pages" data-i18n-attr="aria-label:app.allPages">
+      <div class="ac-rail__head">
+        <div class="ac-rail__heading"><span class="ac-brand__mark ac-hide-desktop" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span><span class="ac-rail__heading-text">Aramin</span></div>
+        <button class="ac-rail__close" type="button" data-ac-rail-close aria-label="Close" data-i18n-attr="aria-label:app.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+
+      <button class="ac-rail__search" type="button" data-ac-palette-open>
+        <svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <span data-i18n="app.search">جستجو…</span>
+        <kbd class="ac-kbd">Ctrl K</kbd>
+      </button>
+
+      <nav class="ac-rail__nav">
+        <div class="ac-rail__group" data-group="overview">
+          <div class="ac-rail__label" data-i18n="group.overview">نمای کلی</div>
+          <a class="ac-rail__link" href="#/dashboard"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-dashboard"/></svg><span class="ac-rail__text" data-i18n="nav.dashboard">داشبورد</span></a>
+          <a class="ac-rail__link" href="#/manage"><svg class="ac-icon" aria-hidden="true"><use href="#i-credit-card"/></svg><span class="ac-rail__text" data-i18n="nav.manage">مدیریت</span></a>
+          <a class="ac-rail__link" href="#/finance"><svg class="ac-icon" aria-hidden="true"><use href="#i-landmark"/></svg><span class="ac-rail__text" data-i18n="nav.finance">مالی و بانکی</span></a>
+          <a class="ac-rail__link" href="#/analytics"><svg class="ac-icon" aria-hidden="true"><use href="#i-chart-line"/></svg><span class="ac-rail__text" data-i18n="nav.analytics">تحلیل‌ها</span></a>
+          <a class="ac-rail__link" href="#/marketing"><svg class="ac-icon" aria-hidden="true"><use href="#i-megaphone"/></svg><span class="ac-rail__text" data-i18n="nav.marketing">بازاریابی</span></a>
+          <a class="ac-rail__link" href="#/search-console"><svg class="ac-icon" aria-hidden="true"><use href="#i-search-check"/></svg><span class="ac-rail__text" data-i18n="nav.searchConsole">سرچ کنسول</span></a>
+          <a class="ac-rail__link" href="#/notifications"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell"/></svg><span class="ac-rail__text" data-i18n="nav.notifications">اعلان‌ها</span><span class="ac-rail__badge ac-rail__badge--accent">3</span></a>
+        </div>
+
+        <div class="ac-rail__group" data-group="commerce">
+          <div class="ac-rail__label" data-i18n="group.commerce">فروش</div>
+          <a class="ac-rail__link" href="#/orders"><svg class="ac-icon" aria-hidden="true"><use href="#i-shopping-cart"/></svg><span class="ac-rail__text" data-i18n="nav.orders">سفارش‌ها</span><span class="ac-rail__badge">12</span></a>
+          <a class="ac-rail__link" href="#/invoice"><svg class="ac-icon" aria-hidden="true"><use href="#i-receipt"/></svg><span class="ac-rail__text" data-i18n="nav.invoice">فاکتور</span></a>
+          <details class="ac-rail__sub">
+            <summary class="ac-rail__link"><svg class="ac-icon" aria-hidden="true"><use href="#i-file-text"/></svg><span class="ac-rail__text" data-i18n="nav.invoiceIR">فاکتور ایرانی</span><svg class="ac-icon ac-rail__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></summary>
+            <div class="ac-rail__subnav">
+              <a class="ac-rail__link" href="#/invoice-official"><span class="ac-rail__text" data-i18n="nav.invoiceOfficial">فاکتور رسمی</span></a>
+              <a class="ac-rail__link" href="#/invoice-proforma"><span class="ac-rail__text" data-i18n="nav.invoiceProforma">پیش‌فاکتور</span></a>
+              <a class="ac-rail__link" href="#/invoice-editor"><span class="ac-rail__text" data-i18n="nav.invoiceEditor">ساخت فاکتور</span></a>
+            </div>
+          </details>
+          <a class="ac-rail__link" href="#/products"><svg class="ac-icon" aria-hidden="true"><use href="#i-package"/></svg><span class="ac-rail__text" data-i18n="nav.products">محصولات</span></a>
+          <details class="ac-rail__sub">
+            <summary class="ac-rail__link"><svg class="ac-icon" aria-hidden="true"><use href="#i-users"/></svg><span class="ac-rail__text" data-i18n="nav.usersAccess">کاربران و دسترسی</span><svg class="ac-icon ac-rail__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></summary>
+            <div class="ac-rail__subnav">
+              <a class="ac-rail__link" href="#/users"><span class="ac-rail__text" data-i18n="nav.users">کاربران</span></a>
+              <a class="ac-rail__link" href="#/user-profile"><span class="ac-rail__text" data-i18n="nav.profile">پروفایل کاربر</span></a>
+              <a class="ac-rail__link" href="#/roles"><span class="ac-rail__text" data-i18n="nav.roles">نقش‌ها و مجوزها</span></a>
+            </div>
+          </details>
+        </div>
+
+        <div class="ac-rail__group" data-group="apps">
+          <div class="ac-rail__label" data-i18n="group.apps">برنامه‌ها</div>
+          <a class="ac-rail__link" href="#/kanban"><svg class="ac-icon" aria-hidden="true"><use href="#i-kanban"/></svg><span class="ac-rail__text" data-i18n="nav.kanban">کانبان</span></a>
+          <a class="ac-rail__link" href="#/calendar"><svg class="ac-icon" aria-hidden="true"><use href="#i-calendar"/></svg><span class="ac-rail__text" data-i18n="nav.calendar">تقویم</span></a>
+          <a class="ac-rail__link" href="#/chat"><svg class="ac-icon" aria-hidden="true"><use href="#i-message-circle"/></svg><span class="ac-rail__text" data-i18n="nav.chat">گفتگو</span><span class="ac-rail__badge ac-rail__badge--danger">5</span></a>
+          <a class="ac-rail__link" href="#/mail"><svg class="ac-icon" aria-hidden="true"><use href="#i-mail"/></svg><span class="ac-rail__text" data-i18n="nav.mail">ایمیل</span></a>
+          <a class="ac-rail__link" href="#/files"><svg class="ac-icon" aria-hidden="true"><use href="#i-folder"/></svg><span class="ac-rail__text" data-i18n="nav.files">فایل‌ها</span></a>
+          <a class="ac-rail__link" href="#/maps"><svg class="ac-icon" aria-hidden="true"><use href="#i-map"/></svg><span class="ac-rail__text" data-i18n="nav.maps">نقشه و ناوگان</span></a>
+          <a class="ac-rail__link" href="#/tickets"><svg class="ac-icon" aria-hidden="true"><use href="#i-ticket"/></svg><span class="ac-rail__text" data-i18n="nav.tickets">تیکت‌ها</span><span class="ac-rail__badge ac-rail__badge--accent">4</span></a>
+        </div>
+
+        <div class="ac-rail__group" data-group="ops">
+          <div class="ac-rail__label" data-i18n="group.ops">عملیات</div>
+          <a class="ac-rail__link" href="#/console"><svg class="ac-icon" aria-hidden="true"><use href="#i-terminal"/></svg><span class="ac-rail__text" data-i18n="nav.console">کنسول عملیات</span></a>
+          <a class="ac-rail__link" href="#/monitoring"><svg class="ac-icon" aria-hidden="true"><use href="#i-activity"/></svg><span class="ac-rail__text" data-i18n="nav.monitoring">پایش سرورها</span></a>
+        </div>
+
+        <div class="ac-rail__group" data-group="ui">
+          <div class="ac-rail__label" data-i18n="group.ui">کیت رابط کاربری</div>
+          <a class="ac-rail__link" href="#/components"><svg class="ac-icon" aria-hidden="true"><use href="#i-component"/></svg><span class="ac-rail__text" data-i18n="nav.components">کامپوننت‌ها</span></a>
+          <a class="ac-rail__link" href="#/overlays"><svg class="ac-icon" aria-hidden="true"><use href="#i-layers"/></svg><span class="ac-rail__text" data-i18n="nav.overlays">پنجره‌ها و اعلان‌ها</span></a>
+          <a class="ac-rail__link" href="#/notify-lab"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell-ring"/></svg><span class="ac-rail__text" data-i18n="nav.notifyLab">آزمایشگاه اعلان و PWA</span></a>
+          <a class="ac-rail__link" href="#/forms"><svg class="ac-icon" aria-hidden="true"><use href="#i-text-cursor-input"/></svg><span class="ac-rail__text" data-i18n="nav.forms">فرم‌ها</span></a>
+        </div>
+
+        <div class="ac-rail__group" data-group="pages">
+          <div class="ac-rail__label" data-i18n="group.pages">صفحه‌ها</div>
+          <a class="ac-rail__link" href="#/pricing"><svg class="ac-icon" aria-hidden="true"><use href="#i-badge-dollar-sign"/></svg><span class="ac-rail__text" data-i18n="nav.pricing">تعرفه‌ها</span></a>
+          <a class="ac-rail__link" href="#/faq"><svg class="ac-icon" aria-hidden="true"><use href="#i-circle-help"/></svg><span class="ac-rail__text" data-i18n="nav.faq">پرسش‌های متداول</span></a>
+          <a class="ac-rail__link" href="#/timeline"><svg class="ac-icon" aria-hidden="true"><use href="#i-history"/></svg><span class="ac-rail__text" data-i18n="nav.timeline">خط زمانی</span></a>
+          <details class="ac-rail__sub">
+            <summary class="ac-rail__link"><svg class="ac-icon" aria-hidden="true"><use href="#i-book-open"/></svg><span class="ac-rail__text" data-i18n="nav.content">محتوا و مستندات</span><svg class="ac-icon ac-rail__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></summary>
+            <div class="ac-rail__subnav">
+              <a class="ac-rail__link" href="#/blog"><span class="ac-rail__text" data-i18n="nav.blog">وبلاگ</span></a>
+              <a class="ac-rail__link" href="#/article"><span class="ac-rail__text" data-i18n="nav.article">مقاله</span></a>
+              <a class="ac-rail__link" href="#/docs"><span class="ac-rail__text" data-i18n="nav.docs">مستندات</span></a>
+              <a class="ac-rail__link" href="#/editor"><span class="ac-rail__text" data-i18n="nav.editor">ویرایشگر Markdown</span></a>
+            </div>
+          </details>
+          <a class="ac-rail__link" href="#/me"><svg class="ac-icon" aria-hidden="true"><use href="#i-circle-user-round"/></svg><span class="ac-rail__text" data-i18n="nav.me">پنل کاربری</span></a>
+          <a class="ac-rail__link" href="#/my-tickets"><svg class="ac-icon" aria-hidden="true"><use href="#i-life-buoy"/></svg><span class="ac-rail__text" data-i18n="nav.myTickets">درخواست‌های من</span></a>
+          <details class="ac-rail__sub">
+            <summary class="ac-rail__link"><svg class="ac-icon" aria-hidden="true"><use href="#i-log-in"/></svg><span class="ac-rail__text" data-i18n="nav.auth">ورود و ثبت‌نام</span><svg class="ac-icon ac-rail__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></summary>
+            <div class="ac-rail__subnav">
+              <a class="ac-rail__link" href="auth/login.html"><span class="ac-rail__text" data-i18n="nav.login">ورود</span></a>
+              <a class="ac-rail__link" href="auth/register.html"><span class="ac-rail__text" data-i18n="nav.register">ثبت‌نام</span></a>
+              <a class="ac-rail__link" href="auth/forgot.html"><span class="ac-rail__text" data-i18n="nav.forgot">فراموشی رمز</span></a>
+              <a class="ac-rail__link" href="auth/otp.html"><span class="ac-rail__text" data-i18n="nav.otp">کد یک‌بارمصرف</span></a>
+              <a class="ac-rail__link" href="auth/lock.html"><span class="ac-rail__text" data-i18n="nav.lock">قفل صفحه</span></a>
+            </div>
+          </details>
+          <details class="ac-rail__sub">
+            <summary class="ac-rail__link"><svg class="ac-icon" aria-hidden="true"><use href="#i-triangle-alert"/></svg><span class="ac-rail__text" data-i18n="nav.errors">صفحه‌های خطا</span><svg class="ac-icon ac-rail__chev ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></summary>
+            <div class="ac-rail__subnav">
+              <a class="ac-rail__link" href="errors/404.html"><span class="ac-rail__text" data-i18n="nav.e404">۴۰۴ — پیدا نشد</span></a>
+              <a class="ac-rail__link" href="errors/500.html"><span class="ac-rail__text" data-i18n="nav.e500">۵۰۰ — خطای سرور</span></a>
+              <a class="ac-rail__link" href="errors/maintenance.html"><span class="ac-rail__text" data-i18n="nav.maintenance">در حال تعمیر</span></a>
+              <a class="ac-rail__link" href="errors/offline.html"><span class="ac-rail__text" data-i18n="nav.offline">آفلاین</span></a>
+            </div>
+          </details>
+          <a class="ac-rail__link" href="#/settings"><svg class="ac-icon" aria-hidden="true"><use href="#i-settings"/></svg><span class="ac-rail__text" data-i18n="nav.settings">تنظیمات</span></a>
+        </div>
+      </nav>
+
+      <div class="ac-rail__foot">
+        <a class="ac-usercard" href="#/user-profile">
+          <span class="ac-avatar ac-avatar--gradient ac-avatar--sm">ع‌ر<span class="ac-status" data-status="online"></span></span>
+          <span class="ac-usercard__text"><strong data-i18n="app.userName">علی‌اصغر رامین</strong><small>ali@aramin.dev</small></span>
+          <svg class="ac-icon" aria-hidden="true"><use href="#i-chevrons-up-down"/></svg>
+        </a>
+      </div>
+    </aside>
+    <div class="ac-scrim" data-ac-rail-close aria-hidden="true"></div>
+
+    <!-- ================================================================ main -->
+    <div class="ac-main">
+      <main class="ac-content" id="ac-content" tabindex="-1" data-ac="pull-refresh">
+        <div class="ac-page-loading" aria-hidden="true">
+          <div class="ac-skeleton ac-skeleton--title"></div>
+          <div class="ac-bento">
+            <div class="ac-skeleton ac-skeleton--block ac-span-md-6 ac-span-4"></div>
+            <div class="ac-skeleton ac-skeleton--block ac-span-md-6 ac-span-4"></div>
+            <div class="ac-skeleton ac-skeleton--block ac-span-md-12 ac-span-4"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ================================================================ tab bar: floating pill (phones / tablets) -->
+    <nav class="ac-tabbar" data-ac="tabbar" aria-label="Tabs" data-i18n-attr="aria-label:app.tabs">
+      <a class="ac-tabbar__item" href="#/dashboard">
+        <span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg></span>
+        <span class="ac-tabbar__label" data-i18n="tab.home">خانه</span>
+      </a>
+      <a class="ac-tabbar__item" href="#/analytics">
+        <span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-chart-column"/></svg></span>
+        <span class="ac-tabbar__label" data-i18n="tab.analytics">تحلیل</span>
+      </a>
+      <div class="ac-tabbar__fab-slot">
+        <button class="ac-tabbar__fab" type="button" data-ac-palette-open aria-label="Quick actions" data-i18n-attr="aria-label:app.quick">
+          <svg class="ac-icon" aria-hidden="true"><use href="#i-plus"/></svg>
+        </button>
+      </div>
+      <a class="ac-tabbar__item" href="#/manage">
+        <span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-credit-card"/></svg><span class="ac-tabbar__badge">2</span></span>
+        <span class="ac-tabbar__label" data-i18n="nav.manage">مدیریت</span>
+      </a>
+      <button class="ac-tabbar__item" type="button" data-ac-rail-open aria-controls="ac-rail">
+        <span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-grid"/></svg></span>
+        <span class="ac-tabbar__label" data-i18n="tab.more">بیشتر</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="ac-toasts" id="ac-toasts" aria-live="polite" aria-atomic="false"></div>
+</body>
+</html>

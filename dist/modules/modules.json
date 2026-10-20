@@ -1,0 +1,1101 @@
+{
+ "version": "0.1.0",
+ "modules": {
+  "core": {
+   "deps": [],
+   "description": "Tokens, base, app-shell layout, motion system, atoms (button, card, misc), base form controls and tables (static markup is always styled) and the runtime: AC namespace, auto-init registry, i18n, theme, format, gestures, focus trap, AC.use() lazy loader.",
+   "kind": "core",
+   "size": {
+    "js": {
+     "raw": 72698,
+     "min": 51196,
+     "gzip": 16899
+    },
+    "css": {
+     "raw": 172725,
+     "min": 132401,
+     "gzip": 24328
+    }
+   }
+  },
+  "shell": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "appbar",
+     "dock",
+     "largetitle",
+     "navpill",
+     "pull-refresh",
+     "rail",
+     "ring",
+     "segmented",
+     "tabbar",
+     "tabs"
+    ],
+    "api": [
+     "palette",
+     "press",
+     "rail"
+    ],
+    "attrs": [
+     "ac-palette-open",
+     "ac-rail-close",
+     "ac-rail-group",
+     "ac-rail-open",
+     "ac-rail-toggle"
+    ],
+    "classes": [
+     "ac-breadcrumbs",
+     "ac-pagination",
+     "ac-tabs"
+    ]
+   },
+   "description": "App chrome behaviour: rail / dock / flyout, bottom tab bar, large title, tabs & segmented, command palette, press ripple, pull-to-refresh, progress ring.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 38507,
+     "min": 27438,
+     "gzip": 8489
+    },
+    "css": {
+     "raw": 16093,
+     "min": 12913,
+     "gzip": 2933
+    }
+   }
+  },
+  "overlays": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "alert",
+     "drawer",
+     "dropdown",
+     "modal",
+     "notifications",
+     "popover",
+     "sheet"
+    ],
+    "api": [
+     "alertReset",
+     "autoPosition",
+     "confirm",
+     "drawer",
+     "layers",
+     "menu",
+     "modal",
+     "notifications",
+     "popover",
+     "portal",
+     "position",
+     "prompt",
+     "sheet",
+     "toast",
+     "tooltip"
+    ],
+    "attrs": [
+     "ac-close",
+     "ac-contextmenu",
+     "ac-notifications-count",
+     "ac-notifications-open",
+     "ac-notifications-src",
+     "ac-open",
+     "ac-tooltip",
+     "ac-tooltip-kbd",
+     "ac-tooltip-placement"
+    ],
+    "classes": [
+     "ac-actionsheet",
+     "ac-alert",
+     "ac-confirm",
+     "ac-cz",
+     "ac-notif",
+     "ac-notif-pop",
+     "ac-notif-sheet",
+     "ac-toast"
+    ]
+   },
+   "description": "Layer stack + positioning, modal, bottom sheet, drawer, menus / action sheets, popover, tooltip, confirm & prompt, toast, alert, notification center.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 73152,
+     "min": 52354,
+     "gzip": 16074
+    },
+    "css": {
+     "raw": 31351,
+     "min": 25623,
+     "gzip": 5312
+    }
+   }
+  },
+  "customizer": {
+   "deps": [
+    "overlays",
+    "shell"
+   ],
+   "css": false,
+   "provides": {
+    "components": [],
+    "api": [
+     "customizer"
+    ],
+    "attrs": [
+     "ac-customizer-open"
+    ],
+    "classes": []
+   },
+   "description": "Theme customizer drawer (theme, accent, density, radius, language, digits). Styles ship with overlays.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 9700,
+     "min": 8412,
+     "gzip": 3133
+    },
+    "css": null
+   }
+  },
+  "langpicker": {
+   "deps": [
+    "overlays"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "langpicker"
+    ],
+    "api": [
+     "langpicker"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-lp-sheet"
+    ]
+   },
+   "description": "Data-driven language picker: popover on desktop, bottom sheet on phones, crossfades into the new direction.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 9684,
+     "min": 7548,
+     "gzip": 2988
+    },
+    "css": {
+     "raw": 6778,
+     "min": 5654,
+     "gzip": 1670
+    }
+   }
+  },
+  "forms": {
+   "deps": [],
+   "css": false,
+   "provides": {
+    "components": [
+     "combobox",
+     "dropzone",
+     "form",
+     "input",
+     "number",
+     "otp",
+     "password",
+     "range",
+     "rating",
+     "swatches",
+     "tags",
+     "wizard"
+    ],
+    "api": [
+     "combobox",
+     "dropzone",
+     "validate"
+    ],
+    "attrs": [
+     "ac-msg",
+     "ac-rules"
+    ],
+    "classes": []
+   },
+   "description": "Inputs, floating labels, password, OTP, number, range, rating, tags, swatches, combobox / multi-select, file dropzone, inline validation, wizard. Styles ship with core.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 74559,
+     "min": 55113,
+     "gzip": 18316
+    },
+    "css": null
+   }
+  },
+  "datepicker": {
+   "deps": [
+    "forms"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "datepicker",
+     "timepicker"
+    ],
+    "api": [
+     "date",
+     "jalali"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-dp",
+     "ac-pop",
+     "ac-tp"
+    ]
+   },
+   "description": "Jalali + Gregorian date / range / time pickers and AC.date helpers.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 33570,
+     "min": 24683,
+     "gzip": 8840
+    },
+    "css": {
+     "raw": 9243,
+     "min": 7768,
+     "gzip": 2149
+    }
+   }
+  },
+  "data-display": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "accordion",
+     "code",
+     "json",
+     "list",
+     "logview",
+     "tree"
+    ],
+    "api": [
+     "copyText",
+     "json",
+     "logview",
+     "swipeable",
+     "tree"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-accordion",
+     "ac-code",
+     "ac-dl",
+     "ac-json",
+     "ac-log",
+     "ac-swipe",
+     "ac-timeline",
+     "ac-tree"
+    ]
+   },
+   "description": "Swipeable lists, accordion, tree view, code block / JSON viewer, log viewer, description lists, timeline.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 26531,
+     "min": 20578,
+     "gzip": 7301
+    },
+    "css": {
+     "raw": 15529,
+     "min": 13408,
+     "gzip": 3094
+    }
+   }
+  },
+  "table": {
+   "deps": [
+    "data-display"
+   ],
+   "css": false,
+   "provides": {
+    "components": [
+     "table"
+    ],
+    "api": [
+     "table"
+    ],
+    "attrs": [],
+    "classes": []
+   },
+   "description": "Data table: sort, search, filters, pagination, selection + bulk bar, column visibility, expansion, CSV, card list on phones. Styles ship with core.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 29693,
+     "min": 25129,
+     "gzip": 8558
+    },
+    "css": null
+   }
+  },
+  "chart": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "chart"
+    ],
+    "api": [
+     "chart"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-chart"
+    ]
+   },
+   "description": "Inline-SVG charts: line, area, bar, donut, gauge, sparkline, heatmap.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 34339,
+     "min": 27024,
+     "gzip": 10134
+    },
+    "css": {
+     "raw": 11673,
+     "min": 9553,
+     "gzip": 2407
+    }
+   }
+  },
+  "apps": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "kanban",
+     "split"
+    ],
+    "api": [
+     "kanban",
+     "split"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-apptoolbar",
+     "ac-cal",
+     "ac-cal-agenda",
+     "ac-cal-block",
+     "ac-cal-cats",
+     "ac-cal-day",
+     "ac-cal-dayview",
+     "ac-cal-detail",
+     "ac-cal-empty",
+     "ac-cal-ev",
+     "ac-cal-mini",
+     "ac-cal-month",
+     "ac-cal-more",
+     "ac-cal-now",
+     "ac-cal-row",
+     "ac-cal-side",
+     "ac-cal-tones",
+     "ac-cal-week",
+     "ac-faq",
+     "ac-faq-cats",
+     "ac-faq-empty",
+     "ac-faq-hero",
+     "ac-faq-link",
+     "ac-faq-search",
+     "ac-faq-side",
+     "ac-file",
+     "ac-files-preview",
+     "ac-files-side",
+     "ac-files-usage",
+     "ac-kanban",
+     "ac-kanban-pager",
+     "ac-kdetail",
+     "ac-plan",
+     "ac-pricing",
+     "ac-pricing-more",
+     "ac-split"
+    ]
+   },
+   "description": "App-screen styles (mail, chat, calendar, files, kanban) + kanban drag & drop and split panes.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 15494,
+     "min": 10940,
+     "gzip": 4071
+    },
+    "css": {
+     "raw": 41457,
+     "min": 36484,
+     "gzip": 6604
+    }
+   }
+  },
+  "money": {
+   "deps": [
+    "forms"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "bank-card",
+     "card-form",
+     "money",
+     "money-unit",
+     "sheba"
+    ],
+    "api": [
+     "bank",
+     "bankCard",
+     "money"
+    ],
+    "attrs": [
+     "ac-money"
+    ],
+    "classes": [
+     "ac-bank-logo",
+     "ac-bcard",
+     "ac-money",
+     "ac-money-tick",
+     "ac-sheba"
+    ]
+   },
+   "description": "Money input & formatting, Iranian banks (logos, IBAN / Sheba, card numbers), bank card form.",
+   "kind": "component",
+   "size": {
+    "js": {
+     "raw": 58738,
+     "min": 44854,
+     "gzip": 16129
+    },
+    "css": {
+     "raw": 11882,
+     "min": 10455,
+     "gzip": 3245
+    }
+   }
+  },
+  "chat": {
+   "deps": [
+    "apps",
+    "overlays"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "chat"
+    ],
+    "api": [
+     "chat"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-chat",
+     "ac-chat-tick",
+     "ac-lightbox",
+     "ac-voice"
+    ]
+   },
+   "description": "Messenger panel: conversation list (filters, pinned, unread, muted), direct / group / channel threads, reactions, reply/quote, edit, delete, forward, voice notes, image lightbox, link previews, read receipts, typing, infinite scroll up, info sidebar with media / files / links, new chat modal; phones: push/pop stack.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 66252,
+     "min": 55658,
+     "gzip": 16799
+    },
+    "css": {
+     "raw": 42084,
+     "min": 37746,
+     "gzip": 6664
+    }
+   }
+  },
+  "files": {
+   "deps": [
+    "overlays"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "files"
+    ],
+    "api": [
+     "files"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-fm",
+     "ac-fm-act",
+     "ac-fm-alert",
+     "ac-fm-band",
+     "ac-fm-browse",
+     "ac-fm-cell",
+     "ac-fm-check",
+     "ac-fm-check2",
+     "ac-fm-chip",
+     "ac-fm-col",
+     "ac-fm-cols",
+     "ac-fm-comment",
+     "ac-fm-conflict",
+     "ac-fm-conflict-layer",
+     "ac-fm-crow",
+     "ac-fm-csv",
+     "ac-fm-disc",
+     "ac-fm-dl",
+     "ac-fm-dots",
+     "ac-fm-empty",
+     "ac-fm-fchip",
+     "ac-fm-field",
+     "ac-fm-field2",
+     "ac-fm-film",
+     "ac-fm-full",
+     "ac-fm-fullslot",
+     "ac-fm-gal",
+     "ac-fm-ghost",
+     "ac-fm-grid",
+     "ac-fm-ins",
+     "ac-fm-job",
+     "ac-fm-layer",
+     "ac-fm-live",
+     "ac-fm-md",
+     "ac-fm-mini",
+     "ac-fm-ocr",
+     "ac-fm-page",
+     "ac-fm-pane",
+     "ac-fm-pcard",
+     "ac-fm-person",
+     "ac-fm-plist",
+     "ac-fm-prow",
+     "ac-fm-ql",
+     "ac-fm-rename",
+     "ac-fm-row",
+     "ac-fm-seal",
+     "ac-fm-selbar",
+     "ac-fm-share",
+     "ac-fm-spin",
+     "ac-fm-star",
+     "ac-fm-table",
+     "ac-fm-tagbtn",
+     "ac-fm-tags",
+     "ac-fm-tbody",
+     "ac-fm-th",
+     "ac-fm-thead",
+     "ac-fm-thumb",
+     "ac-fm-tile",
+     "ac-fm-up",
+     "ac-fm-vers",
+     "ac-fm-wave"
+    ]
+   },
+   "description": "Finder / Explorer-class file, document and records manager on a pluggable storage adapter: icons / list / columns / gallery views, real content thumbnails (images, video frames, text/CSV/Markdown pages, audio waveforms, server renditions; pdf.js optional plugin), preview pane, Quick Look, Get Info inspector with document records (type, number, parties, expiry reminders, approval, OCR), versions, sharing, tags, drag & drop, marquee, clipboard, uploads with pause/resume and conflict resolution, trash; phones: Files-app layout.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 205918,
+     "min": 170124,
+     "gzip": 51910
+    },
+    "css": {
+     "raw": 70372,
+     "min": 60472,
+     "gzip": 11344
+    }
+   }
+  },
+  "invoice-ir": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "invoice-ir"
+    ],
+    "api": [
+     "invoiceIR"
+    ],
+    "attrs": [],
+    "classes": []
+   },
+   "description": "",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 40290,
+     "min": 34436,
+     "gzip": 11327
+    },
+    "css": {
+     "raw": 21027,
+     "min": 17912,
+     "gzip": 4324
+    }
+   }
+  },
+  "mail": {
+   "deps": [
+    "apps",
+    "overlays",
+    "forms",
+    "data-display"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "mail"
+    ],
+    "api": [
+     "mail"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-mail"
+    ]
+   },
+   "description": "Email client: folders + coloured labels, threads, bulk actions, search filters, snooze, swipe actions, floating / minimisable compose with rich text, chips + autocomplete, attachments, signature, schedule send, draft autosave, undo send, settings.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 72735,
+     "min": 63070,
+     "gzip": 18805
+    },
+    "css": {
+     "raw": 36424,
+     "min": 32592,
+     "gzip": 5758
+    }
+   }
+  },
+  "maps": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "location-picker",
+     "map"
+    ],
+    "api": [
+     "map"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-locpick",
+     "ac-map",
+     "ac-map-addr",
+     "ac-map-cluster",
+     "ac-map-dot",
+     "ac-map-handle",
+     "ac-map-handle-m",
+     "ac-map-label",
+     "ac-map-marker",
+     "ac-map-me",
+     "ac-map-picker",
+     "ac-map-pin",
+     "ac-map-popup",
+     "ac-map-shape",
+     "ac-map-veh"
+    ]
+   },
+   "description": "",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 103597,
+     "min": 83466,
+     "gzip": 27327
+    },
+    "css": {
+     "raw": 28689,
+     "min": 24825,
+     "gzip": 5281
+    }
+   }
+  },
+  "marketing": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [],
+    "api": [
+     "marketing"
+    ],
+    "attrs": [],
+    "classes": []
+   },
+   "description": "",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 48534,
+     "min": 40949,
+     "gzip": 13521
+    },
+    "css": {
+     "raw": 18363,
+     "min": 15850,
+     "gzip": 3601
+    }
+   }
+  },
+  "notify": {
+   "deps": [
+    "overlays"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "notify-prefs"
+    ],
+    "api": [
+     "notify"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-island",
+     "ac-ntf",
+     "ac-ntf-banner",
+     "ac-ntf-inline",
+     "ac-ntf-prefs",
+     "ac-ntf-stack",
+     "ac-pospick",
+     "ac-snack"
+    ]
+   },
+   "description": "AC.notify(): toast, rich card, banner, inline, undo snackbar, progress, dynamic island, system & Web Push — routed by per-user preferences (settings card), with sound, haptics, grouping and priority.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 49505,
+     "min": 39727,
+     "gzip": 13152
+    },
+    "css": {
+     "raw": 21191,
+     "min": 18048,
+     "gzip": 3975
+    }
+   }
+  },
+  "prose": {
+   "deps": [
+    "data-display"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "prose"
+    ],
+    "api": [
+     "article",
+     "markdown",
+     "prose",
+     "readingTime"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-anchor",
+     "ac-article",
+     "ac-author",
+     "ac-blog-bar",
+     "ac-blog-search",
+     "ac-callout",
+     "ac-comment",
+     "ac-comment-list",
+     "ac-comments",
+     "ac-compose",
+     "ac-docs",
+     "ac-doctree",
+     "ac-fnref",
+     "ac-footnotes",
+     "ac-lightbox",
+     "ac-mde",
+     "ac-pager",
+     "ac-post-card",
+     "ac-posts",
+     "ac-prose",
+     "ac-readbar",
+     "ac-share",
+     "ac-tag",
+     "ac-task",
+     "ac-toc"
+    ]
+   },
+   "description": "Long-form reading: .ac-prose typography (fa/ar/en, mixed direction), zero-dependency XSS-safe Markdown renderer (AC.markdown), article chrome (reading progress, sticky TOC with scroll-spy, reading time, lightbox), blog cards, docs layout and Markdown editor styles.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 44373,
+     "min": 31818,
+     "gzip": 11572
+    },
+    "css": {
+     "raw": 38486,
+     "min": 33310,
+     "gzip": 6934
+    }
+   }
+  },
+  "pwa": {
+   "deps": [
+    "overlays"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "install-card"
+    ],
+    "api": [
+     "install",
+     "pwa"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-install",
+     "ac-install-banner",
+     "ac-install-card",
+     "ac-install-sheet",
+     "ac-ios",
+     "ac-splash"
+    ]
+   },
+   "description": "Service-worker lifecycle with update toast, install invitation (sheet / banner / card / inline / iOS steps), app badge, Web Share, standalone tweaks, splash, network status, background-sync outbox.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 34145,
+     "min": 28100,
+     "gzip": 10411
+    },
+    "css": {
+     "raw": 14721,
+     "min": 12523,
+     "gzip": 3119
+    }
+   }
+  },
+  "support-chat": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [],
+    "api": [
+     "supportChat"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-sc"
+    ]
+   },
+   "description": "Floating support chat widget: launcher with unread badge, Intercom-style panel (home, conversation with typing / quick replies / attachments / emoji / read receipts, help articles, offline form); phones: full-screen sheet.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 28388,
+     "min": 23904,
+     "gzip": 8500
+    },
+    "css": {
+     "raw": 22789,
+     "min": 20354,
+     "gzip": 4247
+    }
+   }
+  },
+  "terminal": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "terminal"
+    ],
+    "api": [
+     "terminal"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-term"
+    ]
+   },
+   "description": "",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 6445,
+     "min": 4660,
+     "gzip": 2085
+    },
+    "css": {
+     "raw": 3534,
+     "min": 3005,
+     "gzip": 1138
+    }
+   }
+  },
+  "tickets": {
+   "deps": [
+    "table",
+    "overlays",
+    "forms",
+    "apps"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "sla"
+    ],
+    "api": [
+     "tickets"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-split",
+     "ac-tk-back",
+     "ac-tk-bubble",
+     "ac-tk-canned",
+     "ac-tk-canned-pop",
+     "ac-tk-cat",
+     "ac-tk-chip",
+     "ac-tk-composer",
+     "ac-tk-conv",
+     "ac-tk-create",
+     "ac-tk-crumb",
+     "ac-tk-csat",
+     "ac-tk-cust",
+     "ac-tk-detail",
+     "ac-tk-details-btn",
+     "ac-tk-drawer",
+     "ac-tk-file",
+     "ac-tk-files",
+     "ac-tk-help",
+     "ac-tk-load",
+     "ac-tk-log",
+     "ac-tk-msg",
+     "ac-tk-muted",
+     "ac-tk-myitem",
+     "ac-tk-mylist",
+     "ac-tk-noone",
+     "ac-tk-note",
+     "ac-tk-panel",
+     "ac-tk-person",
+     "ac-tk-portal",
+     "ac-tk-prio",
+     "ac-tk-prop",
+     "ac-tk-props",
+     "ac-tk-screen",
+     "ac-tk-send-more",
+     "ac-tk-side",
+     "ac-tk-side-sheet",
+     "ac-tk-sla",
+     "ac-tk-slacard",
+     "ac-tk-split",
+     "ac-tk-subj",
+     "ac-tk-sys",
+     "ac-tk-tag",
+     "ac-tk-tags",
+     "ac-tk-thread",
+     "ac-tk-track",
+     "ac-tk-views"
+    ]
+   },
+   "description": "Help desk: ticket inbox (queue views, filters, priority / status / live SLA chips, bulk assign), ticket detail (thread, internal notes, attachments, canned replies, macros, merge, SLA timer, properties, tags, CSAT, activity), create-ticket modal, customer status timeline; phones: list → detail push.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 57437,
+     "min": 49435,
+     "gzip": 15787
+    },
+    "css": {
+     "raw": 28778,
+     "min": 25409,
+     "gzip": 4881
+    }
+   }
+  },
+  "uptime": {
+   "deps": [],
+   "css": true,
+   "provides": {
+    "components": [
+     "uptime"
+    ],
+    "api": [
+     "uptime"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-uptime"
+    ]
+   },
+   "description": "",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 3087,
+     "min": 2326,
+     "gzip": 1176
+    },
+    "css": {
+     "raw": 1656,
+     "min": 1396,
+     "gzip": 704
+    }
+   }
+  },
+  "user-panel": {
+   "deps": [
+    "shell"
+   ],
+   "css": true,
+   "provides": {
+    "components": [
+     "completeness",
+     "privacy"
+    ],
+    "api": [
+     "userPanel"
+    ],
+    "attrs": [],
+    "classes": [
+     "ac-up-app",
+     "ac-up-apps",
+     "ac-up-checks",
+     "ac-up-complete",
+     "ac-up-eye",
+     "ac-up-id",
+     "ac-up-order",
+     "ac-up-orders",
+     "ac-up-points",
+     "ac-up-quick",
+     "ac-up-row",
+     "ac-up-rows",
+     "ac-up-sec",
+     "ac-up-steps",
+     "ac-up-tier",
+     "ac-up-wallet"
+    ]
+   },
+   "description": "Customer 'my account' home blocks: wallet card with privacy toggle, profile completeness ring, quick-action app grid, order step tracker, notification / ticket rows, security checklist, time-aware greeting.",
+   "kind": "module",
+   "size": {
+    "js": {
+     "raw": 6075,
+     "min": 4429,
+     "gzip": 2111
+    },
+    "css": {
+     "raw": 13775,
+     "min": 12138,
+     "gzip": 2907
+    }
+   }
+  }
+ }
+}

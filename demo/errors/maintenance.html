@@ -1,0 +1,65 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>در حال تعمیر · AraminConsole</title>
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+  <link rel="stylesheet" href="../standalone.css">
+  <script type="module" src="../../dist/aramin-console.js"></script>
+  <script type="module" src="../standalone.js"></script>
+</head>
+<body data-page="maintenance">
+  <main class="ac-fullpage err">
+    <div class="sa-top">
+      <a class="ac-chrome ac-brand" href="../" aria-label="Aramin">
+        <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+        <span class="ac-brand__name">Aramin</span>
+      </a>
+      <div class="ac-chrome sa-tools">
+        <div data-ac="langpicker"></div>
+        <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+      </div>
+    </div>
+
+    <div class="err-box">
+      <svg class="err-art" viewBox="0 0 320 230" role="img" aria-label="Maintenance">
+        <ellipse class="ill-shadow" cx="160" cy="214" rx="100" ry="9"/>
+        <g class="ill-spin">
+          <circle class="ill-acc-s" cx="136" cy="112" r="58" stroke-width="18" stroke-dasharray="14.2 16.2"/>
+          <circle class="ill-acc" cx="136" cy="112" r="52"/>
+          <circle class="ill-paper" cx="136" cy="112" r="20"/>
+        </g>
+        <g class="ill-spin ill-spin--rev">
+          <circle class="ill-ink-s" cx="226" cy="152" r="34" stroke-width="12" stroke-dasharray="9.5 8.3"/>
+          <circle class="ill-ink" cx="226" cy="152" r="30"/>
+          <circle class="ill-paper" cx="226" cy="152" r="11"/>
+        </g>
+        <g class="ill-line" stroke-width="3" stroke-linecap="round"><path d="M30 206V26"/><path d="M22 26h96"/><path d="M30 50 54 26"/></g>
+        <g class="ill-swing ill-swing--crane"><path class="ill-ink-s" d="M100 26v36" stroke-width="2"/><path class="ill-ink-s" d="M100 62a6 6 0 1 0 6 6" stroke-width="3" stroke-linecap="round"/><rect class="ill-ink" x="88" y="76" width="26" height="16" rx="4"/><rect class="ill-paper" x="93" y="82" width="16" height="4" rx="2" opacity=".5"/></g>
+        <g class="ill-float ill-float--slow">
+          <rect class="ill-card" x="196" y="30" width="94" height="40" rx="20" stroke-width="1.5"/>
+          <circle class="ill-acc ill-blink" cx="216" cy="50" r="5"/>
+          <rect class="ill-soft" x="230" y="44" width="44" height="12" rx="6"/>
+        </g>
+      </svg>
+      <span class="err-code" dir="auto" data-i18n="errpage.cMaint">Maintenance</span>
+      <h1 class="err-title" data-i18n="errpage.tMaint">در حال به‌روزرسانی هستیم</h1>
+      <p class="err-text" data-i18n="errpage.pMaint">برای بهتر شدن سرویس، کمی کار فنی داریم. اطلاعات شما امن است و به‌زودی برمی‌گردیم.</p>
+      <div class="err-progress">
+        <div class="ac-spread"><span data-i18n="errpage.progress">پیشرفت کار</span><span><span data-i18n="errpage.eta">حدود</span> <bdi class="ac-num" dir="ltr" data-eta>42</bdi> <span data-i18n="errpage.minutes">دقیقه</span></span></div>
+        <progress class="ac-progress" value="64" max="100" aria-label="Progress" data-i18n-attr="aria-label:errpage.progress"></progress>
+      </div>
+      <div class="err-actions">
+        <button class="ac-btn ac-btn--primary" type="button" data-action="reload"><svg class="ac-icon" aria-hidden="true"><use href="#i-refresh-cw"/></svg><span data-i18n="errpage.check">بررسی دوباره</span></button>
+        <a class="ac-btn ac-btn--outline" href="../#/dashboard"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg><span data-i18n="errpage.home">بازگشت به داشبورد</span></a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

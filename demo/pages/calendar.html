@@ -1,0 +1,106 @@
+<section class="ac-page" data-page="calendar" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.apps">برنامه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.calendar">تقویم</h1>
+      <p class="ac-page-head__sub" data-i18n="cal.sub">جلسه‌ها و رویدادها را در تقویم شمسی یا میلادی ببینید و برنامه‌ریزی کنید.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <div class="ac-segmented" data-ac="segmented" aria-label="Calendar system" data-i18n-attr="aria-label:cal.system" data-cal-system>
+        <button class="ac-segmented__item" type="button" aria-checked="true" data-value="persian" data-i18n="cal.jalali">شمسی</button>
+        <button class="ac-segmented__item" type="button" aria-checked="false" data-value="gregory" data-i18n="cal.gregorian">میلادی</button>
+      </div>
+      <button class="ac-btn ac-btn--primary" type="button" data-cal-new><svg class="ac-icon" aria-hidden="true"><use href="#i-calendar-plus"/></svg><span data-i18n="cal.newEvent">رویداد جدید</span></button>
+    </div>
+  </header>
+
+  <div class="ac-bento ac-stagger">
+    <article class="ac-card ac-card--static ac-span-12 ac-span-xl-8 ac-cal">
+      <div class="ac-cal__bar">
+        <div class="ac-cal__nav">
+          <button class="ac-btn ac-btn--outline ac-btn--sm" type="button" data-cal-today data-i18n="cal.today">امروز</button>
+          <div class="ac-btn-group">
+            <button class="ac-btn ac-btn--ghost ac-btn--icon ac-btn--sm" type="button" data-cal-step="-1" aria-label="Previous" data-i18n-attr="aria-label:cal.prev"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+            <button class="ac-btn ac-btn--ghost ac-btn--icon ac-btn--sm" type="button" data-cal-step="1" aria-label="Next" data-i18n-attr="aria-label:cal.next"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          </div>
+          <h2 class="ac-cal__title" aria-live="polite" data-cal-title></h2>
+        </div>
+        <div class="ac-segmented ac-segmented--sm" data-ac="segmented" aria-label="View" data-i18n-attr="aria-label:cal.view" data-cal-view>
+          <button class="ac-segmented__item" type="button" aria-checked="true" data-value="month" data-i18n="cal.month">ماه</button>
+          <button class="ac-segmented__item" type="button" aria-checked="false" data-value="week" data-i18n="cal.week">هفته</button>
+          <button class="ac-segmented__item" type="button" aria-checked="false" data-value="agenda" data-i18n="cal.agenda">برنامه</button>
+        </div>
+      </div>
+      <div class="ac-cal__body" data-cal-body></div>
+    </article>
+
+    <aside class="ac-span-12 ac-span-xl-4 ac-stack ac-gap-4 ac-cal-side">
+      <article class="ac-card ac-card--static ac-card--accent ac-cal-next">
+        <div class="ac-card__body ac-stack ac-gap-2" data-cal-next></div>
+      </article>
+      <article class="ac-card ac-card--static">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="cal.todayList">برنامهٔ امروز</h2><span class="ac-badge" data-cal-count></span></div>
+        <div class="ac-card__body"><ul class="ac-cal-mini" role="list" data-cal-todaylist></ul></div>
+      </article>
+      <article class="ac-card ac-card--static ac-hide-phone">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="cal.categories">دسته‌ها</h2></div>
+        <div class="ac-card__body">
+          <ul class="ac-cal-cats" role="list">
+            <li data-tone="accent"><i></i><span data-i18n="cal.cat.team">تیم</span></li>
+            <li data-tone="info"><i></i><span data-i18n="cal.cat.product">محصول</span></li>
+            <li data-tone="success"><i></i><span data-i18n="cal.cat.clients">مشتریان</span></li>
+            <li data-tone="warning"><i></i><span data-i18n="cal.cat.planning">برنامه‌ریزی</span></li>
+            <li data-tone="danger"><i></i><span data-i18n="cal.cat.important">مهم</span></li>
+            <li data-tone="neutral"><i></i><span data-i18n="cal.cat.personal">شخصی</span></li>
+          </ul>
+        </div>
+      </article>
+    </aside>
+  </div>
+
+  <div class="ac-modal" id="cal-new-modal" data-ac="modal" data-size="md" data-initial="#cal-title">
+    <form class="ac-dialog ac-form" data-ac="form" data-cal-form novalidate>
+      <div class="ac-dialog__head">
+        <div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="cal.newEvent">رویداد جدید</h2><p class="ac-dialog__sub" data-i18n="cal.newSub">عنوان، زمان و رنگ رویداد را مشخص کنید.</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="ac-dialog__body">
+        <div class="ac-form-grid">
+          <div class="ac-field ac-span-full">
+            <label class="ac-label" for="cal-title"><span data-i18n="cal.title">عنوان</span> <span class="ac-label__req">*</span></label>
+            <input class="ac-input" id="cal-title" name="title" data-ac-rules="required|min:2" autocomplete="off">
+          </div>
+          <div class="ac-field ac-span-full">
+            <label class="ac-label" for="cal-date" data-i18n="cal.date">تاریخ</label>
+            <div class="ac-input-group ac-date" data-ac="datepicker" data-name="date" data-cal-date><input class="ac-input" id="cal-date"></div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="cal-start" data-i18n="cal.start">شروع</label>
+            <div class="ac-input-group ac-time" data-ac="timepicker" data-step="15"><input class="ac-input" id="cal-start" name="start" value="10:00"></div>
+          </div>
+          <div class="ac-field">
+            <label class="ac-label" for="cal-end" data-i18n="cal.end">پایان</label>
+            <div class="ac-input-group ac-time" data-ac="timepicker" data-step="15"><input class="ac-input" id="cal-end" name="end" value="11:00"></div>
+          </div>
+          <div class="ac-field ac-span-full">
+            <label class="ac-label" for="cal-place" data-i18n="cal.place">مکان</label>
+            <input class="ac-input" id="cal-place" name="place" autocomplete="off">
+          </div>
+          <fieldset class="ac-field ac-span-full ac-cal-tones">
+            <legend class="ac-label" data-i18n="cal.color">رنگ</legend>
+            <label data-tone="accent"><input type="radio" name="tone" value="accent" checked><span class="ac-visually-hidden" data-i18n="cal.cat.team">تیم</span></label>
+            <label data-tone="info"><input type="radio" name="tone" value="info"><span class="ac-visually-hidden" data-i18n="cal.cat.product">محصول</span></label>
+            <label data-tone="success"><input type="radio" name="tone" value="success"><span class="ac-visually-hidden" data-i18n="cal.cat.clients">مشتریان</span></label>
+            <label data-tone="warning"><input type="radio" name="tone" value="warning"><span class="ac-visually-hidden" data-i18n="cal.cat.planning">برنامه‌ریزی</span></label>
+            <label data-tone="danger"><input type="radio" name="tone" value="danger"><span class="ac-visually-hidden" data-i18n="cal.cat.important">مهم</span></label>
+            <label data-tone="neutral"><input type="radio" name="tone" value="neutral"><span class="ac-visually-hidden" data-i18n="cal.cat.personal">شخصی</span></label>
+          </fieldset>
+        </div>
+      </div>
+      <div class="ac-dialog__foot">
+        <button class="ac-btn" type="button" data-ac-close data-i18n="overlay.cancel">انصراف</button>
+        <button class="ac-btn ac-btn--primary" type="submit" data-i18n="cal.save">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</section>

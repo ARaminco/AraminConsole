@@ -1,0 +1,272 @@
+<section class="ac-page" data-page="overlays" data-script>
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="kit.eyebrow">کیت رابط کاربری</span>
+      <h1 class="ac-page-head__title" data-i18n="ov.title">پنجره‌ها و بازخورد</h1>
+      <p class="ac-page-head__sub" data-i18n="ov.sub">مودال، شیت، کشو، منو، پاپ‌اوور، راهنما، تأیید، اعلان کوتاه و هشدار — روی گوشی همه مثل یک اپ بومی رفتار می‌کنند.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--primary ac-btn--pill" type="button" data-ac-customizer-open><svg class="ac-icon" aria-hidden="true"><use href="#i-paintbrush"/></svg><span data-i18n="custom.title">شخصی‌سازی</span></button>
+    </div>
+  </header>
+
+  <div class="kit-grid ac-stagger">
+    <!-- dialogs -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="ov.dialogs">پنجره‌ها</h2><p class="ac-card__sub"><span class="ac-ltr">data-ac="modal | sheet | drawer"</span></p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-label" data-i18n="ov.modalSizes">مودال در چهار اندازه (روی گوشی شیت می‌شود)</div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-modal-sm">sm</button>
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-modal">md</button>
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-modal-lg">lg</button>
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-modal-full">full</button>
+          <button class="ac-btn ac-btn--pill ac-btn--ghost" type="button" data-ac-open="#ov-modal-static" data-i18n="ov.static">ثابت</button>
+        </div>
+        <div class="kit-label" data-i18n="ov.sheetsDrawers">شیت پایین و کشوی کناری</div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--primary ac-btn--pill" type="button" data-ac-open="#ov-sheet"><svg class="ac-icon" aria-hidden="true"><use href="#i-panel-bottom"/></svg><span data-i18n="ov.sheet">شیت با نقطه‌های توقف</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-drawer-start"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-panel-left"/></svg><span data-i18n="ov.drawerStart">کشوی آغاز</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-drawer"><svg class="ac-icon ac-flip-rtl" aria-hidden="true"><use href="#i-panel-right"/></svg><span data-i18n="ov.drawerEnd">کشوی پایان</span></button>
+          <button class="ac-btn ac-btn--pill ac-btn--ghost" type="button" data-demo="modal-js"><svg class="ac-icon" aria-hidden="true"><use href="#i-sparkles"/></svg><span>AC.modal.open({…})</span></button>
+        </div>
+      </div>
+    </article>
+
+    <!-- menus -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="ov.menus">منوها</h2><p class="ac-card__sub"><span class="ac-ltr">data-ac="dropdown" · data-ac-contextmenu · AC.menu()</span></p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-menu"><span data-i18n="ov.actions">عملیات</span><svg class="ac-icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <button class="ac-btn ac-btn--pill ac-btn--ghost" type="button" data-demo="menu-js"><span>AC.menu()</span><svg class="ac-icon" aria-hidden="true"><use href="#i-ellipsis"/></svg></button>
+          <span class="ac-text-sm ac-text-muted" data-ov-out="menu"></span>
+        </div>
+        <div class="ac-card ac-card--inset" tabindex="0" data-ac-contextmenu="#ov-ctx-menu">
+          <div class="ac-empty ac-empty--sm"><div class="ac-empty__art"><svg class="ac-icon" aria-hidden="true"><use href="#i-mouse-pointer-click"/></svg></div>
+          <p class="ac-empty__text" data-i18n="ov.ctxHint">راست‌کلیک کنید یا روی گوشی انگشت را نگه دارید</p></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- popover & tooltip -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="ov.floating">پاپ‌اوور و راهنما</h2><p class="ac-card__sub"><span class="ac-ltr">data-ac="popover" · data-ac-tooltip · AC.position()</span></p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-open="#ov-pop"><svg class="ac-icon" aria-hidden="true"><use href="#i-user-plus"/></svg><span data-i18n="ov.invite">دعوت هم‌تیمی</span></button>
+        </div>
+        <div class="kit-label" data-i18n="ov.tooltipHint">راهنما با نشانگر یا Tab (روی لمس نمایش داده نمی‌شود)</div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--icon ac-btn--pill" type="button" aria-label="Copy" data-ac-tooltip="Copy link" data-ac-tooltip-kbd="Ctrl C" data-ac-tooltip-placement="top"><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
+          <button class="ac-btn ac-btn--icon ac-btn--pill" type="button" aria-label="Share" data-ac-tooltip="Share" data-ac-tooltip-placement="bottom"><svg class="ac-icon" aria-hidden="true"><use href="#i-share"/></svg></button>
+          <button class="ac-btn ac-btn--icon ac-btn--pill" type="button" aria-label="Archive" data-ac-tooltip="Archive" data-ac-tooltip-placement="start"><svg class="ac-icon" aria-hidden="true"><use href="#i-archive"/></svg></button>
+          <button class="ac-btn ac-btn--icon ac-btn--pill" type="button" aria-label="Pin" data-ac-tooltip="Pin to top" data-ac-tooltip-placement="end"><svg class="ac-icon" aria-hidden="true"><use href="#i-star"/></svg></button>
+        </div>
+      </div>
+    </article>
+
+    <!-- confirm & prompt -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="ov.confirm">تأیید و پرسش</h2><p class="ac-card__sub"><span class="ac-ltr">await AC.confirm() · await AC.prompt()</span></p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--danger ac-btn--pill" type="button" data-demo="confirm-danger"><svg class="ac-icon" aria-hidden="true"><use href="#i-trash-2"/></svg><span data-i18n="ov.deleteProject">حذف پروژه</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-demo="confirm"><span data-i18n="ov.publish">انتشار</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-demo="prompt"><svg class="ac-icon" aria-hidden="true"><use href="#i-pencil"/></svg><span data-i18n="ov.rename">تغییر نام</span></button>
+        </div>
+        <div><output class="ac-badge ac-badge--lg" data-ov-out="confirm">—</output></div>
+      </div>
+    </article>
+
+    <!-- toasts -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="ov.toasts">اعلان کوتاه</h2><p class="ac-card__sub"><span class="ac-ltr">AC.toast({ title, text, tone, action, duration })</span></p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--pill" type="button" data-toast="success"><span class="ac-status" data-status="online"></span><span data-i18n="ov.tSuccess">موفق</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-toast="danger"><span class="ac-status" data-status="busy"></span><span data-i18n="ov.tError">خطا</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-toast="warning"><span class="ac-status" data-status="away"></span><span data-i18n="ov.tWarning">هشدار</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-toast="info"><span data-i18n="ov.tInfo">اطلاع</span></button>
+        </div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--primary ac-btn--pill" type="button" data-demo="undo"><svg class="ac-icon" aria-hidden="true"><use href="#i-undo-2"/></svg><span data-i18n="ov.tUndo">حذف با امکان بازگشت</span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-demo="promise"><span data-i18n="ov.tPromise">در حال انجام…</span></button>
+          <button class="ac-btn ac-btn--pill ac-btn--ghost" type="button" data-demo="stack"><span data-i18n="ov.tStack">پشته (۴ تا)</span></button>
+        </div>
+        <div class="kit-demo">
+          <div class="ac-segmented ac-segmented--sm" data-ac="segmented" aria-label="Position" data-ov-pos>
+            <button class="ac-segmented__item" type="button" aria-checked="true" data-value="">auto</button>
+            <button class="ac-segmented__item" type="button" data-value="top-center">top</button>
+            <button class="ac-segmented__item" type="button" data-value="bottom-start">bottom-start</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- notifications & customizer -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="notif.title">اعلان‌ها</h2><p class="ac-card__sub"><span class="ac-ltr">AC.notifications · AC.customizer</span></p></div></div>
+      <div class="ac-card__body ac-stack">
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--pill" type="button" data-ac-notifications-open aria-label="Notifications"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell"/></svg><span data-i18n="ov.openCenter">مرکز اعلان‌ها</span><span class="ac-count" data-ac-notifications-count hidden></span></button>
+          <button class="ac-btn ac-btn--pill" type="button" data-demo="notify"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell-ring"/></svg><span data-i18n="ov.pushNotif">اعلان تازه</span></button>
+          <a class="ac-btn ac-btn--pill ac-btn--ghost" href="#/notifications"><span data-i18n="notif.viewAll">همهٔ اعلان‌ها</span></a>
+        </div>
+        <div class="kit-demo">
+          <button class="ac-btn ac-btn--primary ac-btn--pill" type="button" data-ac-customizer-open><svg class="ac-icon" aria-hidden="true"><use href="#i-paintbrush"/></svg><span data-i18n="custom.title">شخصی‌سازی</span></button>
+        </div>
+      </div>
+    </article>
+
+    <!-- alerts -->
+    <article class="ac-card">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="ov.alerts">هشدار و بنر</h2><p class="ac-card__sub"><span class="ac-ltr">.ac-alert[data-tone] · data-ac="alert"</span></p></div>
+        <div class="ac-card__actions"><button class="ac-btn ac-btn--sm ac-btn--ghost ac-btn--pill" type="button" data-demo="alerts-reset"><svg class="ac-icon" aria-hidden="true"><use href="#i-rotate-ccw"/></svg><span data-i18n="custom.reset">بازنشانی</span></button></div></div>
+      <div class="ac-card__body ac-stack" data-ov-alerts>
+        <div class="ac-alert" data-tone="info" data-ac="alert" role="status">
+          <svg class="ac-icon ac-alert__icon" aria-hidden="true"><use href="#i-info"/></svg>
+          <div class="ac-alert__body"><div class="ac-alert__title" data-i18n="ov.aInfoT">نگهداری برنامه‌ریزی‌شده</div><div class="ac-alert__text" data-i18n="ov.aInfo">پنجشنبه ساعت ۲ بامداد سرویس پرداخت ۱۵ دقیقه در دسترس نیست.</div></div>
+          <button class="ac-alert__close" type="button" data-ac-close aria-label="Dismiss"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <div class="ac-alert" data-tone="success" data-ac="alert" role="status">
+          <svg class="ac-icon ac-alert__icon" aria-hidden="true"><use href="#i-circle-check"/></svg>
+          <div class="ac-alert__body"><div class="ac-alert__title" data-i18n="ov.aOkT">همه‌چیز آماده است</div><div class="ac-alert__text" data-i18n="ov.aOk">دامنه تأیید شد و گواهی SSL صادر شد.</div></div>
+          <button class="ac-alert__close" type="button" data-ac-close aria-label="Dismiss"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <div class="ac-alert" data-tone="warning" role="status">
+          <svg class="ac-icon ac-alert__icon" aria-hidden="true"><use href="#i-triangle-alert"/></svg>
+          <div class="ac-alert__body"><div class="ac-alert__title" data-i18n="ov.aWarnT">۸۰٪ فضای ذخیره‌سازی پر شده</div><div class="ac-alert__text" data-i18n="ov.aWarn">برای جلوگیری از توقف پشتیبان‌گیری، طرح را ارتقا دهید.</div>
+            <div class="ac-alert__actions"><button class="ac-btn ac-btn--sm ac-btn--primary ac-btn--pill" type="button" data-i18n="ov.upgrade">ارتقا</button><button class="ac-btn ac-btn--sm ac-btn--pill" type="button" data-i18n="ov.later">بعداً</button></div></div>
+        </div>
+        <div class="ac-alert ac-alert--solid" data-tone="danger" data-ac="alert" role="alert">
+          <svg class="ac-icon ac-alert__icon" aria-hidden="true"><use href="#i-circle-alert"/></svg>
+          <div class="ac-alert__body"><div class="ac-alert__title" data-i18n="ov.aErrT">پرداخت ناموفق بود</div><div class="ac-alert__text" data-i18n="ov.aErr">کارت منقضی شده است؛ روش پرداخت را به‌روز کنید.</div></div>
+          <button class="ac-alert__close" type="button" data-ac-close aria-label="Dismiss"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <div class="ac-alert ac-alert--banner" data-tone="accent" data-ac="alert" role="status">
+          <svg class="ac-icon ac-alert__icon" aria-hidden="true"><use href="#i-sparkles"/></svg>
+          <div class="ac-alert__body"><span class="ac-alert__title" data-i18n="ov.aBanT">تازه: گزارش‌های زمان‌بندی‌شده</span><span class="ac-alert__text" data-i18n="ov.aBan">هر هفته خلاصه‌ای به ایمیل تیم برسد.</span></div>
+          <button class="ac-alert__close" type="button" data-ac-close aria-label="Dismiss"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- ===== overlay definitions (portaled to <body> while open) ===== -->
+  <div class="ac-modal" id="ov-modal" data-ac="modal" data-size="md" data-initial="#ov-name">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head">
+        <div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.mTitle">ساخت فضای کار</h2><p class="ac-dialog__sub" data-i18n="ov.mSub">یک فضای جدا برای تیم و پروژه‌هایتان.</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="ac-dialog__body ac-stack">
+        <div class="ac-field"><label class="ac-label" for="ov-name"><span data-i18n="ov.fName">نام فضای کار</span></label><input class="ac-input" id="ov-name" type="text" value="Aramin Ops" autocomplete="off"></div>
+        <div class="ac-field"><label class="ac-label" for="ov-desc"><span data-i18n="ov.fDesc">توضیح</span></label><textarea class="ac-input" id="ov-desc" rows="3" data-i18n-attr="placeholder:ov.fDescPh" placeholder="برای چه کاری است؟"></textarea></div>
+      </div>
+      <div class="ac-dialog__foot">
+        <button class="ac-btn" type="button" data-ac-close data-i18n="overlay.cancel">انصراف</button>
+        <button class="ac-btn ac-btn--primary" type="button" data-ac-close="save" data-i18n="ov.create">ساختن</button>
+      </div>
+    </div>
+  </div>
+  <div class="ac-modal" id="ov-modal-sm" data-ac="modal" data-size="sm">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.smTitle">کلید API جدید</h2><p class="ac-dialog__text" data-i18n="ov.smText">این کلید فقط یک بار نمایش داده می‌شود. آن را جای امنی نگه دارید.</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="ac-dialog__body"><code class="ac-kbd ac-mono">ak_live_4f9c••••••••••2e71</code></div>
+      <div class="ac-dialog__foot"><button class="ac-btn ac-btn--primary ac-btn--block" type="button" data-ac-close><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg><span data-i18n="ov.copyClose">کپی و بستن</span></button></div>
+    </div>
+  </div>
+  <div class="ac-modal" id="ov-modal-lg" data-ac="modal" data-size="lg">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.lgTitle">شرایط استفاده</h2><p class="ac-dialog__sub" data-i18n="ov.lgSub">آخرین به‌روزرسانی: مهر ۱۴۰۵</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="ac-dialog__body ac-stack" data-ov-lorem="9"></div>
+      <div class="ac-dialog__foot"><button class="ac-btn" type="button" data-ac-close data-i18n="ov.decline">نمی‌پذیرم</button><button class="ac-btn ac-btn--primary" type="button" data-ac-close data-i18n="ov.accept">می‌پذیرم</button></div>
+    </div>
+  </div>
+  <div class="ac-modal" id="ov-modal-full" data-ac="modal" data-size="full">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.fullTitle">پیش‌نمایش تمام‌صفحه</h2><p class="ac-dialog__sub">data-size="full"</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="ac-dialog__body"><div class="ac-empty"><div class="ac-empty__art"><svg class="ac-icon" aria-hidden="true"><use href="#i-maximize-2"/></svg></div><div class="ac-empty__title" data-i18n="ov.fullTitle">پیش‌نمایش تمام‌صفحه</div><p class="ac-empty__text" data-i18n="ov.fullText">برای ویرایشگرها، پیش‌نمایش فایل و جریان‌های چندمرحله‌ای.</p></div></div>
+    </div>
+  </div>
+  <div class="ac-modal" id="ov-modal-static" data-ac="modal" data-size="sm" data-static>
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.staticTitle">تغییرات ذخیره نشده</h2><p class="ac-dialog__text" data-i18n="ov.staticText">کلیک بیرون یا Esc این پنجره را نمی‌بندد؛ یکی از گزینه‌ها را انتخاب کنید.</p></div></div>
+      <div class="ac-dialog__foot"><button class="ac-btn" type="button" data-ac-close data-i18n="ov.discard">دور ریختن</button><button class="ac-btn ac-btn--primary" type="button" data-ac-close data-i18n="ov.save">ذخیره</button></div>
+    </div>
+  </div>
+
+  <div class="ac-sheet" id="ov-sheet" data-ac="sheet" data-snap="0.5,0.92">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.sheetTitle">فیلتر سفارش‌ها</h2><p class="ac-dialog__sub" data-i18n="ov.sheetSub">بکشید تا بزرگ شود؛ پایین بکشید تا بسته شود.</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="ac-dialog__body">
+        <ul class="ac-list ac-list--divided" role="list" data-ov-rows="14"></ul>
+      </div>
+      <div class="ac-dialog__foot"><button class="ac-btn" type="button" data-ac-close data-i18n="custom.reset">بازنشانی</button><button class="ac-btn ac-btn--primary" type="button" data-ac-close data-i18n="ov.apply">اعمال</button></div>
+    </div>
+  </div>
+
+  <div class="ac-drawer" id="ov-drawer" data-ac="drawer" data-side="end">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.drawerTitle">جزئیات سفارش ۱۰۴۲</h2><p class="ac-dialog__sub" data-i18n="ov.drawerSub">سارا کریمی · ۳ قلم</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="ac-dialog__body"><ul class="ac-list ac-list--divided" role="list" data-ov-rows="8"></ul></div>
+      <div class="ac-dialog__foot"><button class="ac-btn" type="button" data-ac-close data-i18n="overlay.cancel">انصراف</button><button class="ac-btn ac-btn--primary" type="button" data-ac-close data-i18n="ov.ship">ارسال سفارش</button></div>
+    </div>
+  </div>
+  <div class="ac-drawer" id="ov-drawer-start" data-ac="drawer" data-side="start" data-size="sm">
+    <div class="ac-dialog">
+      <div class="ac-dialog__head"><div class="ac-dialog__titles"><h2 class="ac-dialog__title" data-i18n="ov.drawerStart">کشوی آغاز</h2><p class="ac-dialog__sub">data-side="start"</p></div>
+        <button class="ac-dialog__close" type="button" data-ac-close aria-label="Close" data-i18n-attr="aria-label:overlay.close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="ac-dialog__body"><ul class="ac-list ac-list--divided" role="list" data-ov-rows="6"></ul></div>
+    </div>
+  </div>
+
+  <div class="ac-menu" id="ov-menu" data-ac="dropdown" data-placement="bottom-start" aria-label="Actions">
+    <div class="ac-menu__label" data-i18n="ov.actions">عملیات</div>
+    <button class="ac-menu__item" data-value="edit"><svg class="ac-icon" aria-hidden="true"><use href="#i-pencil"/></svg><span class="ac-menu__text" data-i18n="kit.edit">ویرایش</span><kbd class="ac-menu__kbd">E</kbd></button>
+    <button class="ac-menu__item" data-value="duplicate"><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg><span class="ac-menu__text" data-i18n="ov.duplicate">تکثیر</span><kbd class="ac-menu__kbd">Ctrl D</kbd></button>
+    <div class="ac-menu__sub">
+      <button class="ac-menu__item"><svg class="ac-icon" aria-hidden="true"><use href="#i-share"/></svg><span class="ac-menu__text" data-i18n="ov.shareTo">اشتراک‌گذاری</span></button>
+      <div class="ac-menu">
+        <button class="ac-menu__item" data-value="link"><svg class="ac-icon" aria-hidden="true"><use href="#i-link"/></svg><span class="ac-menu__text" data-i18n="ov.copyLink">کپی پیوند</span></button>
+        <button class="ac-menu__item" data-value="email"><svg class="ac-icon" aria-hidden="true"><use href="#i-mail"/></svg><span class="ac-menu__text" data-i18n="ov.email">ایمیل</span></button>
+        <button class="ac-menu__item" data-value="chat"><svg class="ac-icon" aria-hidden="true"><use href="#i-message-square"/></svg><span class="ac-menu__text" data-i18n="nav.chat">گفتگو</span></button>
+      </div>
+    </div>
+    <div class="ac-menu__sep"></div>
+    <div class="ac-menu__label" data-i18n="ov.view">نمایش</div>
+    <button class="ac-menu__item" role="menuitemcheckbox" aria-checked="true" data-value="grid"><span class="ac-menu__text" data-i18n="ov.showGrid">نمایش خطوط</span></button>
+    <button class="ac-menu__item" role="menuitemcheckbox" aria-checked="false" data-value="compact"><span class="ac-menu__text" data-i18n="custom.compact">فشرده</span></button>
+    <div role="group">
+      <button class="ac-menu__item" role="menuitemradio" aria-checked="true" data-value="newest"><span class="ac-menu__text" data-i18n="ov.newest">جدیدترین</span></button>
+      <button class="ac-menu__item" role="menuitemradio" aria-checked="false" data-value="oldest"><span class="ac-menu__text" data-i18n="ov.oldest">قدیمی‌ترین</span></button>
+    </div>
+    <div class="ac-menu__sep"></div>
+    <button class="ac-menu__item" aria-disabled="true"><svg class="ac-icon" aria-hidden="true"><use href="#i-archive"/></svg><span class="ac-menu__text" data-i18n="ov.archive">بایگانی</span></button>
+    <button class="ac-menu__item" data-tone="danger" data-value="delete"><svg class="ac-icon" aria-hidden="true"><use href="#i-trash-2"/></svg><span class="ac-menu__text" data-i18n="overlay.delete">حذف</span><kbd class="ac-menu__kbd">Del</kbd></button>
+  </div>
+
+  <div class="ac-menu" id="ov-ctx-menu" data-ac="dropdown" aria-label="Context">
+    <button class="ac-menu__item" data-value="cut"><svg class="ac-icon" aria-hidden="true"><use href="#i-scissors"/></svg><span class="ac-menu__text" data-i18n="ov.cut">برش</span><kbd class="ac-menu__kbd">Ctrl X</kbd></button>
+    <button class="ac-menu__item" data-value="copy"><svg class="ac-icon" aria-hidden="true"><use href="#i-copy"/></svg><span class="ac-menu__text" data-i18n="kit.copy">کپی</span><kbd class="ac-menu__kbd">Ctrl C</kbd></button>
+    <button class="ac-menu__item" data-value="paste"><svg class="ac-icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span class="ac-menu__text" data-i18n="ov.paste">جای‌گذاری</span><kbd class="ac-menu__kbd">Ctrl V</kbd></button>
+    <div class="ac-menu__sep"></div>
+    <button class="ac-menu__item" data-value="move"><svg class="ac-icon" aria-hidden="true"><use href="#i-folder-input"/></svg><span class="ac-menu__text" data-i18n="ov.moveTo">انتقال به…</span></button>
+    <button class="ac-menu__item" data-tone="danger" data-value="delete"><svg class="ac-icon" aria-hidden="true"><use href="#i-trash-2"/></svg><span class="ac-menu__text" data-i18n="overlay.delete">حذف</span></button>
+  </div>
+
+  <div class="ac-popover" id="ov-pop" data-ac="popover" data-placement="bottom-start" aria-label="Invite">
+    <div class="ac-stack">
+      <strong data-i18n="ov.invite">دعوت هم‌تیمی</strong>
+      <p class="ac-text-sm ac-text-muted" data-i18n="ov.inviteText">پیوند دعوت تا ۷ روز معتبر است.</p>
+      <div class="ac-field"><label class="ac-label" for="ov-email"><span data-i18n="ov.email">ایمیل</span></label><input class="ac-input" id="ov-email" type="email" placeholder="name@company.com" autofocus></div>
+      <div class="ac-cluster"><button class="ac-btn ac-btn--sm ac-btn--pill" type="button" data-ac-close data-i18n="overlay.cancel">انصراف</button><button class="ac-btn ac-btn--sm ac-btn--primary ac-btn--pill" type="button" data-ac-close data-i18n="ov.send">ارسال</button></div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html data-motion-default="full" lang="fa" dir="rtl" data-accent="orange" data-ac-icons="../../dist/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>کد یک‌بارمصرف · AraminConsole</title>
+  <meta name="theme-color" content="#f2f2f3">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../dist/fonts/vazirmatn-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="../../dist/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="../../dist/aramin-console.css">
+  <link rel="stylesheet" href="../standalone.css">
+  <script type="module" src="../../dist/aramin-console.js"></script>
+  <script type="module" src="../standalone.js"></script>
+</head>
+<body data-page="otp">
+  <main class="ac-auth auth">
+    <section class="ac-auth__main">
+      <div class="sa-top">
+        <a class="ac-chrome ac-brand" href="../" aria-label="Aramin">
+          <span class="ac-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20 12 4l7 16"/><path d="M8.2 13.5h7.6"/></svg></span>
+          <span class="ac-brand__name">Aramin</span>
+        </a>
+        <div class="ac-chrome sa-tools">
+          <div data-ac="langpicker"></div>
+          <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme" data-i18n-attr="aria-label:app.theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        </div>
+      </div>
+
+      <div class="ac-auth__card auth-card">
+        <header class="auth-head">
+          <span class="auth-head__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shield-check"/></svg></span>
+          <h1 class="auth-title" data-i18n="auth.otpTitle">کد تأیید را وارد کنید</h1>
+          <p class="auth-sub"><span data-i18n="auth.otpSub">یک کد ۶ رقمی پیامک شد به</span> <bdi class="ac-num" dir="ltr" data-otp-to>0912 ••• ••89</bdi></p>
+        </header>
+        <form class="auth-form ac-form" id="otp-form" data-ac="form" novalidate>
+          <div class="ac-field">
+            <span class="ac-label ac-visually-hidden" id="o-label" data-i18n="auth.otpLabel">کد تأیید</span>
+            <div class="ac-otp auth-otp" data-ac="otp" data-length="6" data-name="code" aria-labelledby="o-label" data-ac-rules="required|length:6"></div>
+          </div>
+          <p class="auth-timer"><span data-timer-wait><span class="auth-timer__dial" aria-hidden="true"><svg class="auth-timer__ring" viewBox="0 0 36 36"><circle class="t" cx="18" cy="18" r="15.5"/><circle class="v" cx="18" cy="18" r="15.5" pathLength="1"/></svg></span><span data-i18n="auth.resendIn">ارسال دوباره تا</span> <bdi class="ac-num" dir="ltr" data-timer-left>59</bdi> <span data-i18n="auth.seconds">ثانیه</span> · </span><button type="button" data-timer-resend data-i18n="auth.resend">ارسال دوباره</button></p>
+          <p class="auth-hint"><span data-i18n="auth.otpDemo">نسخهٔ نمایشی: کد درست</span> <bdi class="ac-num" dir="ltr">123456</bdi></p>
+          <div class="auth-actions">
+            <button class="ac-btn ac-btn--primary ac-btn--block auth-submit" type="submit"><span data-i18n="auth.verify">تأیید و ورود</span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg></button>
+          </div>
+        </form>
+        <p class="auth-foot"><span data-i18n="auth.wrongNumber">شماره اشتباه است؟</span> <a class="auth-link" href="register.html" data-i18n="auth.changeNumber">ویرایش شماره</a></p>
+      </div>
+    </section>
+
+    <aside class="ac-auth__aside" aria-label="AraminConsole">
+      <span class="show-tag"><b dir="ltr">v0.1</b><span data-i18n="auth.showTag">متن‌باز · بدون وابستگی · MIT</span></span>
+      <div class="show-stage" aria-hidden="true">
+        <div class="mini">
+          <div class="mini__card">
+            <span class="mini__label">Total balance <span>USD</span></span>
+            <span class="mini__value">$498,601.92</span>
+            <span class="mini__pill">↗ 5%</span>
+          </div>
+          <div class="mini__card mini__card--ink">
+            <span class="mini__label">Goals</span>
+            <svg class="mini__ring" viewBox="0 0 44 44"><circle class="t" cx="22" cy="22" r="18"/><circle class="v" cx="22" cy="22" r="18" transform="rotate(-90 22 22)"/></svg>
+            <span class="mini__pill">74% done</span>
+          </div>
+          <div class="mini__card mini__card--wide">
+            <span class="mini__label">Revenue <span>Jan – Jul</span></span>
+            <div class="mini__bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="mini__card">
+            <span class="mini__label">Card controls</span>
+            <span class="mini__row">Online payments <span class="mini__switch"></span></span>
+            <span class="mini__row">Contactless <span class="mini__switch"></span></span>
+            <span class="mini__row">Use abroad <span class="mini__switch mini__switch--off"></span></span>
+          </div>
+          <div class="mini__card mini__card--ink">
+            <span class="mini__label">Team</span>
+            <span class="mini__value">12</span>
+            <span class="mini__people"><span>AR</span><span>SM</span><span>+9</span></span>
+          </div>
+          <span class="mini__chip mini__chip--a"><i><svg class="ac-icon"><use href="#i-check"/></svg></i>Payment received</span>
+          <span class="mini__chip mini__chip--b"><i><svg class="ac-icon"><use href="#i-zap"/></svg></i>+18% this week</span>
+        </div>
+      </div>
+      <div class="show-copy">
+        <h2 data-i18n="auth.showTitle">پنل مدیریتی که روی گوشی مثل یک اپ رفتار می‌کند.</h2>
+        <p data-i18n="auth.showText">راست‌به‌چپ از پایه، حالت تیره، تقویم شمسی و ده‌ها کامپوننت آماده — فقط با یک فایل CSS و یک ماژول JS.</p>
+        <div class="show-points">
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>RTL</span>
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>Dark mode</span>
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>PWA</span>
+          <span><svg class="ac-icon" aria-hidden="true"><use href="#i-check"/></svg>Jalali</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

@@ -1,0 +1,279 @@
+/* ==========================================================================
+   Cards, stat tiles, bento tiles
+   .ac-card [--flat | --glass | --interactive | --aurora | --accent | --inset]
+     .ac-card__head > .ac-card__titles(.ac-card__title + .ac-card__sub) + .ac-card__actions
+     .ac-card__body | .ac-card__media | .ac-card__foot
+   .ac-stat  (stat tile; combine with .ac-card)
+   ========================================================================== */
+
+.ac-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--ac-surface-1);
+  border: 1px solid var(--ac-border);
+  border-radius: var(--ac-r-xl);
+  box-shadow: var(--ac-shadow-xs);
+  transition: box-shadow var(--ac-dur-4) var(--ac-ease), transform var(--ac-dur-4) var(--ac-ease-out), border-color var(--ac-dur-2);
+}
+/* framer-style hover lift for dashboard tiles: bento children and .ac-card--lift (opt out: .ac-card--static) */
+@media (hover: hover) {
+  :is(.ac-bento > .ac-card, .ac-card--lift):not(.ac-card--static):hover { transform: var(--ac-lift); box-shadow: var(--ac-shadow-lg); }
+}
+.ac-card--pad, .ac-card > .ac-card__body { padding: var(--ac-card-pad); }
+.ac-card--pad > .ac-card__body { padding: 0; }
+.ac-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ac-s-3);
+  padding: var(--ac-card-pad) var(--ac-card-pad) 0;
+  min-width: 0;
+}
+.ac-card__head + .ac-card__body { padding-block-start: var(--ac-s-4); }
+.ac-card__head--divided { padding-block-end: var(--ac-s-4); border-block-end: 1px solid var(--ac-border); }
+.ac-card__head--divided + .ac-card__body { padding-block-start: var(--ac-card-pad); }
+.ac-card__titles { display: grid; gap: 2px; min-width: 0; }
+.ac-card__title { font-size: var(--ac-fs-lg); font-weight: var(--ac-fw-semibold); line-height: 1.35; letter-spacing: -0.01em; }
+.ac-card__sub { font-size: var(--ac-fs-xs); color: var(--ac-muted); }
+.ac-card__actions { display: flex; align-items: center; gap: var(--ac-s-1); flex: none; margin-block: -0.25rem; }
+.ac-card__body { flex: 1 1 auto; min-width: 0; }
+.ac-card__body--flush { padding: 0 !important; }
+.ac-card__media { overflow: hidden; border-radius: var(--ac-r-xl) var(--ac-r-xl) 0 0; }
+.ac-card__media img { inline-size: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.ac-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ac-s-3);
+  padding: var(--ac-s-3) var(--ac-card-pad);
+  border-block-start: 1px solid var(--ac-border);
+  font-size: var(--ac-fs-sm);
+  color: var(--ac-muted);
+}
+
+.ac-card--flat { box-shadow: none !important; background: var(--ac-surface-2); }
+.ac-card--inset { box-shadow: none !important; background: var(--ac-bg-subtle); border-color: transparent; }
+.ac-card--glass {
+  background: var(--ac-glass-bg);
+  -webkit-backdrop-filter: var(--ac-glass-blur);
+  backdrop-filter: var(--ac-glass-blur);
+  border-color: var(--ac-glass-border);
+}
+.ac-card--interactive { cursor: pointer; }
+.ac-card--interactive:hover { border-color: var(--ac-border-strong); box-shadow: var(--ac-shadow-md); transform: translateY(-1px); }
+.ac-card--interactive:active { transform: var(--ac-press); box-shadow: var(--ac-shadow-xs); }
+.ac-card--aurora { overflow: hidden; isolation: isolate; }
+.ac-card--aurora::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ac-aurora);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.ac-card--accent {
+  background: var(--ac-gradient);
+  color: var(--ac-accent-contrast);
+  border-color: transparent;
+  box-shadow: 0 14px 30px -16px color-mix(in oklab, var(--ac-accent) 80%, transparent);
+  overflow: hidden;
+  isolation: isolate;
+}
+.ac-card--accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(90% 70% at 0% 0%, rgba(255, 255, 255, 0.22), transparent 60%),
+    radial-gradient(70% 60% at 100% 100%, rgba(120, 20, 0, 0.18), transparent 70%);
+  pointer-events: none;
+}
+.ac-card--accent :is(.ac-card__sub, .ac-stat__label, .ac-stat__foot) { color: rgba(255, 255, 255, 0.82); }
+
+
+/* ---- stat tile --------------------------------------------------------------- */
+.ac-stat {
+  display: grid;
+  gap: var(--ac-s-2);
+  padding: var(--ac-card-pad);
+  overflow: hidden;
+  isolation: isolate;
+  align-content: start;
+}
+.ac-stat__head { display: flex; align-items: center; gap: var(--ac-s-2); min-width: 0; }
+.ac-stat__label { flex: 1 1 auto; min-width: 0; font-size: var(--ac-fs-xs); font-weight: var(--ac-fw-medium); color: var(--ac-text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ac-stat__icon {
+  --_tone: var(--ac-text-soft);
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  flex: none;
+  border-radius: 50%;
+  color: var(--_tone);
+  background: var(--ac-surface-1);
+  box-shadow: inset 0 0 0 1px var(--ac-border);
+}
+.ac-stat__icon[data-tone] { background: color-mix(in oklab, var(--_tone) 12%, transparent); box-shadow: none; }
+.ac-card--accent .ac-stat__icon { background: rgba(255, 255, 255, 0.2); color: #fff; box-shadow: none; }
+.ac-stat__icon .ac-icon { inline-size: 1rem; block-size: 1rem; }
+.ac-stat__value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ac-s-2);
+  font-size: clamp(var(--ac-fs-2xl), 2.2vw, var(--ac-fs-3xl));
+  font-weight: var(--ac-fw-semibold);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 0;
+}
+.ac-stat__unit { font-size: var(--ac-fs-sm); font-weight: var(--ac-fw-semibold); color: var(--ac-muted); letter-spacing: 0; }
+.ac-stat__foot { display: flex; align-items: center; gap: var(--ac-s-2); font-size: var(--ac-fs-xs); color: var(--ac-muted); min-width: 0; flex-wrap: wrap; }
+/* sparkline slot — a chart teammate renders into it; height reserved here */
+.ac-stat__spark { block-size: 2.75rem; margin-inline: calc(var(--ac-card-pad) * -1); margin-block-end: calc(var(--ac-card-pad) * -1); margin-block-start: var(--ac-s-1); }
+.ac-stat--compact .ac-stat__value { font-size: var(--ac-fs-2xl); }
+
+/* trend chip: <span class="ac-trend" data-trend="up|down|flat">12.4%</span> */
+.ac-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 7px 2px 5px;
+  border-radius: var(--ac-r-pill);
+  font-size: var(--ac-fs-2xs);
+  font-weight: var(--ac-fw-semibold);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  background: var(--ac-neutral-soft);
+  color: var(--ac-neutral-ink);
+}
+.ac-trend::before {
+  content: "";
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  background: currentColor;
+  -webkit-mask: var(--_arrow) center / contain no-repeat;
+  mask: var(--_arrow) center / contain no-repeat;
+}
+.ac-trend[data-trend="up"] { background: var(--ac-success-soft); color: var(--ac-success-ink); --_arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E"); }
+.ac-trend[data-trend="down"] { background: var(--ac-danger-soft); color: var(--ac-danger-ink); --_arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7l10 10M17 8v9H8'/%3E%3C/svg%3E"); }
+.ac-trend[data-trend="flat"] { --_arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E"); }
+.ac-card--accent .ac-trend, .ac-kpi--accent .ac-trend { background: rgba(255, 255, 255, 0.22); color: #fff; }
+
+/* ---- hero card (welcome banner) ------------------------------------------------- */
+.ac-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ac-s-4);
+  padding: clamp(var(--ac-s-5), 3vw, var(--ac-s-8));
+}
+.ac-hero__title { font-size: clamp(var(--ac-fs-xl), 2.4vw, var(--ac-fs-3xl)); font-weight: var(--ac-fw-semibold); letter-spacing: -0.02em; line-height: 1.2; }
+.ac-hero__text { color: var(--ac-text-soft); max-inline-size: 52ch; margin-block-start: var(--ac-s-2); }
+
+/* ---- feature/bento tile with big icon ----------------------------------------- */
+.ac-tile {
+  display: grid;
+  gap: var(--ac-s-3);
+  align-content: start;
+  padding: var(--ac-card-pad);
+}
+.ac-tile__icon {
+  --_tone: var(--ac-accent);
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: 50%;
+  color: var(--_tone);
+  background: color-mix(in oklab, var(--_tone) 12%, transparent);
+}
+.ac-tile__title { font-weight: var(--ac-fw-semibold); font-size: var(--ac-fs-lg); }
+.ac-tile__text { color: var(--ac-text-soft); font-size: var(--ac-fs-sm); }
+
+/* ---- chart slot sizes (a chart teammate renders into [data-ac="chart"]) ------ */
+.ac-chart-slot { position: relative; inline-size: 100%; block-size: var(--ac-chart-h, 16rem); min-width: 0; }
+.ac-chart-slot--sm { --ac-chart-h: 10rem; }
+.ac-chart-slot--lg { --ac-chart-h: 20rem; }
+.ac-chart-slot--square { block-size: auto; aspect-ratio: 1; max-block-size: 15rem; margin-inline: auto; }
+.ac-chart-slot:empty {
+  border-radius: var(--ac-r-lg);
+  background:
+    linear-gradient(var(--ac-chart-grid) 1px, transparent 1px) 0 0 / 100% 25%,
+    linear-gradient(180deg, var(--ac-accent-soft), transparent);
+}
+.ac-chart-slot--square:empty { border-radius: 50%; background: conic-gradient(var(--ac-chart-1) 0 42%, var(--ac-chart-2) 0 70%, var(--ac-chart-3) 0 88%, var(--ac-chart-4) 0); -webkit-mask: radial-gradient(circle, transparent 55%, #000 56%); mask: radial-gradient(circle, transparent 55%, #000 56%); opacity: 0.85; }
+.ac-stat__spark:empty { background: linear-gradient(180deg, var(--ac-accent-soft), transparent); }
+
+/* legend rows (used by dashboard + charts) */
+.ac-legend { display: grid; gap: var(--ac-s-2); }
+.ac-legend__item { display: flex; align-items: center; gap: var(--ac-s-2); font-size: var(--ac-fs-sm); min-width: 0; }
+.ac-legend__swatch { inline-size: 0.5rem; block-size: 0.5rem; border-radius: 50%; flex: none; background: var(--_c, var(--ac-chart-1)); }
+.ac-legend__item:nth-child(2) .ac-legend__swatch { --_c: var(--ac-chart-2); }
+.ac-legend__item:nth-child(3) .ac-legend__swatch { --_c: var(--ac-chart-3); }
+.ac-legend__item:nth-child(4) .ac-legend__swatch { --_c: var(--ac-chart-4); }
+.ac-legend__item:nth-child(5) .ac-legend__swatch { --_c: var(--ac-chart-5); }
+.ac-legend__value { margin-inline-start: auto; font-weight: var(--ac-fw-semibold); font-variant-numeric: tabular-nums; }
+.ac-legend--inline { display: flex; flex-wrap: wrap; gap: var(--ac-s-1) var(--ac-s-4); }
+.ac-legend--inline .ac-legend__item { font-size: var(--ac-fs-xs); color: var(--ac-text-soft); }
+
+/* ---- inset panel: light-gray rounded area inside a card (wallets, chart well, limits) ---- */
+/* <div class="ac-inset"><div class="ac-inset__head">…</div>…</div> */
+.ac-inset {
+  display: grid;
+  gap: var(--ac-s-3);
+  min-width: 0;
+  padding: var(--ac-s-4);
+  border-radius: var(--ac-r-lg);
+  background: var(--ac-surface-2);
+}
+.ac-inset__head { display: flex; align-items: center; justify-content: space-between; gap: var(--ac-s-2); min-width: 0; font-size: var(--ac-fs-sm); font-weight: var(--ac-fw-semibold); }
+.ac-inset__head small { font-size: var(--ac-fs-xs); font-weight: var(--ac-fw-regular); color: var(--ac-muted); }
+
+/* small label in a card corner + big figure */
+.ac-label { font-size: var(--ac-fs-sm); font-weight: var(--ac-fw-medium); color: var(--ac-text-soft); }
+.ac-figure { font-size: clamp(1.625rem, 2.3vw, 2rem); font-weight: var(--ac-fw-semibold); letter-spacing: -0.035em; line-height: 1.15; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---- KPI tile: tiles inside one card (2×2 cluster); one may be filled with the accent ---- */
+/* <div class="ac-kpis"><div class="ac-kpi [ac-kpi--accent]"><div class="ac-kpi__head"><span class="ac-kpi__label">…</span><span class="ac-stat__icon">svg</span></div>
+     <div class="ac-kpi__value">$610</div><div class="ac-kpi__foot"><span class="ac-trend" data-trend="up">7%</span>This month</div></div></div> */
+.ac-kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ac-s-3); block-size: 100%; }
+.ac-kpi {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--ac-s-2);
+  min-width: 0;
+  min-block-size: 8.5rem;
+  padding: var(--ac-s-4);
+  border-radius: var(--ac-r-lg);
+  background: var(--ac-surface-2);
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform var(--ac-dur-4) var(--ac-ease-out), box-shadow var(--ac-dur-4) var(--ac-ease);
+}
+@media (hover: hover) { .ac-kpi:hover { transform: var(--ac-lift); box-shadow: var(--ac-shadow-md); } }
+.ac-kpi__head { display: flex; align-items: center; justify-content: space-between; gap: var(--ac-s-2); min-width: 0; }
+.ac-kpi__label { font-size: var(--ac-fs-xs); color: var(--ac-text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.ac-kpi__value { align-self: center; font-size: clamp(1.375rem, 1.9vw, 1.75rem); font-weight: var(--ac-fw-semibold); letter-spacing: -0.03em; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ac-kpi__foot { display: flex; align-items: center; gap: var(--ac-s-2); font-size: var(--ac-fs-2xs); color: var(--ac-muted); min-width: 0; white-space: nowrap; }
+.ac-kpi--accent { background: var(--ac-gradient); color: var(--ac-accent-contrast); box-shadow: 0 14px 28px -14px color-mix(in oklab, var(--ac-accent) 85%, transparent); }
+.ac-kpi--accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(90% 70% at 0% 0%, rgba(255, 255, 255, 0.24), transparent 60%);
+  pointer-events: none;
+}
+.ac-kpi--accent :is(.ac-kpi__label, .ac-kpi__foot) { color: rgba(255, 255, 255, 0.85); }
+.ac-kpi--accent .ac-stat__icon { background: rgba(255, 255, 255, 0.22); color: #fff; box-shadow: none; }

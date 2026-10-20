@@ -1,0 +1,34 @@
+<section class="ac-page" data-page="blog" data-script data-modules="prose data-display">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow" data-i18n="group.pages">صفحه‌ها</span>
+      <h1 class="ac-page-head__title" data-i18n="nav.blog">وبلاگ</h1>
+      <p class="ac-page-head__sub" data-i18n="blog.sub">یادداشت‌های تیم دربارهٔ طراحی، حرکت، امنیت و ساخت پنل‌های فارسی.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <a class="ac-btn ac-btn--primary" href="#/editor"><svg class="ac-icon" aria-hidden="true"><use href="#i-pen-line"/></svg><span data-i18n="blog.write">نوشتن مقاله</span></a>
+    </div>
+  </header>
+
+  <div class="ac-spread ac-blog-bar">
+    <div class="ac-cluster" role="group" aria-label="برچسب‌ها" data-i18n-attr="aria-label:prose.tags" data-blog-tags>
+      <button class="ac-chip" type="button" data-tag="all" aria-pressed="true" data-i18n="kanban.all">همه</button>
+      <button class="ac-chip" type="button" data-tag="design" aria-pressed="false" data-i18n="blog.tag.design">طراحی</button>
+      <button class="ac-chip" type="button" data-tag="motion" aria-pressed="false" data-i18n="blog.tag.motion">انیمیشن</button>
+      <button class="ac-chip" type="button" data-tag="security" aria-pressed="false" data-i18n="blog.tag.security">امنیت</button>
+      <button class="ac-chip" type="button" data-tag="i18n" aria-pressed="false" data-i18n="blog.tag.i18n">چندزبانه</button>
+      <button class="ac-chip" type="button" data-tag="mobile" aria-pressed="false" data-i18n="blog.tag.mobile">موبایل</button>
+    </div>
+    <div class="ac-input-group ac-blog-search" data-ac="input">
+      <span class="ac-input-group__affix"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg></span>
+      <input class="ac-input" type="search" placeholder="جستجو در مقاله‌ها…" aria-label="جستجو در مقاله‌ها" data-i18n-attr="placeholder:blog.search; aria-label:blog.search" data-blog-search>
+    </div>
+  </div>
+
+  <div class="ac-posts ac-stagger" data-blog-grid></div>
+  <div class="ac-card" data-blog-empty hidden><div class="ac-empty">
+    <div class="ac-empty__art"><svg class="ac-icon" aria-hidden="true"><use href="#i-search"/></svg></div>
+    <h2 class="ac-empty__title" data-i18n="blog.emptyTitle">مقاله‌ای پیدا نشد</h2>
+    <p class="ac-empty__text" data-i18n="blog.emptyText">عبارت دیگری را جستجو کنید یا برچسب «همه» را بزنید.</p>
+  </div></div>
+</section>

@@ -1,0 +1,1 @@
+{ "description": "Customer 'my account' home blocks: wallet card with privacy toggle, profile completeness ring, quick-action app grid, order step tracker, notification / ticket rows, security checklist, time-aware greeting.", "dependencies": ["shell"] }

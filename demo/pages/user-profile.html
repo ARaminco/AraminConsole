@@ -1,0 +1,108 @@
+<section class="ac-page" data-page="user-profile" data-script>
+  <div class="ac-stagger prof">
+    <article class="ac-card ac-card--static prof-hero">
+      <div class="prof-cover" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="prof-id">
+        <span class="ac-avatar ac-avatar--xl ac-avatar--gradient prof-avatar">ع‌ر<span class="ac-status" data-status="online"></span></span>
+        <div class="prof-id__text">
+          <h1 class="prof-name" data-i18n="app.userName">علی‌اصغر رامین</h1>
+          <p class="prof-role"><span data-i18n="users.role.owner">مالک</span> · <span dir="ltr">ali@aramin.dev</span></p>
+          <div class="ac-cluster ac-gap-2 prof-tags">
+            <span class="ac-badge ac-badge--success ac-badge--dot" data-i18n="status.active">فعال</span>
+            <span class="ac-badge"><svg class="ac-icon" aria-hidden="true"><use href="#i-map-pin"/></svg><span data-i18n="prof.city">تهران · دبی</span></span>
+            <span class="ac-badge ac-badge--accent"><svg class="ac-icon" aria-hidden="true"><use href="#i-shield-check"/></svg><span data-i18n="prof.2faOn">ورود دومرحله‌ای</span></span>
+          </div>
+        </div>
+        <div class="prof-id__actions">
+          <button class="ac-btn" type="button" data-prof-msg><svg class="ac-icon" aria-hidden="true"><use href="#i-message-circle"/></svg><span data-i18n="prof.message">پیام</span></button>
+          <a class="ac-btn ac-btn--primary" href="#/settings"><svg class="ac-icon" aria-hidden="true"><use href="#i-pencil"/></svg><span data-i18n="prof.edit">ویرایش پروفایل</span></a>
+        </div>
+      </div>
+      <div class="ac-tabs prof-tabs" data-ac="tabs">
+        <div class="ac-tabs__list" role="tablist" aria-label="Profile" data-i18n-attr="aria-label:nav.profile">
+          <button class="ac-tabs__tab" role="tab" type="button" aria-selected="true" aria-controls="prof-overview" data-i18n="prof.overview">نمای کلی</button>
+          <button class="ac-tabs__tab" role="tab" type="button" aria-controls="prof-activity"><span data-i18n="prof.activity">فعالیت</span><span class="ac-tabs__count">8</span></button>
+          <button class="ac-tabs__tab" role="tab" type="button" aria-controls="prof-security" data-i18n="prof.security">امنیت</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- overview -->
+    <div class="ac-bento ac-stagger" id="prof-overview" role="tabpanel">
+      <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+        <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="prof.sites">سایت‌های مدیریت‌شده</span></div>
+        <div class="ac-stat__value"><span data-ac="counter" data-to="110">0</span></div>
+      </article>
+      <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+        <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="prof.projects">پروژه‌ها</span></div>
+        <div class="ac-stat__value"><span data-ac="counter" data-to="27">0</span></div>
+      </article>
+      <article class="ac-card ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+        <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="prof.deploys">استقرار این ماه</span></div>
+        <div class="ac-stat__value"><span data-ac="counter" data-to="64">0</span></div>
+      </article>
+      <article class="ac-card ac-card--accent ac-stat ac-span-xs-6 ac-span-md-3 ac-span-3">
+        <div class="ac-stat__head"><span class="ac-stat__label" data-i18n="prof.uptime">دسترس‌پذیری</span></div>
+        <div class="ac-stat__value"><span data-ac="counter" data-to="99.96" data-decimals="2" data-suffix="%">0</span></div>
+      </article>
+
+      <article class="ac-card ac-card--static ac-span-md-12 ac-span-7">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="prof.about">درباره</h2></div>
+        <div class="ac-card__body ac-stack ac-gap-4">
+          <p class="ac-text-soft prof-bio" data-i18n="prof.bio">مدیر فنی و مالک CoHub؛ میزبانی حدود ۱۱۰ سایت مشتری، درگاه‌های واتس‌اپ و مسیریاب‌های هوش مصنوعی را اداره می‌کند.</p>
+          <dl class="ac-dl ac-dl--cols-2">
+            <div><dt data-i18n="col.email">ایمیل</dt><dd><bdi>ali@aramin.dev</bdi></dd></div>
+            <div><dt data-i18n="prof.phone">تلفن</dt><dd><bdi>+98 912 000 0000</bdi></dd></div>
+            <div><dt data-i18n="col.team">تیم</dt><dd>Platform</dd></div>
+            <div><dt data-i18n="prof.tz">منطقهٔ زمانی</dt><dd><bdi>Asia/Tehran (UTC+03:30)</bdi></dd></div>
+            <div><dt data-i18n="col.joined">عضویت</dt><dd><bdi>01/02/2019</bdi></dd></div>
+            <div><dt data-i18n="prof.lang">زبان‌ها</dt><dd>فارسی · English · العربية</dd></div>
+          </dl>
+        </div>
+      </article>
+      <article class="ac-card ac-card--static ac-span-md-12 ac-span-5">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="prof.skills">مهارت‌ها</h2></div>
+        <div class="ac-card__body ac-stack ac-gap-4">
+          <div class="ac-cluster ac-gap-2">
+            <span class="ac-chip">Laravel</span><span class="ac-chip">PHP</span><span class="ac-chip">nginx</span><span class="ac-chip">Node.js</span><span class="ac-chip">MySQL</span><span class="ac-chip">WhatsApp API</span><span class="ac-chip">AI agents</span>
+          </div>
+          <div class="ac-stack ac-gap-3">
+            <div class="prof-skill"><span>Backend</span><progress class="ac-progress" value="92" max="100"></progress><b class="ac-num">92%</b></div>
+            <div class="prof-skill"><span>DevOps</span><progress class="ac-progress" value="85" max="100"></progress><b class="ac-num">85%</b></div>
+            <div class="prof-skill"><span>UI</span><progress class="ac-progress" value="70" max="100"></progress><b class="ac-num">70%</b></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- activity -->
+    <div class="ac-bento" id="prof-activity" role="tabpanel" hidden>
+      <article class="ac-card ac-card--static ac-span-12">
+        <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="prof.activity">فعالیت</h2><p class="ac-card__sub" data-i18n="prof.activitySub">آخرین کارهای انجام‌شده با این حساب</p></div></div>
+        <div class="ac-card__body"><ol class="ac-timeline" data-prof-timeline></ol></div>
+      </article>
+    </div>
+
+    <!-- security -->
+    <div class="ac-bento" id="prof-security" role="tabpanel" hidden>
+      <article class="ac-card ac-card--static ac-span-md-12 ac-span-5">
+        <div class="ac-card__head"><h2 class="ac-card__title" data-i18n="prof.signin">ورود و احراز هویت</h2></div>
+        <div class="ac-card__body">
+          <div class="ac-toggle-list">
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-shield-check"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="users.twoFactor">ورود دومرحله‌ای</span><span class="ac-toggle-row__desc" data-i18n="prof.2faSub">کد یک‌بارمصرف از برنامهٔ احراز هویت</span></span><input class="ac-switch" type="checkbox" role="switch" data-prof-2fa checked></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-fingerprint"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="prof.passkey">کلید عبور (Passkey)</span><span class="ac-toggle-row__desc" data-i18n="prof.passkeySub">ورود با اثر انگشت یا چهره</span></span><input class="ac-switch" type="checkbox" role="switch"></label>
+            <label class="ac-toggle-row"><span class="ac-toggle-row__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-bell-ring"/></svg></span><span class="ac-toggle-row__text"><span class="ac-toggle-row__title" data-i18n="prof.alertNew">هشدار ورود جدید</span><span class="ac-toggle-row__desc" data-i18n="prof.alertNewSub">ایمیل و واتس‌اپ برای هر دستگاه تازه</span></span><input class="ac-switch" type="checkbox" role="switch" checked></label>
+          </div>
+          <button class="ac-btn ac-btn--block prof-pass" type="button" data-prof-pass><svg class="ac-icon" aria-hidden="true"><use href="#i-key-round"/></svg><span data-i18n="prof.changePass">تغییر رمز عبور</span></button>
+        </div>
+      </article>
+      <article class="ac-card ac-card--static ac-span-md-12 ac-span-7">
+        <div class="ac-card__head">
+          <div class="ac-card__titles"><h2 class="ac-card__title" data-i18n="prof.sessions">نشست‌های فعال</h2><p class="ac-card__sub" data-i18n="prof.sessionsSub">دستگاه‌هایی که الان وارد حساب شما هستند</p></div>
+          <button class="ac-btn ac-btn--sm ac-btn--danger-soft" type="button" data-prof-revoke-all><span data-i18n="prof.revokeAll">خروج از همه</span></button>
+        </div>
+        <div class="ac-card__body"><ul class="ac-list ac-list--divided" role="list" data-prof-sessions></ul></div>
+      </article>
+    </div>
+  </div>
+</section>
