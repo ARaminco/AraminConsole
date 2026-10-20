@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-ac-icons="aramin/icons.svg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>My Panel</title>
+  <script src="aramin/aramin-console-boot.js"></script>
+  <link rel="stylesheet" href="aramin/aramin-console.min.css">
+  <script type="module" src="aramin/aramin-console.min.js"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="ac-skip-link" href="#ac-content">Skip to content</a>
+  <div class="ac-shell">
+    <header class="ac-appbar" data-ac="appbar" data-collapsed="true">
+      <div class="ac-appbar__inner">
+        <div class="ac-appbar__start">
+          <a class="ac-chrome ac-brand" href="#/dashboard"><span class="ac-brand__name">My Panel</span></a>
+        </div>
+        <div class="ac-appbar__center">
+          <nav class="ac-chrome ac-topnav" data-ac="navpill" aria-label="Sections">
+            <a class="ac-topnav__link" href="#/dashboard">Dashboard</a>
+            <a class="ac-topnav__link" href="#/users">Users</a>
+            <a class="ac-topnav__link" href="#/settings">Settings</a>
+          </nav>
+        </div>
+        <div class="ac-appbar__end">
+          <button class="ac-iconbtn" type="button" data-action="theme" aria-label="Toggle theme"><svg class="ac-icon ac-only-light" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ac-icon ac-only-dark" aria-hidden="true"><use href="#i-sun"/></svg></button>
+        </div>
+      </div>
+    </header>
+
+    <aside class="ac-rail" id="ac-rail" data-ac="rail" aria-label="All pages">
+      <div class="ac-rail__head">
+        <div class="ac-rail__heading"><span class="ac-rail__heading-text">My Panel</span></div>
+        <button class="ac-rail__close" type="button" data-ac-rail-close aria-label="Close"><svg class="ac-icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <nav class="ac-rail__nav">
+        <div class="ac-rail__group" data-group="main">
+          <div class="ac-rail__label">Main</div>
+          <a class="ac-rail__link" href="#/dashboard"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-dashboard"/></svg><span class="ac-rail__text">Dashboard</span></a>
+          <a class="ac-rail__link" href="#/users"><svg class="ac-icon" aria-hidden="true"><use href="#i-users"/></svg><span class="ac-rail__text">Users</span></a>
+          <a class="ac-rail__link" href="#/settings"><svg class="ac-icon" aria-hidden="true"><use href="#i-settings"/></svg><span class="ac-rail__text">Settings</span></a>
+        </div>
+      </nav>
+      <div class="ac-rail__foot">
+        <a class="ac-powered ac-hide-mobile" href="https://air.co.ir/" target="_blank" rel="noopener">Powered by AIR</a>
+      </div>
+    </aside>
+    <div class="ac-scrim" data-ac-rail-close aria-hidden="true"></div>
+
+    <div class="ac-main">
+      <main class="ac-content" id="ac-content" tabindex="-1"></main>
+      <a class="ac-powered" href="https://air.co.ir/" target="_blank" rel="noopener">Powered by AIR</a>
+    </div>
+
+    <nav class="ac-tabbar" data-ac="tabbar" aria-label="Tabs">
+      <a class="ac-tabbar__item" href="#/dashboard"><span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-house"/></svg></span><span class="ac-tabbar__label">Home</span></a>
+      <a class="ac-tabbar__item" href="#/users"><span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-users"/></svg></span><span class="ac-tabbar__label">Users</span></a>
+      <button class="ac-tabbar__item" type="button" data-ac-rail-open aria-controls="ac-rail"><span class="ac-tabbar__icon"><svg class="ac-icon" aria-hidden="true"><use href="#i-layout-grid"/></svg></span><span class="ac-tabbar__label">More</span></button>
+    </nav>
+  </div>
+  <div class="ac-toasts" id="ac-toasts" aria-live="polite"></div>
+</body>
+</html>

@@ -1813,5 +1813,6 @@
   "users.total": "كل المستخدمين",
   "users.totalFoot": "في كل الفرق",
   "users.twoFactor": "التحقق الثنائي",
-  "users.twoFactorFoot": "من الحسابات النشطة"
+  "users.twoFactorFoot": "من الحسابات النشطة",
+  "credit.powered": "مدعوم من AIR"
 }

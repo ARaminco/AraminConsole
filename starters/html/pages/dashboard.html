@@ -1,0 +1,27 @@
+<section class="ac-page" data-page="dashboard">
+  <header class="ac-page-head" data-ac="largetitle">
+    <div class="ac-page-head__titles">
+      <span class="ac-page-head__eyebrow">Overview</span>
+      <h1 class="ac-page-head__title">Dashboard</h1>
+      <p class="ac-page-head__sub">Revenue, signups and activity at a glance.</p>
+    </div>
+    <div class="ac-page-head__actions">
+      <button class="ac-btn ac-btn--primary" type="button" onclick="AC.toast({ title: 'Report exported', tone: 'success' })">Export</button>
+    </div>
+  </header>
+  <div class="ac-bento ac-stagger">
+    <div class="ac-card ac-span-xs-6 ac-span-md-4 ac-span-4"><div class="ac-card__body">
+      <div class="ac-stat"><span class="ac-stat__label">Revenue</span><span class="ac-stat__value" data-ac="counter" data-to="48250" data-prefix="$">0</span></div>
+    </div></div>
+    <div class="ac-card ac-span-xs-6 ac-span-md-4 ac-span-4"><div class="ac-card__body">
+      <div class="ac-stat"><span class="ac-stat__label">New users</span><span class="ac-stat__value" data-ac="counter" data-to="1284">0</span></div>
+    </div></div>
+    <div class="ac-card ac-span-md-4 ac-span-4"><div class="ac-card__body">
+      <div class="ac-stat"><span class="ac-stat__label">Conversion</span><span class="ac-stat__value" data-ac="counter" data-to="3.8" data-decimals="1" data-suffix="%">0</span></div>
+    </div></div>
+    <div class="ac-card ac-span-md-12 ac-span-4">
+      <div class="ac-card__head"><div class="ac-card__titles"><h2 class="ac-card__title">Weekly signups</h2></div></div>
+      <div class="ac-card__body"><div class="ac-chart-slot" data-ac="chart" data-ac-config='{"type":"bar","labels":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"series":[{"name":"Signups","data":[12,19,8,25,17,30,22]}]}'></div></div>
+    </div>
+  </div>
+</section>

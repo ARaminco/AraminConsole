@@ -1,0 +1,34 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: HTML snippet, CodePen, or steps on the live demo.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: AraminConsole version
+      placeholder: "0.1.0"
+  - type: dropdown
+    id: direction
+    attributes:
+      label: Direction and theme
+      multiple: true
+      options: [RTL, LTR, Light, Dark, Phone layout]
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Safari 17 on iOS 17.4"
