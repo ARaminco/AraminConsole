@@ -88,7 +88,7 @@
   opacity: 1;
   background:
     radial-gradient(60% 50% at 85% 10%, rgb(255 255 255 / 0.28), transparent 70%),
-    radial-gradient(50% 45% at 10% 95%, rgb(120 20 0 / 0.35), transparent 70%),
+    radial-gradient(50% 45% at 10% 95%, rgb(8 22 34 / 0.42), transparent 70%),
     repeating-linear-gradient(90deg, rgb(255 255 255 / 0.06) 0 1px, transparent 1px 56px),
     repeating-linear-gradient(0deg, rgb(255 255 255 / 0.06) 0 1px, transparent 1px 56px);
 }
@@ -133,7 +133,7 @@
 .mini__card--ink .mini__pill { background: rgb(255 255 255 / 0.12); color: #7ee2a8; }
 .mini__bars { display: flex; align-items: flex-end; gap: 6px; block-size: 74px; padding-block-start: 6px; }
 .mini__bars i { flex: 1; border-radius: 6px 6px 3px 3px; background: #141416; transform-origin: bottom; animation: sa-grow 900ms var(--ac-ease-out) both; }
-.mini__bars i:nth-child(odd) { background: #f0532d; }
+.mini__bars i:nth-child(odd) { background: var(--ac-accent); }
 .mini__bars i:nth-child(1) { block-size: 46%; animation-delay: 120ms; }
 .mini__bars i:nth-child(2) { block-size: 70%; animation-delay: 180ms; }
 .mini__bars i:nth-child(3) { block-size: 38%; animation-delay: 240ms; }
@@ -143,25 +143,25 @@
 .mini__bars i:nth-child(7) { block-size: 52%; animation-delay: 480ms; }
 .mini__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-block: 5px; border-block-start: 1px solid #efeff1; }
 .mini__row:first-of-type { border: 0; }
-.mini__switch { inline-size: 26px; block-size: 15px; border-radius: 99px; background: #f0532d; position: relative; flex: none; }
+.mini__switch { inline-size: 26px; block-size: 15px; border-radius: 99px; background: var(--ac-accent); position: relative; flex: none; }
 .mini__switch::after { content: ""; position: absolute; inset-block-start: 2px; inset-inline-end: 2px; inline-size: 11px; block-size: 11px; border-radius: 50%; background: #fff; }
 .mini__switch--off { background: #dcdce0; }
 .mini__switch--off::after { inset-inline: 2px auto; }
 .mini__people { display: flex; }
 .mini__people span { inline-size: 22px; block-size: 22px; margin-inline-start: -6px; border-radius: 50%; border: 2px solid #141416; display: grid; place-items: center; font-size: 9px; font-weight: 600; color: #fff; }
 .mini__people span:first-child { margin: 0; }
-.mini__people span:nth-child(1) { background: #f0532d; }
+.mini__people span:nth-child(1) { background: var(--ac-accent); }
 .mini__people span:nth-child(2) { background: #6d6d75; }
 .mini__people span:nth-child(3) { background: #3a3a40; }
 .mini__ring { inline-size: 54px; block-size: 54px; }
 .mini__ring circle { fill: none; stroke-width: 7; }
 .mini__ring .t { stroke: rgb(255 255 255 / 0.14); }
-.mini__ring .v { stroke: #f0532d; stroke-linecap: round; stroke-dasharray: 113; stroke-dashoffset: 30; }
+.mini__ring .v { stroke: var(--ac-accent); stroke-linecap: round; stroke-dasharray: 113; stroke-dashoffset: 30; }
 .mini__chip { position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 8px 8px; border-radius: 99px; background: #fff; color: #141416; font-size: 11px; font-weight: 600; box-shadow: 0 18px 36px -14px rgb(80 20 0 / 0.5); animation: sa-float 6s ease-in-out -2s infinite; }
 .mini__chip i { display: grid; place-items: center; inline-size: 24px; block-size: 24px; border-radius: 50%; background: #e7f7ee; color: #12804a; font-style: normal; }
 .mini__chip--a { inset-block-start: -18px; inset-inline-end: -14px; transform: rotate(4deg); }
 .mini__chip--b { inset-block-end: -22px; inset-inline-end: -8px; }
-.mini__chip--b i { background: #fff0eb; color: #f0532d; }
+.mini__chip--b i { background: var(--ac-accent-soft); color: var(--ac-accent); }
 .mini__chip .ac-icon { inline-size: 13px; block-size: 13px; }
 
 /* ---- auth: phones = full-screen app ----------------------------------------- */
@@ -408,3 +408,6 @@
 
 
 .ill-swing--crane { transform-origin: 100px 26px; }
+
+/* Air in dark mode: the showcase panel uses the Night navy family so white text stays AA */
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .auth .ac-auth__aside { background: linear-gradient(150deg, #0b7f8a 0%, #0f3a4a 55%, #0f1b28 100%); }

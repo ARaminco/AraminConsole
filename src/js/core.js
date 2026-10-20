@@ -345,9 +345,9 @@ export const icon = (name, cls = '') => `<svg class="ac-icon${cls ? ' ' + cls : 
 /* ---------------------------------------------------------------- theme */
 const darkMQ = matchMedia('(prefers-color-scheme: dark)');
 const THEME_KEYS = { theme: 'ac:theme', accent: 'ac:accent', density: 'ac:density', radius: 'ac:radius' };
-const THEME_DEFAULTS = { theme: 'light', accent: 'orange', density: 'comfortable', radius: 'default' };
+const THEME_DEFAULTS = { theme: 'light', accent: 'air', density: 'comfortable', radius: 'default' };
 export const theme = {
-  accents: ['orange', 'violet', 'blue', 'emerald', 'rose', 'amber', 'slate'],
+  accents: ['air', 'orange', 'violet', 'blue', 'emerald', 'rose', 'amber', 'slate'],
   /** { theme: 'auto'|'light'|'dark', resolved: 'light'|'dark', accent, density, radius } */
   get() {
     const out = {};

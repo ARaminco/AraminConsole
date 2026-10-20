@@ -1,7 +1,7 @@
 /* Settings — section nav with scroll-spy, live theme/accent/density/language/digits, API keys (copy / reveal / regenerate / revoke). */
 import { apiKeys, makeKey } from '../data.js';
 
-const ACCENT_HEX = { orange: '#f0532d', violet: '#6d4aff', blue: '#2563eb', emerald: '#059669', rose: '#e11d48', amber: '#d97706', slate: '#334155' };
+const ACCENT_HEX = { air: '#0b7f8a', orange: '#f0532d', violet: '#6d4aff', blue: '#2563eb', emerald: '#059669', rose: '#e11d48', amber: '#d97706', slate: '#334155' };
 
 export default function mount(root, AC) {
   const $ = (s) => root.querySelector(s);

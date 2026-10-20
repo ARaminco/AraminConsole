@@ -9,7 +9,7 @@
    pure token swaps driven by attributes on <html>:
 
      data-theme   = light | dark          (unset → follows prefers-color-scheme)
-     data-accent  = orange (default) | violet | blue | emerald | rose | amber | slate
+     data-accent  = air (default) | orange | violet | blue | emerald | rose | amber | slate
      data-density = comfortable | compact
      data-radius  = sharp | default | round
    ========================================================================== */
@@ -138,6 +138,10 @@
   --ac-accent: #f0532d;
   --ac-accent-2: #ff7a4d;            /* gradient partner */
   --ac-accent-contrast: #ffffff;     /* text on solid accent */
+
+  /* ---- highlight: the one warm spot (notification count, dock dot). Defaults to the accent; the Air preset makes it amber. */
+  --ac-highlight: var(--ac-accent);
+  --ac-highlight-contrast: var(--ac-accent-contrast);
 
   /* ---- ink: the black primary (buttons, active nav pill) ------------- */
   --ac-ink: #111113;
@@ -358,6 +362,7 @@
 }
 
 /* ---- accent presets -------------------------------------------------- */
+:root[data-accent="air"]    { --ac-accent: #0b7f8a; --ac-accent-2: #0c8893; }
 :root[data-accent="orange"] { --ac-accent: #f0532d; --ac-accent-2: #ff7a4d; }
 :root[data-accent="violet"] { --ac-accent: #6d4aff; --ac-accent-2: #a855f7; }
 :root[data-accent="blue"]   { --ac-accent: #2563eb; --ac-accent-2: #06b6d4; }
@@ -372,6 +377,42 @@
 :root[data-theme="dark"][data-accent="rose"]   { --ac-accent: #f43f5e; }
 :root[data-theme="dark"][data-accent="amber"]  { --ac-accent: #f59e0b; --ac-accent-contrast: #1a1205; }
 :root[data-theme="dark"][data-accent="slate"]  { --ac-accent: #94a3b8; --ac-accent-2: #cbd5e1; --ac-accent-contrast: #0b0f17; }
+
+/* ---- Air (default) — the AIR brand: Night/Ink navy, Teal, one amber highlight (docs/theming.md) ----
+   Contrast (WCAG 2.x): light — white on accent #0B7F8A 4.75, ink #1B2836 on white 14.96, text on canvas 15.85,
+   muted #5f6e7d on white 5.23; dark — navy on accent #13B5C2 6.97, text on surface 13.74, muted on surface 5.05. */
+:root:not([data-accent]):not([data-theme="dark"]),
+:root[data-accent="air"]:not([data-theme="dark"]) {
+  --ac-accent: #0b7f8a; --ac-accent-2: #0c8893; --ac-accent-contrast: #ffffff;
+  --ac-highlight: #f5a524; --ac-highlight-contrast: #0f1b28;
+  --ac-ink: #1b2836; --ac-ink-hover: #2c3d50; --ac-ink-contrast: #ffffff;
+  --ac-bg: #f1f5f7; --ac-bg-subtle: #e9eff2;
+  --ac-surface-2: #f5f8fa; --ac-surface-3: #e8eef1;
+  --ac-hover: rgba(27, 40, 54, 0.04); --ac-active: rgba(27, 40, 54, 0.075);
+  --ac-border: #e3e9ed; --ac-border-strong: #d3dce2;
+  --ac-text: #0f1b28; --ac-text-soft: #3f4e5d; --ac-muted: #5f6e7d; --ac-faint: #a9b6c1;
+  --ac-scrim: rgba(15, 27, 40, 0.34);
+  --ac-pill-bg: #f1f5f7; --ac-pill-bg-hover: #e6edf1;
+  --ac-neutral-soft: rgba(27, 40, 54, 0.06); --ac-neutral-ink: #3f4e5d;
+  --ac-chart-3: #f5a524; --ac-chart-4: #9fdde2; --ac-chart-8: #d3dce2;
+  --ac-chart-grid: rgba(27, 40, 54, 0.07);
+  --ac-glass-border: rgba(27, 40, 54, 0.07);
+}
+:root[data-theme="dark"]:not([data-accent]),
+:root[data-theme="dark"][data-accent="air"] {
+  --ac-accent: #13b5c2; --ac-accent-2: #4fd0da; --ac-accent-contrast: #0f1b28;
+  --ac-highlight: #ffb020; --ac-highlight-contrast: #0f1b28;
+  --ac-ink: #eef3f6; --ac-ink-hover: #d5dee5; --ac-ink-contrast: #0f1b28;
+  --ac-bg: #0f1b28; --ac-bg-subtle: #122130;
+  --ac-surface-1: #162534; --ac-surface-2: #1b2c3d; --ac-surface-3: #233649; --ac-elevated: #1b2c3d;
+  --ac-border: #223446; --ac-border-strong: #2e4459;
+  --ac-text: #eef3f6; --ac-text-soft: #b4c2cf; --ac-muted: #8496a7; --ac-faint: #546577;
+  --ac-scrim: rgba(5, 10, 16, 0.62);
+  --ac-chrome-bg: #162534; --ac-pill-bg: #1d2e40; --ac-pill-bg-hover: #263a4f;
+  --ac-neutral-ink: #c4d0db;
+  --ac-chart-3: #ffb020; --ac-chart-4: #1f6f78; --ac-chart-8: #2e4459;
+  --ac-glass-bg: rgba(22, 37, 52, 0.72); --ac-glass-bg-strong: rgba(22, 37, 52, 0.9);
+}
 
 /* ---- density --------------------------------------------------------- */
 :root[data-density="compact"] {
@@ -774,8 +815,8 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
   display: grid;
   place-items: center;
   border-radius: var(--ac-r-pill);
-  background: var(--ac-accent);
-  color: var(--ac-accent-contrast);
+  background: var(--ac-highlight);
+  color: var(--ac-highlight-contrast);
   font-size: 0.5625rem;
   font-weight: var(--ac-fw-bold);
   line-height: 1;
@@ -953,7 +994,7 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
   inline-size: 0.45rem;
   block-size: 0.45rem;
   border-radius: 50%;
-  background: var(--ac-accent);
+  background: var(--ac-highlight);
   box-shadow: 0 0 0 2px var(--ac-chrome-bg);
 }
 
@@ -1506,6 +1547,11 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
   .ac-powered--float { position: fixed; inset-block-end: var(--ac-s-3); inset-inline-end: var(--ac-s-4); margin: 0; background: var(--ac-glass-bg); z-index: 1; }
 }
 
+/* brand logo inside the brand pill (replaces the monogram disc when a brand ships a wordmark) */
+.ac-brand__logo { block-size: 1.25rem; inline-size: auto; flex: none; display: block; }
+.ac-brand:has(.ac-brand__logo) { padding-inline-start: var(--ac-s-4); }
+.ac-brand:has(.ac-brand__logo) .ac-brand__name { font-size: var(--ac-fs-sm); color: var(--ac-text-soft); padding-inline-start: var(--ac-s-2); border-inline-start: 1px solid var(--ac-border-strong); }
+
 
 /* ==== css/components/button.css ==== */
 /* ==========================================================================
@@ -1981,6 +2027,10 @@ small, .ac-small { font-size: var(--ac-fs-sm); }
 }
 .ac-kpi--accent :is(.ac-kpi__label, .ac-kpi__foot) { color: rgba(255, 255, 255, 0.85); }
 .ac-kpi--accent .ac-stat__icon { background: rgba(255, 255, 255, 0.22); color: #fff; box-shadow: none; }
+/* dark Air: bright teal carries navy text, not white */
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .ac-kpi--accent :is(.ac-kpi__label, .ac-kpi__foot, .ac-trend) { color: rgba(15, 27, 40, 0.82); }
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .ac-kpi--accent .ac-stat__icon { background: rgba(15, 27, 40, 0.16); color: #0f1b28; }
+:root[data-theme="dark"]:where(:not([data-accent]), [data-accent="air"]) .ac-kpi--accent .ac-trend { background: rgba(15, 27, 40, 0.14); }
 
 
 /* ==== css/components/feedback.css ==== */

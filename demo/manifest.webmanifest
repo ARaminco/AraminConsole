@@ -17,10 +17,10 @@
   "orientation": "any",
   "lang": "fa",
   "dir": "rtl",
-  "background_color": "#f2f2f3",
-  "theme_color": "#f2f2f3",
+  "background_color": "#f1f5f7",
+  "theme_color": "#f1f5f7",
   "user_preferences": {
-    "color_scheme_dark": { "background_color": "#0e0e10", "theme_color": "#0e0e10" }
+    "color_scheme_dark": { "background_color": "#0f1b28", "theme_color": "#0f1b28" }
   },
   "categories": ["business", "productivity", "developer"],
   "prefer_related_applications": false,

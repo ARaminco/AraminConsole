@@ -22,7 +22,8 @@ const shot = async (size, html, file) => {
   await p.setContent(`<html><body style="margin:0;background:transparent">${html}</body></html>`);
   await p.screenshot({ path: join(ROOT, 'demo/icons', file), omitBackground: true, clip: { x: 0, y: 0, width: size, height: size } });
 };
-await shot(192, `<div style="width:192px;height:192px;background:linear-gradient(135deg,#7c5cff,#b14cf0);display:grid;place-items:center"><div style="width:154px;height:154px">${svg.replace(/<rect[^>]*rx="116"[^>]*\/>/g, '')}</div></div>`, 'icon-maskable-192.png');
+// AIR brand icons are shipped from demo/brand/air (icon-maskable-192 is rendered from icon-512-maskable.png); not regenerated here
+// await shot(192, `<div style="width:192px;height:192px;background:linear-gradient(135deg,#7c5cff,#b14cf0);display:grid;place-items:center"><div style="width:154px;height:154px">${svg.replace(/<rect[^>]*rx="116"[^>]*\/>/g, '')}</div></div>`, 'icon-maskable-192.png');
 for (const [name, icon] of [['dashboard', 'layout-dashboard'], ['tickets', 'life-buoy'], ['chat', 'message-circle'], ['invoice', 'receipt']]) {
   await shot(96, `<div style="width:96px;height:96px;border-radius:24px;background:#111114;display:grid;place-items:center;color:#fff"><div style="width:52px;height:52px">${lucide(icon).replace('<svg', '<svg width="52" height="52"')}</div></div>`, `shortcut-${name}.png`);
 }

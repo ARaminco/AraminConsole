@@ -8,7 +8,7 @@
   var pref = get('ac:theme', 'light');
   var dark = pref === 'dark' || (pref === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
   d.setAttribute('data-theme', dark ? 'dark' : 'light');
-  d.setAttribute('data-accent', get('ac:accent', d.getAttribute('data-accent') || 'orange'));
+  d.setAttribute('data-accent', get('ac:accent', d.getAttribute('data-accent') || 'air'));
   d.setAttribute('data-density', get('ac:density', d.getAttribute('data-density') || 'comfortable'));
   d.setAttribute('data-radius', get('ac:radius', d.getAttribute('data-radius') || 'default'));
   var mp = get('ac:motion', d.getAttribute('data-motion-default') || 'system');

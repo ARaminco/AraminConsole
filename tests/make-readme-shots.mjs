@@ -16,7 +16,7 @@ const shots = [
 const b = await chromium.launch({ executablePath: process.env.CHROME || exe });
 for (const [file, path, w, h, theme] of shots) {
   const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: w < 600 ? 2 : 1, reducedMotion: 'reduce' });
-  await ctx.addInitScript((t) => { localStorage.setItem('ac:theme', t); localStorage.setItem('ac:accent', 'orange'); localStorage.setItem('ac:lang', 'fa'); }, theme);
+  await ctx.addInitScript((t) => { localStorage.setItem('ac:theme', t); localStorage.setItem('ac:accent', 'air'); localStorage.setItem('ac:lang', 'fa'); }, theme);
   const p = await ctx.newPage();
   await p.goto(base + path); await p.waitForTimeout(2500);
   await p.screenshot({ path: out(file) });

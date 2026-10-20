@@ -1,16 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7c5cff"/>
-      <stop offset="1" stop-color="#b14cf0"/>
-    </linearGradient>
-    <radialGradient id="s" cx="0.85" cy="0.1" r="0.8">
-      <stop offset="0" stop-color="#fff" stop-opacity=".35"/>
-      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="512" height="512" rx="116" fill="url(#g)"/>
-  <rect width="512" height="512" rx="116" fill="url(#s)"/>
-  <path d="M152 380 256 132l104 248" fill="none" stroke="#fff" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M190 292h132" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<title>AIR</title>
+<style>path{fill:#0B7F8A}@media (prefers-color-scheme:dark){path{fill:#13B5C2}}</style>
+<path d="M11 2L21 2L24 8L8 8ZM7 12L25 12L28 18L4 18ZM3 22L13 22L10 28L0 28ZM19 22L29 22L32 28L22 28Z"/>
 </svg>

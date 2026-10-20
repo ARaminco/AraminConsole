@@ -3,6 +3,11 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- New default theme **Air** (AIR brand colours, `data-accent="air"`, new `--ac-highlight` token), AIR logo/favicon/app icons in the demo (`demo/brand/air/`); the orange preset remains available and the old monogram icons moved to `demo/icons/legacy/`.
+
 ## [0.1.0] — 2026-10-20
 
 First public release.
