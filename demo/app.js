@@ -112,7 +112,7 @@ function pageModules(name, html) {
     AC.use.providers({ components, attrs, classes }).forEach((n) => need.add(n));
     (html.match(/data-modules="([^"]+)"/)?.[1] || '').split(/[\s,]+/).filter(Boolean).forEach((n) => need.add(n));
   }
-  return [...need].filter((n) => !AC.use.loaded(n));
+  return [...need]; // AC.use() is idempotent and also waits for any stylesheet still in flight
 }
 // warm the next page's modules on hover / focus of a nav link
 on(document, 'pointerover', 'a[href^="#/"]', (e, a) => { const n = pageModules(a.getAttribute('href').slice(2)); if (n.length) AC.use.preload(n); });
